@@ -8,13 +8,34 @@ import (
 	"log"
 	"math/rand"
 	"os"
+	"sync"
 	"time"
 )
 
 func PackAES(srcfilelist []string, destfile string) (err error) {
-	for _, v := range srcfilelist {
-		go PackAESOne(v)
+	wg := &sync.WaitGroup{}
+	r := make([][]byte, len(srcfilelist))
+	for k, v := range srcfilelist {
+		wg.Add(1)
+		go PackAESOneGo(v, &r[k], wg)
 	}
+	wg.Wait()
+	s := bytes.Join(r, []byte(""))
+	err = ioutil.WriteFile(destfile, s, 0644)
+	if err != nil {
+		log.Println("Error Write AES:", err)
+	}
+	return err
+}
+
+func PackAESOneGo(srcfile string, r *[]byte, wg *sync.WaitGroup) (err error) {
+	*r, err = PackAESOne(srcfile)
+	if err != nil {
+		log.Println("Error AES Pack One:", err)
+		wg.Done()
+		return err
+	}
+	wg.Done()
 	return err
 }
 

@@ -2,8 +2,34 @@ package pack
 
 import (
 	"io/ioutil"
+	"sync"
 	"testing"
 )
+
+func TestPackAES(t *testing.T) {
+	src := []string{"test/file_1.txt", "test/file_2.txt", "test/file_3.txt", "test/file_4.txt", "test/file_5.txt"}
+	dest := "test/file_aes.txt"
+	err := PackAES(src, dest)
+	if err != nil {
+		t.Fatal("Error Pack AES:", err)
+	}
+}
+
+func TestPackAESOneGo(t *testing.T) {
+	var wg sync.WaitGroup
+	var r []byte
+	src := "test/file.txt"
+	wg.Add(1)
+	err := PackAESOneGo(src, &r, &wg)
+	if err != nil {
+		t.Fatal("Error Pack AES One Go:", err)
+	}
+	wg.Wait()
+	err = ioutil.WriteFile("test/file_aes.txt", r, 0644)
+	if err != nil {
+		t.Fatal("Error Write AES One Go:", err)
+	}
+}
 
 func TestPackAESOne(t *testing.T) {
 	src := "test/file.txt"
