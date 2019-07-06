@@ -63,6 +63,21 @@ func PackAESOne(srcfile string) (r []byte, err error) {
 		log.Println("Error generate random key:", err)
 		return r, err
 	}
+	/*// fourth, split the data slice
+	ss, err := SplitByte(data, ConstAESBufferSize)
+	if err != nil {
+		log.Println("Error split bytes:", err)
+		return r, err
+	}
+	// fifth, we can call AESEncrypt function
+	wg := &sync.WaitGroup{}
+	rr := make([][]byte, len(ss))
+	for k, v := range ss {
+		wg.Add(1)
+		go AESEncryptGo(v, key, &rr[k], wg)
+	}
+	wg.Wait()
+	dest := bytes.Join(rr, []byte(""))*/
 	// fourth, we can call AESEncrypt function
 	dest, err := AESEncrypt(data, key)
 	if err != nil {
@@ -75,6 +90,17 @@ func PackAESOne(srcfile string) (r []byte, err error) {
 	s = append(s, dest)
 	r = bytes.Join(s, []byte(""))
 	return r, err
+}
+
+func AESEncryptGo(src, key []byte, dest *[]byte, wg *sync.WaitGroup) (err error) {
+	*dest, err = AESEncrypt(src, key)
+	if err != nil {
+		log.Println("Error AES Encrypt data:", err)
+		wg.Done()
+		return err
+	}
+	wg.Done()
+	return err
 }
 
 func AESEncrypt(src, key []byte) (dest []byte, err error) {
@@ -109,4 +135,18 @@ func PKCS7UnPadding(src []byte) []byte {
 	size := len(src)
 	unpadding := int(src[size-1])
 	return src[:(size - unpadding)]
+}
+
+func SplitByte(data []byte, size int) (r [][]byte, err error) {
+	for {
+		s := make([]byte, size)
+		rd := bytes.NewReader(data)
+		_, err := rd.Read(s)
+		if err != nil {
+			log.Println("Error read byte:", err)
+			return r, err
+		}
+		r = append(r, s)
+	}
+	return r, err
 }
