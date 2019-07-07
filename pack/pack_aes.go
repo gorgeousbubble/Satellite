@@ -8,6 +8,7 @@ import (
 	"log"
 	"math/rand"
 	"os"
+	. "satellite/utils"
 	"sync"
 	"time"
 )
@@ -63,7 +64,7 @@ func PackAESOne(srcfile string) (r []byte, err error) {
 		log.Println("Error generate random key:", err)
 		return r, err
 	}
-	/*// fourth, split the data slice
+	// fourth, split the data slice
 	ss, err := SplitByte(data, ConstAESBufferSize)
 	if err != nil {
 		log.Println("Error split bytes:", err)
@@ -77,13 +78,13 @@ func PackAESOne(srcfile string) (r []byte, err error) {
 		go AESEncryptGo(v, key, &rr[k], wg)
 	}
 	wg.Wait()
-	dest := bytes.Join(rr, []byte(""))*/
-	// fourth, we can call AESEncrypt function
+	dest := bytes.Join(rr, []byte(""))
+	/*// fourth, we can call AESEncrypt function
 	dest, err := AESEncrypt(data, key)
 	if err != nil {
 		log.Println("Error AES Encrypt data:", err)
 		return r, err
-	}
+	}*/
 	// finally, return result
 	var s [][]byte
 	s = append(s, key)
@@ -138,15 +139,17 @@ func PKCS7UnPadding(src []byte) []byte {
 }
 
 func SplitByte(data []byte, size int) (r [][]byte, err error) {
+	rd := bytes.NewReader(data)
 	for {
 		s := make([]byte, size)
-		rd := bytes.NewReader(data)
-		_, err := rd.Read(s)
-		if err != nil {
+		switch n, err := rd.Read(s); true {
+		case n < 0:
 			log.Println("Error read byte:", err)
 			return r, err
+		case n == 0:
+			return r, nil
+		case n > 0:
+			r = append(r, s)
 		}
-		r = append(r, s)
 	}
-	return r, err
 }

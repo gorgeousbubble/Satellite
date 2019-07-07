@@ -2,6 +2,7 @@ package pack
 
 import (
 	"io/ioutil"
+	. "satellite/utils"
 	"sync"
 	"testing"
 )
@@ -49,6 +50,15 @@ func TestAESEncrypt(t *testing.T) {
 	_, err := AESEncrypt(src, key)
 	if err != nil {
 		t.Fatal("Error AES Encrypt:", err)
+	}
+}
+
+func TestSplitByte(t *testing.T) {
+	data := []byte("hello,World!")
+	size := ConstAESBufferSize
+	_, err := SplitByte(data, size)
+	if err != nil {
+		t.Fatal("Error Split Byte:", err)
 	}
 }
 
