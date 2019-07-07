@@ -4,7 +4,19 @@ import (
 	"crypto/aes"
 	"crypto/cipher"
 	"log"
+	"sync"
 )
+
+func AESDecryptGo(src, key []byte, dest *[]byte, wg *sync.WaitGroup) (err error) {
+	*dest, err = AESDecrypt(src, key)
+	if err != nil {
+		log.Println("Error AES Decrypt data:", err)
+		wg.Done()
+		return err
+	}
+	wg.Done()
+	return err
+}
 
 func AESDecrypt(src, key []byte) (dest []byte, err error) {
 	dest = []byte{}
