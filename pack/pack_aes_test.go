@@ -47,9 +47,13 @@ func TestPackAESOne(t *testing.T) {
 func TestAESEncrypt(t *testing.T) {
 	src := []byte("hello,world!")
 	key := []byte("Satellite-266414")
-	_, err := AESEncrypt(src, key)
+	r, err := AESEncrypt(src, key)
 	if err != nil {
 		t.Fatal("Error AES Encrypt:", err)
+	}
+	err = ioutil.WriteFile("test/file_aes.txt", r, 0644)
+	if err != nil {
+		t.Fatal("Error Write AES One:", err)
 	}
 }
 

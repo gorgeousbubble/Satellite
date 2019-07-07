@@ -153,12 +153,6 @@ func PKCS7Padding(src []byte, size int) []byte {
 	return append(src, text...)
 }
 
-func PKCS7UnPadding(src []byte) []byte {
-	size := len(src)
-	unpadding := int(src[size-1])
-	return src[:(size - unpadding)]
-}
-
 func SplitByte(data []byte, size int) (r [][]byte, err error) {
 	rd := bytes.NewReader(data)
 	for {
