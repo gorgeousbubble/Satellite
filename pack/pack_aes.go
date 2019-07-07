@@ -79,6 +79,24 @@ func PackAESOne(srcfile string) (r []byte, err error) {
 	}
 	wg.Wait()
 	dest := bytes.Join(rr, []byte(""))
+	// sixth, fill the packet struct
+	if len([]byte(srcfile)) > 32 {
+		log.Println("Error source file name length:", err)
+		return
+	}
+	if len(key) > 16 {
+		log.Println("Error key length:", err)
+		return
+	}
+	head := TPackAESOne{}
+	head.Name = make([]byte, 32)
+	head.Key = make([]byte, 16)
+	head.OriginSize = make([]byte, 4)
+	head.CryptSize = make([]byte, 4)
+	head.Name = []byte(srcfile)
+	head.Key = key
+	head.OriginSize = IntToBytes(len(data))
+	head.CryptSize = IntToBytes(len(dest))
 	/*// fourth, we can call AESEncrypt function
 	dest, err := AESEncrypt(data, key)
 	if err != nil {
@@ -87,7 +105,10 @@ func PackAESOne(srcfile string) (r []byte, err error) {
 	}*/
 	// finally, return result
 	var s [][]byte
-	s = append(s, key)
+	s = append(s, head.Name)
+	s = append(s, head.Key)
+	s = append(s, head.OriginSize)
+	s = append(s, head.CryptSize)
 	s = append(s, dest)
 	r = bytes.Join(s, []byte(""))
 	return r, err

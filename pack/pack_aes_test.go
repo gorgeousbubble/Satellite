@@ -115,3 +115,14 @@ func BenchmarkAESEncrypt(b *testing.B) {
 		}
 	}
 }
+
+func BenchmarkSplitByte(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		data := []byte("hello,World!")
+		size := ConstAESBufferSize
+		_, err := SplitByte(data, size)
+		if err != nil {
+			b.Fatal("Error Split Byte:", err)
+		}
+	}
+}
