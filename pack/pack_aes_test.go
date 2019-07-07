@@ -44,6 +44,20 @@ func TestPackAESOne(t *testing.T) {
 	}
 }
 
+func TestAESEncryptGo(t *testing.T) {
+	var wg sync.WaitGroup
+	var r []byte
+	src := []byte("hello,world!")
+	key := []byte("Satellite-266414")
+	wg.Add(1)
+	go AESEncryptGo(src, key, &r, &wg)
+	wg.Wait()
+	err := ioutil.WriteFile("test/file_aes.txt", r, 0644)
+	if err != nil {
+		t.Fatal("Error Write AES Encrypt:", err)
+	}
+}
+
 func TestAESEncrypt(t *testing.T) {
 	src := []byte("hello,world!")
 	key := []byte("Satellite-266414")
@@ -53,7 +67,7 @@ func TestAESEncrypt(t *testing.T) {
 	}
 	err = ioutil.WriteFile("test/file_aes.txt", r, 0644)
 	if err != nil {
-		t.Fatal("Error Write AES One:", err)
+		t.Fatal("Error Write AES Encrypt:", err)
 	}
 }
 
@@ -109,13 +123,29 @@ func BenchmarkPackAESOne(b *testing.B) {
 	}
 }
 
+func BenchmarkAESEncryptGo(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		var wg sync.WaitGroup
+		var r []byte
+		src := []byte("hello,world!")
+		key := []byte("Satellite-266414")
+		wg.Add(1)
+		go AESEncryptGo(src, key, &r, &wg)
+		wg.Wait()
+		err := ioutil.WriteFile("test/file_aes.txt", r, 0644)
+		if err != nil {
+			b.Fatal("Error Write AES Encrypt:", err)
+		}
+	}
+}
+
 func BenchmarkAESEncrypt(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := []byte("hello,world!")
 		key := []byte("Satellite-266414")
 		_, err := AESEncrypt(src, key)
 		if err != nil {
-			b.Fatal("Error AES Encrypt:", err)
+			b.Fatal("Error Write AES Encrypt:", err)
 		}
 	}
 }

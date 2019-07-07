@@ -2,8 +2,23 @@ package unpack
 
 import (
 	"io/ioutil"
+	"sync"
 	"testing"
 )
+
+func TestAESDecryptGo(t *testing.T) {
+	var dest []byte
+	var wg sync.WaitGroup
+	src := []byte{0x3B, 0x1B, 0x63, 0x41, 0x08, 0xC7, 0x8B, 0x97, 0xEC, 0x0D, 0xA3, 0xE4, 0xD2, 0xCD, 0x39, 0x84}
+	key := []byte("Satellite-266414")
+	wg.Add(1)
+	go AESDecryptGo(src, key, &dest, &wg)
+	wg.Wait()
+	err := ioutil.WriteFile("test/file.txt", dest, 0644)
+	if err != nil {
+		t.Fatal("Error Write AES One:", err)
+	}
+}
 
 func TestAESDecrypt(t *testing.T) {
 	src := []byte{0x3B, 0x1B, 0x63, 0x41, 0x08, 0xC7, 0x8B, 0x97, 0xEC, 0x0D, 0xA3, 0xE4, 0xD2, 0xCD, 0x39, 0x84}
