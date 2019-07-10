@@ -18,3 +18,13 @@ func BytesToInt(b []byte) int {
 	binary.Read(r, binary.BigEndian, &x)
 	return int(x)
 }
+
+func BytesCopy(r *[]byte, s []byte) bool {
+	if len(*r) < len(s) {
+		return false
+	}
+	for i := 0; i < len(s); i++ {
+		(*r)[i] = s[i]
+	}
+	return true
+}

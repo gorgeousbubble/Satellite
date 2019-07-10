@@ -8,6 +8,7 @@ import (
 	"log"
 	"math/rand"
 	"os"
+	"path/filepath"
 	. "satellite/utils"
 	"sync"
 	"time"
@@ -15,12 +16,30 @@ import (
 
 func PackAES(srcfilelist []string, destfile string) (err error) {
 	wg := &sync.WaitGroup{}
-	r := make([][]byte, len(srcfilelist))
+	// first, split the pre-crypt files
+	r := make([][]byte, len(srcfilelist)+3)
 	for k, v := range srcfilelist {
 		wg.Add(1)
-		go PackAESOneGo(v, &r[k], wg)
+		go PackAESOneGo(v, &r[k+3], wg)
 	}
 	wg.Wait()
+	// second, fill the header
+	head := TPackAES{}
+	head.Name = make([]byte, 32)
+	head.Author = make([]byte, 16)
+	head.Number = make([]byte, 4)
+	_, destname := filepath.Split(destfile)
+	if len([]byte(destname)) > 32 {
+		log.Println("Error dest file name length:", err)
+		return
+	}
+	BytesCopy(&(head.Name), []byte(destname))
+	BytesCopy(&(head.Author), []byte("Alopex6414"))
+	BytesCopy(&(head.Number), IntToBytes(len(srcfilelist)))
+	r[0] = head.Name
+	r[1] = head.Author
+	r[2] = head.Number
+	// third, write to dest file
 	s := bytes.Join(r, []byte(""))
 	err = ioutil.WriteFile(destfile, s, 0644)
 	if err != nil {
@@ -80,7 +99,8 @@ func PackAESOne(srcfile string) (r []byte, err error) {
 	wg.Wait()
 	dest := bytes.Join(rr, []byte(""))
 	// sixth, fill the packet struct
-	if len([]byte(srcfile)) > 32 {
+	_, srcname := filepath.Split(srcfile)
+	if len([]byte(srcname)) > 32 {
 		log.Println("Error source file name length:", err)
 		return
 	}
@@ -93,10 +113,10 @@ func PackAESOne(srcfile string) (r []byte, err error) {
 	head.Key = make([]byte, 16)
 	head.OriginSize = make([]byte, 4)
 	head.CryptSize = make([]byte, 4)
-	head.Name = []byte(srcfile)
-	head.Key = key
-	head.OriginSize = IntToBytes(len(data))
-	head.CryptSize = IntToBytes(len(dest))
+	BytesCopy(&(head.Name), []byte(srcname))
+	BytesCopy(&(head.Key), key)
+	BytesCopy(&(head.OriginSize), IntToBytes(len(data)))
+	BytesCopy(&(head.CryptSize), IntToBytes(len(dest)))
 	/*// fourth, we can call AESEncrypt function
 	dest, err := AESEncrypt(data, key)
 	if err != nil {
@@ -148,7 +168,10 @@ func AESEncrypt(src, key []byte) (dest []byte, err error) {
 }
 
 func PKCS7Padding(src []byte, size int) []byte {
-	padding := size - len(src) % size
+	var padding int
+	if len(src)%size != 0 {
+		padding = size - len(src) % size
+	}
 	text := bytes.Repeat([]byte{byte(padding)}, padding)
 	return append(src, text...)
 }
