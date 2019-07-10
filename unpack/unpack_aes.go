@@ -191,9 +191,11 @@ func AESDecrypt(src, key []byte) (dest []byte, err error) {
 }
 
 func PKCS7UnPadding(src []byte) []byte {
-	size := len(src)
+	// don't need do anything
+	/*size := len(src)
 	unpadding := int(src[size-1])
-	return src[:(size - unpadding)]
+	return src[:(size - unpadding)]*/
+	return src
 }
 
 func SplitByte(data []byte, size int) (r [][]byte, err error) {
