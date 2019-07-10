@@ -9,6 +9,7 @@ import (
 	"math/rand"
 	"os"
 	"path/filepath"
+	"runtime"
 	. "satellite/utils"
 	"sync"
 	"time"
@@ -16,6 +17,9 @@ import (
 
 func PackAES(srcfilelist []string, destfile string) (err error) {
 	wg := &sync.WaitGroup{}
+	// start multi-cpu
+	core := runtime.NumCPU()
+	runtime.GOMAXPROCS(core)
 	// first, split the pre-crypt files
 	r := make([][]byte, len(srcfilelist)+3)
 	for k, v := range srcfilelist {

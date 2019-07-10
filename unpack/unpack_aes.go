@@ -8,12 +8,16 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"runtime"
 	. "satellite/utils"
 	"sync"
 )
 
 func UnpackAES(srcfile string, destpath string) (err error) {
 	wg := &sync.WaitGroup{}
+	// start multi-cpu
+	core := runtime.NumCPU()
+	runtime.GOMAXPROCS(core)
 	// first, open the file
 	file, err := os.Open(srcfile)
 	if err != nil {
