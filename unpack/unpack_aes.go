@@ -13,7 +13,6 @@ import (
 )
 
 func UnpackAES(srcfile string, destpath string) (err error) {
-	err = nil
 	wg := &sync.WaitGroup{}
 	// first, open the file
 	file, err := os.Open(srcfile)
@@ -119,7 +118,6 @@ func UnpackAESOneGo(data []byte, head TUnpackAESOne, destpath string, wg *sync.W
 }
 
 func UnpackAESOne(data []byte, head TUnpackAESOne, destpath string) (err error) {
-	err = nil
 	// initial, fill the name
 	var s []byte
 	for _, v := range head.Name {
@@ -169,8 +167,6 @@ func AESDecryptGo(src, key []byte, dest *[]byte, wg *sync.WaitGroup) (err error)
 }
 
 func AESDecrypt(src, key []byte) (dest []byte, err error) {
-	dest = []byte{}
-	err = nil
 	// key length should be 16, 24, 32
 	block, err := aes.NewCipher(key)
 	if err != nil {

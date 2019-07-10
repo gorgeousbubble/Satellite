@@ -60,8 +60,6 @@ func PackAESOneGo(srcfile string, r *[]byte, wg *sync.WaitGroup) (err error) {
 }
 
 func PackAESOne(srcfile string) (r []byte, err error) {
-	r = []byte{}
-	err = nil
 	rand.Seed(time.Now().UnixNano())
 	// first, open the file
 	file, err := os.Open(srcfile)
@@ -146,8 +144,6 @@ func AESEncryptGo(src, key []byte, dest *[]byte, wg *sync.WaitGroup) (err error)
 }
 
 func AESEncrypt(src, key []byte) (dest []byte, err error) {
-	dest = []byte{}
-	err = nil
 	// key length should be 16, 24, 32
 	block, err := aes.NewCipher(key)
 	if err != nil {
