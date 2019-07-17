@@ -8,7 +8,7 @@ import (
 	"os"
 )
 
-func GenRSAKey(bits int) error {
+func GenRSAKey2File(bits int) error {
 	// generate private key
 	privateKey, err := rsa.GenerateKey(rand.Reader, bits)
 	if err != nil {
@@ -45,5 +45,31 @@ func GenRSAKey(bits int) error {
 	if err != nil {
 		return err
 	}
+	return nil
+}
+
+func GenRSAKey2Memory(pri *[]byte, pub *[]byte, bits int) error {
+	// generate private key
+	privateKey, err := rsa.GenerateKey(rand.Reader, bits)
+	if err != nil {
+		return err
+	}
+	derSteam := x509.MarshalPKCS1PrivateKey(privateKey)
+	block := &pem.Block{
+		Type: "RSA PRIVATE KEY",
+		Bytes: derSteam,
+	}
+	*pri = pem.EncodeToMemory(block)
+	// generate public key
+	publicKey := &privateKey.PublicKey
+	derPkix, err := x509.MarshalPKIXPublicKey(publicKey)
+	if err != nil {
+		return nil
+	}
+	block = &pem.Block{
+		Type: "PUBLIC KEY",
+		Bytes: derPkix,
+	}
+	*pub = pem.EncodeToMemory(block)
 	return nil
 }
