@@ -5,8 +5,19 @@ import (
 	"crypto/rsa"
 	"crypto/x509"
 	"encoding/pem"
+	"log"
 	"os"
 )
+
+var RSAPrivateKey []byte
+var RSAPublicKey []byte
+
+func init() {
+	err := GenRSAKey2Memory(&RSAPrivateKey, &RSAPublicKey, 1024)
+	if err != nil {
+		log.Println("Error Gen RSA Key:", err)
+	}
+}
 
 func GenRSAKey2File(bits int) error {
 	// generate private key
