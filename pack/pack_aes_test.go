@@ -8,8 +8,8 @@ import (
 )
 
 func TestPackAES(t *testing.T) {
-	src := []string{"test/file_1.txt", "test/file_2.txt", "test/file_3.txt", "test/file_4.txt", "test/file_5.txt"}
-	dest := "test/file_aes.txt"
+	src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
+	dest := "../test/data/pack/file_aes.txt"
 	err := PackAES(src, dest)
 	if err != nil {
 		t.Fatal("Error Pack AES:", err)
