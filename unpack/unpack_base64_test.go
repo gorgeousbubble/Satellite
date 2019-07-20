@@ -12,7 +12,7 @@ func TestBase64Decrypt(t *testing.T) {
 	if r != dest {
 		t.Errorf("Error Decrypt Base64.")
 	}
-	err := ioutil.WriteFile("test/file.txt", []byte(r), 0644)
+	err := ioutil.WriteFile("../test/data/unpack/file.txt", []byte(r), 0644)
 	if err != nil {
 		t.Fatal("Error Write Base64 One:", err)
 	}
@@ -26,7 +26,7 @@ func BenchmarkBase64Decrypt(b *testing.B) {
 		if r != dest {
 			b.Errorf("Error Decrypt Base64.")
 		}
-		err := ioutil.WriteFile("test/file.txt", []byte(r), 0644)
+		err := ioutil.WriteFile("../test/data/unpack/file.txt", []byte(r), 0644)
 		if err != nil {
 			b.Fatal("Error Write Base64 One:", err)
 		}

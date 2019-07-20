@@ -9,8 +9,8 @@ import (
 )
 
 func TestUnpackAES(t *testing.T) {
-	srcfile := "test/file_aes.txt"
-	destpath := "test/"
+	srcfile := "../test/data/unpack/file_aes.txt"
+	destpath := "../test/data/unpack/"
 	err := UnpackAES(srcfile, destpath)
 	if err != nil {
 		t.Fatal("Error Unpack AES:", err)
@@ -31,7 +31,7 @@ func TestUnpackAESOneGo(t *testing.T) {
 		0x44, 0x3C, 0xF9, 0x14, 0x73, 0x9D, 0x61, 0xE4, 0x21, 0x69, 0x86, 0x8E, 0xAC, 0xF9, 0x22, 0x02,
 		0xCC, 0x85, 0x22, 0xE0, 0x0F, 0x21, 0xA9, 0xDA, 0x4D, 0x74, 0x6D, 0x26, 0x54, 0x05, 0x55, 0xF8,
 		0x6D, 0x12, 0x27, 0x0C, 0xC3, 0x61, 0x36, 0xDF}
-	destpath := "test/"
+	destpath := "../test/data/unpack/"
 	hh := TUnpackAESOne{}
 	hh.Name = make([]byte, 32)
 	hh.Key = make([]byte, 16)
@@ -79,7 +79,7 @@ func TestUnpackAESOne(t *testing.T) {
 		0x44, 0x3C, 0xF9, 0x14, 0x73, 0x9D, 0x61, 0xE4, 0x21, 0x69, 0x86, 0x8E, 0xAC, 0xF9, 0x22, 0x02,
 		0xCC, 0x85, 0x22, 0xE0, 0x0F, 0x21, 0xA9, 0xDA, 0x4D, 0x74, 0x6D, 0x26, 0x54, 0x05, 0x55, 0xF8,
 		0x6D, 0x12, 0x27, 0x0C, 0xC3, 0x61, 0x36, 0xDF}
-	destpath := "test/"
+	destpath := "../test/data/unpack/"
 	hh := TUnpackAESOne{}
 	hh.Name = make([]byte, 32)
 	hh.Key = make([]byte, 16)
@@ -123,7 +123,7 @@ func TestAESDecryptGo(t *testing.T) {
 	wg.Add(1)
 	go AESDecryptGo(src, key, &dest, &wg)
 	wg.Wait()
-	err := ioutil.WriteFile("test/file.txt", dest, 0644)
+	err := ioutil.WriteFile("../test/data/unpack/file.txt", dest, 0644)
 	if err != nil {
 		t.Fatal("Error Write AES One:", err)
 	}
@@ -136,7 +136,7 @@ func TestAESDecrypt(t *testing.T) {
 	if err != nil {
 		t.Fatal("Error AES Decrypt:", err)
 	}
-	err = ioutil.WriteFile("test/file.txt", r, 0644)
+	err = ioutil.WriteFile("../test/data/unpack/file.txt", r, 0644)
 	if err != nil {
 		t.Fatal("Error Write AES One:", err)
 	}
@@ -153,8 +153,8 @@ func TestSplitByte(t *testing.T) {
 
 func BenchmarkUnpackAES(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		srcfile := "test/file_aes.txt"
-		destpath := "test/"
+		srcfile := "../test/data/unpack/file_aes.txt"
+		destpath := "../test/data/unpack/"
 		err := UnpackAES(srcfile, destpath)
 		if err != nil {
 			b.Fatal("Error Unpack AES:", err)
@@ -177,7 +177,7 @@ func BenchmarkUnpackAESOneGo(b *testing.B) {
 			0x44, 0x3C, 0xF9, 0x14, 0x73, 0x9D, 0x61, 0xE4, 0x21, 0x69, 0x86, 0x8E, 0xAC, 0xF9, 0x22, 0x02,
 			0xCC, 0x85, 0x22, 0xE0, 0x0F, 0x21, 0xA9, 0xDA, 0x4D, 0x74, 0x6D, 0x26, 0x54, 0x05, 0x55, 0xF8,
 			0x6D, 0x12, 0x27, 0x0C, 0xC3, 0x61, 0x36, 0xDF}
-		destpath := "test/"
+		destpath := "../test/data/unpack/"
 		hh := TUnpackAESOne{}
 		hh.Name = make([]byte, 32)
 		hh.Key = make([]byte, 16)
@@ -227,7 +227,7 @@ func BenchmarkUnpackAESOne(b *testing.B) {
 			0x44, 0x3C, 0xF9, 0x14, 0x73, 0x9D, 0x61, 0xE4, 0x21, 0x69, 0x86, 0x8E, 0xAC, 0xF9, 0x22, 0x02,
 			0xCC, 0x85, 0x22, 0xE0, 0x0F, 0x21, 0xA9, 0xDA, 0x4D, 0x74, 0x6D, 0x26, 0x54, 0x05, 0x55, 0xF8,
 			0x6D, 0x12, 0x27, 0x0C, 0xC3, 0x61, 0x36, 0xDF}
-		destpath := "test/"
+		destpath := "../test/data/unpack/"
 		hh := TUnpackAESOne{}
 		hh.Name = make([]byte, 32)
 		hh.Key = make([]byte, 16)
@@ -273,7 +273,7 @@ func BenchmarkAESDecryptGo(b *testing.B) {
 		wg.Add(1)
 		go AESDecryptGo(src, key, &dest, &wg)
 		wg.Wait()
-		err := ioutil.WriteFile("test/file.txt", dest, 0644)
+		err := ioutil.WriteFile("../test/data/unpack/file.txt", dest, 0644)
 		if err != nil {
 			b.Fatal("Error Write AES One:", err)
 		}
@@ -288,7 +288,7 @@ func BenchmarkAESDecrypt(b *testing.B) {
 		if err != nil {
 			b.Fatal("Error AES Decrypt:", err)
 		}
-		err = ioutil.WriteFile("test/file.txt", r, 0644)
+		err = ioutil.WriteFile("../test/data/unpack/file.txt", r, 0644)
 		if err != nil {
 			b.Fatal("Error Write AES One:", err)
 		}
@@ -298,8 +298,8 @@ func BenchmarkAESDecrypt(b *testing.B) {
 func BenchmarkSplitByte(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		for i := 0; i < b.N; i++ {
-			srcfile := "test/file_aes.txt"
-			destpath := "test/"
+			srcfile := "../test/data/unpack/file_aes.txt"
+			destpath := "../test/data/unpack/"
 			err := UnpackAES(srcfile, destpath)
 			if err != nil {
 				b.Fatal("Error Unpack AES:", err)
