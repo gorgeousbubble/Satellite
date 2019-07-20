@@ -11,6 +11,17 @@ import (
 	"sync"
 )
 
+func PackBase64OneGo(srcfile string, r *string, wg *sync.WaitGroup) (err error) {
+	*r, err = PackBase64One(srcfile)
+	if err != nil {
+		log.Println("Error Base64 Pack One:", err)
+		wg.Done()
+		return err
+	}
+	wg.Done()
+	return err
+}
+
 func PackBase64One(srcfile string) (r string, err error) {
 	// first, open the file
 	file, err := os.Open(srcfile)

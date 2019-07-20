@@ -6,6 +6,19 @@ import (
 	"testing"
 )
 
+func TestPackBase64OneGo(t *testing.T) {
+	var wg sync.WaitGroup
+	var r string
+	src := "../test/data/pack/file.txt"
+	wg.Add(1)
+	go PackBase64OneGo(src, &r, &wg)
+	wg.Wait()
+	err := ioutil.WriteFile("../test/data/pack/file_base64.txt", []byte(r), 0644)
+	if err != nil {
+		t.Fatal("Error Write Base64 One:", err)
+	}
+}
+
 func TestPackBase64One(t *testing.T) {
 	src := "../test/data/pack/file.txt"
 	r, err := PackBase64One(src)
@@ -45,6 +58,35 @@ func TestBase64Encrypt(t *testing.T) {
 	err := ioutil.WriteFile("../test/data/pack/file_base64.txt", []byte(r), 0644)
 	if err != nil {
 		t.Fatal("Error Write Base64 One:", err)
+	}
+}
+
+func BenchmarkPackBase64OneGo(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		var wg sync.WaitGroup
+		var r string
+		src := "../test/data/pack/file.txt"
+		wg.Add(1)
+		go PackBase64OneGo(src, &r, &wg)
+		wg.Wait()
+		err := ioutil.WriteFile("../test/data/pack/file_base64.txt", []byte(r), 0644)
+		if err != nil {
+			b.Fatal("Error Write Base64 One:", err)
+		}
+	}
+}
+
+func BenchmarkPackBase64One(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		src := "../test/data/pack/file.txt"
+		r, err := PackBase64One(src)
+		if err != nil {
+			b.Fatal("Error Pack Base64 One:", err)
+		}
+		err = ioutil.WriteFile("../test/data/pack/file_base64.txt", []byte(r), 0644)
+		if err != nil {
+			b.Fatal("Error Write Base64 One:", err)
+		}
 	}
 }
 
