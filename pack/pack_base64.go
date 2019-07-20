@@ -31,6 +31,11 @@ func PackBase64One(srcfile string) (r string, err error) {
 		log.Println("Error split bytes:", err)
 		return r, err
 	}
+	size := len(data) % ConstBase64BufferSize
+	if size != 0 {
+		last := len(data) / ConstBase64BufferSize
+		ss[last] = append(ss[last][:0], ss[last][:size]...)
+	}
 	// fourth, we can call Base64Encrypt function
 	wg := &sync.WaitGroup{}
 	rr := make([]string, len(ss))

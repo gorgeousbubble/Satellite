@@ -6,6 +6,18 @@ import (
 	"testing"
 )
 
+func TestPackBase64One(t *testing.T) {
+	src := "../test/data/pack/file.txt"
+	r, err := PackBase64One(src)
+	if err != nil {
+		t.Fatal("Error Pack Base64 One:", err)
+	}
+	err = ioutil.WriteFile("../test/data/pack/file_base64.txt", []byte(r), 0644)
+	if err != nil {
+		t.Fatal("Error Write Base64 One:", err)
+	}
+}
+
 func TestBase64EncryptGo(t *testing.T) {
 	var wg sync.WaitGroup
 	var r string
