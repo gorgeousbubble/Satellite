@@ -13,3 +13,9 @@ type TPackAESOne struct {
 	OriginSize	[]byte		// [4]byte/32bit
 	CryptSize	[]byte		// [4]byte/32bit
 }
+
+// pack base64
+type TPackBase64One struct {
+	Name		[]byte		// [32]byte/256bit
+	Size		[]byte		// [4]byte/32bit
+}
