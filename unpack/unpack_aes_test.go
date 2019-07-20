@@ -142,15 +142,6 @@ func TestAESDecrypt(t *testing.T) {
 	}
 }
 
-func TestSplitByte(t *testing.T) {
-	data := []byte("hello,World!")
-	size := ConstAESBufferSize
-	_, err := SplitByte(data, size)
-	if err != nil {
-		t.Fatal("Error Split Byte:", err)
-	}
-}
-
 func BenchmarkUnpackAES(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		srcfile := "../test/data/unpack/file_aes.txt"
@@ -291,19 +282,6 @@ func BenchmarkAESDecrypt(b *testing.B) {
 		err = ioutil.WriteFile("../test/data/unpack/file.txt", r, 0644)
 		if err != nil {
 			b.Fatal("Error Write AES One:", err)
-		}
-	}
-}
-
-func BenchmarkSplitByte(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		for i := 0; i < b.N; i++ {
-			srcfile := "../test/data/unpack/file_aes.txt"
-			destpath := "../test/data/unpack/"
-			err := UnpackAES(srcfile, destpath)
-			if err != nil {
-				b.Fatal("Error Unpack AES:", err)
-			}
 		}
 	}
 }

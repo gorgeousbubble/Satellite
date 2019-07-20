@@ -2,7 +2,6 @@ package pack
 
 import (
 	"io/ioutil"
-	. "satellite/utils"
 	"sync"
 	"testing"
 )
@@ -68,15 +67,6 @@ func TestAESEncrypt(t *testing.T) {
 	err = ioutil.WriteFile("../test/data/pack/file_aes.txt", r, 0644)
 	if err != nil {
 		t.Fatal("Error Write AES Encrypt:", err)
-	}
-}
-
-func TestSplitByte(t *testing.T) {
-	data := []byte("hello,World!")
-	size := ConstAESBufferSize
-	_, err := SplitByte(data, size)
-	if err != nil {
-		t.Fatal("Error Split Byte:", err)
 	}
 }
 
@@ -146,17 +136,6 @@ func BenchmarkAESEncrypt(b *testing.B) {
 		_, err := AESEncrypt(src, key)
 		if err != nil {
 			b.Fatal("Error Write AES Encrypt:", err)
-		}
-	}
-}
-
-func BenchmarkSplitByte(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		data := []byte("hello,World!")
-		size := ConstAESBufferSize
-		_, err := SplitByte(data, size)
-		if err != nil {
-			b.Fatal("Error Split Byte:", err)
 		}
 	}
 }

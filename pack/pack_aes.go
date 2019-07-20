@@ -175,19 +175,3 @@ func PKCS7Padding(src []byte, size int) []byte {
 	text := bytes.Repeat([]byte{byte(padding)}, padding)
 	return append(src, text...)
 }
-
-func SplitByte(data []byte, size int) (r [][]byte, err error) {
-	rd := bytes.NewReader(data)
-	for {
-		s := make([]byte, size)
-		switch n, err := rd.Read(s); true {
-		case n < 0:
-			log.Println("Error read byte:", err)
-			return r, err
-		case n == 0:
-			return r, nil
-		case n > 0:
-			r = append(r, s)
-		}
-	}
-}
