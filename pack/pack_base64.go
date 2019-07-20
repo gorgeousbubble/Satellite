@@ -36,7 +36,7 @@ func PackBase64One(srcfile string) (r string, err error) {
 	rr := make([]string, len(ss))
 	for k, v := range ss {
 		wg.Add(1)
-		go Base64EncrypteGo(string(v), &rr[k], wg)
+		go Base64EncryptGo(string(v), &rr[k], wg)
 	}
 	wg.Wait()
 	dest := strings.Join(rr, "")
@@ -60,7 +60,7 @@ func PackBase64One(srcfile string) (r string, err error) {
 	return r, err
 }
 
-func Base64EncrypteGo(str string, r *string, wg *sync.WaitGroup) {
+func Base64EncryptGo(str string, r *string, wg *sync.WaitGroup) {
 	*r = Base64Encrypt(str)
 	wg.Done()
 }
