@@ -44,6 +44,20 @@ func TestRSAEncrypt(t *testing.T) {
 	}
 }
 
+func BenchmarkPackRSAOne(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		src := "../test/data/pack/file.txt"
+		r, err := PackRSAOne(src)
+		if err != nil {
+			b.Fatal("Error Pack RSA One:", err)
+		}
+		err = ioutil.WriteFile("../test/data/pack/file_rsa.txt", r, 0644)
+		if err != nil {
+			b.Fatal("Error Write RSA One:", err)
+		}
+	}
+}
+
 func BenchmarkRSAEncryptGo(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var wg sync.WaitGroup
