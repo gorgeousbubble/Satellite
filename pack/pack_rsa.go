@@ -6,11 +6,10 @@ import (
 	"crypto/x509"
 	"encoding/pem"
 	"errors"
-	. "satellite/utils"
 )
 
-func RSAEncrypt(src []byte) (dest []byte, err error) {
-	block, _ := pem.Decode(RSAPublicKey)
+func RSAEncrypt(src, key []byte) (dest []byte, err error) {
+	block, _ := pem.Decode(key)
 	if block == nil {
 		err = errors.New("RSA Public Key Error")
 		return dest, err
