@@ -15,6 +15,17 @@ import (
 	"sync"
 )
 
+func PackRSAOneGo(srcfile string, r *[]byte, wg *sync.WaitGroup) (err error) {
+	*r, err = PackRSAOne(srcfile)
+	if err != nil {
+		log.Println("Error RSA Pack One:", err)
+		wg.Done()
+		return err
+	}
+	wg.Done()
+	return err
+}
+
 func PackRSAOne(srcfile string) (r []byte, err error) {
 	// first, open the file
 	file, err := os.Open(srcfile)
