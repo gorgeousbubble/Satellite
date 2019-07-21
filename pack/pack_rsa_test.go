@@ -7,6 +7,22 @@ import (
 	"testing"
 )
 
+func TestPackRSAOneGo(t *testing.T) {
+	var wg sync.WaitGroup
+	var r []byte
+	src := "../test/data/pack/file.txt"
+	wg.Add(1)
+	err := PackRSAOneGo(src, &r, &wg)
+	if err != nil {
+		t.Fatal("Error Pack RSA One Go:", err)
+	}
+	wg.Wait()
+	err = ioutil.WriteFile("../test/data/pack/file_rsa.txt", r, 0644)
+	if err != nil {
+		t.Fatal("Error Write RSA One Go:", err)
+	}
+}
+
 func TestPackRSAOne(t *testing.T) {
 	src := "../test/data/pack/file.txt"
 	r, err := PackRSAOne(src)
@@ -41,6 +57,24 @@ func TestRSAEncrypt(t *testing.T) {
 	err = ioutil.WriteFile("../test/data/pack/file_rsa.txt", r, 0644)
 	if err != nil {
 		t.Fatal("Error Write RSA Encrypt:", err)
+	}
+}
+
+func BenchmarkPackRSAOneGo(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		var wg sync.WaitGroup
+		var r []byte
+		src := "../test/data/pack/file.txt"
+		wg.Add(1)
+		err := PackRSAOneGo(src, &r, &wg)
+		if err != nil {
+			b.Fatal("Error Pack RSA One Go:", err)
+		}
+		wg.Wait()
+		err = ioutil.WriteFile("../test/data/pack/file_rsa.txt", r, 0644)
+		if err != nil {
+			b.Fatal("Error Write RSA One Go:", err)
+		}
 	}
 }
 
