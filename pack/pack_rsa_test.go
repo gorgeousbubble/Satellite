@@ -7,6 +7,18 @@ import (
 	"testing"
 )
 
+func TestPackRSAOne(t *testing.T) {
+	src := "../test/data/pack/file.txt"
+	r, err := PackRSAOne(src)
+	if err != nil {
+		t.Fatal("Error Pack RSA One:", err)
+	}
+	err = ioutil.WriteFile("../test/data/pack/file_rsa.txt", r, 0644)
+	if err != nil {
+		t.Fatal("Error Write RSA One:", err)
+	}
+}
+
 func TestRSAEncryptGo(t *testing.T) {
 	var wg sync.WaitGroup
 	var r []byte
