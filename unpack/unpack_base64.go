@@ -1,7 +1,6 @@
 package unpack
 
 import (
-	"bytes"
 	"encoding/base64"
 	"io/ioutil"
 	"log"
