@@ -8,6 +8,15 @@ import (
 	"testing"
 )
 
+func TestUnpackRSA(t *testing.T) {
+	srcfile := "../test/data/unpack/file_rsa.txt"
+	destpath := "../test/data/unpack/"
+	err := UnpackRSA(srcfile, destpath)
+	if err != nil {
+		t.Fatal("Error Unpack AES:", err)
+	}
+}
+
 func TestUnpackRSAOneGo(t *testing.T) {
 	var wg sync.WaitGroup
 	src := []byte{
@@ -274,6 +283,17 @@ func TestRSADecrypt(t *testing.T) {
 	err = ioutil.WriteFile("../test/data/unpack/file.txt", r, 0644)
 	if err != nil {
 		t.Fatal("Error Write RSA One:", err)
+	}
+}
+
+func BenchmarkUnpackRSA(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		srcfile := "../test/data/unpack/file_rsa.txt"
+		destpath := "../test/data/unpack/"
+		err := UnpackRSA(srcfile, destpath)
+		if err != nil {
+			b.Fatal("Error Unpack AES:", err)
+		}
 	}
 }
 
