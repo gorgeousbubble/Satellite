@@ -13,6 +13,17 @@ import (
 	"sync"
 )
 
+func UnpackRSAOneGo(data []byte, head TUnpackRSAOne, destpath string, wg *sync.WaitGroup) (err error) {
+	err = UnpackRSAOne(data, head, destpath)
+	if err != nil {
+		log.Println("Error RSA Unpack One:", err)
+		wg.Done()
+		return err
+	}
+	wg.Done()
+	return err
+}
+
 func UnpackRSAOne(data []byte, head TUnpackRSAOne, destpath string) (err error) {
 	// initial, fill the name
 	var s []byte
