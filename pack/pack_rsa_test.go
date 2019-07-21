@@ -7,6 +7,15 @@ import (
 	"testing"
 )
 
+func TestPackRSA(t *testing.T) {
+	src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
+	dest := "../test/data/pack/file_rsa.txt"
+	err := PackRSA(src, dest)
+	if err != nil {
+		t.Fatal("Error Pack RSA:", err)
+	}
+}
+
 func TestPackRSAOneGo(t *testing.T) {
 	var wg sync.WaitGroup
 	var r []byte
@@ -57,6 +66,17 @@ func TestRSAEncrypt(t *testing.T) {
 	err = ioutil.WriteFile("../test/data/pack/file_rsa.txt", r, 0644)
 	if err != nil {
 		t.Fatal("Error Write RSA Encrypt:", err)
+	}
+}
+
+func BenchmarkPackRSA(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
+		dest := "../test/data/pack/file_rsa.txt"
+		err := PackRSA(src, dest)
+		if err != nil {
+			b.Fatal("Error Pack RSA:", err)
+		}
 	}
 }
 
