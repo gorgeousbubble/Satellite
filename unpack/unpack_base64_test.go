@@ -8,6 +8,15 @@ import (
 	"testing"
 )
 
+func TestUnpackBase64(t *testing.T) {
+	srcfile := "../test/data/unpack/file_base64.txt"
+	destpath := "../test/data/unpack/"
+	err := UnpackBase64(srcfile, destpath)
+	if err != nil {
+		t.Fatal("Error Unpack Base64:", err)
+	}
+}
+
 func TestUnpackBase64OneGo(t *testing.T) {
 	var wg sync.WaitGroup
 	src := []byte{
@@ -97,6 +106,17 @@ func TestBase64Decrypt(t *testing.T) {
 	err := ioutil.WriteFile("../test/data/unpack/file.txt", []byte(r), 0644)
 	if err != nil {
 		t.Fatal("Error Write Base64 One:", err)
+	}
+}
+
+func BenchmarkUnpackBase64(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		srcfile := "../test/data/unpack/file_base64.txt"
+		destpath := "../test/data/unpack/"
+		err := UnpackBase64(srcfile, destpath)
+		if err != nil {
+			b.Fatal("Error Unpack Base64:", err)
+		}
 	}
 }
 
