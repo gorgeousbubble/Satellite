@@ -6,11 +6,10 @@ import (
 	"crypto/x509"
 	"encoding/pem"
 	"errors"
-	. "satellite/utils"
 )
 
-func RSADecrypt(src []byte) (dest []byte, err error) {
-	block, _ := pem.Decode(RSAPrivateKey)
+func RSADecrypt(src, key []byte) (dest []byte, err error) {
+	block, _ := pem.Decode(key)
 	if block == nil {
 		err = errors.New("RSA Private Key Error")
 		return dest, err
