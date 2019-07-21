@@ -6,7 +6,20 @@ import (
 	"crypto/x509"
 	"encoding/pem"
 	"errors"
+	"log"
+	"sync"
 )
+
+func RSADecryptGo(src, key []byte, dest *[]byte, wg *sync.WaitGroup) (err error) {
+	*dest, err = RSADecrypt(src, key)
+	if err != nil {
+		log.Println("Error RSA Decrypt data:", err)
+		wg.Done()
+		return err
+	}
+	wg.Done()
+	return err
+}
 
 func RSADecrypt(src, key []byte) (dest []byte, err error) {
 	block, _ := pem.Decode(key)
