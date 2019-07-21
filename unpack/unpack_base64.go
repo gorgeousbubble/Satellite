@@ -1,13 +1,102 @@
 package unpack
 
 import (
+	"bytes"
 	"encoding/base64"
 	"io/ioutil"
 	"log"
+	"os"
+	"path/filepath"
+	"runtime"
 	. "satellite/utils"
 	"strings"
 	"sync"
 )
+
+func UnpackBase64(srcfile string, destpath string) (err error) {
+	wg := &sync.WaitGroup{}
+	// start multi-cpu
+	core := runtime.NumCPU()
+	runtime.GOMAXPROCS(core)
+	// first, open the file
+	file, err := os.Open(srcfile)
+	if err != nil {
+		log.Println("Error open file:", err)
+		return err
+	}
+	defer file.Close()
+	// second, read file data
+	data, err := ioutil.ReadAll(file)
+	if err != nil {
+		log.Println("Error read file:", err)
+		return err
+	}
+	_, srcname := filepath.Split(srcfile)
+	// third, new one header
+	h := TUnpackBase64{}
+	h.Name = make([]byte, 32)
+	h.Author = make([]byte, 16)
+	h.Number = make([]byte, 4)
+	// fourth, read the header
+	rd := bytes.NewReader(data)
+	_, err = rd.Read(h.Name)
+	if err != nil {
+		log.Println("Error read header name:", err)
+		return err
+	}
+	s := make([]byte, 32)
+	BytesCopy(&s, []byte(srcname))
+	if !bytes.Equal(h.Name, s) {
+		log.Println("Error read header name:", err)
+		return err
+	}
+	_, err = rd.Read(h.Author)
+	if err != nil {
+		log.Println("Error read header author:", err)
+		return err
+	}
+	s = make([]byte, 16)
+	BytesCopy(&s, []byte("Alopex6414"))
+	if !bytes.Equal(h.Author, s) {
+		log.Println("Error read header author:", err)
+		return err
+	}
+	_, err = rd.Read(h.Number)
+	if err != nil {
+		log.Println("Error read header number:", err)
+		return err
+	}
+	size := BytesToInt(h.Number)
+	// fifth, read every one file in packet
+	for i := 0; i < size; i++ {
+		// six, read the header
+		hh := TUnpackBase64One{}
+		hh.Name = make([]byte, 32)
+		hh.Size = make([]byte, 4)
+		_, err = rd.Read(hh.Name)
+		if err != nil {
+			log.Println("Error read header name:", err)
+			return err
+		}
+		_, err = rd.Read(hh.Size)
+		if err != nil {
+			log.Println("Error read header size:", err)
+			return err
+		}
+		// seven, read the body
+		s := make([]byte, BytesToInt(hh.Size))
+		n, err := rd.Read(s)
+		if n <= 0 {
+			log.Println("Error read body:", err)
+			return err
+		}
+		// eight, run unpack one file
+		wg.Add(1)
+		go UnpackBase64OneGo(s, hh, destpath, wg)
+	}
+	wg.Wait()
+	return err
+}
 
 func UnpackBase64OneGo(data []byte, head TUnpackBase64One, destpath string, wg *sync.WaitGroup) (err error) {
 	err = UnpackBase64One(data, head, destpath)
