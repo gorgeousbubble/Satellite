@@ -9,6 +9,17 @@ import (
 	"sync"
 )
 
+func UnpackBase64OneGo(data []byte, head TUnpackBase64One, destpath string, wg *sync.WaitGroup) (err error) {
+	err = UnpackBase64One(data, head, destpath)
+	if err != nil {
+		log.Println("Error Base64 Unpack One:", err)
+		wg.Done()
+		return err
+	}
+	wg.Done()
+	return err
+}
+
 func UnpackBase64One(data []byte, head TUnpackBase64One, destpath string) (err error) {
 	// initial, fill the name
 	var s []byte
