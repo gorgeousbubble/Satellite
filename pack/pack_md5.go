@@ -5,11 +5,11 @@ import (
 	"sync"
 )
 
-func MD5EncryptGo(data []byte, r *[16]byte, wg *sync.WaitGroup) {
+func MD5EncryptGo(data []byte, r *[md5.Size]byte, wg *sync.WaitGroup) {
 	*r = md5.Sum(data)
 	wg.Done()
 }
 
-func MD5Encrypt(data []byte) [16]byte {
+func MD5Encrypt(data []byte) [md5.Size]byte {
 	return md5.Sum(data)
 }

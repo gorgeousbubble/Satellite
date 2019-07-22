@@ -1,6 +1,7 @@
 package pack
 
 import (
+	"crypto/md5"
 	"io/ioutil"
 	"sync"
 	"testing"
@@ -8,7 +9,7 @@ import (
 
 func TestMD5EncryptGo(t *testing.T) {
 	var wg sync.WaitGroup
-	var r [16]byte
+	var r [md5.Size]byte
 	src := []byte("hello,world!")
 	wg.Add(1)
 	go MD5EncryptGo(src, &r, &wg)
@@ -31,7 +32,7 @@ func TestMD5Encrypt(t *testing.T) {
 func BenchmarkMD5EncryptGo(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var wg sync.WaitGroup
-		var r [16]byte
+		var r [md5.Size]byte
 		src := []byte("hello,world!")
 		wg.Add(1)
 		go MD5EncryptGo(src, &r, &wg)
