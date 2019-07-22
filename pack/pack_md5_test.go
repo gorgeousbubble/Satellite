@@ -14,7 +14,7 @@ func TestMD5EncryptGo(t *testing.T) {
 	wg.Add(1)
 	go MD5EncryptGo(src, &r, &wg)
 	wg.Wait()
-	err := ioutil.WriteFile("../test/data/pack/file_md5.txt", r[:15], 0644)
+	err := ioutil.WriteFile("../test/data/pack/file_md5.txt", r[:(md5.Size-1)], 0644)
 	if err != nil {
 		t.Fatal("Error Write MD5 Encrypt:", err)
 	}
@@ -23,7 +23,7 @@ func TestMD5EncryptGo(t *testing.T) {
 func TestMD5Encrypt(t *testing.T) {
 	src := []byte("hello,world!")
 	r := MD5Encrypt(src)
-	err := ioutil.WriteFile("../test/data/pack/file_md5.txt", r[:15], 0644)
+	err := ioutil.WriteFile("../test/data/pack/file_md5.txt", r[:(md5.Size-1)], 0644)
 	if err != nil {
 		t.Fatal("Error Write MD5 Encrypt:", err)
 	}
@@ -37,7 +37,7 @@ func BenchmarkMD5EncryptGo(b *testing.B) {
 		wg.Add(1)
 		go MD5EncryptGo(src, &r, &wg)
 		wg.Wait()
-		err := ioutil.WriteFile("../test/data/pack/file_md5.txt", r[:15], 0644)
+		err := ioutil.WriteFile("../test/data/pack/file_md5.txt", r[:(md5.Size-1)], 0644)
 		if err != nil {
 			b.Fatal("Error Write MD5 Encrypt:", err)
 		}
@@ -48,7 +48,7 @@ func BenchmarkMD5Encrypt(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := []byte("hello,world!")
 		r := MD5Encrypt(src)
-		err := ioutil.WriteFile("../test/data/pack/file_md5.txt", r[:15], 0644)
+		err := ioutil.WriteFile("../test/data/pack/file_md5.txt", r[:(md5.Size-1)], 0644)
 		if err != nil {
 			b.Fatal("Error Write MD5 Encrypt:", err)
 		}
