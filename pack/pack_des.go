@@ -5,7 +5,19 @@ import (
 	"crypto/cipher"
 	"crypto/des"
 	"log"
+	"sync"
 )
+
+func DESEncryptGo(src, key []byte, dest *[]byte, wg *sync.WaitGroup) (err error) {
+	*dest, err = DESEncrypt(src, key)
+	if err != nil {
+		log.Println("Error DES Encrypt data:", err)
+		wg.Done()
+		return err
+	}
+	wg.Done()
+	return err
+}
 
 func DESEncrypt(src, key []byte) (dest []byte, err error) {
 	// key length should be 8
