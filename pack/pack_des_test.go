@@ -6,6 +6,15 @@ import (
 	"testing"
 )
 
+func TestPackDES(t *testing.T) {
+	src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
+	dest := "../test/data/pack/file_des.txt"
+	err := PackDES(src, dest)
+	if err != nil {
+		t.Fatal("Error Pack DES:", err)
+	}
+}
+
 func TestPackDESOneGo(t *testing.T) {
 	var wg sync.WaitGroup
 	var r []byte
@@ -58,6 +67,17 @@ func TestDESEncrypt(t *testing.T) {
 	err = ioutil.WriteFile("../test/data/pack/file_des.txt", r, 0644)
 	if err != nil {
 		t.Fatal("Error Write DES Encrypt:", err)
+	}
+}
+
+func BenchmarkPackDES(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
+		dest := "../test/data/pack/file_des.txt"
+		err := PackDES(src, dest)
+		if err != nil {
+			b.Fatal("Error Pack DES:", err)
+		}
 	}
 }
 
