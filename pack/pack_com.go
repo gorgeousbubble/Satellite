@@ -14,6 +14,20 @@ type TPackAESOne struct {
 	CryptSize	[]byte		// [4]byte/32bit
 }
 
+// pack des
+type TPackDES struct {
+	Name		[]byte		// [32]byte/256bit
+	Author		[]byte		// [16]byte/128bit
+	Number		[]byte		// [4]byte/32bit
+}
+
+type TPackDESOne struct {
+	Name		[]byte		// [32]byte/256bit
+	Key			[]byte		// [8]byte/64bit
+	OriginSize	[]byte		// [4]byte/32bit
+	CryptSize	[]byte		// [4]byte/32bit
+}
+
 // pack rsa
 type TPackRSA struct {
 	Name		[]byte		// [32]byte/256bit
