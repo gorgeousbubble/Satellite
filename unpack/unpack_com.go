@@ -14,6 +14,20 @@ type TUnpackAESOne struct {
 	CryptSize	[]byte		// [4]byte/32bit
 }
 
+// unpack des
+type TUnpackDES struct {
+	Name		[]byte		// [32]byte/256bit
+	Author		[]byte		// [16]byte/128bit
+	Number		[]byte		// [4]byte/32bit
+}
+
+type TUnackDESOne struct {
+	Name		[]byte		// [32]byte/256bit
+	Key			[]byte		// [8]byte/64bit
+	OriginSize	[]byte		// [4]byte/32bit
+	CryptSize	[]byte		// [4]byte/32bit
+}
+
 // unpack rsa
 type TUnpackRSA struct {
 	Name		[]byte		// [32]byte/256bit
