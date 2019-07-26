@@ -1,5 +1,3 @@
-package main
+package unpack
 
-func main() {
-	$END$
-}
+
