@@ -9,10 +9,48 @@ import (
 	"math/rand"
 	"os"
 	"path/filepath"
+	"runtime"
 	. "satellite/utils"
 	"sync"
 	"time"
 )
+
+func PackDES(srcfilelist []string, destfile string) (err error) {
+	wg := &sync.WaitGroup{}
+	// start multi-cpu
+	core := runtime.NumCPU()
+	runtime.GOMAXPROCS(core)
+	// first, split the pre-crypt files
+	r := make([][]byte, len(srcfilelist)+3)
+	for k, v := range srcfilelist {
+		wg.Add(1)
+		go PackDESOneGo(v, &r[k+3], wg)
+	}
+	wg.Wait()
+	// second, fill the header
+	head := TPackDES{}
+	head.Name = make([]byte, 32)
+	head.Author = make([]byte, 16)
+	head.Number = make([]byte, 4)
+	_, destname := filepath.Split(destfile)
+	if len([]byte(destname)) > 32 {
+		log.Println("Error dest file name length:", err)
+		return
+	}
+	BytesCopy(&(head.Name), []byte(destname))
+	BytesCopy(&(head.Author), []byte("Alopex6414"))
+	BytesCopy(&(head.Number), IntToBytes(len(srcfilelist)))
+	r[0] = head.Name
+	r[1] = head.Author
+	r[2] = head.Number
+	// third, write to dest file
+	s := bytes.Join(r, []byte(""))
+	err = ioutil.WriteFile(destfile, s, 0644)
+	if err != nil {
+		log.Println("Error Write DES:", err)
+	}
+	return err
+}
 
 func PackDESOneGo(srcfile string, r *[]byte, wg *sync.WaitGroup) (err error) {
 	*r, err = PackDESOne(srcfile)
