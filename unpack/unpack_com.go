@@ -21,7 +21,7 @@ type TUnpackDES struct {
 	Number		[]byte		// [4]byte/32bit
 }
 
-type TUnackDESOne struct {
+type TUnpackDESOne struct {
 	Name		[]byte		// [32]byte/256bit
 	Key			[]byte		// [8]byte/64bit
 	OriginSize	[]byte		// [4]byte/32bit

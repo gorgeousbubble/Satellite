@@ -10,7 +10,7 @@ import (
 	"sync"
 )
 
-func UnpackDESOneGo(data []byte, head TUnackDESOne, destpath string, wg *sync.WaitGroup) (err error) {
+func UnpackDESOneGo(data []byte, head TUnpackDESOne, destpath string, wg *sync.WaitGroup) (err error) {
 	err = UnpackDESOne(data, head, destpath)
 	if err != nil {
 		log.Println("Error DES Unpack One:", err)
@@ -21,7 +21,7 @@ func UnpackDESOneGo(data []byte, head TUnackDESOne, destpath string, wg *sync.Wa
 	return err
 }
 
-func UnpackDESOne(data []byte, head TUnackDESOne, destpath string) (err error) {
+func UnpackDESOne(data []byte, head TUnpackDESOne, destpath string) (err error) {
 	// initial, fill the name
 	var s []byte
 	for _, v := range head.Name {
