@@ -8,6 +8,15 @@ import (
 	"testing"
 )
 
+func TestUnpackDES(t *testing.T) {
+	srcfile := "../test/data/unpack/file_des.txt"
+	destpath := "../test/data/unpack/"
+	err := UnpackDES(srcfile, destpath)
+	if err != nil {
+		t.Fatal("Error Unpack DES:", err)
+	}
+}
+
 func TestUnpackDESOneGo(t *testing.T) {
 	var wg sync.WaitGroup
 	src := []byte{0x66, 0x69, 0x6C, 0x65, 0x2E, 0x74, 0x78, 0x74, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -128,6 +137,17 @@ func TestDESDecrypt(t *testing.T) {
 	err = ioutil.WriteFile("../test/data/unpack/file.txt", r, 0644)
 	if err != nil {
 		t.Fatal("Error Write DES One:", err)
+	}
+}
+
+func BenchmarkUnpackDES(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		srcfile := "../test/data/unpack/file_des.txt"
+		destpath := "../test/data/unpack/"
+		err := UnpackDES(srcfile, destpath)
+		if err != nil {
+			b.Fatal("Error Unpack DES:", err)
+		}
 	}
 }
 
