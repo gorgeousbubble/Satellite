@@ -22,7 +22,7 @@ func DESDecrypt(src, key []byte) (dest []byte, err error) {
 	// decrypt
 	blockMode.CryptBlocks(dest, src)
 	// delete block data
-	dest = PKCS7UnPadding(dest)
+	dest = PKCS5UnPadding(dest)
 	return dest, err
 }
 
