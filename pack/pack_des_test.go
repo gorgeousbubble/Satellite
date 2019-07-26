@@ -6,6 +6,22 @@ import (
 	"testing"
 )
 
+func TestPackDESOneGo(t *testing.T) {
+	var wg sync.WaitGroup
+	var r []byte
+	src := "../test/data/pack/file.txt"
+	wg.Add(1)
+	err := PackDESOneGo(src, &r, &wg)
+	if err != nil {
+		t.Fatal("Error Pack DES One Go:", err)
+	}
+	wg.Wait()
+	err = ioutil.WriteFile("../test/data/pack/file_des.txt", r, 0644)
+	if err != nil {
+		t.Fatal("Error Write DES One Go:", err)
+	}
+}
+
 func TestPackDESOne(t *testing.T) {
 	src := "../test/data/pack/file.txt"
 	r, err := PackDESOne(src)
@@ -42,6 +58,24 @@ func TestDESEncrypt(t *testing.T) {
 	err = ioutil.WriteFile("../test/data/pack/file_des.txt", r, 0644)
 	if err != nil {
 		t.Fatal("Error Write DES Encrypt:", err)
+	}
+}
+
+func BenchmarkPackDESOneGo(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		var wg sync.WaitGroup
+		var r []byte
+		src := "../test/data/pack/file.txt"
+		wg.Add(1)
+		err := PackDESOneGo(src, &r, &wg)
+		if err != nil {
+			b.Fatal("Error Pack DES One Go:", err)
+		}
+		wg.Wait()
+		err = ioutil.WriteFile("../test/data/pack/file_des.txt", r, 0644)
+		if err != nil {
+			b.Fatal("Error Write DES One Go:", err)
+		}
 	}
 }
 
