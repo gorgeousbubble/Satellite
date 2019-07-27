@@ -52,6 +52,84 @@ func PackDES(srcfilelist []string, destfile string) (err error) {
 	return err
 }
 
+func Pack3DESOneGo(srcfile string, r *[]byte, wg *sync.WaitGroup) (err error) {
+	*r, err = Pack3DESOne(srcfile)
+	if err != nil {
+		log.Println("Error 3DES Pack One:", err)
+		wg.Done()
+		return err
+	}
+	wg.Done()
+	return err
+}
+
+func Pack3DESOne(srcfile string) (r []byte, err error) {
+	rand.Seed(time.Now().UnixNano())
+	// first, open the file
+	file, err := os.Open(srcfile)
+	if err != nil {
+		log.Println("Error open file:", err)
+		return r, err
+	}
+	defer file.Close()
+	// second, read file data
+	data, err := ioutil.ReadAll(file)
+	if err != nil {
+		log.Println("Error read file:", err)
+		return r, err
+	}
+	// third, generate random key
+	key := make([]byte, 24)
+	_, err = rand.Read(key)
+	if err != nil {
+		log.Println("Error generate random key:", err)
+		return r, err
+	}
+	// fourth, split the data slice
+	ss, err := SplitByte(data, ConstDESBufferSize)
+	if err != nil {
+		log.Println("Error split bytes:", err)
+		return r, err
+	}
+	// fifth, we can call TripleDESEncryptGo function
+	wg := &sync.WaitGroup{}
+	rr := make([][]byte, len(ss))
+	for k, v := range ss {
+		wg.Add(1)
+		go TripleDESEncryptGo(v, key, &rr[k], wg)
+	}
+	wg.Wait()
+	dest := bytes.Join(rr, []byte(""))
+	// sixth, fill the packet struct
+	_, srcname := filepath.Split(srcfile)
+	if len([]byte(srcname)) > 32 {
+		log.Println("Error source file name length:", err)
+		return
+	}
+	if len(key) > 24 {
+		log.Println("Error key length:", err)
+		return
+	}
+	head := TPack3DESOne{}
+	head.Name = make([]byte, 32)
+	head.Key = make([]byte, 24)
+	head.OriginSize = make([]byte, 4)
+	head.CryptSize = make([]byte, 4)
+	BytesCopy(&(head.Name), []byte(srcname))
+	BytesCopy(&(head.Key), key)
+	BytesCopy(&(head.OriginSize), IntToBytes(len(data)))
+	BytesCopy(&(head.CryptSize), IntToBytes(len(dest)))
+	// finally, return result
+	var s [][]byte
+	s = append(s, head.Name)
+	s = append(s, head.Key)
+	s = append(s, head.OriginSize)
+	s = append(s, head.CryptSize)
+	s = append(s, dest)
+	r = bytes.Join(s, []byte(""))
+	return r, err
+}
+
 func PackDESOneGo(srcfile string, r *[]byte, wg *sync.WaitGroup) (err error) {
 	*r, err = PackDESOne(srcfile)
 	if err != nil {

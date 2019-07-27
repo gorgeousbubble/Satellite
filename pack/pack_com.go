@@ -15,6 +15,19 @@ type TPackAESOne struct {
 }
 
 // pack des
+type TPack3DES struct {
+	Name		[]byte		// [32]byte/256bit
+	Author		[]byte		// [16]byte/128bit
+	Number		[]byte		// [4]byte/32bit
+}
+
+type TPack3DESOne struct {
+	Name		[]byte		// [32]byte/256bit
+	Key			[]byte		// [24]byte/192bit
+	OriginSize	[]byte		// [4]byte/32bit
+	CryptSize	[]byte		// [4]byte/32bit
+}
+
 type TPackDES struct {
 	Name		[]byte		// [32]byte/256bit
 	Author		[]byte		// [16]byte/128bit
