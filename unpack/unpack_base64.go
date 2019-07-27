@@ -36,6 +36,7 @@ func UnpackBase64(srcfile string, destpath string) (err error) {
 	h := TUnpackBase64{}
 	h.Name = make([]byte, 32)
 	h.Author = make([]byte, 16)
+	h.Type = make([]byte, 8)
 	h.Number = make([]byte, 4)
 	// fourth, read the header
 	rd := bytes.NewReader(data)
@@ -59,6 +60,17 @@ func UnpackBase64(srcfile string, destpath string) (err error) {
 	BytesCopy(&s, []byte("Alopex6414"))
 	if !bytes.Equal(h.Author, s) {
 		log.Println("Error read header author:", err)
+		return err
+	}
+	_, err = rd.Read(h.Type)
+	if err != nil {
+		log.Println("Error read header type:", err)
+		return err
+	}
+	s = make([]byte, 8)
+	BytesCopy(&s, []byte("BASE64"))
+	if !bytes.Equal(h.Type, s) {
+		log.Println("Error read header type:", err)
 		return err
 	}
 	_, err = rd.Read(h.Number)

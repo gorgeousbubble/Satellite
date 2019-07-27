@@ -4,6 +4,7 @@ package unpack
 type TUnpackAES struct {
 	Name		[]byte		// [32]byte/256bit
 	Author		[]byte		// [16]byte/128bit
+	Type		[]byte		// [8]byte/64bit
 	Number		[]byte		// [4]byte/32bit
 }
 
@@ -18,6 +19,7 @@ type TUnpackAESOne struct {
 type TUnpack3DES struct {
 	Name		[]byte		// [32]byte/256bit
 	Author		[]byte		// [16]byte/128bit
+	Type		[]byte		// [8]byte/64bit
 	Number		[]byte		// [4]byte/32bit
 }
 
@@ -31,6 +33,7 @@ type TUnpack3DESOne struct {
 type TUnpackDES struct {
 	Name		[]byte		// [32]byte/256bit
 	Author		[]byte		// [16]byte/128bit
+	Type		[]byte		// [8]byte/64bit
 	Number		[]byte		// [4]byte/32bit
 }
 
@@ -45,6 +48,7 @@ type TUnpackDESOne struct {
 type TUnpackRSA struct {
 	Name		[]byte		// [32]byte/256bit
 	Author		[]byte		// [16]byte/128bit
+	Type		[]byte		// [8]byte/64bit
 	Number		[]byte		// [4]byte/32bit
 }
 
@@ -59,6 +63,7 @@ type TUnpackRSAOne struct {
 type TUnpackBase64 struct {
 	Name		[]byte		// [32]byte/256bit
 	Author		[]byte		// [16]byte/128bit
+	Type		[]byte		// [8]byte/64bit
 	Number		[]byte		// [4]byte/32bit
 }
 

@@ -18,16 +18,17 @@ func PackBase64(srcfilelist []string, destfile string) (err error) {
 	core := runtime.NumCPU()
 	runtime.GOMAXPROCS(core)
 	// first, split the pre-crypt files
-	r := make([]string, len(srcfilelist)+3)
+	r := make([]string, len(srcfilelist)+4)
 	for k, v := range srcfilelist {
 		wg.Add(1)
-		go PackBase64OneGo(v, &r[k+3], wg)
+		go PackBase64OneGo(v, &r[k+4], wg)
 	}
 	wg.Wait()
 	// second, fill the header
 	head := TPackBase64{}
 	head.Name = make([]byte, 32)
 	head.Author = make([]byte, 16)
+	head.Type = make([]byte, 8)
 	head.Number = make([]byte, 4)
 	_, destname := filepath.Split(destfile)
 	if len([]byte(destname)) > 32 {
@@ -36,10 +37,12 @@ func PackBase64(srcfilelist []string, destfile string) (err error) {
 	}
 	BytesCopy(&(head.Name), []byte(destname))
 	BytesCopy(&(head.Author), []byte("Alopex6414"))
+	BytesCopy(&(head.Type), []byte("BASE64"))
 	BytesCopy(&(head.Number), IntToBytes(len(srcfilelist)))
 	r[0] = string(head.Name)
 	r[1] = string(head.Author)
-	r[2] = string(head.Number)
+	r[2] = string(head.Type)
+	r[3] = string(head.Number)
 	// third, write to dest file
 	s := strings.Join(r, "")
 	err = ioutil.WriteFile(destfile, []byte(s), 0644)

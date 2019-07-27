@@ -21,16 +21,17 @@ func PackAES(srcfilelist []string, destfile string) (err error) {
 	core := runtime.NumCPU()
 	runtime.GOMAXPROCS(core)
 	// first, split the pre-crypt files
-	r := make([][]byte, len(srcfilelist)+3)
+	r := make([][]byte, len(srcfilelist)+4)
 	for k, v := range srcfilelist {
 		wg.Add(1)
-		go PackAESOneGo(v, &r[k+3], wg)
+		go PackAESOneGo(v, &r[k+4], wg)
 	}
 	wg.Wait()
 	// second, fill the header
 	head := TPackAES{}
 	head.Name = make([]byte, 32)
 	head.Author = make([]byte, 16)
+	head.Type = make([]byte, 8)
 	head.Number = make([]byte, 4)
 	_, destname := filepath.Split(destfile)
 	if len([]byte(destname)) > 32 {
@@ -39,10 +40,12 @@ func PackAES(srcfilelist []string, destfile string) (err error) {
 	}
 	BytesCopy(&(head.Name), []byte(destname))
 	BytesCopy(&(head.Author), []byte("Alopex6414"))
+	BytesCopy(&(head.Type), []byte("AES"))
 	BytesCopy(&(head.Number), IntToBytes(len(srcfilelist)))
 	r[0] = head.Name
 	r[1] = head.Author
-	r[2] = head.Number
+	r[2] = head.Type
+	r[3] = head.Number
 	// third, write to dest file
 	s := bytes.Join(r, []byte(""))
 	err = ioutil.WriteFile(destfile, s, 0644)

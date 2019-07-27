@@ -4,6 +4,7 @@ package pack
 type TPackAES struct {
 	Name		[]byte		// [32]byte/256bit
 	Author		[]byte		// [16]byte/128bit
+	Type		[]byte		// [8]byte/64bit
 	Number		[]byte		// [4]byte/32bit
 }
 
@@ -18,6 +19,7 @@ type TPackAESOne struct {
 type TPack3DES struct {
 	Name		[]byte		// [32]byte/256bit
 	Author		[]byte		// [16]byte/128bit
+	Type		[]byte		// [8]byte/64bit
 	Number		[]byte		// [4]byte/32bit
 }
 
@@ -31,6 +33,7 @@ type TPack3DESOne struct {
 type TPackDES struct {
 	Name		[]byte		// [32]byte/256bit
 	Author		[]byte		// [16]byte/128bit
+	Type		[]byte		// [8]byte/64bit
 	Number		[]byte		// [4]byte/32bit
 }
 
@@ -45,6 +48,7 @@ type TPackDESOne struct {
 type TPackRSA struct {
 	Name		[]byte		// [32]byte/256bit
 	Author		[]byte		// [16]byte/128bit
+	Type		[]byte		// [8]byte/64bit
 	Number		[]byte		// [4]byte/32bit
 }
 
@@ -59,6 +63,7 @@ type TPackRSAOne struct {
 type TPackBase64 struct {
 	Name		[]byte		// [32]byte/256bit
 	Author		[]byte		// [16]byte/128bit
+	Type		[]byte		// [8]byte/64bit
 	Number		[]byte		// [4]byte/32bit
 }
 
