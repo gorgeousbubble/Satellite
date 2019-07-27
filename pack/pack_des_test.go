@@ -15,6 +15,34 @@ func TestPackDES(t *testing.T) {
 	}
 }
 
+func TestPack3DESOneGo(t *testing.T) {
+	var wg sync.WaitGroup
+	var r []byte
+	src := "../test/data/pack/file.txt"
+	wg.Add(1)
+	err := Pack3DESOneGo(src, &r, &wg)
+	if err != nil {
+		t.Fatal("Error Pack 3DES One Go:", err)
+	}
+	wg.Wait()
+	err = ioutil.WriteFile("../test/data/pack/file_3des.txt", r, 0644)
+	if err != nil {
+		t.Fatal("Error Write 3DES One Go:", err)
+	}
+}
+
+func TestPack3DESOne(t *testing.T) {
+	src := "../test/data/pack/file.txt"
+	r, err := Pack3DESOne(src)
+	if err != nil {
+		t.Fatal("Error Pack 3DES One:", err)
+	}
+	err = ioutil.WriteFile("../test/data/pack/file_3des.txt", r, 0644)
+	if err != nil {
+		t.Fatal("Error Write 3DES One:", err)
+	}
+}
+
 func TestPackDESOneGo(t *testing.T) {
 	var wg sync.WaitGroup
 	var r []byte
@@ -104,6 +132,38 @@ func BenchmarkPackDES(b *testing.B) {
 		err := PackDES(src, dest)
 		if err != nil {
 			b.Fatal("Error Pack DES:", err)
+		}
+	}
+}
+
+func BenchmarkPack3DESOneGo(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		var wg sync.WaitGroup
+		var r []byte
+		src := "../test/data/pack/file.txt"
+		wg.Add(1)
+		err := Pack3DESOneGo(src, &r, &wg)
+		if err != nil {
+			b.Fatal("Error Pack 3DES One Go:", err)
+		}
+		wg.Wait()
+		err = ioutil.WriteFile("../test/data/pack/file_3des.txt", r, 0644)
+		if err != nil {
+			b.Fatal("Error Write 3DES One Go:", err)
+		}
+	}
+}
+
+func BenchmarkPack3DESOne(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		src := "../test/data/pack/file.txt"
+		r, err := Pack3DESOne(src)
+		if err != nil {
+			b.Fatal("Error Pack 3DES One:", err)
+		}
+		err = ioutil.WriteFile("../test/data/pack/file_3des.txt", r, 0644)
+		if err != nil {
+			b.Fatal("Error Write 3DES One:", err)
 		}
 	}
 }
