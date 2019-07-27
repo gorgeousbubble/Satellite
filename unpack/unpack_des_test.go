@@ -113,6 +113,33 @@ func TestUnpackDESOne(t *testing.T) {
 	}
 }
 
+func TestTripleDESDecryptGo(t *testing.T) {
+	var dest []byte
+	var wg sync.WaitGroup
+	src := []byte{0x2F, 0x58, 0x70, 0x9E, 0xA3, 0x98, 0x7E, 0xD7, 0x8E, 0x79, 0x12, 0x0F, 0x47, 0xF3, 0xA5, 0x49}
+	key := []byte("HyacinthRaindropRomantic")
+	wg.Add(1)
+	go TripleDESDecryptGo(src, key, &dest, &wg)
+	wg.Wait()
+	err := ioutil.WriteFile("../test/data/unpack/file.txt", dest, 0644)
+	if err != nil {
+		t.Fatal("Error Write 3DES One:", err)
+	}
+}
+
+func TestTripleDESDecrypt(t *testing.T) {
+	src := []byte{0x2F, 0x58, 0x70, 0x9E, 0xA3, 0x98, 0x7E, 0xD7, 0x8E, 0x79, 0x12, 0x0F, 0x47, 0xF3, 0xA5, 0x49}
+	key := []byte("HyacinthRaindropRomantic")
+	r, err := TripleDESDecrypt(src, key)
+	if err != nil {
+		t.Fatal("Error 3DES Decrypt:", err)
+	}
+	err = ioutil.WriteFile("../test/data/unpack/file.txt", r, 0644)
+	if err != nil {
+		t.Fatal("Error Write 3DES One:", err)
+	}
+}
+
 func TestDESDecryptGo(t *testing.T) {
 	var dest []byte
 	var wg sync.WaitGroup
@@ -247,6 +274,37 @@ func BenchmarkUnpackDESOne(b *testing.B) {
 		err = UnpackDESOne(s, hh, destpath)
 		if err != nil {
 			b.Fatal("Error unpack crypt file:", err)
+		}
+	}
+}
+
+func BenchmarkTripleDESDecryptGo(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		var dest []byte
+		var wg sync.WaitGroup
+		src := []byte{0x2F, 0x58, 0x70, 0x9E, 0xA3, 0x98, 0x7E, 0xD7, 0x8E, 0x79, 0x12, 0x0F, 0x47, 0xF3, 0xA5, 0x49}
+		key := []byte("HyacinthRaindropRomantic")
+		wg.Add(1)
+		go TripleDESDecryptGo(src, key, &dest, &wg)
+		wg.Wait()
+		err := ioutil.WriteFile("../test/data/unpack/file.txt", dest, 0644)
+		if err != nil {
+			b.Fatal("Error Write 3DES One:", err)
+		}
+	}
+}
+
+func BenchmarkTripleDESDecrypt(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		src := []byte{0x2F, 0x58, 0x70, 0x9E, 0xA3, 0x98, 0x7E, 0xD7, 0x8E, 0x79, 0x12, 0x0F, 0x47, 0xF3, 0xA5, 0x49}
+		key := []byte("HyacinthRaindropRomantic")
+		r, err := TripleDESDecrypt(src, key)
+		if err != nil {
+			b.Fatal("Error 3DES Decrypt:", err)
+		}
+		err = ioutil.WriteFile("../test/data/unpack/file.txt", r, 0644)
+		if err != nil {
+			b.Fatal("Error Write 3DES One:", err)
 		}
 	}
 }
