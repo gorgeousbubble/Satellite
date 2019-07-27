@@ -130,6 +130,37 @@ func PackDESOne(srcfile string) (r []byte, err error) {
 	return r, err
 }
 
+func TripleDESEncryptGo(src, key []byte, dest *[]byte, wg *sync.WaitGroup) (err error) {
+	*dest, err = TripleDESEncrypt(src, key)
+	if err != nil {
+		log.Println("Error 3DES Encrypt data:", err)
+		wg.Done()
+		return err
+	}
+	wg.Done()
+	return err
+}
+
+func TripleDESEncrypt(src, key []byte) (dest []byte, err error) {
+	// key length should be 8
+	block, err := des.NewTripleDESCipher(key)
+	if err != nil {
+		log.Println("Error key length:", err)
+		return dest, err
+	}
+	// calculate block size
+	blockSize := block.BlockSize()
+	// fill block data
+	src = PKCS5Padding(src, blockSize)
+	// encrypt mode
+	blockMode := cipher.NewCBCEncrypter(block, key[:8])
+	// create slice
+	dest = make([]byte, len(src))
+	// encrypt
+	blockMode.CryptBlocks(dest, src)
+	return dest, err
+}
+
 func DESEncryptGo(src, key []byte, dest *[]byte, wg *sync.WaitGroup) (err error) {
 	*dest, err = DESEncrypt(src, key)
 	if err != nil {
