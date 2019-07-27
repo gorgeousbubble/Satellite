@@ -142,7 +142,7 @@ func TripleDESEncryptGo(src, key []byte, dest *[]byte, wg *sync.WaitGroup) (err 
 }
 
 func TripleDESEncrypt(src, key []byte) (dest []byte, err error) {
-	// key length should be 8
+	// key length should be 24
 	block, err := des.NewTripleDESCipher(key)
 	if err != nil {
 		log.Println("Error key length:", err)
@@ -153,7 +153,7 @@ func TripleDESEncrypt(src, key []byte) (dest []byte, err error) {
 	// fill block data
 	src = PKCS5Padding(src, blockSize)
 	// encrypt mode
-	blockMode := cipher.NewCBCEncrypter(block, key[:8])
+	blockMode := cipher.NewCBCEncrypter(block, key[:blockSize])
 	// create slice
 	dest = make([]byte, len(src))
 	// encrypt
