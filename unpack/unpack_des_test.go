@@ -8,6 +8,15 @@ import (
 	"testing"
 )
 
+func TestUnpack3DES(t *testing.T) {
+	srcfile := "../test/data/unpack/file_3des.txt"
+	destpath := "../test/data/unpack/"
+	err := Unpack3DES(srcfile, destpath)
+	if err != nil {
+		t.Fatal("Error Unpack 3DES:", err)
+	}
+}
+
 func TestUnpackDES(t *testing.T) {
 	srcfile := "../test/data/unpack/file_des.txt"
 	destpath := "../test/data/unpack/"
@@ -262,6 +271,17 @@ func TestDESDecrypt(t *testing.T) {
 	err = ioutil.WriteFile("../test/data/unpack/file.txt", r, 0644)
 	if err != nil {
 		t.Fatal("Error Write DES One:", err)
+	}
+}
+
+func BenchmarkUnpack3DES(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		srcfile := "../test/data/unpack/file_3des.txt"
+		destpath := "../test/data/unpack/"
+		err := Unpack3DES(srcfile, destpath)
+		if err != nil {
+			b.Fatal("Error Unpack 3DES:", err)
+		}
 	}
 }
 
