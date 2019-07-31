@@ -1,17 +1,16 @@
 package comp
 
 import (
-	"sync"
 	"testing"
 )
 
-func TestCompressZipOneGo(t *testing.T) {
-	var wg sync.WaitGroup
-	src := "../test/data/comp/file.txt"
+func TestCompressZip(t *testing.T) {
+	src := []string{"../test/data/comp/file_1.txt", "../test/data/comp/file_2.txt", "../test/data/comp/file_3.txt", "../test/data/comp/file_4.txt", "../test/data/comp/file_5.txt"}
 	dest := "../test/data/comp/file.zip"
-	wg.Add(1)
-	go CompressZipOneGo(src, dest, &wg)
-	wg.Wait()
+	err := CompressZip(src, dest)
+	if err != nil {
+		t.Fatal("Error Compress Zip:", err)
+	}
 }
 
 func TestCompressZipOne(t *testing.T) {
@@ -23,14 +22,14 @@ func TestCompressZipOne(t *testing.T) {
 	}
 }
 
-func BenchmarkCompressZipOneGo(b *testing.B) {
+func BenchmarkCompressZip(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		var wg sync.WaitGroup
-		src := "../test/data/comp/file.txt"
+		src := []string{"../test/data/comp/file_1.txt", "../test/data/comp/file_2.txt", "../test/data/comp/file_3.txt", "../test/data/comp/file_4.txt", "../test/data/comp/file_5.txt"}
 		dest := "../test/data/comp/file.zip"
-		wg.Add(1)
-		go CompressZipOneGo(src, dest, &wg)
-		wg.Wait()
+		err := CompressZip(src, dest)
+		if err != nil {
+			b.Fatal("Error Compress Zip:", err)
+		}
 	}
 }
 
