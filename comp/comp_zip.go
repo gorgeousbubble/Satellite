@@ -38,8 +38,15 @@ func CompressZipOne(src string, dest string) (err error) {
 			log.Println("Error create compress file header:", err)
 			return err
 		}
+		// open the src file...
+		data, err := os.Open(path)
+		if err != nil {
+			log.Println("Error open file:", err)
+			return err
+		}
+		defer data.Close()
 		// write compress data into file
-		_, err = io.Copy(writer, file)
+		_, err = io.Copy(writer, data)
 		if err != nil {
 			log.Println("Error write compress data into file:", err)
 			return err
