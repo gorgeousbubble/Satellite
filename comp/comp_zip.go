@@ -6,7 +6,17 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"sync"
 )
+
+func CompressZipOneGo(src string, dest string, wg *sync.WaitGroup) (err error) {
+	err = CompressZipOne(src, dest)
+	if err != nil {
+		log.Println("Error Compress Zip One:", err)
+	}
+	wg.Done()
+	return err
+}
 
 func CompressZipOne(src string, dest string) (err error) {
 	// create the dest zip file...
