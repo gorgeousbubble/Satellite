@@ -1,5 +1,3 @@
-package main
+package decomp
 
-func main() {
-	$END$
-}
+
