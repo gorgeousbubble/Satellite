@@ -21,7 +21,7 @@ func CompressTarGz(src []string, dest string) (err error) {
 	gw := gzip.NewWriter(file)
 	defer gw.Close()
 	// apply one tar writer to write file
-	tw := tar.NewWriter(file)
+	tw := tar.NewWriter(gw)
 	defer tw.Close()
 	// loop compress src list files
 	for _, v := range src {
