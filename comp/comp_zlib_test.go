@@ -12,7 +12,7 @@ func TestCompressZlib(t *testing.T) {
 	if err != nil {
 		t.Fatal("Error Compress Zlib:", err)
 	}
-	fmt.Println("After Compress Zlib:", dest)
+	fmt.Println("After Compress Zlib:", string(dest))
 }
 
 func BenchmarkCompressZlib(b *testing.B) {
