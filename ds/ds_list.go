@@ -1,7 +1,5 @@
 package ds
 
-type Object interface {}
-
 type Node struct {
 	data Object
 	next *Node
