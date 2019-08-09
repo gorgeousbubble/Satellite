@@ -1,5 +1,7 @@
-package main
+package global
 
-func main() {
-	$END$
-}
+const (
+	AppName = "satellite"
+	AppVersion = "v1.00a"
+	AppAuthor = "alopex"
+)
