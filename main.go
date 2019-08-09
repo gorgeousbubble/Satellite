@@ -1,9 +1,14 @@
 package main
 
 import (
-	"fmt"
+	"flag"
+	"os"
+	_ "satellite/cmd"
 )
 
 func main() {
-	fmt.Println("hello,world!")
+	if len(os.Args) <= 1 {
+		flag.Usage()
+	}
+
 }
