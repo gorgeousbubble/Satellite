@@ -34,15 +34,15 @@ func Unpack(srcfile string, destpath string) (err error) {
 	index := bytes.IndexByte(buf, 0)
 	tp := string(buf[0:index])
 	switch tp {
-	case "AES":
+	case "AES", "aes":
 		err = UnpackAES(srcfile, destpath)
-	case "DES":
+	case "DES", "des":
 		err = UnpackDES(srcfile, destpath)
-	case "3DES":
+	case "3DES", "3des":
 		err = Unpack3DES(srcfile, destpath)
-	case "RSA":
+	case "RSA", "rsa":
 		err = UnpackRSA(srcfile, destpath)
-	case "BASE64":
+	case "BASE64", "base64":
 		err = UnpackBase64(srcfile, destpath)
 	default:
 		err = errors.New("Undefined unpack algorithm.")
