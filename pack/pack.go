@@ -18,7 +18,7 @@ func Pack(srcfilelist []string, destfile string, algorithm string) (err error) {
 	case "BASE64", "base64":
 		err = PackBase64(srcfilelist, destfile)
 	default:
-		err = errors.New("Undefined unpack algorithm.")
+		err = errors.New("Undefined pack algorithm.")
 		log.Println(err)
 	}
 	return err
