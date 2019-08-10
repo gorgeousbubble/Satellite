@@ -7,7 +7,6 @@ import (
 	"os"
 	"satellite/comp"
 	. "satellite/global"
-	"satellite/pack"
 )
 
 var compCmd = flag.NewFlagSet(CmdCompress, flag.ExitOnError)
@@ -18,7 +17,7 @@ var compType string
 func init() {
 	compCmd.Var(NewStrSlice([]string{}, &compSrc), "i", "input files: file list to compress, such as \"file_1.txt,file_2.mov,file_3.png...\"")
 	compCmd.StringVar(&compDest, "o", "", "output files: one file end with 'tar.gz' or 'zip', such as \"file.tar.gz\" or \"file.zip\"")
-	compCmd.StringVar(&compType, "t", "zip", "pack type: one type of enum [tar.gz,zip]")
+	compCmd.StringVar(&compType, "t", "zip", "compress type: one type of enum [tar.gz,zip]")
 }
 
 func ParseCmdComp() {
