@@ -7,20 +7,17 @@ import (
 	"os"
 )
 
-var Help bool
-
 func init() {
-	flag.BoolVar(&Help, "h", false, "show help")
-
-	flag.Usage = usage
+	flag.Usage = Usage
 }
 
-func usage() {
+func Usage() {
 	_, err := fmt.Fprintf(os.Stderr, `Satellite Project - We share beautiful dreams together.
 Version: v1.00a
 Author: alopex
 
-Usage: satellite [-h]
+Usage: satellite [pack/unpack]
+
 Options:
 `)
 	if err != nil {
