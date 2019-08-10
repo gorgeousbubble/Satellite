@@ -7,15 +7,15 @@ import (
 
 func Pack(srcfilelist []string, destfile string, algorithm string) (err error) {
 	switch algorithm {
-	case "AES":
+	case "AES", "aes":
 		err = PackAES(srcfilelist, destfile)
-	case "DES":
+	case "DES", "des":
 		err = PackDES(srcfilelist, destfile)
-	case "3DES":
+	case "3DES", "3des":
 		err = Pack3DES(srcfilelist, destfile)
-	case "RSA":
+	case "RSA", "rsa":
 		err = PackRSA(srcfilelist, destfile)
-	case "BASE64":
+	case "BASE64", "base64":
 		err = PackBase64(srcfilelist, destfile)
 	default:
 		err = errors.New("Undefined unpack algorithm.")
