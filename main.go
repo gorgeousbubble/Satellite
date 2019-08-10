@@ -21,6 +21,8 @@ func main() {
 		cmd.ParseCmdUnpack()
 	case CmdCompress:
 		cmd.ParseCmdComp()
+	case CmdDecompress:
+		cmd.ParseCmdDeComp()
 	default:
 		fmt.Println("Unexpected command~")
 		os.Exit(1)
