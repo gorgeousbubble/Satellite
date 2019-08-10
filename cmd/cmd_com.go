@@ -19,6 +19,8 @@ Author: alopex
 Usage: satellite [pack/unpack]
 
 Options:
+	pack 	- packet files to user customize type.
+	unpack	- unpack packet to origin files.
 `)
 	if err != nil {
 		log.Println("Error print information:", err)
