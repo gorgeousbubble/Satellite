@@ -16,11 +16,13 @@ func Usage() {
 Version: v1.00a
 Author: alopex
 
-Usage: satellite [pack/unpack]
+Usage: satellite [pack/unpack] [comp/decomp]
 
 Options:
 	pack 	- packet files to user customize type.
 	unpack	- unpack packet to origin files.
+	comp	- compress files to 'zip' or 'tar.gz'.
+	decomp	- decompress packet to origin files.
 `)
 	if err != nil {
 		log.Println("Error print information:", err)
