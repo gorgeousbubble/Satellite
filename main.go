@@ -6,6 +6,7 @@ import (
 	"os"
 	"satellite/cmd"
 	. "satellite/global"
+	_ "satellite/logging"
 )
 
 func main() {
