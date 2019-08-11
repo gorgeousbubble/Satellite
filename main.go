@@ -27,5 +27,4 @@ func main() {
 		fmt.Println("Unexpected command~")
 		os.Exit(1)
 	}
-
 }
