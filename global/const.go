@@ -15,4 +15,5 @@ const (
 
 const (
 	LogPath			= "/log"
+	LogNumber		= 5
 )
