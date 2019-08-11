@@ -12,3 +12,7 @@ const (
 	CmdCompress		= "comp"
 	CmdDecompress 	= "decomp"
 )
+
+const (
+	LogPath			= "/log"
+)
