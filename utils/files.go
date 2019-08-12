@@ -14,7 +14,7 @@ func (s FileInfos) Len() int {
 }
 
 func (s FileInfos) Less(i, j int) bool {
-	return s[i].ModTime().Before(s[j].ModTime())
+	return s[i].ModTime().After(s[j].ModTime())
 }
 
 func (s FileInfos) Swap(i, j int) {
