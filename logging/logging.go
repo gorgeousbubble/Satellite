@@ -40,7 +40,8 @@ func init() {
 	}
 	if len(files) >= LogNumber {
 		sort.Sort(FileInfos(files))
-		err = os.Remove(files[0].Name())
+		del := path + "/" + files[len(files)-1].Name()
+		err = os.Remove(del)
 		if err != nil {
 			fmt.Println("Error remove log file:", err)
 			os.Exit(1)
@@ -52,7 +53,8 @@ func init() {
 		fmt.Println("Error open log file:", err)
 		os.Exit(1)
 	}
-	defer file.Close()
+	//defer file.Close()
 	// Set log settings
+	log.SetFlags(log.LstdFlags|log.Lshortfile)
 	log.SetOutput(file)
 }
