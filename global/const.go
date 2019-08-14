@@ -11,6 +11,7 @@ const (
 	CmdUnpack   	= "unpack"
 	CmdCompress		= "comp"
 	CmdDecompress 	= "decomp"
+	CmdTcp          = "tcp"
 )
 
 const (
