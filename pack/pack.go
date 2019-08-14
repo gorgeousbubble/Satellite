@@ -2,7 +2,6 @@ package pack
 
 import (
 	"github.com/pkg/errors"
-	"log"
 )
 
 func Pack(srcfilelist []string, destfile string, algorithm string) (err error) {
@@ -19,7 +18,6 @@ func Pack(srcfilelist []string, destfile string, algorithm string) (err error) {
 		err = PackBase64(srcfilelist, destfile)
 	default:
 		err = errors.New("Undefined pack algorithm.")
-		log.Println(err)
 	}
 	return err
 }
