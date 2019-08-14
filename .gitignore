@@ -3,3 +3,6 @@
 #Project files
 .idea
 .vscode
+
+#Log files
+.log
