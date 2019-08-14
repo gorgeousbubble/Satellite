@@ -25,3 +25,7 @@ const (
 	ConstRSAUnpackSize		= 128	// RSA buffer size(Unpack)
 	ConstBase64BufferSize 	= 128	// Base64 buffer size
 )
+
+const (
+	ConstTCPBufferSize		= 4096	// TCP buffer size(Receive)
+)
