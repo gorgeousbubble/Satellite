@@ -60,7 +60,7 @@ func connectHandler(c net.Conn) {
 			c.Close()
 			break
 		}
-		// handle data stream(just for demo...)
+		// handle data stream
 		str := strings.TrimSpace(string(buf[0:n]))
 		fmt.Println("[" + c.RemoteAddr().String() + "]:", str)
 	}
