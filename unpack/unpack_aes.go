@@ -9,6 +9,7 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	. "satellite/global"
 	. "satellite/utils"
 	"sync"
 )

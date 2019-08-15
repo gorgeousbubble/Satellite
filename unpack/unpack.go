@@ -46,7 +46,6 @@ func Unpack(srcfile string, destpath string) (err error) {
 		err = UnpackBase64(srcfile, destpath)
 	default:
 		err = errors.New("Undefined unpack algorithm.")
-		log.Println(err)
 	}
 	return err
 }
