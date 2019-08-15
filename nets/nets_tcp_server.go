@@ -5,8 +5,6 @@ import (
 	"log"
 	"net"
 	"os"
-	. "satellite/global"
-	"strings"
 )
 
 func StartTcpServer(ip string, port string) {
@@ -35,33 +33,7 @@ func StartTcpServer(ip string, port string) {
 			log.Println("Error accept connect:", err)
 			continue
 		}
-		go connectHandler(conn)
-	}
-}
-
-func connectHandler(c net.Conn) {
-	// invalid socket
-	if c == nil {
-		fmt.Println("Invalid socket connect.")
-		log.Println("Invalid socket connect.")
-		return
-	}
-	// create slice to receive data
-	buf := make([]byte, ConstTCPBufferSize)
-	// loop receive data stream
-	for {
-		// start read data stream from net
-		n, err := c.Read(buf)
-		if n == 0 || err != nil {
-			if err != nil {
-				fmt.Println("Error read data stream:", err)
-				log.Println("Error read data stream:", err)
-			}
-			c.Close()
-			break
-		}
-		// handle data stream
-		str := strings.TrimSpace(string(buf[0:n]))
-		fmt.Println("[" + c.RemoteAddr().String() + "]:", str)
+		fmt.Println("Success accept client:", conn.RemoteAddr().String())
+		go connRecvHandler(conn)
 	}
 }
