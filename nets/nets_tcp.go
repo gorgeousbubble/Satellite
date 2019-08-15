@@ -11,21 +11,27 @@ import (
 
 func StartTcpServer(ip string, port string) {
 	// resolve ip address
+	fmt.Println("Start Tcp Server")
 	addr, err := net.ResolveTCPAddr("tcp", ip + ":" + port)
 	if err != nil {
+		fmt.Println("Error resolve ip address:", err)
 		log.Println("Error resolve ip address:", err)
 		os.Exit(1)
 	}
 	// start listen tcp
+	fmt.Println("Listen Tcp:", ip + ":" + port)
 	socket, err := net.ListenTCP("tcp", addr)
 	if err != nil {
+		fmt.Println("Error listen tcp:", err)
 		log.Println("Error listen tcp:", err)
 		os.Exit(1)
 	}
 	// loop waiting for connect...
+	fmt.Println("Loop waiting for connect...")
 	for {
 		conn, err := socket.Accept()
 		if err != nil {
+			fmt.Println("Error accept connect:", err)
 			log.Println("Error accept connect:", err)
 			continue
 		}
@@ -36,7 +42,9 @@ func StartTcpServer(ip string, port string) {
 func connectHandler(c net.Conn) {
 	// invalid socket
 	if c == nil {
-		log.Panicln("Invalid socket connect.")
+		fmt.Println("Invalid socket connect.")
+		log.Println("Invalid socket connect.")
+		return
 	}
 	// create slice to receive data
 	buf := make([]byte, ConstTCPBufferSize)
@@ -46,6 +54,7 @@ func connectHandler(c net.Conn) {
 		n, err := c.Read(buf)
 		if n == 0 || err != nil {
 			if err != nil {
+				fmt.Println("Error read data stream:", err)
 				log.Println("Error read data stream:", err)
 			}
 			c.Close()
@@ -53,6 +62,6 @@ func connectHandler(c net.Conn) {
 		}
 		// handle data stream(just for demo...)
 		str := strings.TrimSpace(string(buf[0:n]))
-		fmt.Println(str)
+		fmt.Println("[" + c.RemoteAddr().String() + "]:", str)
 	}
 }
