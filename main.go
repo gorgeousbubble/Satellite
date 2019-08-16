@@ -26,6 +26,8 @@ func main() {
 		cmd.ParseCmdDeComp()
 	case CmdTcp:
 		cmd.ParseCmdTcp()
+	case CmdUdp:
+		cmd.ParseCmdUdp()
 	default:
 		fmt.Println("Invalid command~")
 		os.Exit(1)
