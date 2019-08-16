@@ -27,7 +27,7 @@ func main() {
 	case CmdTcp:
 		cmd.ParseCmdTcp()
 	default:
-		fmt.Println("Unexpected command~")
+		fmt.Println("Invalid command~")
 		os.Exit(1)
 	}
 }
