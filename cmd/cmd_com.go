@@ -23,7 +23,7 @@ Options:
 	unpack	- unpack packet to origin files.
 	comp	- compress files to 'zip' or 'tar.gz'.
 	decomp	- decompress packet to origin files.
-	tcp		- tcp simple server/client.
+	tcp	- tcp simple server/client.
 `)
 	if err != nil {
 		log.Println("Error print information:", err)
