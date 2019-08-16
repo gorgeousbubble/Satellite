@@ -29,4 +29,5 @@ const (
 
 const (
 	ConstTCPBufferSize = 4096 // TCP buffer size(Receive)
+	ConstUDPBufferSize = 4096 // UDP buffer size(Receive)
 )
