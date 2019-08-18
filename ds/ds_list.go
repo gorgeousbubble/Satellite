@@ -82,7 +82,7 @@ func (list *List) Get(i int) *Node {
 		return nil
 	}
 	item := (*list).head
-	for j := 0; j < i ; j++ {
+	for j := 0; j < i; j++ {
 		item = (*item).next
 	}
 	return item

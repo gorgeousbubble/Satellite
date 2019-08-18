@@ -55,6 +55,6 @@ func init() {
 	}
 	//defer file.Close()
 	// Set log settings
-	log.SetFlags(log.LstdFlags|log.Lshortfile)
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
 	log.SetOutput(file)
 }

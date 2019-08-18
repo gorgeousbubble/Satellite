@@ -20,7 +20,7 @@ func SHA1Encode(src string) string {
 	return hex.EncodeToString(h.Sum(nil))
 }
 
-func SHA1EncryptGo(data []byte, r *[sha1.Size]byte, wg *sync.WaitGroup)  {
+func SHA1EncryptGo(data []byte, r *[sha1.Size]byte, wg *sync.WaitGroup) {
 	*r = sha1.Sum(data)
 	wg.Done()
 }

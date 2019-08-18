@@ -48,7 +48,7 @@ func ListFiles(dir string, term string) (files []os.FileInfo, err error) {
 		return err
 	})
 	if err != nil {
-		log.Println("Error list files:",  err)
+		log.Println("Error list files:", err)
 	}
 	return
 }

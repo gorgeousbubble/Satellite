@@ -351,7 +351,7 @@ func TripleDESDecrypt(src, key []byte) (dest []byte, err error) {
 	// calculate block size
 	blockSize := block.BlockSize()
 	// encrypt mode
-	blockMode := cipher.NewCBCDecrypter(block,key[:blockSize])
+	blockMode := cipher.NewCBCDecrypter(block, key[:blockSize])
 	// create slice
 	dest = make([]byte, len(src))
 	// decrypt
@@ -382,7 +382,7 @@ func DESDecrypt(src, key []byte) (dest []byte, err error) {
 	// calculate block size
 	blockSize := block.BlockSize()
 	// encrypt mode
-	blockMode := cipher.NewCBCDecrypter(block,key[:blockSize])
+	blockMode := cipher.NewCBCDecrypter(block, key[:blockSize])
 	// create slice
 	dest = make([]byte, len(src))
 	// decrypt

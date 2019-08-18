@@ -54,7 +54,7 @@ func GenRSAKey2File(bits int) error {
 	}
 	derSteam := x509.MarshalPKCS1PrivateKey(privateKey)
 	block := &pem.Block{
-		Type: "RSA PRIVATE KEY",
+		Type:  "RSA PRIVATE KEY",
 		Bytes: derSteam,
 	}
 	file, err := os.Create("private.pem")
@@ -72,7 +72,7 @@ func GenRSAKey2File(bits int) error {
 		return nil
 	}
 	block = &pem.Block{
-		Type: "PUBLIC KEY",
+		Type:  "PUBLIC KEY",
 		Bytes: derPkix,
 	}
 	file, err = os.Create("public.pem")
@@ -94,7 +94,7 @@ func GenRSAKey2Memory(pri *[]byte, pub *[]byte, bits int) error {
 	}
 	derSteam := x509.MarshalPKCS1PrivateKey(privateKey)
 	block := &pem.Block{
-		Type: "RSA PRIVATE KEY",
+		Type:  "RSA PRIVATE KEY",
 		Bytes: derSteam,
 	}
 	*pri = pem.EncodeToMemory(block)
@@ -105,7 +105,7 @@ func GenRSAKey2Memory(pri *[]byte, pub *[]byte, bits int) error {
 		return nil
 	}
 	block = &pem.Block{
-		Type: "PUBLIC KEY",
+		Type:  "PUBLIC KEY",
 		Bytes: derPkix,
 	}
 	*pub = pem.EncodeToMemory(block)

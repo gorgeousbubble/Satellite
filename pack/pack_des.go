@@ -317,7 +317,7 @@ func DESEncrypt(src, key []byte) (dest []byte, err error) {
 func PKCS5Padding(src []byte, size int) []byte {
 	var padding int
 	if len(src)%size != 0 {
-		padding = size - len(src) % size
+		padding = size - len(src)%size
 	}
 	text := bytes.Repeat([]byte{byte(padding)}, padding)
 	return append(src, text...)
