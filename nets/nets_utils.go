@@ -7,7 +7,6 @@ import (
 	"net"
 	"os"
 	. "satellite/global"
-	"strconv"
 	"strings"
 	"time"
 )
@@ -34,7 +33,7 @@ func connTcpSendHandler(c net.Conn) {
 			break
 		}
 		t := time.Now()
-		fmt.Println("["+c.LocalAddr().String()+"] ", strconv.Itoa(t.Hour())+":"+strconv.Itoa(t.Minute())+":"+strconv.Itoa(t.Second()))
+		fmt.Println("["+c.LocalAddr().String()+"] ", t.Format("15:04:05"))
 		fmt.Println("Remote<-Local:", in)
 	}
 }
@@ -67,7 +66,7 @@ func connTcpRecvHandler(c net.Conn) {
 		// handle data stream
 		str := strings.TrimSpace(string(buf[0:n]))
 		t := time.Now()
-		fmt.Println("["+c.RemoteAddr().String()+"] ", strconv.Itoa(t.Hour())+":"+strconv.Itoa(t.Minute())+":"+strconv.Itoa(t.Second()))
+		fmt.Println("["+c.RemoteAddr().String()+"] ", t.Format("15:04:05"))
 		fmt.Println("Remote->Local:", str)
 	}
 }
@@ -94,7 +93,7 @@ func connUdpSendHandler(c *net.UDPConn) {
 			break
 		}
 		t := time.Now()
-		fmt.Println("["+c.LocalAddr().String()+"] ", strconv.Itoa(t.Hour())+":"+strconv.Itoa(t.Minute())+":"+strconv.Itoa(t.Second()))
+		fmt.Println("["+c.LocalAddr().String()+"] ", t.Format("15:04:05"))
 		fmt.Println("Remote<-Local:", in)
 	}
 }
@@ -127,7 +126,7 @@ func connUdpRecvHandler(c *net.UDPConn) {
 		// handle data stream
 		str := strings.TrimSpace(string(buf[0:n]))
 		t := time.Now()
-		fmt.Println("["+remoteAddr.String()+"] ", strconv.Itoa(t.Hour())+":"+strconv.Itoa(t.Minute())+":"+strconv.Itoa(t.Second()))
+		fmt.Println("["+remoteAddr.String()+"] ", t.Format("15:04:05"))
 		fmt.Println("Remote->Local:", str)
 	}
 }
