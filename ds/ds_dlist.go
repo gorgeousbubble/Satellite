@@ -20,7 +20,7 @@ func (dlist *DList) Init() {
 
 func (dlist *DList) Append(data Object) {
 	newNode := new(DNode)
-	(*newNode).data =  data
+	(*newNode).data = data
 
 	if (*dlist).GetSize() == 0 {
 		(*dlist).head = newNode
@@ -44,7 +44,7 @@ func (dlist *DList) InsertNext(node *DNode, data Object) bool {
 		dlist.Append(data)
 	} else {
 		newNode := new(DNode)
-		(*newNode).data =  data
+		(*newNode).data = data
 		(*newNode).prev = node
 		(*newNode).next = (*node).next
 

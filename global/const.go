@@ -12,6 +12,7 @@ const (
 	CmdCompress   = "comp"
 	CmdDecompress = "decomp"
 	CmdTcp        = "tcp"
+	CmdUdp        = "udp"
 )
 
 const (

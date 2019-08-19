@@ -9,7 +9,7 @@ func shift(s []int, l int, h int) {
 			j++
 		}
 		if k < s[j] {
-			s[i]  = s[j]
+			s[i] = s[j]
 			i = j
 			j = 2*i + 1
 		} else {

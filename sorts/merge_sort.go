@@ -7,10 +7,10 @@ func merge(s []int, l int, m int, r int) {
 	for i <= m && j <= r {
 		if s[i] <= s[j] {
 			t = append(t, s[i])
-			i ++
+			i++
 		} else {
 			t = append(t, s[j])
-			j ++
+			j++
 		}
 	}
 	if i <= m {
