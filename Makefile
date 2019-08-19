@@ -2,7 +2,7 @@
 # Copyright(C) 2019, Team Gorgeous Bubble, All Rights Reserved.
 
 # Golang Command
-GO 		= go
+GO 	= go
 GOBUILD = $(GO) build
 GOCLEAN = $(GO) clean
 GOTEST 	= $(GO) test
