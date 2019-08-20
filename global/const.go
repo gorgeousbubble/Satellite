@@ -13,6 +13,7 @@ const (
 	CmdDecompress = "decomp"
 	CmdTcp        = "tcp"
 	CmdUdp        = "udp"
+	CmdHttp       = "http"
 )
 
 const (

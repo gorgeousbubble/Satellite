@@ -2,7 +2,6 @@ package nets
 
 import (
 	"net/http"
-	"restful/src/logger"
 )
 
 func handleRoot(w http.ResponseWriter, r *http.Request) {
@@ -13,7 +12,6 @@ func handleRoot(w http.ResponseWriter, r *http.Request) {
 	}
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
-		logger.Errorf("%d Internal Server Error", http.StatusInternalServerError)
 		return
 	}
 }
