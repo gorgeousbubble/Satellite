@@ -21,6 +21,10 @@ const (
 )
 
 const (
+	HttpURLRoot = "/"
+)
+
+const (
 	ConstAESBufferSize    = 128 // AES buffer size should be 128, 256, ...
 	ConstDESBufferSize    = 128 // DES buffer size should be 128, 256, ...
 	ConstRSAPacketSize    = 64  // RSA buffer size should less than 128(Packet)
@@ -29,6 +33,8 @@ const (
 )
 
 const (
-	ConstTCPBufferSize = 4096 // TCP buffer size(Receive)
-	ConstUDPBufferSize = 4096 // UDP buffer size(Receive)
+	ConstTCPBufferSize    = 4096 // TCP buffer size(Receive)
+	ConstUDPBufferSize    = 4096 // UDP buffer size(Receive)
+	ConstHTTPWriteTimeout = 1000 // HTTP Write Timeout Time(Millisecond)
+	ConstHTTPReadTimeout  = 1000 // HTTP Read Timeout Time(Millisecond)
 )
