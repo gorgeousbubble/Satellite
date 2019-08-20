@@ -13,11 +13,16 @@ const (
 	CmdDecompress = "decomp"
 	CmdTcp        = "tcp"
 	CmdUdp        = "udp"
+	CmdHttp       = "http"
 )
 
 const (
 	LogPath   = "/log"
 	LogNumber = 5
+)
+
+const (
+	HttpURLRoot = "/"
 )
 
 const (
@@ -29,6 +34,8 @@ const (
 )
 
 const (
-	ConstTCPBufferSize = 4096 // TCP buffer size(Receive)
-	ConstUDPBufferSize = 4096 // UDP buffer size(Receive)
+	ConstTCPBufferSize    = 4096 // TCP buffer size(Receive)
+	ConstUDPBufferSize    = 4096 // UDP buffer size(Receive)
+	ConstHTTPWriteTimeout = 1000 // HTTP Write Timeout Time(Millisecond)
+	ConstHTTPReadTimeout  = 1000 // HTTP Read Timeout Time(Millisecond)
 )
