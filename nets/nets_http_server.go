@@ -1,6 +1,8 @@
 package nets
 
 import (
+	"fmt"
+	"log"
 	"net/http"
 	. "satellite/global"
 	"time"
@@ -13,5 +15,9 @@ func StartHttpServer(ip string, port string) {
 		ReadTimeout:  ConstHTTPReadTimeout * time.Millisecond,
 		Handler:      createHttpRouter(),
 	}
-	server.ListenAndServe()
+	fmt.Println("Start Listen And Server on ", ip+":"+port)
+	err := server.ListenAndServe()
+	if err != nil {
+		log.Println("Error Listen And Server:", err)
+	}
 }
