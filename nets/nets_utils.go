@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"net/http"
 	"os"
 	. "satellite/global"
 	"strings"
@@ -129,4 +130,10 @@ func connUdpRecvHandler(c *net.UDPConn) {
 		fmt.Println("["+remoteAddr.String()+"] ", t.Format("15:04:05"))
 		fmt.Println("Remote->Local:", str)
 	}
+}
+
+func createHttpRouter() (mux *http.ServeMux) {
+	mux = http.NewServeMux()
+	mux.HandleFunc(HttpURLRoot, handleRoot)
+	return mux
 }
