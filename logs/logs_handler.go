@@ -2,11 +2,6 @@ package logs
 
 import "io"
 
-type Handler interface {
-	Write(b []byte) (n int, err error)
-	Close() error
-}
-
 type StreamHandler struct {
 	w io.Writer
 }
