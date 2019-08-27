@@ -2,7 +2,6 @@ package logs
 
 import (
 	"fmt"
-	"os"
 	"runtime"
 	"strconv"
 	"sync"
@@ -56,15 +55,6 @@ func NewLogger(handler Handler, flag int) *Logger {
 	r.closed.Set(0)
 	r.bufs = make([][]byte, 0, 16)
 	return r
-}
-
-func NewDefault(handler Handler) *Logger {
-	return NewLogger(handler, Ltime|Lfile|Llevel)
-}
-
-func newStdHandler() *StreamHandler {
-	h, _ := NewStreamHandler(os.Stdout)
-	return h
 }
 
 func (l *Logger) popBuf() []byte {
