@@ -87,4 +87,5 @@ func (w *multipleLogWriter) doRollOver() (err error) {
 		}
 		w.curBytes = int(file.Size())
 	}
+	return err
 }
