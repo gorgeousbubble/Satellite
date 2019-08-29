@@ -49,12 +49,13 @@ func (i *Atom) Get() int {
 }
 
 func NewLogger(w LogWriter, flag int) *Logger {
-	r := new(Logger)
-	r.level.Set(LevelDebug)
-	r.flag = flag
-	r.closed.Set(0)
-	r.bufs = make([][]byte, 0, 16)
-	return r
+	l := new(Logger)
+	l.level.Set(LevelDebug)
+	l.writer = w
+	l.flag = flag
+	l.closed.Set(0)
+	l.bufs = make([][]byte, 0, 16)
+	return l
 }
 
 func (l *Logger) popBuf() []byte {
