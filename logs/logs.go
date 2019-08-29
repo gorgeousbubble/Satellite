@@ -26,7 +26,7 @@ const (
 
 const maxBufPoolSize = 16
 
-var levelPrefix = [LevelDebug + 1]string{"[C]", "[E]", "[W]", "[T]", "[I]", "[D]"}
+var levelPrefix = [LevelDebug + 1]string{"C", "E", "W", "T", "I", "D"}
 
 type Atom int32
 
@@ -34,7 +34,7 @@ type Logger struct {
 	level   Atom
 	flag    int
 	lock    sync.Mutex
-	handler Handler
+	writer  LogWriter
 	buflock sync.Mutex
 	bufs    [][]byte
 	closed  Atom
@@ -48,13 +48,14 @@ func (i *Atom) Get() int {
 	return int(atomic.LoadInt32((*int32)(i)))
 }
 
-func NewLogger(handler Handler, flag int) *Logger {
-	r := new(Logger)
-	r.level.Set(LevelDebug)
-	r.flag = flag
-	r.closed.Set(0)
-	r.bufs = make([][]byte, 0, 16)
-	return r
+func NewLogger(w LogWriter, flag int) *Logger {
+	l := new(Logger)
+	l.level.Set(LevelDebug)
+	l.writer = w
+	l.flag = flag
+	l.closed.Set(0)
+	l.bufs = make([][]byte, 0, 16)
+	return l
 }
 
 func (l *Logger) popBuf() []byte {
@@ -84,22 +85,22 @@ func (l *Logger) Close() {
 		return
 	}
 	l.closed.Set(1)
-	l.handler.Close()
+	l.writer.Close()
 }
 
 func (l *Logger) SetLevel(level int) {
 	l.level.Set(level)
 }
 
-func (l *Logger) SetHandler(h Handler) {
+func (l *Logger) SetWriter(w LogWriter) {
 	if l.closed.Get() == 1 {
 		return
 	}
 	l.lock.Lock()
-	if l.handler != nil {
-		l.handler.Close()
+	if l.writer != nil {
+		l.writer.Close()
 	}
-	l.handler = h
+	l.writer = w
 	l.lock.Unlock()
 }
 
@@ -151,7 +152,7 @@ func (l *Logger) Output(callDepth int, level int, format string, v ...interface{
 		buf = append(buf, '\n')
 	}
 	l.lock.Lock()
-	l.handler.Write(buf)
+	l.writer.Write(buf)
 	l.lock.Unlock()
 	l.putBuf(buf)
 }
