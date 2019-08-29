@@ -26,7 +26,7 @@ const (
 
 const maxBufPoolSize = 16
 
-var levelPrefix = [LevelDebug + 1]string{"[C]", "[E]", "[W]", "[T]", "[I]", "[D]"}
+var levelPrefix = [LevelDebug + 1]string{"C", "E", "W", "T", "I", "D"}
 
 type Atom int32
 
