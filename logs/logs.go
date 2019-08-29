@@ -92,7 +92,7 @@ func (l *Logger) SetLevel(level int) {
 	l.level.Set(level)
 }
 
-func (l *Logger) SetHandler(h LogWriter) {
+func (l *Logger) SetWriter(w LogWriter) {
 	if l.closed.Get() == 1 {
 		return
 	}
@@ -100,7 +100,7 @@ func (l *Logger) SetHandler(h LogWriter) {
 	if l.writer != nil {
 		l.writer.Close()
 	}
-	l.writer = h
+	l.writer = w
 	l.lock.Unlock()
 }
 
