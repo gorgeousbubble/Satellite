@@ -34,7 +34,7 @@ type Logger struct {
 	level   Atom
 	flag    int
 	lock    sync.Mutex
-	handler Handler
+	writer  LogWriter
 	buflock sync.Mutex
 	bufs    [][]byte
 	closed  Atom
@@ -48,7 +48,7 @@ func (i *Atom) Get() int {
 	return int(atomic.LoadInt32((*int32)(i)))
 }
 
-func NewLogger(handler Handler, flag int) *Logger {
+func NewLogger(w LogWriter, flag int) *Logger {
 	r := new(Logger)
 	r.level.Set(LevelDebug)
 	r.flag = flag
@@ -84,22 +84,22 @@ func (l *Logger) Close() {
 		return
 	}
 	l.closed.Set(1)
-	l.handler.Close()
+	l.writer.Close()
 }
 
 func (l *Logger) SetLevel(level int) {
 	l.level.Set(level)
 }
 
-func (l *Logger) SetHandler(h Handler) {
+func (l *Logger) SetHandler(h LogWriter) {
 	if l.closed.Get() == 1 {
 		return
 	}
 	l.lock.Lock()
-	if l.handler != nil {
-		l.handler.Close()
+	if l.writer != nil {
+		l.writer.Close()
 	}
-	l.handler = h
+	l.writer = h
 	l.lock.Unlock()
 }
 
@@ -151,7 +151,7 @@ func (l *Logger) Output(callDepth int, level int, format string, v ...interface{
 		buf = append(buf, '\n')
 	}
 	l.lock.Lock()
-	l.handler.Write(buf)
+	l.writer.Write(buf)
 	l.lock.Unlock()
 	l.putBuf(buf)
 }
