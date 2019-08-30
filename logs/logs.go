@@ -162,49 +162,49 @@ func (l *Logger) Output(callDepth int, level int, format string, v ...interface{
 }
 
 func (l *Logger) Cirtical(v ...interface{}) {
-	l.Output(2, LevelCritical, "", v)
+	l.Output(2, LevelCritical, "", v...)
 }
 
 func (l *Logger) Error(v ...interface{}) {
-	l.Output(2, LevelError, "", v)
+	l.Output(2, LevelError, "", v...)
 }
 
 func (l *Logger) Warning(v ...interface{}) {
-	l.Output(2, LevelWarning, "", v)
+	l.Output(2, LevelWarning, "", v...)
 }
 
 func (l *Logger) Trace(v ...interface{}) {
-	l.Output(2, LevelTrace, "", v)
+	l.Output(2, LevelTrace, "", v...)
 }
 
 func (l *Logger) Info(v ...interface{}) {
-	l.Output(2, LevelInfo, "", v)
+	l.Output(2, LevelInfo, "", v...)
 }
 
 func (l *Logger) Debug(v ...interface{}) {
-	l.Output(2, LevelDebug, "", v)
+	l.Output(2, LevelDebug, "", v...)
 }
 
 func (l *Logger) Cirticalf(format string, v ...interface{}) {
-	l.Output(2, LevelCritical, format, v)
+	l.Output(2, LevelCritical, format, v...)
 }
 
 func (l *Logger) Errorf(format string, v ...interface{}) {
-	l.Output(2, LevelError, format, v)
+	l.Output(2, LevelError, format, v...)
 }
 
 func (l *Logger) Warningf(format string, v ...interface{}) {
-	l.Output(2, LevelWarning, format, v)
+	l.Output(2, LevelWarning, format, v...)
 }
 
 func (l *Logger) Tracef(format string, v ...interface{}) {
-	l.Output(2, LevelTrace, format, v)
+	l.Output(2, LevelTrace, format, v...)
 }
 
 func (l *Logger) Infof(format string, v ...interface{}) {
-	l.Output(2, LevelInfo, format, v)
+	l.Output(2, LevelInfo, format, v...)
 }
 
 func (l *Logger) Debugf(format string, v ...interface{}) {
-	l.Output(2, LevelDebug, format, v)
+	l.Output(2, LevelDebug, format, v...)
 }
