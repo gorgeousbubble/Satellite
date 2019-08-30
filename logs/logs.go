@@ -58,6 +58,10 @@ func NewLogger(w LogWriter, flag int) *Logger {
 	return l
 }
 
+func NewDefaultLogger(w LogWriter) *Logger {
+	return NewLogger(w, Ltime|Lfile|Llevel)
+}
+
 func (l *Logger) popBuf() []byte {
 	l.buflock.Lock()
 	var buf []byte
