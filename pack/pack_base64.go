@@ -13,14 +13,14 @@ import (
 	"sync"
 )
 
-func PackBase64(srcfilelist []string, destfile string) (err error) {
+func PackBase64(src []string, dest string) (err error) {
 	wg := &sync.WaitGroup{}
 	// start multi-cpu
 	core := runtime.NumCPU()
 	runtime.GOMAXPROCS(core)
 	// first, split the pre-crypt files
-	r := make([]string, len(srcfilelist)+4)
-	for k, v := range srcfilelist {
+	r := make([]string, len(src)+4)
+	for k, v := range src {
 		wg.Add(1)
 		go PackBase64OneGo(v, &r[k+4], wg)
 	}
@@ -31,22 +31,22 @@ func PackBase64(srcfilelist []string, destfile string) (err error) {
 	head.Author = make([]byte, 16)
 	head.Type = make([]byte, 8)
 	head.Number = make([]byte, 4)
-	_, destname := filepath.Split(destfile)
-	if len([]byte(destname)) > 32 {
+	_, name := filepath.Split(dest)
+	if len([]byte(name)) > 32 {
 		log.Println("Error dest file name length:", err)
 		return
 	}
-	BytesCopy(&(head.Name), []byte(destname))
+	BytesCopy(&(head.Name), []byte(name))
 	BytesCopy(&(head.Author), []byte("Alopex6414"))
 	BytesCopy(&(head.Type), []byte("BASE64"))
-	BytesCopy(&(head.Number), IntToBytes(len(srcfilelist)))
+	BytesCopy(&(head.Number), IntToBytes(len(src)))
 	r[0] = string(head.Name)
 	r[1] = string(head.Author)
 	r[2] = string(head.Type)
 	r[3] = string(head.Number)
 	// third, write to dest file
 	s := strings.Join(r, "")
-	err = ioutil.WriteFile(destfile, []byte(s), 0644)
+	err = ioutil.WriteFile(dest, []byte(s), 0644)
 	if err != nil {
 		log.Println("Error Write Base64:", err)
 	}
