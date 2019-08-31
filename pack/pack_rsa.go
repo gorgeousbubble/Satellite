@@ -91,7 +91,7 @@ func PackRSAOne(srcfile string) (r []byte, err error) {
 		return r, err
 	}
 	// fourth, split the data slice
-	ss, err := SplitByte(data, ConstRSAPacketSize)
+	ss, err := SplitByte(data, RSAPacketSize)
 	if err != nil {
 		log.Println("Error split bytes:", err)
 		return r, err

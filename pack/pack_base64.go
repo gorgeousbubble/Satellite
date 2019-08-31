@@ -2,6 +2,8 @@ package pack
 
 import (
 	"encoding/base64"
+	"errors"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
@@ -13,50 +15,58 @@ import (
 	"sync"
 )
 
-func PackBase64(srcfilelist []string, destfile string) (err error) {
+func PackBase64(src []string, dest string) (err error) {
 	wg := &sync.WaitGroup{}
 	// start multi-cpu
 	core := runtime.NumCPU()
 	runtime.GOMAXPROCS(core)
 	// first, split the pre-crypt files
-	r := make([]string, len(srcfilelist)+4)
-	for k, v := range srcfilelist {
+	r := make([]string, len(src)+4)
+	for k, v := range src {
 		wg.Add(1)
 		go PackBase64OneGo(v, &r[k+4], wg)
 	}
 	wg.Wait()
-	// second, fill the header
+	// second, check goroutine whether success or not
+	for i := 0; i < len(src); i++ {
+		if r[i+4] == "" {
+			s := fmt.Sprintf("Error base64 pack one file: %v", src[i])
+			err = errors.New(s)
+			return err
+		}
+	}
+	// third, fill the header
 	head := TPackBase64{}
 	head.Name = make([]byte, 32)
 	head.Author = make([]byte, 16)
 	head.Type = make([]byte, 8)
 	head.Number = make([]byte, 4)
-	_, destname := filepath.Split(destfile)
-	if len([]byte(destname)) > 32 {
+	_, name := filepath.Split(dest)
+	if len([]byte(name)) > 32 {
 		log.Println("Error dest file name length:", err)
 		return
 	}
-	BytesCopy(&(head.Name), []byte(destname))
+	BytesCopy(&(head.Name), []byte(name))
 	BytesCopy(&(head.Author), []byte("Alopex6414"))
 	BytesCopy(&(head.Type), []byte("BASE64"))
-	BytesCopy(&(head.Number), IntToBytes(len(srcfilelist)))
+	BytesCopy(&(head.Number), IntToBytes(len(src)))
 	r[0] = string(head.Name)
 	r[1] = string(head.Author)
 	r[2] = string(head.Type)
 	r[3] = string(head.Number)
-	// third, write to dest file
+	// finally, write to dest file
 	s := strings.Join(r, "")
-	err = ioutil.WriteFile(destfile, []byte(s), 0644)
+	err = ioutil.WriteFile(dest, []byte(s), 0644)
 	if err != nil {
-		log.Println("Error Write Base64:", err)
+		log.Println("Error write base64 file:", err)
 	}
 	return err
 }
 
-func PackBase64OneGo(srcfile string, r *string, wg *sync.WaitGroup) (err error) {
-	*r, err = PackBase64One(srcfile)
+func PackBase64OneGo(src string, r *string, wg *sync.WaitGroup) (err error) {
+	*r, err = PackBase64One(src)
 	if err != nil {
-		log.Println("Error Base64 Pack One:", err)
+		log.Println("Error base64 pack one file:", err)
 		wg.Done()
 		return err
 	}
@@ -64,9 +74,9 @@ func PackBase64OneGo(srcfile string, r *string, wg *sync.WaitGroup) (err error) 
 	return err
 }
 
-func PackBase64One(srcfile string) (r string, err error) {
+func PackBase64One(src string) (r string, err error) {
 	// first, open the file
-	file, err := os.Open(srcfile)
+	file, err := os.Open(src)
 	if err != nil {
 		log.Println("Error open file:", err)
 		return r, err
@@ -79,14 +89,14 @@ func PackBase64One(srcfile string) (r string, err error) {
 		return r, err
 	}
 	// third, split the data slice
-	ss, err := SplitByte(data, ConstBase64BufferSize)
+	ss, err := SplitByte(data, Base64BufferSize)
 	if err != nil {
 		log.Println("Error split bytes:", err)
 		return r, err
 	}
-	size := len(data) % ConstBase64BufferSize
+	size := len(data) % Base64BufferSize
 	if size != 0 {
-		last := len(data) / ConstBase64BufferSize
+		last := len(data) / Base64BufferSize
 		ss[last] = append(ss[last][:0], ss[last][:size]...)
 	}
 	// fourth, we can call Base64Encrypt function
@@ -99,15 +109,15 @@ func PackBase64One(srcfile string) (r string, err error) {
 	wg.Wait()
 	dest := strings.Join(rr, "")
 	// fifth, fill the packet struct
-	_, srcname := filepath.Split(srcfile)
-	if len([]byte(srcname)) > 32 {
+	_, name := filepath.Split(src)
+	if len([]byte(name)) > 32 {
 		log.Println("Error source file name length:", err)
 		return
 	}
 	head := TPackBase64One{}
 	head.Name = make([]byte, 32)
 	head.Size = make([]byte, 4)
-	BytesCopy(&(head.Name), []byte(srcname))
+	BytesCopy(&(head.Name), []byte(name))
 	BytesCopy(&(head.Size), IntToBytes(len(dest)))
 	// finally, return result
 	var s []string

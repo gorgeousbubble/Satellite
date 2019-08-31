@@ -1,23 +1,25 @@
 package pack
 
 import (
-	"github.com/pkg/errors"
+	"errors"
+	"fmt"
 )
 
-func Pack(srcfilelist []string, destfile string, algorithm string) (err error) {
+func Pack(src []string, dest string, algorithm string) (err error) {
 	switch algorithm {
 	case "AES", "aes":
-		err = PackAES(srcfilelist, destfile)
+		err = PackAES(src, dest)
 	case "DES", "des":
-		err = PackDES(srcfilelist, destfile)
+		err = PackDES(src, dest)
 	case "3DES", "3des":
-		err = Pack3DES(srcfilelist, destfile)
+		err = Pack3DES(src, dest)
 	case "RSA", "rsa":
-		err = PackRSA(srcfilelist, destfile)
+		err = PackRSA(src, dest)
 	case "BASE64", "base64":
-		err = PackBase64(srcfilelist, destfile)
+		err = PackBase64(src, dest)
 	default:
-		err = errors.New("Undefined pack algorithm.")
+		s := fmt.Sprint("Undefined pack algorithm.")
+		err = errors.New(s)
 	}
 	return err
 }

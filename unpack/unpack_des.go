@@ -255,7 +255,7 @@ func Unpack3DESOne(data []byte, head TUnpack3DESOne, destpath string) (err error
 	destfile := destpath + string(s)
 	key := head.Key
 	// first, split the data slice
-	ss, err := SplitByte(data, ConstDESBufferSize)
+	ss, err := SplitByte(data, DESBufferSize)
 	if err != nil {
 		log.Println("Error split bytes:", err)
 		return err
@@ -304,7 +304,7 @@ func UnpackDESOne(data []byte, head TUnpackDESOne, destpath string) (err error) 
 	destfile := destpath + string(s)
 	key := head.Key
 	// first, split the data slice
-	ss, err := SplitByte(data, ConstDESBufferSize)
+	ss, err := SplitByte(data, DESBufferSize)
 	if err != nil {
 		log.Println("Error split bytes:", err)
 		return err
