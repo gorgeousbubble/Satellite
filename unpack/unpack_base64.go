@@ -14,13 +14,13 @@ import (
 	"sync"
 )
 
-func UnpackBase64(srcfile string, destpath string) (err error) {
+func UnpackBase64(src string, dest string) (err error) {
 	wg := &sync.WaitGroup{}
 	// start multi-cpu
 	core := runtime.NumCPU()
 	runtime.GOMAXPROCS(core)
 	// first, open the file
-	file, err := os.Open(srcfile)
+	file, err := os.Open(src)
 	if err != nil {
 		log.Println("Error open file:", err)
 		return err
@@ -32,7 +32,7 @@ func UnpackBase64(srcfile string, destpath string) (err error) {
 		log.Println("Error read file:", err)
 		return err
 	}
-	_, srcname := filepath.Split(srcfile)
+	_, name := filepath.Split(src)
 	// third, new one header
 	h := TUnpackBase64{}
 	h.Name = make([]byte, 32)
@@ -47,7 +47,7 @@ func UnpackBase64(srcfile string, destpath string) (err error) {
 		return err
 	}
 	s := make([]byte, 32)
-	BytesCopy(&s, []byte(srcname))
+	BytesCopy(&s, []byte(name))
 	if !bytes.Equal(h.Name, s) {
 		log.Println("Error read header name:", err)
 		return err
@@ -105,16 +105,16 @@ func UnpackBase64(srcfile string, destpath string) (err error) {
 		}
 		// eight, run unpack one file
 		wg.Add(1)
-		go UnpackBase64OneGo(s, hh, destpath, wg)
+		go UnpackBase64OneGo(s, hh, dest, wg)
 	}
 	wg.Wait()
 	return err
 }
 
-func UnpackBase64OneGo(data []byte, head TUnpackBase64One, destpath string, wg *sync.WaitGroup) (err error) {
-	err = UnpackBase64One(data, head, destpath)
+func UnpackBase64OneGo(data []byte, head TUnpackBase64One, dest string, wg *sync.WaitGroup) (err error) {
+	err = UnpackBase64One(data, head, dest)
 	if err != nil {
-		log.Println("Error Base64 Unpack One:", err)
+		log.Println("Error base64 unpack one file:", err)
 		wg.Done()
 		return err
 	}
@@ -122,7 +122,7 @@ func UnpackBase64OneGo(data []byte, head TUnpackBase64One, destpath string, wg *
 	return err
 }
 
-func UnpackBase64One(data []byte, head TUnpackBase64One, destpath string) (err error) {
+func UnpackBase64One(data []byte, head TUnpackBase64One, path string) (err error) {
 	// initial, fill the name
 	var s []byte
 	for _, v := range head.Name {
@@ -131,7 +131,7 @@ func UnpackBase64One(data []byte, head TUnpackBase64One, destpath string) (err e
 		}
 		s = append(s, v)
 	}
-	destfile := destpath + string(s)
+	file := path + string(s)
 	// first, split the data slice
 	ss, err := SplitByte(data, Base64BufferSize)
 	if err != nil {
@@ -153,9 +153,9 @@ func UnpackBase64One(data []byte, head TUnpackBase64One, destpath string) (err e
 	wg.Wait()
 	dest := strings.Join(rr, "")
 	// fourth, create the origin file
-	err = ioutil.WriteFile(destfile, []byte(dest), 0644)
+	err = ioutil.WriteFile(file, []byte(dest), 0644)
 	if err != nil {
-		log.Println("Error write to destfile:", err)
+		log.Println("Error write to dest file:", err)
 		return err
 	}
 	return err
