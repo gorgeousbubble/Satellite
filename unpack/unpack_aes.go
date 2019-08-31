@@ -146,7 +146,7 @@ func UnpackAESOne(data []byte, head TUnpackAESOne, destpath string) (err error) 
 	destfile := destpath + string(s)
 	key := head.Key
 	// first, split the data slice
-	ss, err := SplitByte(data, ConstAESBufferSize)
+	ss, err := SplitByte(data, AESBufferSize)
 	if err != nil {
 		log.Println("Error split bytes:", err)
 		return err

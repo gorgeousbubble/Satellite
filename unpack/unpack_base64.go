@@ -133,14 +133,14 @@ func UnpackBase64One(data []byte, head TUnpackBase64One, destpath string) (err e
 	}
 	destfile := destpath + string(s)
 	// first, split the data slice
-	ss, err := SplitByte(data, ConstBase64BufferSize)
+	ss, err := SplitByte(data, Base64BufferSize)
 	if err != nil {
 		log.Println("Error split bytes:", err)
 		return err
 	}
-	size := len(data) % ConstBase64BufferSize
+	size := len(data) % Base64BufferSize
 	if size != 0 {
-		last := len(data) / ConstBase64BufferSize
+		last := len(data) / Base64BufferSize
 		ss[last] = append(ss[last][:0], ss[last][:size]...)
 	}
 	// second, we can call Base64Decrypt function
