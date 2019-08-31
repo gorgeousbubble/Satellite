@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"crypto/aes"
 	"crypto/cipher"
+	"errors"
 	"io/ioutil"
 	"log"
 	"math/rand"
@@ -28,7 +29,14 @@ func PackAES(srcfilelist []string, destfile string) (err error) {
 		go PackAESOneGo(v, &r[k+4], wg)
 	}
 	wg.Wait()
-	// second, fill the header
+	// second, check goroutine whether success or not
+	for i := 0; i < len(srcfilelist); i++ {
+		if bytes.Equal(r[i+4], []byte("")) {
+			err = errors.New("error aes packet one file")
+			return err
+		}
+	}
+	// third, fill the header
 	head := TPackAES{}
 	head.Name = make([]byte, 32)
 	head.Author = make([]byte, 16)
@@ -47,7 +55,7 @@ func PackAES(srcfilelist []string, destfile string) (err error) {
 	r[1] = head.Author
 	r[2] = head.Type
 	r[3] = head.Number
-	// third, write to dest file
+	// finally, write to dest file
 	s := bytes.Join(r, []byte(""))
 	err = ioutil.WriteFile(destfile, s, 0644)
 	if err != nil {
