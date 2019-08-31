@@ -17,20 +17,20 @@ import (
 	"time"
 )
 
-func PackAES(srcfilelist []string, destfile string) (err error) {
+func PackAES(src []string, dest string) (err error) {
 	wg := &sync.WaitGroup{}
 	// start multi-cpu
 	core := runtime.NumCPU()
 	runtime.GOMAXPROCS(core)
 	// first, split the pre-crypt files
-	r := make([][]byte, len(srcfilelist)+4)
-	for k, v := range srcfilelist {
+	r := make([][]byte, len(src)+4)
+	for k, v := range src {
 		wg.Add(1)
 		go PackAESOneGo(v, &r[k+4], wg)
 	}
 	wg.Wait()
 	// second, check goroutine whether success or not
-	for i := 0; i < len(srcfilelist); i++ {
+	for i := 0; i < len(src); i++ {
 		if bytes.Equal(r[i+4], []byte("")) {
 			err = errors.New("error aes packet one file")
 			return err
@@ -42,7 +42,7 @@ func PackAES(srcfilelist []string, destfile string) (err error) {
 	head.Author = make([]byte, 16)
 	head.Type = make([]byte, 8)
 	head.Number = make([]byte, 4)
-	_, destname := filepath.Split(destfile)
+	_, destname := filepath.Split(dest)
 	if len([]byte(destname)) > 32 {
 		log.Println("Error dest file name length:", err)
 		return
@@ -50,14 +50,14 @@ func PackAES(srcfilelist []string, destfile string) (err error) {
 	BytesCopy(&(head.Name), []byte(destname))
 	BytesCopy(&(head.Author), []byte("Alopex6414"))
 	BytesCopy(&(head.Type), []byte("AES"))
-	BytesCopy(&(head.Number), IntToBytes(len(srcfilelist)))
+	BytesCopy(&(head.Number), IntToBytes(len(src)))
 	r[0] = head.Name
 	r[1] = head.Author
 	r[2] = head.Type
 	r[3] = head.Number
 	// finally, write to dest file
 	s := bytes.Join(r, []byte(""))
-	err = ioutil.WriteFile(destfile, s, 0644)
+	err = ioutil.WriteFile(dest, s, 0644)
 	if err != nil {
 		log.Println("Error Write AES:", err)
 	}
