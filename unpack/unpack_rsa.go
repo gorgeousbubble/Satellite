@@ -149,7 +149,7 @@ func UnpackRSAOne(data []byte, head TUnpackRSAOne, destpath string) (err error) 
 	destfile := destpath + string(s)
 	key := head.Key
 	// first, split the data slice
-	ss, err := SplitByte(data, ConstRSAUnpackSize)
+	ss, err := SplitByte(data, RSAUnpackSize)
 	if err != nil {
 		log.Println("Error split bytes:", err)
 		return err

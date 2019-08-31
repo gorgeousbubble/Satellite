@@ -100,7 +100,7 @@ func PackAESOne(src string) (r []byte, err error) {
 		return r, err
 	}
 	// fourth, split the data slice
-	ss, err := SplitByte(data, ConstAESBufferSize)
+	ss, err := SplitByte(data, AESBufferSize)
 	if err != nil {
 		log.Println("Error split bytes:", err)
 		return r, err

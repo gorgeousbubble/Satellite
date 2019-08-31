@@ -130,7 +130,7 @@ func Pack3DESOne(srcfile string) (r []byte, err error) {
 		return r, err
 	}
 	// fourth, split the data slice
-	ss, err := SplitByte(data, ConstDESBufferSize)
+	ss, err := SplitByte(data, DESBufferSize)
 	if err != nil {
 		log.Println("Error split bytes:", err)
 		return r, err
@@ -208,7 +208,7 @@ func PackDESOne(srcfile string) (r []byte, err error) {
 		return r, err
 	}
 	// fourth, split the data slice
-	ss, err := SplitByte(data, ConstDESBufferSize)
+	ss, err := SplitByte(data, DESBufferSize)
 	if err != nil {
 		log.Println("Error split bytes:", err)
 		return r, err

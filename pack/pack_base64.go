@@ -89,14 +89,14 @@ func PackBase64One(src string) (r string, err error) {
 		return r, err
 	}
 	// third, split the data slice
-	ss, err := SplitByte(data, ConstBase64BufferSize)
+	ss, err := SplitByte(data, Base64BufferSize)
 	if err != nil {
 		log.Println("Error split bytes:", err)
 		return r, err
 	}
-	size := len(data) % ConstBase64BufferSize
+	size := len(data) % Base64BufferSize
 	if size != 0 {
-		last := len(data) / ConstBase64BufferSize
+		last := len(data) / Base64BufferSize
 		ss[last] = append(ss[last][:0], ss[last][:size]...)
 	}
 	// fourth, we can call Base64Encrypt function
