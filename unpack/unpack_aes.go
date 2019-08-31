@@ -14,13 +14,13 @@ import (
 	"sync"
 )
 
-func UnpackAES(srcfile string, destpath string) (err error) {
+func UnpackAES(src string, dest string) (err error) {
 	wg := &sync.WaitGroup{}
 	// start multi-cpu
 	core := runtime.NumCPU()
 	runtime.GOMAXPROCS(core)
 	// first, open the file
-	file, err := os.Open(srcfile)
+	file, err := os.Open(src)
 	if err != nil {
 		log.Println("Error open file:", err)
 		return err
@@ -32,7 +32,7 @@ func UnpackAES(srcfile string, destpath string) (err error) {
 		log.Println("Error read file:", err)
 		return err
 	}
-	_, srcname := filepath.Split(srcfile)
+	_, name := filepath.Split(src)
 	// third, new one header
 	h := TUnpackAES{}
 	h.Name = make([]byte, 32)
@@ -47,7 +47,7 @@ func UnpackAES(srcfile string, destpath string) (err error) {
 		return err
 	}
 	s := make([]byte, 32)
-	BytesCopy(&s, []byte(srcname))
+	BytesCopy(&s, []byte(name))
 	if !bytes.Equal(h.Name, s) {
 		log.Println("Error read header name:", err)
 		return err
@@ -117,16 +117,16 @@ func UnpackAES(srcfile string, destpath string) (err error) {
 		}
 		// eight, run unpack one file
 		wg.Add(1)
-		go UnpackAESOneGo(s, hh, destpath, wg)
+		go UnpackAESOneGo(s, hh, dest, wg)
 	}
 	wg.Wait()
 	return err
 }
 
-func UnpackAESOneGo(data []byte, head TUnpackAESOne, destpath string, wg *sync.WaitGroup) (err error) {
-	err = UnpackAESOne(data, head, destpath)
+func UnpackAESOneGo(data []byte, head TUnpackAESOne, dest string, wg *sync.WaitGroup) (err error) {
+	err = UnpackAESOne(data, head, dest)
 	if err != nil {
-		log.Println("Error AES Unpack One:", err)
+		log.Println("Error aes unpack one:", err)
 		wg.Done()
 		return err
 	}
@@ -134,7 +134,7 @@ func UnpackAESOneGo(data []byte, head TUnpackAESOne, destpath string, wg *sync.W
 	return err
 }
 
-func UnpackAESOne(data []byte, head TUnpackAESOne, destpath string) (err error) {
+func UnpackAESOne(data []byte, head TUnpackAESOne, path string) (err error) {
 	// initial, fill the name
 	var s []byte
 	for _, v := range head.Name {
@@ -143,7 +143,7 @@ func UnpackAESOne(data []byte, head TUnpackAESOne, destpath string) (err error) 
 		}
 		s = append(s, v)
 	}
-	destfile := destpath + string(s)
+	file := path + string(s)
 	key := head.Key
 	// first, split the data slice
 	ss, err := SplitByte(data, AESBufferSize)
@@ -164,9 +164,9 @@ func UnpackAESOne(data []byte, head TUnpackAESOne, destpath string) (err error) 
 	size := BytesToInt(head.OriginSize)
 	dest = append(dest[:0], dest[:size]...)
 	// fourth, create the origin file
-	err = ioutil.WriteFile(destfile, dest, 0644)
+	err = ioutil.WriteFile(file, dest, 0644)
 	if err != nil {
-		log.Println("Error write to destfile:", err)
+		log.Println("Error write to dest file:", err)
 		return err
 	}
 	return err
@@ -175,7 +175,7 @@ func UnpackAESOne(data []byte, head TUnpackAESOne, destpath string) (err error) 
 func AESDecryptGo(src, key []byte, dest *[]byte, wg *sync.WaitGroup) (err error) {
 	*dest, err = AESDecrypt(src, key)
 	if err != nil {
-		log.Println("Error AES Decrypt data:", err)
+		log.Println("Error aes decrypt data:", err)
 		wg.Done()
 		return err
 	}

@@ -14,13 +14,13 @@ import (
 	"sync"
 )
 
-func Unpack3DES(srcfile string, destpath string) (err error) {
+func Unpack3DES(src string, dest string) (err error) {
 	wg := &sync.WaitGroup{}
 	// start multi-cpu
 	core := runtime.NumCPU()
 	runtime.GOMAXPROCS(core)
 	// first, open the file
-	file, err := os.Open(srcfile)
+	file, err := os.Open(src)
 	if err != nil {
 		log.Println("Error open file:", err)
 		return err
@@ -32,7 +32,7 @@ func Unpack3DES(srcfile string, destpath string) (err error) {
 		log.Println("Error read file:", err)
 		return err
 	}
-	_, srcname := filepath.Split(srcfile)
+	_, name := filepath.Split(src)
 	// third, new one header
 	h := TUnpackDES{}
 	h.Name = make([]byte, 32)
@@ -47,7 +47,7 @@ func Unpack3DES(srcfile string, destpath string) (err error) {
 		return err
 	}
 	s := make([]byte, 32)
-	BytesCopy(&s, []byte(srcname))
+	BytesCopy(&s, []byte(name))
 	if !bytes.Equal(h.Name, s) {
 		log.Println("Error read header name:", err)
 		return err
@@ -117,19 +117,19 @@ func Unpack3DES(srcfile string, destpath string) (err error) {
 		}
 		// eight, run unpack one file
 		wg.Add(1)
-		go Unpack3DESOneGo(s, hh, destpath, wg)
+		go Unpack3DESOneGo(s, hh, dest, wg)
 	}
 	wg.Wait()
 	return err
 }
 
-func UnpackDES(srcfile string, destpath string) (err error) {
+func UnpackDES(src string, dest string) (err error) {
 	wg := &sync.WaitGroup{}
 	// start multi-cpu
 	core := runtime.NumCPU()
 	runtime.GOMAXPROCS(core)
 	// first, open the file
-	file, err := os.Open(srcfile)
+	file, err := os.Open(src)
 	if err != nil {
 		log.Println("Error open file:", err)
 		return err
@@ -141,7 +141,7 @@ func UnpackDES(srcfile string, destpath string) (err error) {
 		log.Println("Error read file:", err)
 		return err
 	}
-	_, srcname := filepath.Split(srcfile)
+	_, name := filepath.Split(src)
 	// third, new one header
 	h := TUnpackDES{}
 	h.Name = make([]byte, 32)
@@ -156,7 +156,7 @@ func UnpackDES(srcfile string, destpath string) (err error) {
 		return err
 	}
 	s := make([]byte, 32)
-	BytesCopy(&s, []byte(srcname))
+	BytesCopy(&s, []byte(name))
 	if !bytes.Equal(h.Name, s) {
 		log.Println("Error read header name:", err)
 		return err
@@ -226,16 +226,16 @@ func UnpackDES(srcfile string, destpath string) (err error) {
 		}
 		// eight, run unpack one file
 		wg.Add(1)
-		go UnpackDESOneGo(s, hh, destpath, wg)
+		go UnpackDESOneGo(s, hh, dest, wg)
 	}
 	wg.Wait()
 	return err
 }
 
-func Unpack3DESOneGo(data []byte, head TUnpack3DESOne, destpath string, wg *sync.WaitGroup) (err error) {
-	err = Unpack3DESOne(data, head, destpath)
+func Unpack3DESOneGo(data []byte, head TUnpack3DESOne, dest string, wg *sync.WaitGroup) (err error) {
+	err = Unpack3DESOne(data, head, dest)
 	if err != nil {
-		log.Println("Error 3DES Unpack One:", err)
+		log.Println("Error 3des unpack one file:", err)
 		wg.Done()
 		return err
 	}
@@ -243,7 +243,7 @@ func Unpack3DESOneGo(data []byte, head TUnpack3DESOne, destpath string, wg *sync
 	return err
 }
 
-func Unpack3DESOne(data []byte, head TUnpack3DESOne, destpath string) (err error) {
+func Unpack3DESOne(data []byte, head TUnpack3DESOne, path string) (err error) {
 	// initial, fill the name
 	var s []byte
 	for _, v := range head.Name {
@@ -252,7 +252,7 @@ func Unpack3DESOne(data []byte, head TUnpack3DESOne, destpath string) (err error
 		}
 		s = append(s, v)
 	}
-	destfile := destpath + string(s)
+	file := path + string(s)
 	key := head.Key
 	// first, split the data slice
 	ss, err := SplitByte(data, DESBufferSize)
@@ -273,18 +273,18 @@ func Unpack3DESOne(data []byte, head TUnpack3DESOne, destpath string) (err error
 	size := BytesToInt(head.OriginSize)
 	dest = append(dest[:0], dest[:size]...)
 	// fourth, create the origin file
-	err = ioutil.WriteFile(destfile, dest, 0644)
+	err = ioutil.WriteFile(file, dest, 0644)
 	if err != nil {
-		log.Println("Error write to destfile:", err)
+		log.Println("Error write to dest file:", err)
 		return err
 	}
 	return err
 }
 
-func UnpackDESOneGo(data []byte, head TUnpackDESOne, destpath string, wg *sync.WaitGroup) (err error) {
-	err = UnpackDESOne(data, head, destpath)
+func UnpackDESOneGo(data []byte, head TUnpackDESOne, dest string, wg *sync.WaitGroup) (err error) {
+	err = UnpackDESOne(data, head, dest)
 	if err != nil {
-		log.Println("Error DES Unpack One:", err)
+		log.Println("Error des unpack one:", err)
 		wg.Done()
 		return err
 	}
@@ -292,7 +292,7 @@ func UnpackDESOneGo(data []byte, head TUnpackDESOne, destpath string, wg *sync.W
 	return err
 }
 
-func UnpackDESOne(data []byte, head TUnpackDESOne, destpath string) (err error) {
+func UnpackDESOne(data []byte, head TUnpackDESOne, path string) (err error) {
 	// initial, fill the name
 	var s []byte
 	for _, v := range head.Name {
@@ -301,7 +301,7 @@ func UnpackDESOne(data []byte, head TUnpackDESOne, destpath string) (err error) 
 		}
 		s = append(s, v)
 	}
-	destfile := destpath + string(s)
+	file := path + string(s)
 	key := head.Key
 	// first, split the data slice
 	ss, err := SplitByte(data, DESBufferSize)
@@ -322,9 +322,9 @@ func UnpackDESOne(data []byte, head TUnpackDESOne, destpath string) (err error) 
 	size := BytesToInt(head.OriginSize)
 	dest = append(dest[:0], dest[:size]...)
 	// fourth, create the origin file
-	err = ioutil.WriteFile(destfile, dest, 0644)
+	err = ioutil.WriteFile(file, dest, 0644)
 	if err != nil {
-		log.Println("Error write to destfile:", err)
+		log.Println("Error write to dest file:", err)
 		return err
 	}
 	return err
@@ -333,7 +333,7 @@ func UnpackDESOne(data []byte, head TUnpackDESOne, destpath string) (err error) 
 func TripleDESDecryptGo(src, key []byte, dest *[]byte, wg *sync.WaitGroup) (err error) {
 	*dest, err = TripleDESDecrypt(src, key)
 	if err != nil {
-		log.Println("Error 3DES Decrypt data:", err)
+		log.Println("Error 3des decrypt data:", err)
 		wg.Done()
 		return err
 	}
@@ -364,7 +364,7 @@ func TripleDESDecrypt(src, key []byte) (dest []byte, err error) {
 func DESDecryptGo(src, key []byte, dest *[]byte, wg *sync.WaitGroup) (err error) {
 	*dest, err = DESDecrypt(src, key)
 	if err != nil {
-		log.Println("Error DES Decrypt data:", err)
+		log.Println("Error des decrypt data:", err)
 		wg.Done()
 		return err
 	}
