@@ -9,9 +9,9 @@ import (
 )
 
 func TestUnpackBase64(t *testing.T) {
-	srcfile := "../test/data/unpack/file_base64.txt"
-	destpath := "../test/data/unpack/"
-	err := UnpackBase64(srcfile, destpath)
+	src := "../test/data/unpack/file_base64.txt"
+	dest := "../test/data/unpack/"
+	err := UnpackBase64(src, dest)
 	if err != nil {
 		t.Fatal("Error Unpack Base64:", err)
 	}
@@ -25,7 +25,7 @@ func TestUnpackBase64OneGo(t *testing.T) {
 		0x00, 0x00, 0x00, 0x10, 0x61, 0x47, 0x56, 0x73, 0x62, 0x47, 0x38, 0x73, 0x64, 0x32, 0x39, 0x79,
 		0x62, 0x47, 0x51, 0x68,
 	}
-	destpath := "../test/data/unpack/"
+	dest := "../test/data/unpack/"
 	h := TUnpackBase64One{}
 	h.Name = make([]byte, 32)
 	h.Size = make([]byte, 4)
@@ -44,7 +44,7 @@ func TestUnpackBase64OneGo(t *testing.T) {
 		t.Fatal("Error read body:", err)
 	}
 	wg.Add(1)
-	go UnpackBase64OneGo(s, h, destpath, &wg)
+	go UnpackBase64OneGo(s, h, dest, &wg)
 	wg.Wait()
 }
 
@@ -55,7 +55,7 @@ func TestUnpackBase64One(t *testing.T) {
 		0x00, 0x00, 0x00, 0x10, 0x61, 0x47, 0x56, 0x73, 0x62, 0x47, 0x38, 0x73, 0x64, 0x32, 0x39, 0x79,
 		0x62, 0x47, 0x51, 0x68,
 	}
-	destpath := "../test/data/unpack/"
+	dest := "../test/data/unpack/"
 	h := TUnpackBase64One{}
 	h.Name = make([]byte, 32)
 	h.Size = make([]byte, 4)
@@ -73,7 +73,7 @@ func TestUnpackBase64One(t *testing.T) {
 	if n <= 0 {
 		t.Fatal("Error read body:", err)
 	}
-	err = UnpackBase64One(s, h, destpath)
+	err = UnpackBase64One(s, h, dest)
 	if err != nil {
 		t.Fatal("Error unpack crypt file:", err)
 	}
@@ -111,9 +111,9 @@ func TestBase64Decrypt(t *testing.T) {
 
 func BenchmarkUnpackBase64(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		srcfile := "../test/data/unpack/file_base64.txt"
-		destpath := "../test/data/unpack/"
-		err := UnpackBase64(srcfile, destpath)
+		src := "../test/data/unpack/file_base64.txt"
+		dest := "../test/data/unpack/"
+		err := UnpackBase64(src, dest)
 		if err != nil {
 			b.Fatal("Error Unpack Base64:", err)
 		}
@@ -129,7 +129,7 @@ func BenchmarkUnpackBase64OneGo(b *testing.B) {
 			0x00, 0x00, 0x00, 0x10, 0x61, 0x47, 0x56, 0x73, 0x62, 0x47, 0x38, 0x73, 0x64, 0x32, 0x39, 0x79,
 			0x62, 0x47, 0x51, 0x68,
 		}
-		destpath := "../test/data/unpack/"
+		dest := "../test/data/unpack/"
 		h := TUnpackBase64One{}
 		h.Name = make([]byte, 32)
 		h.Size = make([]byte, 4)
@@ -148,7 +148,7 @@ func BenchmarkUnpackBase64OneGo(b *testing.B) {
 			b.Fatal("Error read body:", err)
 		}
 		wg.Add(1)
-		go UnpackBase64OneGo(s, h, destpath, &wg)
+		go UnpackBase64OneGo(s, h, dest, &wg)
 		wg.Wait()
 	}
 }
@@ -161,7 +161,7 @@ func BenchmarkUnpackBase64One(b *testing.B) {
 			0x00, 0x00, 0x00, 0x10, 0x61, 0x47, 0x56, 0x73, 0x62, 0x47, 0x38, 0x73, 0x64, 0x32, 0x39, 0x79,
 			0x62, 0x47, 0x51, 0x68,
 		}
-		destpath := "../test/data/unpack/"
+		dest := "../test/data/unpack/"
 		h := TUnpackBase64One{}
 		h.Name = make([]byte, 32)
 		h.Size = make([]byte, 4)
@@ -179,7 +179,7 @@ func BenchmarkUnpackBase64One(b *testing.B) {
 		if n <= 0 {
 			b.Fatal("Error read body:", err)
 		}
-		err = UnpackBase64One(s, h, destpath)
+		err = UnpackBase64One(s, h, dest)
 		if err != nil {
 			b.Fatal("Error unpack crypt file:", err)
 		}
