@@ -77,10 +77,10 @@ func PackAESOneGo(src string, r *[]byte, wg *sync.WaitGroup) (err error) {
 	return err
 }
 
-func PackAESOne(srcfile string) (r []byte, err error) {
+func PackAESOne(src string) (r []byte, err error) {
 	rand.Seed(time.Now().UnixNano())
 	// first, open the file
-	file, err := os.Open(srcfile)
+	file, err := os.Open(src)
 	if err != nil {
 		log.Println("Error open file:", err)
 		return r, err
@@ -115,8 +115,8 @@ func PackAESOne(srcfile string) (r []byte, err error) {
 	wg.Wait()
 	dest := bytes.Join(rr, []byte(""))
 	// sixth, fill the packet struct
-	_, srcname := filepath.Split(srcfile)
-	if len([]byte(srcname)) > 32 {
+	_, name := filepath.Split(src)
+	if len([]byte(name)) > 32 {
 		log.Println("Error source file name length:", err)
 		return
 	}
@@ -129,7 +129,7 @@ func PackAESOne(srcfile string) (r []byte, err error) {
 	head.Key = make([]byte, 16)
 	head.OriginSize = make([]byte, 4)
 	head.CryptSize = make([]byte, 4)
-	BytesCopy(&(head.Name), []byte(srcname))
+	BytesCopy(&(head.Name), []byte(name))
 	BytesCopy(&(head.Key), key)
 	BytesCopy(&(head.OriginSize), IntToBytes(len(data)))
 	BytesCopy(&(head.CryptSize), IntToBytes(len(dest)))
