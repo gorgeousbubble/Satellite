@@ -48,15 +48,15 @@ func PackBase64(src []string, dest string) (err error) {
 	s := strings.Join(r, "")
 	err = ioutil.WriteFile(dest, []byte(s), 0644)
 	if err != nil {
-		log.Println("Error Write Base64:", err)
+		log.Println("Error write base64 file:", err)
 	}
 	return err
 }
 
-func PackBase64OneGo(srcfile string, r *string, wg *sync.WaitGroup) (err error) {
-	*r, err = PackBase64One(srcfile)
+func PackBase64OneGo(src string, r *string, wg *sync.WaitGroup) (err error) {
+	*r, err = PackBase64One(src)
 	if err != nil {
-		log.Println("Error Base64 Pack One:", err)
+		log.Println("Error base64 pack one file:", err)
 		wg.Done()
 		return err
 	}
@@ -64,9 +64,9 @@ func PackBase64OneGo(srcfile string, r *string, wg *sync.WaitGroup) (err error) 
 	return err
 }
 
-func PackBase64One(srcfile string) (r string, err error) {
+func PackBase64One(src string) (r string, err error) {
 	// first, open the file
-	file, err := os.Open(srcfile)
+	file, err := os.Open(src)
 	if err != nil {
 		log.Println("Error open file:", err)
 		return r, err
@@ -99,15 +99,15 @@ func PackBase64One(srcfile string) (r string, err error) {
 	wg.Wait()
 	dest := strings.Join(rr, "")
 	// fifth, fill the packet struct
-	_, srcname := filepath.Split(srcfile)
-	if len([]byte(srcname)) > 32 {
+	_, name := filepath.Split(src)
+	if len([]byte(name)) > 32 {
 		log.Println("Error source file name length:", err)
 		return
 	}
 	head := TPackBase64One{}
 	head.Name = make([]byte, 32)
 	head.Size = make([]byte, 4)
-	BytesCopy(&(head.Name), []byte(srcname))
+	BytesCopy(&(head.Name), []byte(name))
 	BytesCopy(&(head.Size), IntToBytes(len(dest)))
 	// finally, return result
 	var s []string

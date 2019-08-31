@@ -153,7 +153,7 @@ func PackAESOne(src string) (r []byte, err error) {
 func AESEncryptGo(src, key []byte, dest *[]byte, wg *sync.WaitGroup) (err error) {
 	*dest, err = AESEncrypt(src, key)
 	if err != nil {
-		log.Println("Error AES Encrypt data:", err)
+		log.Println("Error aes encrypt data:", err)
 		wg.Done()
 		return err
 	}
