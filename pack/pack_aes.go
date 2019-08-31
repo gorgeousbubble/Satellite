@@ -69,7 +69,7 @@ func PackAES(src []string, dest string) (err error) {
 func PackAESOneGo(src string, r *[]byte, wg *sync.WaitGroup) (err error) {
 	*r, err = PackAESOne(src)
 	if err != nil {
-		log.Println("Error AES Pack One:", err)
+		log.Println("Error aes pack one file:", err)
 		wg.Done()
 		return err
 	}
