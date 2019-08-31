@@ -17,13 +17,13 @@ import (
 	"sync"
 )
 
-func UnpackRSA(srcfile string, destpath string) (err error) {
+func UnpackRSA(src string, dest string) (err error) {
 	wg := &sync.WaitGroup{}
 	// start multi-cpu
 	core := runtime.NumCPU()
 	runtime.GOMAXPROCS(core)
 	// first, open the file
-	file, err := os.Open(srcfile)
+	file, err := os.Open(src)
 	if err != nil {
 		log.Println("Error open file:", err)
 		return err
@@ -35,7 +35,7 @@ func UnpackRSA(srcfile string, destpath string) (err error) {
 		log.Println("Error read file:", err)
 		return err
 	}
-	_, srcname := filepath.Split(srcfile)
+	_, name := filepath.Split(src)
 	// third, new one header
 	h := TUnpackRSA{}
 	h.Name = make([]byte, 32)
@@ -50,7 +50,7 @@ func UnpackRSA(srcfile string, destpath string) (err error) {
 		return err
 	}
 	s := make([]byte, 32)
-	BytesCopy(&s, []byte(srcname))
+	BytesCopy(&s, []byte(name))
 	if !bytes.Equal(h.Name, s) {
 		log.Println("Error read header name:", err)
 		return err
@@ -120,16 +120,16 @@ func UnpackRSA(srcfile string, destpath string) (err error) {
 		}
 		// eight, run unpack one file
 		wg.Add(1)
-		go UnpackRSAOneGo(s, hh, destpath, wg)
+		go UnpackRSAOneGo(s, hh, dest, wg)
 	}
 	wg.Wait()
 	return err
 }
 
-func UnpackRSAOneGo(data []byte, head TUnpackRSAOne, destpath string, wg *sync.WaitGroup) (err error) {
-	err = UnpackRSAOne(data, head, destpath)
+func UnpackRSAOneGo(data []byte, head TUnpackRSAOne, dest string, wg *sync.WaitGroup) (err error) {
+	err = UnpackRSAOne(data, head, dest)
 	if err != nil {
-		log.Println("Error RSA Unpack One:", err)
+		log.Println("Error rsa unpack one file:", err)
 		wg.Done()
 		return err
 	}
@@ -137,7 +137,7 @@ func UnpackRSAOneGo(data []byte, head TUnpackRSAOne, destpath string, wg *sync.W
 	return err
 }
 
-func UnpackRSAOne(data []byte, head TUnpackRSAOne, destpath string) (err error) {
+func UnpackRSAOne(data []byte, head TUnpackRSAOne, path string) (err error) {
 	// initial, fill the name
 	var s []byte
 	for _, v := range head.Name {
@@ -146,7 +146,7 @@ func UnpackRSAOne(data []byte, head TUnpackRSAOne, destpath string) (err error) 
 		}
 		s = append(s, v)
 	}
-	destfile := destpath + string(s)
+	file := path + string(s)
 	key := head.Key
 	// first, split the data slice
 	ss, err := SplitByte(data, RSAUnpackSize)
@@ -167,9 +167,9 @@ func UnpackRSAOne(data []byte, head TUnpackRSAOne, destpath string) (err error) 
 	size := BytesToInt(head.OriginSize)
 	dest = append(dest[:0], dest[:size]...)
 	// fourth, create the origin file
-	err = ioutil.WriteFile(destfile, dest, 0644)
+	err = ioutil.WriteFile(file, dest, 0644)
 	if err != nil {
-		log.Println("Error write to destfile:", err)
+		log.Println("Error write to dest file:", err)
 		return err
 	}
 	return err
@@ -178,7 +178,7 @@ func UnpackRSAOne(data []byte, head TUnpackRSAOne, destpath string) (err error) 
 func RSADecryptGo(src, key []byte, dest *[]byte, wg *sync.WaitGroup) (err error) {
 	*dest, err = RSADecrypt(src, key)
 	if err != nil {
-		log.Println("Error RSA Decrypt data:", err)
+		log.Println("Error rsa decrypt data:", err)
 		wg.Done()
 		return err
 	}
