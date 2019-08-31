@@ -3,14 +3,15 @@ package unpack
 import (
 	"bufio"
 	"bytes"
-	"github.com/pkg/errors"
+	"errors"
+	"fmt"
 	"log"
 	"os"
 )
 
-func Unpack(srcfile string, destpath string) (err error) {
+func Unpack(src string, dest string) (err error) {
 	// first, open the file
-	file, err := os.Open(srcfile)
+	file, err := os.Open(src)
 	if err != nil {
 		log.Println("Error open file:", err)
 		return err
@@ -35,17 +36,18 @@ func Unpack(srcfile string, destpath string) (err error) {
 	tp := string(buf[0:index])
 	switch tp {
 	case "AES", "aes":
-		err = UnpackAES(srcfile, destpath)
+		err = UnpackAES(src, dest)
 	case "DES", "des":
-		err = UnpackDES(srcfile, destpath)
+		err = UnpackDES(src, dest)
 	case "3DES", "3des":
-		err = Unpack3DES(srcfile, destpath)
+		err = Unpack3DES(src, dest)
 	case "RSA", "rsa":
-		err = UnpackRSA(srcfile, destpath)
+		err = UnpackRSA(src, dest)
 	case "BASE64", "base64":
-		err = UnpackBase64(srcfile, destpath)
+		err = UnpackBase64(src, dest)
 	default:
-		err = errors.New("Undefined unpack algorithm.")
+		s := fmt.Sprint("Undefined unpack algorithm.")
+		err = errors.New(s)
 	}
 	return err
 }
