@@ -81,7 +81,7 @@ func PackDES(src []string, dest string) (err error) {
 	// second, check goroutine whether success or not
 	for i := 0; i < len(src); i++ {
 		if bytes.Equal(r[i+4], []byte("")) {
-			s := fmt.Sprintf("Error 3des pack one file: %v", src[i])
+			s := fmt.Sprintf("Error des pack one file: %v", src[i])
 			err = errors.New(s)
 			return err
 		}

@@ -7,6 +7,7 @@ import (
 	"crypto/x509"
 	"encoding/pem"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
@@ -17,50 +18,58 @@ import (
 	"sync"
 )
 
-func PackRSA(srcfilelist []string, destfile string) (err error) {
+func PackRSA(src []string, dest string) (err error) {
 	wg := &sync.WaitGroup{}
 	// start multi-cpu
 	core := runtime.NumCPU()
 	runtime.GOMAXPROCS(core)
 	// first, split the pre-crypt files
-	r := make([][]byte, len(srcfilelist)+4)
-	for k, v := range srcfilelist {
+	r := make([][]byte, len(src)+4)
+	for k, v := range src {
 		wg.Add(1)
 		go PackRSAOneGo(v, &r[k+4], wg)
 	}
 	wg.Wait()
-	// second, fill the header
+	// second, check goroutine whether success or not
+	for i := 0; i < len(src); i++ {
+		if bytes.Equal(r[i+4], []byte("")) {
+			s := fmt.Sprintf("Error rsa pack one file: %v", src[i])
+			err = errors.New(s)
+			return err
+		}
+	}
+	// third, fill the header
 	head := TPackRSA{}
 	head.Name = make([]byte, 32)
 	head.Author = make([]byte, 16)
 	head.Type = make([]byte, 8)
 	head.Number = make([]byte, 4)
-	_, destname := filepath.Split(destfile)
-	if len([]byte(destname)) > 32 {
+	_, name := filepath.Split(dest)
+	if len([]byte(name)) > 32 {
 		log.Println("Error dest file name length:", err)
 		return
 	}
-	BytesCopy(&(head.Name), []byte(destname))
+	BytesCopy(&(head.Name), []byte(name))
 	BytesCopy(&(head.Author), []byte("Alopex6414"))
 	BytesCopy(&(head.Type), []byte("RSA"))
-	BytesCopy(&(head.Number), IntToBytes(len(srcfilelist)))
+	BytesCopy(&(head.Number), IntToBytes(len(src)))
 	r[0] = head.Name
 	r[1] = head.Author
 	r[2] = head.Type
 	r[3] = head.Number
-	// third, write to dest file
+	// finally, write to dest file
 	s := bytes.Join(r, []byte(""))
-	err = ioutil.WriteFile(destfile, s, 0644)
+	err = ioutil.WriteFile(dest, s, 0644)
 	if err != nil {
-		log.Println("Error Write RSA:", err)
+		log.Println("Error write rsa file:", err)
 	}
 	return err
 }
 
-func PackRSAOneGo(srcfile string, r *[]byte, wg *sync.WaitGroup) (err error) {
-	*r, err = PackRSAOne(srcfile)
+func PackRSAOneGo(src string, r *[]byte, wg *sync.WaitGroup) (err error) {
+	*r, err = PackRSAOne(src)
 	if err != nil {
-		log.Println("Error RSA Pack One:", err)
+		log.Println("Error rsa pack one file:", err)
 		wg.Done()
 		return err
 	}
@@ -68,9 +77,9 @@ func PackRSAOneGo(srcfile string, r *[]byte, wg *sync.WaitGroup) (err error) {
 	return err
 }
 
-func PackRSAOne(srcfile string) (r []byte, err error) {
+func PackRSAOne(src string) (r []byte, err error) {
 	// first, open the file
-	file, err := os.Open(srcfile)
+	file, err := os.Open(src)
 	if err != nil {
 		log.Println("Error open file:", err)
 		return r, err
@@ -106,8 +115,8 @@ func PackRSAOne(srcfile string) (r []byte, err error) {
 	wg.Wait()
 	dest := bytes.Join(rr, []byte(""))
 	// sixth, fill the packet struct
-	_, srcname := filepath.Split(srcfile)
-	if len([]byte(srcname)) > 32 {
+	_, name := filepath.Split(src)
+	if len([]byte(name)) > 32 {
 		log.Println("Error source file name length:", err)
 		return
 	}
@@ -116,7 +125,7 @@ func PackRSAOne(srcfile string) (r []byte, err error) {
 	head.Key = make([]byte, 1024)
 	head.OriginSize = make([]byte, 4)
 	head.CryptSize = make([]byte, 4)
-	BytesCopy(&(head.Name), []byte(srcname))
+	BytesCopy(&(head.Name), []byte(name))
 	BytesCopy(&(head.Key), pri)
 	BytesCopy(&(head.OriginSize), IntToBytes(len(data)))
 	BytesCopy(&(head.CryptSize), IntToBytes(len(dest)))
@@ -134,7 +143,7 @@ func PackRSAOne(srcfile string) (r []byte, err error) {
 func RSAEncryptGo(src, key []byte, dest *[]byte, wg *sync.WaitGroup) (err error) {
 	*dest, err = RSAEncrypt(src, key)
 	if err != nil {
-		log.Println("Error RSA Encrypt data:", err)
+		log.Println("Error rsa encrypt data:", err)
 		wg.Done()
 		return err
 	}
