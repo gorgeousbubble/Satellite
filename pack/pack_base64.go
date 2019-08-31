@@ -2,6 +2,8 @@ package pack
 
 import (
 	"encoding/base64"
+	"errors"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
@@ -25,7 +27,15 @@ func PackBase64(src []string, dest string) (err error) {
 		go PackBase64OneGo(v, &r[k+4], wg)
 	}
 	wg.Wait()
-	// second, fill the header
+	// second, check goroutine whether success or not
+	for i := 0; i < len(src); i++ {
+		if r[i+4] == "" {
+			s := fmt.Sprintf("Error base64 pack one file: %v", src[i])
+			err = errors.New(s)
+			return err
+		}
+	}
+	// third, fill the header
 	head := TPackBase64{}
 	head.Name = make([]byte, 32)
 	head.Author = make([]byte, 16)
@@ -44,7 +54,7 @@ func PackBase64(src []string, dest string) (err error) {
 	r[1] = string(head.Author)
 	r[2] = string(head.Type)
 	r[3] = string(head.Number)
-	// third, write to dest file
+	// finally, write to dest file
 	s := strings.Join(r, "")
 	err = ioutil.WriteFile(dest, []byte(s), 0644)
 	if err != nil {
