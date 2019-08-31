@@ -5,6 +5,7 @@ import (
 	"crypto/aes"
 	"crypto/cipher"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"math/rand"
@@ -32,7 +33,8 @@ func PackAES(src []string, dest string) (err error) {
 	// second, check goroutine whether success or not
 	for i := 0; i < len(src); i++ {
 		if bytes.Equal(r[i+4], []byte("")) {
-			err = errors.New("error aes packet one file")
+			s := fmt.Sprintf("Error aes pack one file: %v", src[i])
+			err = errors.New(s)
 			return err
 		}
 	}
@@ -42,12 +44,12 @@ func PackAES(src []string, dest string) (err error) {
 	head.Author = make([]byte, 16)
 	head.Type = make([]byte, 8)
 	head.Number = make([]byte, 4)
-	_, destname := filepath.Split(dest)
-	if len([]byte(destname)) > 32 {
+	_, name := filepath.Split(dest)
+	if len([]byte(name)) > 32 {
 		log.Println("Error dest file name length:", err)
 		return
 	}
-	BytesCopy(&(head.Name), []byte(destname))
+	BytesCopy(&(head.Name), []byte(name))
 	BytesCopy(&(head.Author), []byte("Alopex6414"))
 	BytesCopy(&(head.Type), []byte("AES"))
 	BytesCopy(&(head.Number), IntToBytes(len(src)))
@@ -59,13 +61,13 @@ func PackAES(src []string, dest string) (err error) {
 	s := bytes.Join(r, []byte(""))
 	err = ioutil.WriteFile(dest, s, 0644)
 	if err != nil {
-		log.Println("Error Write AES:", err)
+		log.Println("Error write aes file:", err)
 	}
 	return err
 }
 
-func PackAESOneGo(srcfile string, r *[]byte, wg *sync.WaitGroup) (err error) {
-	*r, err = PackAESOne(srcfile)
+func PackAESOneGo(src string, r *[]byte, wg *sync.WaitGroup) (err error) {
+	*r, err = PackAESOne(src)
 	if err != nil {
 		log.Println("Error AES Pack One:", err)
 		wg.Done()
