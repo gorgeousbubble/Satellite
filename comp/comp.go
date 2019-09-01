@@ -1,7 +1,8 @@
 package comp
 
 import (
-	"github.com/pkg/errors"
+	"errors"
+	"fmt"
 )
 
 func Compress(src []string, dest string, algorithm string) (err error) {
@@ -11,7 +12,8 @@ func Compress(src []string, dest string, algorithm string) (err error) {
 	case "zip":
 		err = CompressZip(src, dest)
 	default:
-		err = errors.New("Undefined compress algorithm.")
+		s := fmt.Sprint("Undefined compress algorithm.")
+		err = errors.New(s)
 	}
 	return err
 }
