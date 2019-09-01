@@ -9,9 +9,9 @@ import (
 )
 
 func TestUnpackAES(t *testing.T) {
-	srcfile := "../test/data/unpack/file_aes.txt"
-	destpath := "../test/data/unpack/"
-	err := UnpackAES(srcfile, destpath)
+	src := "../test/data/unpack/file_aes.txt"
+	dest := "../test/data/unpack/"
+	err := UnpackAES(src, dest)
 	if err != nil {
 		t.Fatal("Error Unpack AES:", err)
 	}
@@ -31,7 +31,7 @@ func TestUnpackAESOneGo(t *testing.T) {
 		0x44, 0x3C, 0xF9, 0x14, 0x73, 0x9D, 0x61, 0xE4, 0x21, 0x69, 0x86, 0x8E, 0xAC, 0xF9, 0x22, 0x02,
 		0xCC, 0x85, 0x22, 0xE0, 0x0F, 0x21, 0xA9, 0xDA, 0x4D, 0x74, 0x6D, 0x26, 0x54, 0x05, 0x55, 0xF8,
 		0x6D, 0x12, 0x27, 0x0C, 0xC3, 0x61, 0x36, 0xDF}
-	destpath := "../test/data/unpack/"
+	dest := "../test/data/unpack/"
 	hh := TUnpackAESOne{}
 	hh.Name = make([]byte, 32)
 	hh.Key = make([]byte, 16)
@@ -62,7 +62,7 @@ func TestUnpackAESOneGo(t *testing.T) {
 	}
 
 	wg.Add(1)
-	go UnpackAESOneGo(s, hh, destpath, &wg)
+	go UnpackAESOneGo(s, hh, dest, &wg)
 	wg.Wait()
 }
 
@@ -79,7 +79,7 @@ func TestUnpackAESOne(t *testing.T) {
 		0x44, 0x3C, 0xF9, 0x14, 0x73, 0x9D, 0x61, 0xE4, 0x21, 0x69, 0x86, 0x8E, 0xAC, 0xF9, 0x22, 0x02,
 		0xCC, 0x85, 0x22, 0xE0, 0x0F, 0x21, 0xA9, 0xDA, 0x4D, 0x74, 0x6D, 0x26, 0x54, 0x05, 0x55, 0xF8,
 		0x6D, 0x12, 0x27, 0x0C, 0xC3, 0x61, 0x36, 0xDF}
-	destpath := "../test/data/unpack/"
+	dest := "../test/data/unpack/"
 	hh := TUnpackAESOne{}
 	hh.Name = make([]byte, 32)
 	hh.Key = make([]byte, 16)
@@ -109,7 +109,7 @@ func TestUnpackAESOne(t *testing.T) {
 		t.Fatal("Error read body:", err)
 	}
 
-	err = UnpackAESOne(s, hh, destpath)
+	err = UnpackAESOne(s, hh, dest)
 	if err != nil {
 		t.Fatal("Error unpack crypt file:", err)
 	}
@@ -144,9 +144,9 @@ func TestAESDecrypt(t *testing.T) {
 
 func BenchmarkUnpackAES(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		srcfile := "../test/data/unpack/file_aes.txt"
-		destpath := "../test/data/unpack/"
-		err := UnpackAES(srcfile, destpath)
+		src := "../test/data/unpack/file_aes.txt"
+		dest := "../test/data/unpack/"
+		err := UnpackAES(src, dest)
 		if err != nil {
 			b.Fatal("Error Unpack AES:", err)
 		}
@@ -168,7 +168,7 @@ func BenchmarkUnpackAESOneGo(b *testing.B) {
 			0x44, 0x3C, 0xF9, 0x14, 0x73, 0x9D, 0x61, 0xE4, 0x21, 0x69, 0x86, 0x8E, 0xAC, 0xF9, 0x22, 0x02,
 			0xCC, 0x85, 0x22, 0xE0, 0x0F, 0x21, 0xA9, 0xDA, 0x4D, 0x74, 0x6D, 0x26, 0x54, 0x05, 0x55, 0xF8,
 			0x6D, 0x12, 0x27, 0x0C, 0xC3, 0x61, 0x36, 0xDF}
-		destpath := "../test/data/unpack/"
+		dest := "../test/data/unpack/"
 		hh := TUnpackAESOne{}
 		hh.Name = make([]byte, 32)
 		hh.Key = make([]byte, 16)
@@ -199,7 +199,7 @@ func BenchmarkUnpackAESOneGo(b *testing.B) {
 		}
 
 		wg.Add(1)
-		go UnpackAESOneGo(s, hh, destpath, &wg)
+		go UnpackAESOneGo(s, hh, dest, &wg)
 		wg.Wait()
 	}
 }
@@ -218,7 +218,7 @@ func BenchmarkUnpackAESOne(b *testing.B) {
 			0x44, 0x3C, 0xF9, 0x14, 0x73, 0x9D, 0x61, 0xE4, 0x21, 0x69, 0x86, 0x8E, 0xAC, 0xF9, 0x22, 0x02,
 			0xCC, 0x85, 0x22, 0xE0, 0x0F, 0x21, 0xA9, 0xDA, 0x4D, 0x74, 0x6D, 0x26, 0x54, 0x05, 0x55, 0xF8,
 			0x6D, 0x12, 0x27, 0x0C, 0xC3, 0x61, 0x36, 0xDF}
-		destpath := "../test/data/unpack/"
+		dest := "../test/data/unpack/"
 		hh := TUnpackAESOne{}
 		hh.Name = make([]byte, 32)
 		hh.Key = make([]byte, 16)
@@ -248,7 +248,7 @@ func BenchmarkUnpackAESOne(b *testing.B) {
 			b.Fatal("Error read body:", err)
 		}
 
-		err = UnpackAESOne(s, hh, destpath)
+		err = UnpackAESOne(s, hh, dest)
 		if err != nil {
 			b.Fatal("Error unpack crypt file:", err)
 		}

@@ -9,9 +9,9 @@ import (
 )
 
 func TestUnpackRSA(t *testing.T) {
-	srcfile := "../test/data/unpack/file_rsa.txt"
-	destpath := "../test/data/unpack/"
-	err := UnpackRSA(srcfile, destpath)
+	src := "../test/data/unpack/file_rsa.txt"
+	dest := "../test/data/unpack/"
+	err := UnpackRSA(src, dest)
 	if err != nil {
 		t.Fatal("Error Unpack AES:", err)
 	}
@@ -96,7 +96,7 @@ func TestUnpackRSAOneGo(t *testing.T) {
 		0x65, 0xCA, 0x6F, 0xB5, 0x0A, 0x70, 0xDD, 0x2A, 0xE4, 0x08, 0x3F, 0x7B, 0xEE, 0x83, 0xE5, 0xF9,
 		0xB2, 0x55, 0xAD, 0x5D, 0x4D, 0xDA, 0x91, 0xF1,
 	}
-	destpath := "../test/data/unpack/"
+	dest := "../test/data/unpack/"
 	hh := TUnpackRSAOne{}
 	hh.Name = make([]byte, 32)
 	hh.Key = make([]byte, 1024)
@@ -126,7 +126,7 @@ func TestUnpackRSAOneGo(t *testing.T) {
 		t.Fatal("Error read body:", err)
 	}
 	wg.Add(1)
-	go UnpackRSAOneGo(s, hh, destpath, &wg)
+	go UnpackRSAOneGo(s, hh, dest, &wg)
 	wg.Wait()
 }
 
@@ -208,7 +208,7 @@ func TestUnpackRSAOne(t *testing.T) {
 		0x65, 0xCA, 0x6F, 0xB5, 0x0A, 0x70, 0xDD, 0x2A, 0xE4, 0x08, 0x3F, 0x7B, 0xEE, 0x83, 0xE5, 0xF9,
 		0xB2, 0x55, 0xAD, 0x5D, 0x4D, 0xDA, 0x91, 0xF1,
 	}
-	destpath := "../test/data/unpack/"
+	dest := "../test/data/unpack/"
 	hh := TUnpackRSAOne{}
 	hh.Name = make([]byte, 32)
 	hh.Key = make([]byte, 1024)
@@ -237,7 +237,7 @@ func TestUnpackRSAOne(t *testing.T) {
 	if n <= 0 {
 		t.Fatal("Error read body:", err)
 	}
-	err = UnpackRSAOne(s, hh, destpath)
+	err = UnpackRSAOne(s, hh, dest)
 	if err != nil {
 		t.Fatal("Error unpack crypt file:", err)
 	}
@@ -288,9 +288,9 @@ func TestRSADecrypt(t *testing.T) {
 
 func BenchmarkUnpackRSA(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		srcfile := "../test/data/unpack/file_rsa.txt"
-		destpath := "../test/data/unpack/"
-		err := UnpackRSA(srcfile, destpath)
+		src := "../test/data/unpack/file_rsa.txt"
+		dest := "../test/data/unpack/"
+		err := UnpackRSA(src, dest)
 		if err != nil {
 			b.Fatal("Error Unpack AES:", err)
 		}
@@ -377,7 +377,7 @@ func BenchmarkUnpackRSAOneGo(b *testing.B) {
 			0x65, 0xCA, 0x6F, 0xB5, 0x0A, 0x70, 0xDD, 0x2A, 0xE4, 0x08, 0x3F, 0x7B, 0xEE, 0x83, 0xE5, 0xF9,
 			0xB2, 0x55, 0xAD, 0x5D, 0x4D, 0xDA, 0x91, 0xF1,
 		}
-		destpath := "../test/data/unpack/"
+		dest := "../test/data/unpack/"
 		hh := TUnpackRSAOne{}
 		hh.Name = make([]byte, 32)
 		hh.Key = make([]byte, 1024)
@@ -407,7 +407,7 @@ func BenchmarkUnpackRSAOneGo(b *testing.B) {
 			b.Fatal("Error read body:", err)
 		}
 		wg.Add(1)
-		go UnpackRSAOneGo(s, hh, destpath, &wg)
+		go UnpackRSAOneGo(s, hh, dest, &wg)
 		wg.Wait()
 	}
 }
@@ -491,7 +491,7 @@ func BenchmarkUnpackRSAOne(b *testing.B) {
 			0x65, 0xCA, 0x6F, 0xB5, 0x0A, 0x70, 0xDD, 0x2A, 0xE4, 0x08, 0x3F, 0x7B, 0xEE, 0x83, 0xE5, 0xF9,
 			0xB2, 0x55, 0xAD, 0x5D, 0x4D, 0xDA, 0x91, 0xF1,
 		}
-		destpath := "../test/data/unpack/"
+		dest := "../test/data/unpack/"
 		hh := TUnpackRSAOne{}
 		hh.Name = make([]byte, 32)
 		hh.Key = make([]byte, 1024)
@@ -520,7 +520,7 @@ func BenchmarkUnpackRSAOne(b *testing.B) {
 		if n <= 0 {
 			b.Fatal("Error read body:", err)
 		}
-		err = UnpackRSAOne(s, hh, destpath)
+		err = UnpackRSAOne(s, hh, dest)
 		if err != nil {
 			b.Fatal("Error unpack crypt file:", err)
 		}
