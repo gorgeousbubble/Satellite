@@ -1,7 +1,8 @@
 package decomp
 
 import (
-	"github.com/pkg/errors"
+	"errors"
+	"fmt"
 )
 
 func DeCompress(src string, dest string, algorithm string) (err error) {
@@ -11,7 +12,8 @@ func DeCompress(src string, dest string, algorithm string) (err error) {
 	case "zip":
 		err = DeCompressZip(src, dest)
 	default:
-		err = errors.New("Undefined decompress algorithm.")
+		s := fmt.Sprint("Undefined decompress algorithm.")
+		err = errors.New(s)
 	}
 	return err
 }
