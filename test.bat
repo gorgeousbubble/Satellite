@@ -10,27 +10,30 @@ goto test_pack
 :test_pack
 echo test pack:
 echo.
-echo.
 
 cd pack
 go test -v -cover -bench .
+echo.
+echo.
 
 :: Test unpack package
 :test_unpack
 echo test unpack:
 echo.
-echo.
 
 cd ..
 cd unpack
 go test -v -cover -bench .
+echo.
+echo.
 
 :: Test comp package
 :test_comp
 echo test comp:
 echo.
-echo.
 
 cd ..
 cd comp
 go test -v -cover -bench .
+echo.
+echo.
