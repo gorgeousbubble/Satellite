@@ -7,6 +7,7 @@ import (
 	"os"
 	. "satellite/global"
 	"satellite/pack"
+	"time"
 )
 
 var packCmd = flag.NewFlagSet(CmdPacket, flag.ExitOnError)
@@ -35,19 +36,42 @@ func ParseCmdPack() {
 	// handle command parameters
 	err = handleCmdPack(packSrc, packDest, packType)
 	if err != nil {
+		fmt.Print("\n")
 		fmt.Println("Pack failure:", err)
 		os.Exit(1)
 	}
+	fmt.Print("\n")
 	fmt.Println("Pack success.")
 }
 
 func handleCmdPack(src []string, dest string, algorithm string) (err error) {
+	ch := make(chan bool)
 	// execute pack function
-	err = pack.Pack(src, dest, algorithm)
-	if err != nil {
-		log.Println("Pack failure:", err)
-		return err
+	go execPack(src, dest, algorithm, &err, ch)
+	for {
+		select {
+		case r := <-ch:
+			if r == false {
+				log.Println("Pack failure:", err)
+				return err
+			}
+			log.Println("Pack success.")
+			return err
+		default:
+			for _, r := range "-\\|/" {
+				fmt.Printf("\r%c", r)
+				time.Sleep(100 * time.Millisecond)
+			}
+		}
 	}
-	log.Println("Pack success.")
-	return err
+}
+
+func execPack(src []string, dest string, algorithm string, err *error, ch chan bool) {
+	*err = pack.Pack(src, dest, algorithm)
+	if *err != nil {
+		ch <- false
+		return
+	}
+	ch <- true
+	return
 }
