@@ -3,10 +3,12 @@ package cmd
 import (
 	"flag"
 	"fmt"
+	"github.com/schollz/progressbar"
 	"log"
 	"os"
 	. "satellite/global"
 	"satellite/pack"
+	"sync/atomic"
 	"time"
 )
 
@@ -46,6 +48,16 @@ func ParseCmdPack() {
 
 func handleCmdPack(src []string, dest string, algorithm string) (err error) {
 	ch := make(chan bool)
+	// calculate work
+	var work int64
+	err = pack.WorkCalculate(src, algorithm, &work)
+	if err != nil || work <= 0 {
+		fmt.Println("Error Calculate Pack Work")
+		return err
+	}
+	fmt.Println("Pack Start:")
+	// create process bar
+	bar := progressbar.New64(work)
 	// execute pack function
 	go execPack(src, dest, algorithm, &err, ch)
 	for {
@@ -58,10 +70,18 @@ func handleCmdPack(src []string, dest string, algorithm string) (err error) {
 			log.Println("Pack success.")
 			return err
 		default:
-			for _, r := range "-\\|/" {
-				fmt.Printf("\r%c", r)
+			/*for _, r := range "-\\|/" {
+				fmt.Printf("\r%c, total:%d, done:%d", r, atomic.LoadInt64(&pack.NumAll), atomic.LoadInt64(&pack.NumDone))
 				time.Sleep(100 * time.Millisecond)
+			}*/
+			done := atomic.LoadInt64(&pack.Done) * AESBufferSize
+			atomic.StoreInt64(&pack.Done, 0)
+			err = bar.Add64(done)
+			if err != nil {
+				fmt.Println("Error add count:", err)
+				return err
 			}
+			time.Sleep(100 * time.Millisecond)
 		}
 	}
 }
