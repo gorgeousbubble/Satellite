@@ -65,7 +65,7 @@ func TestUnpackAESOneToMemory(t *testing.T) {
 		t.Fatal("Error unpack crypt file:", err)
 	}
 	if !bytes.Equal(dest, []byte("hello,world!")) {
-		t.Fatal("Error unpack content:", err)
+		t.Fatal("Error unpack content:", string(dest))
 	}
 }
 
@@ -254,7 +254,7 @@ func BenchmarkUnpackAESOneToMemory(b *testing.B) {
 			b.Fatal("Error unpack crypt file:", err)
 		}
 		if !bytes.Equal(dest, []byte("hello,world!")) {
-			b.Fatal("Error unpack content:", err)
+			b.Fatal("Error unpack content:", string(dest))
 		}
 	}
 }
