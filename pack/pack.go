@@ -23,3 +23,18 @@ func Pack(src []string, dest string, algorithm string) (err error) {
 	}
 	return err
 }
+
+func WorkCalculate(src []string, algorithm string, work *int64) (err error) {
+	switch algorithm {
+	case "AES", "aes":
+		*work, err = PackAESWorkCalculate(src)
+	case "DES", "des":
+	case "3DES", "3des":
+	case "RSA", "rsa":
+	case "BASE64", "base64":
+	default:
+		s := fmt.Sprint("Undefined pack algorithm.")
+		err = errors.New(s)
+	}
+	return err
+}
