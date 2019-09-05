@@ -111,6 +111,30 @@ func UnpackBase64(src string, dest string) (err error) {
 	return err
 }
 
+func UnpackBase64OneToMemory(data []byte, dest *string) (err error) {
+	// first, split the data slice
+	ss, err := SplitByte(data, Base64BufferSize)
+	if err != nil {
+		log.Println("Error split bytes:", err)
+		return err
+	}
+	size := len(data) % Base64BufferSize
+	if size != 0 {
+		last := len(data) / Base64BufferSize
+		ss[last] = append(ss[last][:0], ss[last][:size]...)
+	}
+	// second, we can call Base64Decrypt function
+	wg := &sync.WaitGroup{}
+	rr := make([]string, len(ss))
+	for k, v := range ss {
+		wg.Add(1)
+		go Base64DecryptGo(string(v), &rr[k], wg)
+	}
+	wg.Wait()
+	*dest = strings.Join(rr, "")
+	return err
+}
+
 func UnpackBase64OneGo(data []byte, head TUnpackBase64One, dest string, wg *sync.WaitGroup) (err error) {
 	err = UnpackBase64One(data, head, dest)
 	if err != nil {

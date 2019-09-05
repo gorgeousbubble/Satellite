@@ -126,6 +126,30 @@ func UnpackRSA(src string, dest string) (err error) {
 	return err
 }
 
+func UnpackRSAOneToMemory(data []byte, head TUnpackRSAOne, dest *[]byte) (err error) {
+	// initial, fill the key
+	key := head.Key
+	// first, split the data slice
+	ss, err := SplitByte(data, RSAUnpackSize)
+	if err != nil {
+		log.Println("Error split bytes:", err)
+		return err
+	}
+	// second, we can call RSADecrypt function
+	wg := &sync.WaitGroup{}
+	rr := make([][]byte, len(ss))
+	for k, v := range ss {
+		wg.Add(1)
+		go RSADecryptGo(v, key, &rr[k], wg)
+	}
+	wg.Wait()
+	r := bytes.Join(rr, []byte(""))
+	// third, delete the more data
+	size := BytesToInt(head.OriginSize)
+	*dest = append(r[:0], r[:size]...)
+	return err
+}
+
 func UnpackRSAOneGo(data []byte, head TUnpackRSAOne, dest string, wg *sync.WaitGroup) (err error) {
 	err = UnpackRSAOne(data, head, dest)
 	if err != nil {
