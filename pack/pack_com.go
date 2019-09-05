@@ -1,5 +1,7 @@
 package pack
 
+var Done int64
+
 // pack aes
 type TPackAES struct {
 	Name   []byte // [32]byte/256bit
