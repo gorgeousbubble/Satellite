@@ -17,6 +17,40 @@ func TestUnpackBase64(t *testing.T) {
 	}
 }
 
+func TestUnpackBase64OneToMemory(t *testing.T) {
+	var dest string
+	src := []byte{
+		0x66, 0x69, 0x6C, 0x65, 0x2E, 0x74, 0x78, 0x74, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x10, 0x61, 0x47, 0x56, 0x73, 0x62, 0x47, 0x38, 0x73, 0x64, 0x32, 0x39, 0x79,
+		0x62, 0x47, 0x51, 0x68,
+	}
+	h := TUnpackBase64One{}
+	h.Name = make([]byte, 32)
+	h.Size = make([]byte, 4)
+	rd := bytes.NewReader(src)
+	_, err := rd.Read(h.Name)
+	if err != nil {
+		t.Fatal("Error read header name:", err)
+	}
+	_, err = rd.Read(h.Size)
+	if err != nil {
+		t.Fatal("Error read header size:", err)
+	}
+	s := make([]byte, BytesToInt(h.Size))
+	n, err := rd.Read(s)
+	if n <= 0 {
+		t.Fatal("Error read body:", err)
+	}
+	err = UnpackBase64OneToMemory(s, &dest)
+	if err != nil {
+		t.Fatal("Error unpack crypt file:", err)
+	}
+	if dest != "hello,world!" {
+		t.Fatal("Error unpack content:", dest)
+	}
+}
+
 func TestUnpackBase64OneGo(t *testing.T) {
 	var wg sync.WaitGroup
 	src := []byte{
@@ -116,6 +150,42 @@ func BenchmarkUnpackBase64(b *testing.B) {
 		err := UnpackBase64(src, dest)
 		if err != nil {
 			b.Fatal("Error Unpack Base64:", err)
+		}
+	}
+}
+
+func BenchmarkUnpackBase64OneToMemory(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		var dest string
+		src := []byte{
+			0x66, 0x69, 0x6C, 0x65, 0x2E, 0x74, 0x78, 0x74, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+			0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+			0x00, 0x00, 0x00, 0x10, 0x61, 0x47, 0x56, 0x73, 0x62, 0x47, 0x38, 0x73, 0x64, 0x32, 0x39, 0x79,
+			0x62, 0x47, 0x51, 0x68,
+		}
+		h := TUnpackBase64One{}
+		h.Name = make([]byte, 32)
+		h.Size = make([]byte, 4)
+		rd := bytes.NewReader(src)
+		_, err := rd.Read(h.Name)
+		if err != nil {
+			b.Fatal("Error read header name:", err)
+		}
+		_, err = rd.Read(h.Size)
+		if err != nil {
+			b.Fatal("Error read header size:", err)
+		}
+		s := make([]byte, BytesToInt(h.Size))
+		n, err := rd.Read(s)
+		if n <= 0 {
+			b.Fatal("Error read body:", err)
+		}
+		err = UnpackBase64OneToMemory(s, &dest)
+		if err != nil {
+			b.Fatal("Error unpack crypt file:", err)
+		}
+		if dest != "hello,world!" {
+			b.Fatal("Error unpack content:", dest)
 		}
 	}
 }
