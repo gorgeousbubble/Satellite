@@ -9,3 +9,6 @@ bin
 
 #Log files
 log
+
+#RSA Key
+*.pem
