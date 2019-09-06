@@ -10,5 +10,11 @@ bin
 #Log files
 log
 
+#Test files
+*.pak
+*.dat
+*.tar.gz
+*.zip
+
 #RSA Key
 *.pem
