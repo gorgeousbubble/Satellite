@@ -51,7 +51,6 @@ func handleCmdPack(src []string, dest string, algorithm string) (err error) {
 	ch := make(chan bool)
 	// calculate work
 	var work int64
-	var sum int64
 	err = pack.WorkCalculate(src, algorithm, &work)
 	if err != nil || work <= 0 {
 		fmt.Println("Error Calculate Pack Work")
@@ -94,8 +93,6 @@ func handleCmdPack(src []string, dest string, algorithm string) (err error) {
 				err = errors.New(s)
 				return err
 			}
-			sum += done
-			log.Printf("done:%v, work:%v, rate:%v", sum, work, float64(sum)/float64(work))
 			err = bar.Add64(done)
 			if err != nil {
 				fmt.Println("Error add count:", err)

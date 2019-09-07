@@ -29,8 +29,11 @@ func WorkCalculate(src []string, algorithm string, work *int64) (err error) {
 	case "AES", "aes":
 		*work, err = PackAESWorkCalculate(src)
 	case "DES", "des":
+		*work, err = PackDESWorkCalculate(src)
 	case "3DES", "3des":
+		*work, err = PackDESWorkCalculate(src)
 	case "RSA", "rsa":
+		*work, err = PackRSAWorkCalculate(src)
 	case "BASE64", "base64":
 		*work, err = PackBase64WorkCalculate(src)
 	default:
