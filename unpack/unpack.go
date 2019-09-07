@@ -88,6 +88,8 @@ func WorkCalculate(src string, algorithm *string, work *int64) (err error) {
 		*work, err = Unpack3DESWorkCalculate(src)
 		*algorithm = "3DES"
 	case "RSA", "rsa":
+		*work, err = UnpackRSAWorkCalculate(src)
+		*algorithm = "RSA"
 	case "BASE64", "base64":
 		*work, err = UnpackBase64WorkCalculate(src)
 		*algorithm = "BASE64"
