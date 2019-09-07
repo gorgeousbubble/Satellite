@@ -74,8 +74,21 @@ func handleCmdPack(src []string, dest string, algorithm string) (err error) {
 				fmt.Printf("\r%c, total:%d, done:%d", r, atomic.LoadInt64(&pack.NumAll), atomic.LoadInt64(&pack.NumDone))
 				time.Sleep(100 * time.Millisecond)
 			}*/
-			done := atomic.LoadInt64(&pack.Done) * AESBufferSize
+			done := atomic.LoadInt64(&pack.Done)
 			atomic.StoreInt64(&pack.Done, 0)
+			switch algorithm {
+			case "AES", "aes":
+				done *= AESBufferSize
+			case "DES", "des":
+				done *= DESBufferSize
+			case "3DES", "3des":
+				done *= DESBufferSize
+			case "RSA", "rsa":
+				done *= RSAPacketSize
+			case "BASE64", "base64":
+				done *= Base64BufferSize
+			default:
+			}
 			err = bar.Add64(done)
 			if err != nil {
 				fmt.Println("Error add count:", err)
