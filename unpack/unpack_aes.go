@@ -12,6 +12,7 @@ import (
 	. "satellite/global"
 	. "satellite/utils"
 	"sync"
+	"sync/atomic"
 )
 
 func UnpackAES(src string, dest string) (err error) {
@@ -19,6 +20,8 @@ func UnpackAES(src string, dest string) (err error) {
 	// start multi-cpu
 	core := runtime.NumCPU()
 	runtime.GOMAXPROCS(core)
+	// clear global variable
+	atomic.StoreInt64(&Done, 0)
 	// first, open the file
 	file, err := os.Open(src)
 	if err != nil {
@@ -123,6 +126,110 @@ func UnpackAES(src string, dest string) (err error) {
 	return err
 }
 
+func UnpackAESWorkCalculate(src string) (work int64, err error) {
+	var sum int64
+	// first, open the file
+	file, err := os.Open(src)
+	if err != nil {
+		log.Println("Error open file:", err)
+		return work, err
+	}
+	// second, read file data
+	data, err := ioutil.ReadAll(file)
+	if err != nil {
+		log.Println("Error read file:", err)
+		return work, err
+	}
+	_, name := filepath.Split(src)
+	// third, new one header
+	h := TUnpackAES{}
+	h.Name = make([]byte, 32)
+	h.Author = make([]byte, 16)
+	h.Type = make([]byte, 8)
+	h.Number = make([]byte, 4)
+	// fourth, read the header
+	rd := bytes.NewReader(data)
+	_, err = rd.Read(h.Name)
+	if err != nil {
+		log.Println("Error read header name:", err)
+		return work, err
+	}
+	s := make([]byte, 32)
+	BytesCopy(&s, []byte(name))
+	if !bytes.Equal(h.Name, s) {
+		log.Println("Error read header name:", err)
+		return work, err
+	}
+	_, err = rd.Read(h.Author)
+	if err != nil {
+		log.Println("Error read header author:", err)
+		return work, err
+	}
+	s = make([]byte, 16)
+	BytesCopy(&s, []byte("Alopex6414"))
+	if !bytes.Equal(h.Author, s) {
+		log.Println("Error read header author:", err)
+		return work, err
+	}
+	_, err = rd.Read(h.Type)
+	if err != nil {
+		log.Println("Error read header type:", err)
+		return work, err
+	}
+	s = make([]byte, 8)
+	BytesCopy(&s, []byte("AES"))
+	if !bytes.Equal(h.Type, s) {
+		log.Println("Error read header type:", err)
+		return work, err
+	}
+	_, err = rd.Read(h.Number)
+	if err != nil {
+		log.Println("Error read header number:", err)
+		return work, err
+	}
+	size := BytesToInt(h.Number)
+	// fifth, read every one file in packet
+	for i := 0; i < size; i++ {
+		// six, read the header
+		hh := TUnpackAESOne{}
+		hh.Name = make([]byte, 32)
+		hh.Key = make([]byte, 16)
+		hh.OriginSize = make([]byte, 4)
+		hh.CryptSize = make([]byte, 4)
+		_, err = rd.Read(hh.Name)
+		if err != nil {
+			log.Println("Error read header name:", err)
+			return work, err
+		}
+		_, err = rd.Read(hh.Key)
+		if err != nil {
+			log.Println("Error read header key:", err)
+			return work, err
+		}
+		_, err = rd.Read(hh.OriginSize)
+		if err != nil {
+			log.Println("Error read header origin size:", err)
+			return work, err
+		}
+		_, err = rd.Read(hh.CryptSize)
+		if err != nil {
+			log.Println("Error read header crypt size:", err)
+			return work, err
+		}
+		// seven, read the body
+		s := make([]byte, BytesToInt(hh.CryptSize))
+		n, err := rd.Read(s)
+		if n <= 0 {
+			log.Println("Error read body:", err)
+			return work, err
+		}
+		// eight, calculate file size sum
+		sum += int64(BytesToInt(hh.CryptSize))
+	}
+	work = sum
+	return work, err
+}
+
 func UnpackAESOneToMemory(data []byte, head TUnpackAESOne, dest *[]byte) (err error) {
 	// initial, fill the key
 	key := head.Key
@@ -203,6 +310,7 @@ func AESDecryptGo(src, key []byte, dest *[]byte, wg *sync.WaitGroup) (err error)
 		wg.Done()
 		return err
 	}
+	atomic.AddInt64(&Done, 1)
 	wg.Done()
 	return err
 }

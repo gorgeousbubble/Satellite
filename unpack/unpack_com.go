@@ -1,5 +1,7 @@
 package unpack
 
+var Done int64
+
 // unpack aes
 type TUnpackAES struct {
 	Name   []byte // [32]byte/256bit

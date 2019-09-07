@@ -51,3 +51,51 @@ func Unpack(src string, dest string) (err error) {
 	}
 	return err
 }
+
+func WorkCalculate(src string, algorithm *string, work *int64) (err error) {
+	// first, open the file
+	file, err := os.Open(src)
+	if err != nil {
+		log.Println("Error open file:", err)
+		return err
+	}
+	// second, read file data
+	buf := make([]byte, 60)
+	rd := bufio.NewReader(file)
+	_, err = rd.Read(buf)
+	if err != nil {
+		log.Println("Error read file:", err)
+		return err
+	}
+	// third, close the file
+	err = file.Close()
+	if err != nil {
+		log.Println("Error close file:", err)
+		return err
+	}
+	// fourth, find the algorithm
+	buf = buf[48:56]
+	index := bytes.IndexByte(buf, 0)
+	tp := string(buf[0:index])
+	switch tp {
+	case "AES", "aes":
+		*work, err = UnpackAESWorkCalculate(src)
+		*algorithm = "AES"
+	case "DES", "des":
+		*work, err = UnpackDESWorkCalculate(src)
+		*algorithm = "DES"
+	case "3DES", "3des":
+		*work, err = Unpack3DESWorkCalculate(src)
+		*algorithm = "3DES"
+	case "RSA", "rsa":
+		*work, err = UnpackRSAWorkCalculate(src)
+		*algorithm = "RSA"
+	case "BASE64", "base64":
+		*work, err = UnpackBase64WorkCalculate(src)
+		*algorithm = "BASE64"
+	default:
+		s := fmt.Sprint("Undefined unpack algorithm.")
+		err = errors.New(s)
+	}
+	return err
+}
