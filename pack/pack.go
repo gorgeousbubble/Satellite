@@ -32,6 +32,7 @@ func WorkCalculate(src []string, algorithm string, work *int64) (err error) {
 	case "3DES", "3des":
 	case "RSA", "rsa":
 	case "BASE64", "base64":
+		*work, err = PackBase64WorkCalculate(src)
 	default:
 		s := fmt.Sprint("Undefined pack algorithm.")
 		err = errors.New(s)

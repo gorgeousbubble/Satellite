@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"errors"
 	"flag"
 	"fmt"
 	"github.com/schollz/progressbar"
@@ -39,17 +40,18 @@ func ParseCmdPack() {
 	err = handleCmdPack(packSrc, packDest, packType)
 	if err != nil {
 		fmt.Print("\n")
-		fmt.Println("Pack failure:", err)
+		fmt.Println("Pack Failure:", err)
 		os.Exit(1)
 	}
 	fmt.Print("\n")
-	fmt.Println("Pack success.")
+	fmt.Println("Pack Success.")
 }
 
 func handleCmdPack(src []string, dest string, algorithm string) (err error) {
 	ch := make(chan bool)
 	// calculate work
 	var work int64
+	var sum int64
 	err = pack.WorkCalculate(src, algorithm, &work)
 	if err != nil || work <= 0 {
 		fmt.Println("Error Calculate Pack Work")
@@ -88,7 +90,12 @@ func handleCmdPack(src []string, dest string, algorithm string) (err error) {
 			case "BASE64", "base64":
 				done *= Base64BufferSize
 			default:
+				s := fmt.Sprint("Undefined pack algorithm.")
+				err = errors.New(s)
+				return err
 			}
+			sum += done
+			log.Printf("done:%v, work:%v, rate:%v", sum, work, float64(sum)/float64(work))
 			err = bar.Add64(done)
 			if err != nil {
 				fmt.Println("Error add count:", err)
