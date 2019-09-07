@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"errors"
 	"flag"
 	"fmt"
 	"github.com/schollz/progressbar"
@@ -39,11 +40,11 @@ func ParseCmdPack() {
 	err = handleCmdPack(packSrc, packDest, packType)
 	if err != nil {
 		fmt.Print("\n")
-		fmt.Println("Pack failure:", err)
+		fmt.Println("Pack Failure:", err)
 		os.Exit(1)
 	}
 	fmt.Print("\n")
-	fmt.Println("Pack success.")
+	fmt.Println("Pack Success.")
 }
 
 func handleCmdPack(src []string, dest string, algorithm string) (err error) {
@@ -74,8 +75,24 @@ func handleCmdPack(src []string, dest string, algorithm string) (err error) {
 				fmt.Printf("\r%c, total:%d, done:%d", r, atomic.LoadInt64(&pack.NumAll), atomic.LoadInt64(&pack.NumDone))
 				time.Sleep(100 * time.Millisecond)
 			}*/
-			done := atomic.LoadInt64(&pack.Done) * AESBufferSize
+			done := atomic.LoadInt64(&pack.Done)
 			atomic.StoreInt64(&pack.Done, 0)
+			switch algorithm {
+			case "AES", "aes":
+				done *= AESBufferSize
+			case "DES", "des":
+				done *= DESBufferSize
+			case "3DES", "3des":
+				done *= DESBufferSize
+			case "RSA", "rsa":
+				done *= RSAPacketSize
+			case "BASE64", "base64":
+				done *= Base64BufferSize
+			default:
+				s := fmt.Sprint("Undefined pack algorithm.")
+				err = errors.New(s)
+				return err
+			}
 			err = bar.Add64(done)
 			if err != nil {
 				fmt.Println("Error add count:", err)
