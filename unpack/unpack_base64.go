@@ -12,6 +12,7 @@ import (
 	. "satellite/utils"
 	"strings"
 	"sync"
+	"sync/atomic"
 )
 
 func UnpackBase64(src string, dest string) (err error) {
@@ -19,6 +20,8 @@ func UnpackBase64(src string, dest string) (err error) {
 	// start multi-cpu
 	core := runtime.NumCPU()
 	runtime.GOMAXPROCS(core)
+	// clear global variable
+	atomic.StoreInt64(&Done, 0)
 	// first, open the file
 	file, err := os.Open(src)
 	if err != nil {
@@ -111,6 +114,98 @@ func UnpackBase64(src string, dest string) (err error) {
 	return err
 }
 
+func UnpackBase64WorkCalculate(src string) (work int64, err error) {
+	var sum int64
+	// first, open the file
+	file, err := os.Open(src)
+	if err != nil {
+		log.Println("Error open file:", err)
+		return work, err
+	}
+	defer file.Close()
+	// second, read file data
+	data, err := ioutil.ReadAll(file)
+	if err != nil {
+		log.Println("Error read file:", err)
+		return work, err
+	}
+	_, name := filepath.Split(src)
+	// third, new one header
+	h := TUnpackBase64{}
+	h.Name = make([]byte, 32)
+	h.Author = make([]byte, 16)
+	h.Type = make([]byte, 8)
+	h.Number = make([]byte, 4)
+	// fourth, read the header
+	rd := bytes.NewReader(data)
+	_, err = rd.Read(h.Name)
+	if err != nil {
+		log.Println("Error read header name:", err)
+		return work, err
+	}
+	s := make([]byte, 32)
+	BytesCopy(&s, []byte(name))
+	if !bytes.Equal(h.Name, s) {
+		log.Println("Error read header name:", err)
+		return work, err
+	}
+	_, err = rd.Read(h.Author)
+	if err != nil {
+		log.Println("Error read header author:", err)
+		return work, err
+	}
+	s = make([]byte, 16)
+	BytesCopy(&s, []byte("Alopex6414"))
+	if !bytes.Equal(h.Author, s) {
+		log.Println("Error read header author:", err)
+		return work, err
+	}
+	_, err = rd.Read(h.Type)
+	if err != nil {
+		log.Println("Error read header type:", err)
+		return work, err
+	}
+	s = make([]byte, 8)
+	BytesCopy(&s, []byte("BASE64"))
+	if !bytes.Equal(h.Type, s) {
+		log.Println("Error read header type:", err)
+		return work, err
+	}
+	_, err = rd.Read(h.Number)
+	if err != nil {
+		log.Println("Error read header number:", err)
+		return work, err
+	}
+	size := BytesToInt(h.Number)
+	// fifth, read every one file in packet
+	for i := 0; i < size; i++ {
+		// six, read the header
+		hh := TUnpackBase64One{}
+		hh.Name = make([]byte, 32)
+		hh.Size = make([]byte, 4)
+		_, err = rd.Read(hh.Name)
+		if err != nil {
+			log.Println("Error read header name:", err)
+			return work, err
+		}
+		_, err = rd.Read(hh.Size)
+		if err != nil {
+			log.Println("Error read header size:", err)
+			return work, err
+		}
+		// seven, read the body
+		s := make([]byte, BytesToInt(hh.Size))
+		n, err := rd.Read(s)
+		if n <= 0 {
+			log.Println("Error read body:", err)
+			return work, err
+		}
+		// eight, calculate file size sum
+		sum += int64(BytesToInt(hh.Size))
+	}
+	return work, err
+}
+
 func UnpackBase64OneToMemory(data []byte, dest *string) (err error) {
 	// first, split the data slice
 	ss, err := SplitByte(data, Base64BufferSize)
@@ -187,6 +282,7 @@ func UnpackBase64One(data []byte, head TUnpackBase64One, path string) (err error
 
 func Base64DecryptGo(str string, r *string, wg *sync.WaitGroup) {
 	*r = Base64Decrypt(str)
+	atomic.AddInt64(&Done, 1)
 	wg.Done()
 }
 

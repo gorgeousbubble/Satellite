@@ -85,6 +85,8 @@ func WorkCalculate(src string, algorithm *string, work *int64) (err error) {
 	case "3DES", "3des":
 	case "RSA", "rsa":
 	case "BASE64", "base64":
+		*work, err = UnpackBase64WorkCalculate(src)
+		*algorithm = "BASE64"
 	default:
 		s := fmt.Sprint("Undefined unpack algorithm.")
 		err = errors.New(s)
