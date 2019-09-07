@@ -70,21 +70,27 @@ func PackAES(src []string, dest string) (err error) {
 }
 
 func PackAESWorkCalculate(src []string) (work int64, err error) {
-	var size int64
+	var sum int64
 	for _, v := range src {
+		var size int64
 		err = filepath.Walk(v, func(path string, info os.FileInfo, err error) error {
 			if err != nil {
 				return err
 			}
-			size += info.Size()
+			size = info.Size()
 			return err
 		})
 		if err != nil {
 			log.Println("Error calculate work:", err)
 			return work, err
 		}
+		if size%AESBufferSize != 0 {
+			padding := AESBufferSize - size%AESBufferSize
+			size += padding
+		}
+		sum += size
 	}
-	work = size
+	work = sum
 	return work, err
 }
 

@@ -13,6 +13,7 @@ import (
 	. "satellite/utils"
 	"strings"
 	"sync"
+	"sync/atomic"
 )
 
 func PackBase64(src []string, dest string) (err error) {
@@ -20,6 +21,8 @@ func PackBase64(src []string, dest string) (err error) {
 	// start multi-cpu
 	core := runtime.NumCPU()
 	runtime.GOMAXPROCS(core)
+	// clear global variable
+	atomic.StoreInt64(&Done, 0)
 	// first, split the pre-crypt files
 	r := make([]string, len(src)+4)
 	for k, v := range src {
@@ -61,6 +64,31 @@ func PackBase64(src []string, dest string) (err error) {
 		log.Println("Error write base64 file:", err)
 	}
 	return err
+}
+
+func PackBase64WorkCalculate(src []string) (work int64, err error) {
+	var sum int64
+	for _, v := range src {
+		var size int64
+		err = filepath.Walk(v, func(path string, info os.FileInfo, err error) error {
+			if err != nil {
+				return err
+			}
+			size = info.Size()
+			return err
+		})
+		if err != nil {
+			log.Println("Error calculate work:", err)
+			return work, err
+		}
+		if size%Base64BufferSize != 0 {
+			padding := Base64BufferSize - size%Base64BufferSize
+			size += padding
+		}
+		sum += size
+	}
+	work = sum
+	return work, err
 }
 
 func PackBase64OneGo(src string, r *string, wg *sync.WaitGroup) (err error) {
@@ -130,6 +158,7 @@ func PackBase64One(src string) (r string, err error) {
 
 func Base64EncryptGo(str string, r *string, wg *sync.WaitGroup) {
 	*r = Base64Encrypt(str)
+	atomic.AddInt64(&Done, 1)
 	wg.Done()
 }
 
