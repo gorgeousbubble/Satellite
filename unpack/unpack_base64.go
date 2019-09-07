@@ -203,6 +203,7 @@ func UnpackBase64WorkCalculate(src string) (work int64, err error) {
 		// eight, calculate file size sum
 		sum += int64(BytesToInt(hh.Size))
 	}
+	work = sum
 	return work, err
 }
 
