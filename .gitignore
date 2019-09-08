@@ -15,6 +15,7 @@ log
 *.dat
 *.tar.gz
 *.zip
+*.txt
 
 #RSA Key
 *.pem
