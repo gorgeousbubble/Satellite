@@ -11,8 +11,8 @@ import (
 func StartHttpServer(ip string, port string) {
 	server := http.Server{
 		Addr:         ip + ":" + port,
-		WriteTimeout: ConstHTTPWriteTimeout * time.Millisecond,
-		ReadTimeout:  ConstHTTPReadTimeout * time.Millisecond,
+		WriteTimeout: HTTPWriteTimeout * time.Millisecond,
+		ReadTimeout:  HTTPReadTimeout * time.Millisecond,
 		Handler:      createHttpRouter(),
 	}
 	fmt.Println("Start Listen And Server on ", ip+":"+port)
