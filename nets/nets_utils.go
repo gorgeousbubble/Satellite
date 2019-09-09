@@ -53,7 +53,7 @@ func connTcpRecvHandler(c net.Conn) {
 		return
 	}
 	// create slice to receive data
-	buf := make([]byte, ConstTCPBufferSize)
+	buf := make([]byte, TCPBufferSize)
 	// loop receive data stream
 	for {
 		// start read data stream from net
@@ -113,7 +113,7 @@ func connUdpRecvHandler(c *net.UDPConn) {
 		return
 	}
 	// create slice to receive data
-	buf := make([]byte, ConstUDPBufferSize)
+	buf := make([]byte, UDPBufferSize)
 	// loop receive data stream
 	for {
 		// start read data stream from net
