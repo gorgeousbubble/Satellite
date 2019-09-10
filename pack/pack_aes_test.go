@@ -90,10 +90,12 @@ func BenchmarkPackAES(b *testing.B) {
 }
 
 func BenchmarkPackAESWorkCalculate(b *testing.B) {
-	src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
-	_, err := PackAESWorkCalculate(src)
-	if err != nil {
-		b.Fatal("Error Pack AES Work Calculate:", err)
+	for i := 0; i < b.N; i++ {
+		src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
+		_, err := PackAESWorkCalculate(src)
+		if err != nil {
+			b.Fatal("Error Pack AES Work Calculate:", err)
+		}
 	}
 }
 

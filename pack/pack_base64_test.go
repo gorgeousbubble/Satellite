@@ -15,6 +15,14 @@ func TestPackBase64(t *testing.T) {
 	}
 }
 
+func TestPackBase64WorkCalculate(t *testing.T) {
+	src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
+	_, err := PackBase64WorkCalculate(src)
+	if err != nil {
+		t.Fatal("Error Pack Base64 Work Calculate:", err)
+	}
+}
+
 func TestPackBase64OneGo(t *testing.T) {
 	var wg sync.WaitGroup
 	var r string
