@@ -16,6 +16,14 @@ func TestPackRSA(t *testing.T) {
 	}
 }
 
+func TestPackRSAWorkCalculate(t *testing.T) {
+	src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
+	_, err := PackRSAWorkCalculate(src)
+	if err != nil {
+		t.Fatal("Error Pack RSA Work Calculate:", err)
+	}
+}
+
 func TestPackRSAOneGo(t *testing.T) {
 	var wg sync.WaitGroup
 	var r []byte
@@ -76,6 +84,16 @@ func BenchmarkPackRSA(b *testing.B) {
 		err := PackRSA(src, dest)
 		if err != nil {
 			b.Fatal("Error Pack RSA:", err)
+		}
+	}
+}
+
+func BenchmarkPackRSAWorkCalculate(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
+		_, err := PackRSAWorkCalculate(src)
+		if err != nil {
+			b.Fatal("Error Pack RSA Work Calculate:", err)
 		}
 	}
 }
