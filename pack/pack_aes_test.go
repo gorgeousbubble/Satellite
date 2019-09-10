@@ -15,6 +15,14 @@ func TestPackAES(t *testing.T) {
 	}
 }
 
+func TestPackAESWorkCalculate(t *testing.T) {
+	src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
+	_, err := PackAESWorkCalculate(src)
+	if err != nil {
+		t.Fatal("Error Pack AES Work Calculate:", err)
+	}
+}
+
 func TestPackAESOneGo(t *testing.T) {
 	var wg sync.WaitGroup
 	var r []byte
@@ -77,6 +85,16 @@ func BenchmarkPackAES(b *testing.B) {
 		err := PackAES(src, dest)
 		if err != nil {
 			b.Fatal("Error Pack AES:", err)
+		}
+	}
+}
+
+func BenchmarkPackAESWorkCalculate(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
+		_, err := PackAESWorkCalculate(src)
+		if err != nil {
+			b.Fatal("Error Pack AES Work Calculate:", err)
 		}
 	}
 }
