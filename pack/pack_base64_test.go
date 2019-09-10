@@ -89,6 +89,16 @@ func BenchmarkPackBase64(b *testing.B) {
 	}
 }
 
+func BenchmarkPackBase64WorkCalculate(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
+		_, err := PackBase64WorkCalculate(src)
+		if err != nil {
+			b.Fatal("Error Pack Base64 Work Calculate:", err)
+		}
+	}
+}
+
 func BenchmarkPackBase64OneGo(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var wg sync.WaitGroup
