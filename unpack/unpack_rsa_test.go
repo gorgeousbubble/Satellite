@@ -17,6 +17,14 @@ func TestUnpackRSA(t *testing.T) {
 	}
 }
 
+func TestUnpackRSAWorkCalculate(t *testing.T) {
+	src := "../test/data/unpack/file_rsa.txt"
+	_, err := UnpackRSAWorkCalculate(src)
+	if err != nil {
+		t.Fatal("Error Unpack RSA Work Calculate:", err)
+	}
+}
+
 func TestUnpackRSAOneToMemory(t *testing.T) {
 	var dest []byte
 	src := []byte{
@@ -409,6 +417,16 @@ func BenchmarkUnpackRSA(b *testing.B) {
 		err := UnpackRSA(src, dest)
 		if err != nil {
 			b.Fatal("Error Unpack AES:", err)
+		}
+	}
+}
+
+func BenchmarkUnpackRSAWorkCalculate(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		src := "../test/data/unpack/file_rsa.txt"
+		_, err := UnpackRSAWorkCalculate(src)
+		if err != nil {
+			b.Fatal("Error Unpack RSA Work Calculate:", err)
 		}
 	}
 }
