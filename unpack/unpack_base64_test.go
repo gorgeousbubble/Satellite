@@ -17,6 +17,14 @@ func TestUnpackBase64(t *testing.T) {
 	}
 }
 
+func TestUnpackBase64WorkCalculate(t *testing.T) {
+	src := "../test/data/unpack/file_base64.txt"
+	_, err := UnpackBase64WorkCalculate(src)
+	if err != nil {
+		t.Fatal("Error Unpack Base64 Work Calculate:", err)
+	}
+}
+
 func TestUnpackBase64OneToMemory(t *testing.T) {
 	var dest string
 	src := []byte{
@@ -150,6 +158,16 @@ func BenchmarkUnpackBase64(b *testing.B) {
 		err := UnpackBase64(src, dest)
 		if err != nil {
 			b.Fatal("Error Unpack Base64:", err)
+		}
+	}
+}
+
+func BenchmarkUnpackBase64WorkCalculate(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		src := "../test/data/unpack/file_base64.txt"
+		_, err := UnpackBase64WorkCalculate(src)
+		if err != nil {
+			b.Fatal("Error Unpack Base64 Work Calculate:", err)
 		}
 	}
 }
