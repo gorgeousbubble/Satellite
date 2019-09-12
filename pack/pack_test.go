@@ -156,3 +156,58 @@ func BenchmarkPack5(b *testing.B) {
 		}
 	}
 }
+
+func BenchmarkWorkCalculate(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		var work int64
+		src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
+		err := WorkCalculate(src, "aes", &work)
+		if err != nil {
+			b.Fatal("Error Work Calculate:", err)
+		}
+	}
+}
+
+func BenchmarkWorkCalculate2(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		var work int64
+		src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
+		err := WorkCalculate(src, "des", &work)
+		if err != nil {
+			b.Fatal("Error Work Calculate:", err)
+		}
+	}
+}
+
+func BenchmarkWorkCalculate3(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		var work int64
+		src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
+		err := WorkCalculate(src, "3des", &work)
+		if err != nil {
+			b.Fatal("Error Work Calculate:", err)
+		}
+	}
+}
+
+func BenchmarkWorkCalculate4(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		var work int64
+		src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
+		err := WorkCalculate(src, "rsa", &work)
+		if err != nil {
+			b.Fatal("Error Work Calculate:", err)
+		}
+	}
+}
+
+func BenchmarkWorkCalculate5(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		var work int64
+		src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
+		err := WorkCalculate(src, "base64", &work)
+		if err != nil {
+			b.Fatal("Error Work Calculate:", err)
+		}
+	}
+}
