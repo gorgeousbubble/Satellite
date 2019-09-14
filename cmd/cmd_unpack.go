@@ -16,10 +16,12 @@ import (
 var unpackCmd = flag.NewFlagSet(CmdUnpack, flag.ExitOnError)
 var unpackSrc string
 var unpackDest string
+var unpackVerbose bool
 
 func init() {
 	unpackCmd.StringVar(&unpackSrc, "i", "", "input files: packet file, such as \"file.dat\" or \"file.pak\"")
 	unpackCmd.StringVar(&unpackDest, "o", "", "output files: one or more origin files. (should be path not file)")
+	unpackCmd.BoolVar(&unpackVerbose, "v", false, "verbose information list.")
 }
 
 func ParseCmdUnpack() {
@@ -35,7 +37,7 @@ func ParseCmdUnpack() {
 		os.Exit(1)
 	}
 	// handle command parameters
-	err = handleCmdUnpack(unpackSrc, unpackDest)
+	err = handleCmdUnpack(unpackSrc, unpackDest, unpackVerbose)
 	if err != nil {
 		fmt.Print("\n")
 		fmt.Println("Unpack Failure:", err)
@@ -45,7 +47,20 @@ func ParseCmdUnpack() {
 	fmt.Println("Unpack Success.")
 }
 
-func handleCmdUnpack(src string, dest string) (err error) {
+func handleCmdUnpack(src string, dest string, verbose bool) (err error) {
+	// whether look up verbose information
+	if verbose {
+		var info []string
+		err = unpack.UnpackAESExtractInfo(src, &info)
+		if err != nil {
+			fmt.Println("Error Extract Unpack Information")
+			return err
+		}
+		for _, v := range info {
+			fmt.Println(v)
+		}
+		return nil
+	}
 	ch := make(chan bool)
 	// calculate work
 	var work int64
