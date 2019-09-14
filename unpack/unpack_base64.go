@@ -114,6 +114,97 @@ func UnpackBase64(src string, dest string) (err error) {
 	return err
 }
 
+func UnpackBase64ExtractInfo(src string, dest *[]string) (err error) {
+	// first, open the file
+	file, err := os.Open(src)
+	if err != nil {
+		log.Println("Error open file:", err)
+		return err
+	}
+	defer file.Close()
+	// second, read file data
+	data, err := ioutil.ReadAll(file)
+	if err != nil {
+		log.Println("Error read file:", err)
+		return err
+	}
+	_, name := filepath.Split(src)
+	// third, new one header
+	h := TUnpackBase64{}
+	h.Name = make([]byte, 32)
+	h.Author = make([]byte, 16)
+	h.Type = make([]byte, 8)
+	h.Number = make([]byte, 4)
+	// fourth, read the header
+	rd := bytes.NewReader(data)
+	_, err = rd.Read(h.Name)
+	if err != nil {
+		log.Println("Error read header name:", err)
+		return err
+	}
+	s := make([]byte, 32)
+	BytesCopy(&s, []byte(name))
+	if !bytes.Equal(h.Name, s) {
+		log.Println("Error read header name:", err)
+		return err
+	}
+	_, err = rd.Read(h.Author)
+	if err != nil {
+		log.Println("Error read header author:", err)
+		return err
+	}
+	s = make([]byte, 16)
+	BytesCopy(&s, []byte("Alopex6414"))
+	if !bytes.Equal(h.Author, s) {
+		log.Println("Error read header author:", err)
+		return err
+	}
+	_, err = rd.Read(h.Type)
+	if err != nil {
+		log.Println("Error read header type:", err)
+		return err
+	}
+	s = make([]byte, 8)
+	BytesCopy(&s, []byte("BASE64"))
+	if !bytes.Equal(h.Type, s) {
+		log.Println("Error read header type:", err)
+		return err
+	}
+	_, err = rd.Read(h.Number)
+	if err != nil {
+		log.Println("Error read header number:", err)
+		return err
+	}
+	size := BytesToInt(h.Number)
+	// fifth, read every one file in packet
+	for i := 0; i < size; i++ {
+		// six, read the header
+		hh := TUnpackBase64One{}
+		hh.Name = make([]byte, 32)
+		hh.Size = make([]byte, 4)
+		_, err = rd.Read(hh.Name)
+		if err != nil {
+			log.Println("Error read header name:", err)
+			return err
+		}
+		_, err = rd.Read(hh.Size)
+		if err != nil {
+			log.Println("Error read header size:", err)
+			return err
+		}
+		// seven, read the body
+		s := make([]byte, BytesToInt(hh.Size))
+		n, err := rd.Read(s)
+		if n <= 0 {
+			log.Println("Error read body:", err)
+			return err
+		}
+		// eight, extract packet information
+		*dest = append(*dest, string(hh.Name))
+	}
+	return err
+}
+
 func UnpackBase64WorkCalculate(src string) (work int64, err error) {
 	var sum int64
 	// first, open the file
