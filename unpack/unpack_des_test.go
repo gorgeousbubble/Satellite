@@ -26,6 +26,30 @@ func TestUnpackDES(t *testing.T) {
 	}
 }
 
+func TestUnpack3DESExtractInfo(t *testing.T) {
+	var dest []string
+	src := "../test/data/unpack/file_3des.txt"
+	err := Unpack3DESExtractInfo(src, &dest)
+	if err != nil {
+		t.Fatal("Error Unpack 3DES Extract Information:", err)
+	}
+	if len(dest) != 5 {
+		t.Fatal("Error Extract file number")
+	}
+}
+
+func TestUnpackDESExtractInfo(t *testing.T) {
+	var dest []string
+	src := "../test/data/unpack/file_des.txt"
+	err := UnpackDESExtractInfo(src, &dest)
+	if err != nil {
+		t.Fatal("Error Unpack DES Extract Information:", err)
+	}
+	if len(dest) != 5 {
+		t.Fatal("Error Extract file number")
+	}
+}
+
 func TestUnpack3DESWorkCalculate(t *testing.T) {
 	src := "../test/data/unpack/file_3des.txt"
 	_, err := Unpack3DESWorkCalculate(src)
@@ -411,6 +435,34 @@ func BenchmarkUnpackDES(b *testing.B) {
 		err := UnpackDES(src, dest)
 		if err != nil {
 			b.Fatal("Error Unpack DES:", err)
+		}
+	}
+}
+
+func BenchmarkUnpack3DESExtractInfo(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		var dest []string
+		src := "../test/data/unpack/file_3des.txt"
+		err := Unpack3DESExtractInfo(src, &dest)
+		if err != nil {
+			b.Fatal("Error Unpack 3DES Extract Information:", err)
+		}
+		if len(dest) != 5 {
+			b.Fatal("Error Extract file number")
+		}
+	}
+}
+
+func BenchmarkUnpackDESExtractInfo(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		var dest []string
+		src := "../test/data/unpack/file_des.txt"
+		err := UnpackDESExtractInfo(src, &dest)
+		if err != nil {
+			b.Fatal("Error Unpack DES Extract Information:", err)
+		}
+		if len(dest) != 5 {
+			b.Fatal("Error Extract file number")
 		}
 	}
 }
