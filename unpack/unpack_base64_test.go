@@ -17,6 +17,18 @@ func TestUnpackBase64(t *testing.T) {
 	}
 }
 
+func TestBase64ExtractInfo(t *testing.T) {
+	var dest []string
+	src := "../test/data/unpack/file_base64.txt"
+	err := UnpackBase64ExtractInfo(src, &dest)
+	if err != nil {
+		t.Fatal("Error Unpack Base64 Extract Information:", err)
+	}
+	if len(dest) != 5 {
+		t.Fatal("Error Extract file number")
+	}
+}
+
 func TestUnpackBase64WorkCalculate(t *testing.T) {
 	src := "../test/data/unpack/file_base64.txt"
 	_, err := UnpackBase64WorkCalculate(src)
@@ -158,6 +170,20 @@ func BenchmarkUnpackBase64(b *testing.B) {
 		err := UnpackBase64(src, dest)
 		if err != nil {
 			b.Fatal("Error Unpack Base64:", err)
+		}
+	}
+}
+
+func BenchmarkUnpackBase64ExtractInfo(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		var dest []string
+		src := "../test/data/unpack/file_base64.txt"
+		err := UnpackBase64ExtractInfo(src, &dest)
+		if err != nil {
+			b.Fatal("Error Unpack Base64 Extract Information:", err)
+		}
+		if len(dest) != 5 {
+			b.Fatal("Error Extract file number")
 		}
 	}
 }
