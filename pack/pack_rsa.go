@@ -71,6 +71,10 @@ func PackRSA(src []string, dest string) (err error) {
 
 func PackRSAWorkCalculate(src []string) (work int64, err error) {
 	var sum int64
+	if len(src) == 0 {
+		err = errors.New("Pack file list is empty.")
+		return work, err
+	}
 	for _, v := range src {
 		var size int64
 		err = filepath.Walk(v, func(path string, info os.FileInfo, err error) error {
