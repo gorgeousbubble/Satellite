@@ -17,6 +17,18 @@ func TestUnpackRSA(t *testing.T) {
 	}
 }
 
+func TestUnpackRSAExtractInfo(t *testing.T) {
+	var dest []string
+	src := "../test/data/unpack/file_rsa.txt"
+	err := UnpackRSAExtractInfo(src, &dest)
+	if err != nil {
+		t.Fatal("Error Unpack RSA Extract Information:", err)
+	}
+	if len(dest) != 5 {
+		t.Fatal("Error Extract file number")
+	}
+}
+
 func TestUnpackRSAWorkCalculate(t *testing.T) {
 	src := "../test/data/unpack/file_rsa.txt"
 	_, err := UnpackRSAWorkCalculate(src)
@@ -417,6 +429,20 @@ func BenchmarkUnpackRSA(b *testing.B) {
 		err := UnpackRSA(src, dest)
 		if err != nil {
 			b.Fatal("Error Unpack AES:", err)
+		}
+	}
+}
+
+func BenchmarkUnpackRSAExtractInfo(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		var dest []string
+		src := "../test/data/unpack/file_rsa.txt"
+		err := UnpackRSAExtractInfo(src, &dest)
+		if err != nil {
+			b.Fatal("Error Unpack RSA Extract Information:", err)
+		}
+		if len(dest) != 5 {
+			b.Fatal("Error Extract file number")
 		}
 	}
 }
