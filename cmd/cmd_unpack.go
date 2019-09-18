@@ -14,6 +14,8 @@ import (
 	"github.com/schollz/progressbar"
 )
 
+const line string = "--------------------------------------------------"
+
 var unpackCmd = flag.NewFlagSet(CmdUnpack, flag.ExitOnError)
 var unpackSrc string
 var unpackDest string
@@ -57,9 +59,13 @@ func handleCmdUnpack(src string, dest string, verbose bool) (err error) {
 			fmt.Println("Error Extract Unpack Information")
 			return err
 		}
+		fmt.Println(line)
+		fmt.Println("Files")
+		fmt.Println(line)
 		for _, v := range info {
 			fmt.Println(v)
 		}
+		fmt.Println(line)
 		return nil
 	}
 	ch := make(chan bool)
