@@ -4,13 +4,14 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-	"github.com/schollz/progressbar"
 	"log"
 	"os"
 	. "satellite/global"
 	"satellite/unpack"
 	"sync/atomic"
 	"time"
+
+	"github.com/schollz/progressbar"
 )
 
 var unpackCmd = flag.NewFlagSet(CmdUnpack, flag.ExitOnError)
@@ -51,7 +52,7 @@ func handleCmdUnpack(src string, dest string, verbose bool) (err error) {
 	// whether look up verbose information
 	if verbose {
 		var info []string
-		err = unpack.UnpackAESExtractInfo(src, &info)
+		err = unpack.ExtractInfo(src, &info)
 		if err != nil {
 			fmt.Println("Error Extract Unpack Information")
 			return err
