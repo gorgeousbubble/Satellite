@@ -19,8 +19,9 @@ func TestUnpackAES(t *testing.T) {
 
 func TestUnpackAESExtractInfo(t *testing.T) {
 	var dest []string
+	var sz []int
 	src := "../test/data/unpack/file_aes.txt"
-	err := UnpackAESExtractInfo(src, &dest)
+	err := UnpackAESExtractInfo(src, &dest, &sz)
 	if err != nil {
 		t.Fatal("Error Unpack AES Extract Information:", err)
 	}
@@ -228,8 +229,9 @@ func BenchmarkUnpackAES(b *testing.B) {
 func BenchmarkUnpackAESExtractInfo(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var dest []string
+		var sz []int
 		src := "../test/data/unpack/file_aes.txt"
-		err := UnpackAESExtractInfo(src, &dest)
+		err := UnpackAESExtractInfo(src, &dest, &sz)
 		if err != nil {
 			b.Fatal("Error Unpack AES Extract Information:", err)
 		}

@@ -114,7 +114,7 @@ func UnpackBase64(src string, dest string) (err error) {
 	return err
 }
 
-func UnpackBase64ExtractInfo(src string, dest *[]string) (err error) {
+func UnpackBase64ExtractInfo(src string, dest *[]string, sz *[]int) (err error) {
 	// first, open the file
 	file, err := os.Open(src)
 	if err != nil {
@@ -201,6 +201,7 @@ func UnpackBase64ExtractInfo(src string, dest *[]string) (err error) {
 		}
 		// eight, extract packet information
 		*dest = append(*dest, string(hh.Name))
+		*sz = append(*sz, BytesToInt(hh.Size))
 	}
 	return err
 }

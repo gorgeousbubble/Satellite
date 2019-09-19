@@ -237,7 +237,7 @@ func UnpackDES(src string, dest string) (err error) {
 	return err
 }
 
-func Unpack3DESExtractInfo(src string, dest *[]string) (err error) {
+func Unpack3DESExtractInfo(src string, dest *[]string, sz *[]int) (err error) {
 	// first, open the file
 	file, err := os.Open(src)
 	if err != nil {
@@ -336,11 +336,12 @@ func Unpack3DESExtractInfo(src string, dest *[]string) (err error) {
 		}
 		// eight, extract packet information
 		*dest = append(*dest, string(hh.Name))
+		*sz = append(*sz, BytesToInt(hh.OriginSize))
 	}
 	return err
 }
 
-func UnpackDESExtractInfo(src string, dest *[]string) (err error) {
+func UnpackDESExtractInfo(src string, dest *[]string, sz *[]int) (err error) {
 	// first, open the file
 	file, err := os.Open(src)
 	if err != nil {
@@ -439,6 +440,7 @@ func UnpackDESExtractInfo(src string, dest *[]string) (err error) {
 		}
 		// eight, extract packet information
 		*dest = append(*dest, string(hh.Name))
+		*sz = append(*sz, BytesToInt(hh.OriginSize))
 	}
 	return err
 }

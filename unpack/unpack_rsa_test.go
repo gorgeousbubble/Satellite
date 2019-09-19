@@ -19,8 +19,9 @@ func TestUnpackRSA(t *testing.T) {
 
 func TestUnpackRSAExtractInfo(t *testing.T) {
 	var dest []string
+	var sz []int
 	src := "../test/data/unpack/file_rsa.txt"
-	err := UnpackRSAExtractInfo(src, &dest)
+	err := UnpackRSAExtractInfo(src, &dest, &sz)
 	if err != nil {
 		t.Fatal("Error Unpack RSA Extract Information:", err)
 	}
@@ -436,8 +437,9 @@ func BenchmarkUnpackRSA(b *testing.B) {
 func BenchmarkUnpackRSAExtractInfo(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var dest []string
+		var sz []int
 		src := "../test/data/unpack/file_rsa.txt"
-		err := UnpackRSAExtractInfo(src, &dest)
+		err := UnpackRSAExtractInfo(src, &dest, &sz)
 		if err != nil {
 			b.Fatal("Error Unpack RSA Extract Information:", err)
 		}

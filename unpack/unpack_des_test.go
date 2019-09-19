@@ -28,8 +28,9 @@ func TestUnpackDES(t *testing.T) {
 
 func TestUnpack3DESExtractInfo(t *testing.T) {
 	var dest []string
+	var sz []int
 	src := "../test/data/unpack/file_3des.txt"
-	err := Unpack3DESExtractInfo(src, &dest)
+	err := Unpack3DESExtractInfo(src, &dest, &sz)
 	if err != nil {
 		t.Fatal("Error Unpack 3DES Extract Information:", err)
 	}
@@ -40,8 +41,9 @@ func TestUnpack3DESExtractInfo(t *testing.T) {
 
 func TestUnpackDESExtractInfo(t *testing.T) {
 	var dest []string
+	var sz []int
 	src := "../test/data/unpack/file_des.txt"
-	err := UnpackDESExtractInfo(src, &dest)
+	err := UnpackDESExtractInfo(src, &dest, &sz)
 	if err != nil {
 		t.Fatal("Error Unpack DES Extract Information:", err)
 	}
@@ -442,8 +444,9 @@ func BenchmarkUnpackDES(b *testing.B) {
 func BenchmarkUnpack3DESExtractInfo(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var dest []string
+		var sz []int
 		src := "../test/data/unpack/file_3des.txt"
-		err := Unpack3DESExtractInfo(src, &dest)
+		err := Unpack3DESExtractInfo(src, &dest, &sz)
 		if err != nil {
 			b.Fatal("Error Unpack 3DES Extract Information:", err)
 		}
@@ -456,8 +459,9 @@ func BenchmarkUnpack3DESExtractInfo(b *testing.B) {
 func BenchmarkUnpackDESExtractInfo(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var dest []string
+		var sz []int
 		src := "../test/data/unpack/file_des.txt"
-		err := UnpackDESExtractInfo(src, &dest)
+		err := UnpackDESExtractInfo(src, &dest, &sz)
 		if err != nil {
 			b.Fatal("Error Unpack DES Extract Information:", err)
 		}
