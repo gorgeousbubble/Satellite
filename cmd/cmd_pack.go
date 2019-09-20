@@ -4,13 +4,15 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-	"github.com/schollz/progressbar"
 	"log"
 	"os"
 	. "satellite/global"
 	"satellite/pack"
+	. "satellite/utils"
 	"sync/atomic"
 	"time"
+
+	"github.com/schollz/progressbar"
 )
 
 var packCmd = flag.NewFlagSet(CmdPacket, flag.ExitOnError)
@@ -49,6 +51,12 @@ func ParseCmdPack() {
 
 func handleCmdPack(src []string, dest string, algorithm string) (err error) {
 	ch := make(chan bool)
+	// check parameters
+	is := checkParameters(src, dest, algorithm)
+	if !is {
+		err = errors.New("parameters illegal")
+		return err
+	}
 	// calculate work
 	var work int64
 	err = pack.WorkCalculate(src, algorithm, &work)
@@ -101,6 +109,36 @@ func handleCmdPack(src []string, dest string, algorithm string) (err error) {
 			time.Sleep(100 * time.Millisecond)
 		}
 	}
+}
+
+func checkParameters(src []string, dest string, algorithm string) (is bool) {
+	// check src
+	for i := 0; i < len(src); i++ {
+		is, _ = PathExist(src[i])
+		if !is {
+			fmt.Printf("Source file %v path not exist.", i)
+			return is
+		}
+	}
+	// check dest
+	is, _ = PathExist(dest)
+	if !is {
+		fmt.Println("Destination file path not exist.")
+		return is
+	}
+	// check algorithm
+	switch algorithm {
+	case "AES", "aes":
+	case "DES", "des":
+	case "3DES", "3des":
+	case "RSA", "rsa":
+	case "BASE64", "base64":
+	default:
+		is = false
+		fmt.Printf("Algorithm %v not support.", algorithm)
+	}
+	is = true
+	return is
 }
 
 func execPack(src []string, dest string, algorithm string, err *error, ch chan bool) {
