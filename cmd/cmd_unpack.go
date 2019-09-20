@@ -8,13 +8,14 @@ import (
 	"os"
 	. "satellite/global"
 	"satellite/unpack"
+	"strconv"
 	"sync/atomic"
 	"time"
 
 	"github.com/schollz/progressbar"
 )
 
-const line string = "--------------------------------------------------"
+const line string = "----------------------------------------------------------------------------------------------------"
 
 var unpackCmd = flag.NewFlagSet(CmdUnpack, flag.ExitOnError)
 var unpackSrc string
@@ -51,27 +52,30 @@ func ParseCmdUnpack() {
 }
 
 func handleCmdUnpack(src string, dest string, verbose bool) (err error) {
+	var algorithm string
+	ch := make(chan bool)
 	// whether look up verbose information
 	if verbose {
-		var info []string
-		err = unpack.ExtractInfo(src, &info)
+		var files []string
+		var sizes []int
+		err = unpack.ExtractInfo(src, &files, &sizes, &algorithm)
 		if err != nil {
 			fmt.Println("Error Extract Unpack Information")
 			return err
 		}
 		fmt.Println(line)
-		fmt.Println("Files")
+		fmt.Println("file\t\t\t\t\tsize\t\t\t\t\talgorithm")
 		fmt.Println(line)
-		for _, v := range info {
-			fmt.Println(v)
+		for i := 0; i < len(files); i++ {
+			name := files[i]
+			size := sizes[i] / 1024
+			fmt.Println(name + "\t" + strconv.Itoa(size) + "kb\t\t\t\t\t" + algorithm)
 		}
 		fmt.Println(line)
 		return nil
 	}
-	ch := make(chan bool)
 	// calculate work
 	var work int64
-	var algorithm string
 	err = unpack.WorkCalculate(src, &algorithm, &work)
 	if err != nil || work <= 0 {
 		fmt.Println("Error Calculate Unpack Work")

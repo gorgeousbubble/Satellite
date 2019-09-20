@@ -52,7 +52,7 @@ func Unpack(src string, dest string) (err error) {
 	return err
 }
 
-func ExtractInfo(src string, dest *[]string) (err error) {
+func ExtractInfo(src string, dest *[]string, sz *[]int, algorithm *string) (err error) {
 	// first, open the file
 	file, err := os.Open(src)
 	if err != nil {
@@ -79,15 +79,20 @@ func ExtractInfo(src string, dest *[]string) (err error) {
 	tp := string(buf[0:index])
 	switch tp {
 	case "AES", "aes":
-		err = UnpackAESExtractInfo(src, dest)
+		err = UnpackAESExtractInfo(src, dest, sz)
+		*algorithm = "aes"
 	case "DES", "des":
-		err = UnpackDESExtractInfo(src, dest)
+		err = UnpackDESExtractInfo(src, dest, sz)
+		*algorithm = "des"
 	case "3DES", "3des":
-		err = Unpack3DESExtractInfo(src, dest)
+		err = Unpack3DESExtractInfo(src, dest, sz)
+		*algorithm = "3des"
 	case "RSA", "rsa":
-		err = UnpackRSAExtractInfo(src, dest)
+		err = UnpackRSAExtractInfo(src, dest, sz)
+		*algorithm = "rsa"
 	case "BASE64", "base64":
-		err = UnpackBase64ExtractInfo(src, dest)
+		err = UnpackBase64ExtractInfo(src, dest, sz)
+		*algorithm = "base64"
 	default:
 		s := fmt.Sprint("Undefined unpack algorithm.")
 		err = errors.New(s)

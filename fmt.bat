@@ -160,4 +160,5 @@ echo.
 echo.
 
 :: Pasue Test
+cd ..
 pause

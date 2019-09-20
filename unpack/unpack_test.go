@@ -49,8 +49,10 @@ func TestUnpack5(t *testing.T) {
 
 func TestExtractInfo(t *testing.T) {
 	var dest []string
+	var size []int
+	var algorithm string
 	src := "../test/data/unpack/file_aes.txt"
-	err := ExtractInfo(src, &dest)
+	err := ExtractInfo(src, &dest, &size, &algorithm)
 	if err != nil {
 		t.Fatal("Error Extract AES Information:", err)
 	}
@@ -61,8 +63,10 @@ func TestExtractInfo(t *testing.T) {
 
 func TestExtractInfo2(t *testing.T) {
 	var dest []string
+	var size []int
+	var algorithm string
 	src := "../test/data/unpack/file_base64.txt"
-	err := ExtractInfo(src, &dest)
+	err := ExtractInfo(src, &dest, &size, &algorithm)
 	if err != nil {
 		t.Fatal("Error Extract BASE64 Information:", err)
 	}
@@ -73,8 +77,10 @@ func TestExtractInfo2(t *testing.T) {
 
 func TestExtractInfo3(t *testing.T) {
 	var dest []string
+	var size []int
+	var algorithm string
 	src := "../test/data/unpack/file_3des.txt"
-	err := ExtractInfo(src, &dest)
+	err := ExtractInfo(src, &dest, &size, &algorithm)
 	if err != nil {
 		t.Fatal("Error Extract 3DES Information:", err)
 	}
@@ -85,8 +91,10 @@ func TestExtractInfo3(t *testing.T) {
 
 func TestExtractInfo4(t *testing.T) {
 	var dest []string
+	var size []int
+	var algorithm string
 	src := "../test/data/unpack/file_des.txt"
-	err := ExtractInfo(src, &dest)
+	err := ExtractInfo(src, &dest, &size, &algorithm)
 	if err != nil {
 		t.Fatal("Error Extract DES Information:", err)
 	}
@@ -97,8 +105,10 @@ func TestExtractInfo4(t *testing.T) {
 
 func TestExtractInfo5(t *testing.T) {
 	var dest []string
+	var size []int
+	var algorithm string
 	src := "../test/data/unpack/file_rsa.txt"
-	err := ExtractInfo(src, &dest)
+	err := ExtractInfo(src, &dest, &size, &algorithm)
 	if err != nil {
 		t.Fatal("Error Extract RSA Information:", err)
 	}
@@ -215,8 +225,10 @@ func BenchmarkUnpack5(b *testing.B) {
 func BenchmarkExtractInfo(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var dest []string
+		var size []int
+		var algorithm string
 		src := "../test/data/unpack/file_aes.txt"
-		err := ExtractInfo(src, &dest)
+		err := ExtractInfo(src, &dest, &size, &algorithm)
 		if err != nil {
 			b.Fatal("Error Extract AES Information:", err)
 		}
@@ -229,8 +241,10 @@ func BenchmarkExtractInfo(b *testing.B) {
 func BenchmarkExtractInfo2(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var dest []string
+		var size []int
+		var algorithm string
 		src := "../test/data/unpack/file_base64.txt"
-		err := ExtractInfo(src, &dest)
+		err := ExtractInfo(src, &dest, &size, &algorithm)
 		if err != nil {
 			b.Fatal("Error Extract BASE64 Information:", err)
 		}
@@ -243,8 +257,10 @@ func BenchmarkExtractInfo2(b *testing.B) {
 func BenchmarkExtractInfo3(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var dest []string
+		var size []int
+		var algorithm string
 		src := "../test/data/unpack/file_3des.txt"
-		err := ExtractInfo(src, &dest)
+		err := ExtractInfo(src, &dest, &size, &algorithm)
 		if err != nil {
 			b.Fatal("Error Extract 3DES Information:", err)
 		}
@@ -257,8 +273,10 @@ func BenchmarkExtractInfo3(b *testing.B) {
 func BenchmarkExtractInfo4(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var dest []string
+		var size []int
+		var algorithm string
 		src := "../test/data/unpack/file_des.txt"
-		err := ExtractInfo(src, &dest)
+		err := ExtractInfo(src, &dest, &size, &algorithm)
 		if err != nil {
 			b.Fatal("Error Extract DES Information:", err)
 		}
@@ -271,8 +289,10 @@ func BenchmarkExtractInfo4(b *testing.B) {
 func BenchmarkExtractInfo5(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var dest []string
+		var size []int
+		var algorithm string
 		src := "../test/data/unpack/file_rsa.txt"
-		err := ExtractInfo(src, &dest)
+		err := ExtractInfo(src, &dest, &size, &algorithm)
 		if err != nil {
 			b.Fatal("Error Extract RSA Information:", err)
 		}
