@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 	. "satellite/global"
 	"satellite/pack"
 	. "satellite/utils"
@@ -42,11 +43,11 @@ func ParseCmdPack() {
 	err = handleCmdPack(packSrc, packDest, packType)
 	if err != nil {
 		fmt.Print("\n")
-		fmt.Println("Pack Failure:", err)
+		fmt.Println("Pack failure:", err)
 		os.Exit(1)
 	}
 	fmt.Print("\n")
-	fmt.Println("Pack Success.")
+	fmt.Println("Pack success.")
 }
 
 func handleCmdPack(src []string, dest string, algorithm string) (err error) {
@@ -57,11 +58,21 @@ func handleCmdPack(src []string, dest string, algorithm string) (err error) {
 		err = errors.New("parameters illegal")
 		return err
 	}
+	src, err = refactorSource(src)
+	if err != nil {
+		fmt.Println("Error refactor source files:", err)
+		return err
+	}
 	// calculate work
 	var work int64
 	err = pack.WorkCalculate(src, algorithm, &work)
-	if err != nil || work <= 0 {
-		fmt.Println("Error Calculate Pack Work")
+	if err != nil {
+		fmt.Println("Error calculate pack work")
+		return err
+	}
+	if work <= 0 {
+		err = errors.New("work can not equal or less zero")
+		fmt.Println("Error work value")
 		return err
 	}
 	fmt.Println("Pack Start:")
@@ -112,19 +123,19 @@ func handleCmdPack(src []string, dest string, algorithm string) (err error) {
 }
 
 func checkParameters(src []string, dest string, algorithm string) (is bool) {
+	is = true
 	// check src
+	if len(src) == 0 {
+		is = false
+		fmt.Println("Source file list can't be empty.")
+		return is
+	}
 	for i := 0; i < len(src); i++ {
 		is, _ = PathExist(src[i])
 		if !is {
-			fmt.Printf("Source file %v path not exist.", i)
+			fmt.Printf("Source file %v path not exist.\n", i+1)
 			return is
 		}
-	}
-	// check dest
-	is, _ = PathExist(dest)
-	if !is {
-		fmt.Println("Destination file path not exist.")
-		return is
 	}
 	// check algorithm
 	switch algorithm {
@@ -135,10 +146,38 @@ func checkParameters(src []string, dest string, algorithm string) (is bool) {
 	case "BASE64", "base64":
 	default:
 		is = false
-		fmt.Printf("Algorithm %v not support.", algorithm)
+		fmt.Printf("Algorithm %v not support.\n", algorithm)
 	}
-	is = true
 	return is
+}
+
+func refactorSource(src []string) (dest []string, err error) {
+	for i := 0; i < len(src); {
+		is, err := IsDir(src[i])
+		if err != nil {
+			return dest, err
+		}
+		if is {
+			err = filepath.Walk(src[i], func(path string, info os.FileInfo, err error) error {
+				if err != nil {
+					return err
+				}
+				if info.IsDir() {
+					return err
+				}
+				dest = append(dest, path)
+				return err
+			})
+			if err != nil {
+				return dest, err
+			}
+			src = append(src[:i], src[i+1:]...)
+		} else {
+			dest = append(dest, src[i])
+			i++
+		}
+	}
+	return dest, err
 }
 
 func execPack(src []string, dest string, algorithm string, err *error, ch chan bool) {
