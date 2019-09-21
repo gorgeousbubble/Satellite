@@ -3,6 +3,7 @@
 #Project files
 .idea
 .vscode
+cmake-build-debug
 
 #Bin files
 bin
