@@ -42,11 +42,11 @@ func ParseCmdPack() {
 	err = handleCmdPack(packSrc, packDest, packType)
 	if err != nil {
 		fmt.Print("\n")
-		fmt.Println("Pack Failure:", err)
+		fmt.Println("Pack failure:", err)
 		os.Exit(1)
 	}
 	fmt.Print("\n")
-	fmt.Println("Pack Success.")
+	fmt.Println("Pack success.")
 }
 
 func handleCmdPack(src []string, dest string, algorithm string) (err error) {
@@ -113,10 +113,15 @@ func handleCmdPack(src []string, dest string, algorithm string) (err error) {
 
 func checkParameters(src []string, dest string, algorithm string) (is bool) {
 	// check src
+	if len(src) == 0 {
+		is = false
+		fmt.Println("Source file list can't be empty.")
+		return is
+	}
 	for i := 0; i < len(src); i++ {
 		is, _ = PathExist(src[i])
 		if !is {
-			fmt.Printf("Source file %v path not exist.", i)
+			fmt.Printf("Source file %v path not exist.\n", i+1)
 			return is
 		}
 	}
