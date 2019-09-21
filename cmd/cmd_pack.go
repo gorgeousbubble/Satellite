@@ -112,6 +112,7 @@ func handleCmdPack(src []string, dest string, algorithm string) (err error) {
 }
 
 func checkParameters(src []string, dest string, algorithm string) (is bool) {
+	is = true
 	// check src
 	if len(src) == 0 {
 		is = false
@@ -125,12 +126,6 @@ func checkParameters(src []string, dest string, algorithm string) (is bool) {
 			return is
 		}
 	}
-	// check dest
-	is, _ = PathExist(dest)
-	if !is {
-		fmt.Println("Destination file path not exist.")
-		return is
-	}
 	// check algorithm
 	switch algorithm {
 	case "AES", "aes":
@@ -140,9 +135,8 @@ func checkParameters(src []string, dest string, algorithm string) (is bool) {
 	case "BASE64", "base64":
 	default:
 		is = false
-		fmt.Printf("Algorithm %v not support.", algorithm)
+		fmt.Printf("Algorithm %v not support.\n", algorithm)
 	}
-	is = true
 	return is
 }
 
