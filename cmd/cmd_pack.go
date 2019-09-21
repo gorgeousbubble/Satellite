@@ -60,8 +60,13 @@ func handleCmdPack(src []string, dest string, algorithm string) (err error) {
 	// calculate work
 	var work int64
 	err = pack.WorkCalculate(src, algorithm, &work)
-	if err != nil || work <= 0 {
-		fmt.Println("Error Calculate Pack Work")
+	if err != nil {
+		fmt.Println("Error calculate pack work")
+		return err
+	}
+	if work <= 0 {
+		err = errors.New("work can not equal or less zero")
+		fmt.Println("Error work value")
 		return err
 	}
 	fmt.Println("Pack Start:")
