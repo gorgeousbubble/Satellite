@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 	. "satellite/global"
 	"satellite/pack"
 	. "satellite/utils"
@@ -55,6 +56,11 @@ func handleCmdPack(src []string, dest string, algorithm string) (err error) {
 	is := checkParameters(src, dest, algorithm)
 	if !is {
 		err = errors.New("parameters illegal")
+		return err
+	}
+	src, err = refactorSource(src)
+	if err != nil {
+		fmt.Println("Error refactor source files:", err)
 		return err
 	}
 	// calculate work
@@ -143,6 +149,35 @@ func checkParameters(src []string, dest string, algorithm string) (is bool) {
 		fmt.Printf("Algorithm %v not support.\n", algorithm)
 	}
 	return is
+}
+
+func refactorSource(src []string) (dest []string, err error) {
+	for i := 0; i < len(src); {
+		is, err := IsDir(src[i])
+		if err != nil {
+			return dest, err
+		}
+		if is {
+			err = filepath.Walk(src[i], func(path string, info os.FileInfo, err error) error {
+				if err != nil {
+					return err
+				}
+				if info.IsDir() {
+					return err
+				}
+				dest = append(dest, path)
+				return err
+			})
+			if err != nil {
+				return dest, err
+			}
+			src = append(src[:i], src[i+1:]...)
+		} else {
+			dest = append(dest, src[i])
+			i++
+		}
+	}
+	return dest, err
 }
 
 func execPack(src []string, dest string, algorithm string, err *error, ch chan bool) {
