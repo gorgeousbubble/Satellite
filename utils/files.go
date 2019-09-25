@@ -34,6 +34,19 @@ func PathExist(dir string) (is bool, err error) {
 	return true, err
 }
 
+func IsDir(dir string) (is bool, err error) {
+	f, err := os.Stat(dir)
+	if err != nil {
+		if os.IsNotExist(err) {
+			log.Println("Path not exist")
+		} else {
+			log.Println("Error status:", err)
+		}
+		return false, err
+	}
+	return f.IsDir(), err
+}
+
 func ListFiles(dir string, term string) (files []os.FileInfo, err error) {
 	err = filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
