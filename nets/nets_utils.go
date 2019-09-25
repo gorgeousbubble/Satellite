@@ -11,11 +11,12 @@ import (
 	"log"
 	"math/big"
 	"net"
-	"net/http"
 	"os"
 	. "satellite/global"
 	"strings"
 	"time"
+
+	"github.com/gorilla/mux"
 )
 
 func connTcpSendHandler(c net.Conn) {
@@ -138,10 +139,10 @@ func connUdpRecvHandler(c *net.UDPConn) {
 	}
 }
 
-func createHttpRouter() (mux *http.ServeMux) {
-	mux = http.NewServeMux()
-	mux.HandleFunc(HttpURLRoot, handleRoot)
-	return mux
+func createHttpRouter() (r *mux.Router) {
+	r = mux.NewRouter()
+	r.HandleFunc(HttpURLRoot, handleRoot).Methods("GET")
+	return r
 }
 
 func GenerateCA(ip string) (err error) {
