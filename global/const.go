@@ -24,6 +24,7 @@ const (
 
 const (
 	HttpURLRoot = "/"
+	HttpURLPack = HttpURLRoot + "pack"
 )
 
 const (
