@@ -143,6 +143,7 @@ func createHttpRouter() (r *mux.Router) {
 	r = mux.NewRouter()
 	r.HandleFunc(HttpURLRoot, handleRoot).Methods("GET")
 	r.HandleFunc(HttpURLPack, handleNetsPack).Methods("POST")
+	r.HandleFunc(HttpURLUnpack, handleNetsUnpack).Methods("POST")
 	return r
 }
 
