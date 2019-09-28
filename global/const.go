@@ -26,6 +26,7 @@ const (
 	HttpURLRoot      = "/"
 	HttpURLSatellite = HttpURLRoot + "satellite"
 	HttpURLPack      = HttpURLSatellite + "/pack"
+	HttpURLUnpack    = HttpURLSatellite + "/unpack"
 )
 
 const (
