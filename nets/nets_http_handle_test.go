@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestHandleNetsPack(t *testing.T) {
+func TestHandlePostNetsPack(t *testing.T) {
 	mux := http.NewServeMux()
 	mux.HandleFunc(HttpURLPack, handleNetsPack)
 
@@ -22,7 +22,7 @@ func TestHandleNetsPack(t *testing.T) {
 	}
 }
 
-func BenchmarkHandleNetsPack(b *testing.B) {
+func BenchmarkHandlePostNetsPack(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		mux := http.NewServeMux()
 		mux.HandleFunc(HttpURLPack, handleNetsPack)
@@ -38,7 +38,7 @@ func BenchmarkHandleNetsPack(b *testing.B) {
 	}
 }
 
-func TestHandleNetsUnpack(t *testing.T) {
+func TestHandlePostNetsUnpack(t *testing.T) {
 	mux := http.NewServeMux()
 	mux.HandleFunc(HttpURLUnpack, handleNetsUnpack)
 
@@ -52,7 +52,7 @@ func TestHandleNetsUnpack(t *testing.T) {
 	}
 }
 
-func BenchmarkHandleNetsUnpack(b *testing.B) {
+func BenchmarkHandlePostNetsUnpack(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		mux := http.NewServeMux()
 		mux.HandleFunc(HttpURLUnpack, handleNetsUnpack)
@@ -60,6 +60,36 @@ func BenchmarkHandleNetsUnpack(b *testing.B) {
 		writer := httptest.NewRecorder()
 		body := strings.NewReader(`{"src": "../test/data/unpack/file_aes.txt", "dest": "../test/data/unpack/"}`)
 		request, _ := http.NewRequest("POST", HttpURLUnpack, body)
+		mux.ServeHTTP(writer, request)
+
+		if writer.Code != http.StatusOK {
+			b.Errorf("Response code is %v", writer.Code)
+		}
+	}
+}
+
+func TestHandleGetNetsUnpack(t *testing.T) {
+	mux := http.NewServeMux()
+	mux.HandleFunc(HttpURLUnpack, handleNetsUnpack)
+
+	writer := httptest.NewRecorder()
+	body := strings.NewReader(`{"src": "../test/data/unpack/file_aes.txt"}`)
+	request, _ := http.NewRequest("GET", HttpURLUnpack, body)
+	mux.ServeHTTP(writer, request)
+
+	if writer.Code != http.StatusOK {
+		t.Errorf("Response code is %v", writer.Code)
+	}
+}
+
+func BenchmarkHandleGetNetsUnpack(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		mux := http.NewServeMux()
+		mux.HandleFunc(HttpURLUnpack, handleNetsUnpack)
+
+		writer := httptest.NewRecorder()
+		body := strings.NewReader(`{"src": "../test/data/unpack/file_aes.txt"}`)
+		request, _ := http.NewRequest("GET", HttpURLUnpack, body)
 		mux.ServeHTTP(writer, request)
 
 		if writer.Code != http.StatusOK {

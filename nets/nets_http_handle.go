@@ -3,6 +3,7 @@ package nets
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -42,6 +43,9 @@ func handleNetsPack(w http.ResponseWriter, r *http.Request) {
 func handleNetsUnpack(w http.ResponseWriter, r *http.Request) {
 	var err error
 	switch r.Method {
+	case "GET":
+		log.Printf("GET %s", r.RequestURI)
+		err = handleGetNetsUnpack(w, r)
 	case "POST":
 		log.Printf("POST %s", r.RequestURI)
 		err = handlePostNetsUnpack(w, r)
@@ -167,7 +171,7 @@ func handlePostNetsUnpack(w http.ResponseWriter, r *http.Request) (err error) {
 		log.Printf("%d Unprocessable Entity", http.StatusUnprocessableEntity)
 		return nil
 	}
-	// start pack files
+	// start unpack files
 	ch := make(chan bool)
 	count := 0
 	finish := false
@@ -203,6 +207,96 @@ func handlePostNetsUnpack(w http.ResponseWriter, r *http.Request) (err error) {
 		}
 	}
 	w.Header().Set("Content-Type", "text/plain")
+	log.Printf("%d Ok", http.StatusOK)
+	return err
+}
+
+func handleGetNetsUnpack(w http.ResponseWriter, r *http.Request) (err error) {
+	defer r.Body.Close()
+	// read request body
+	len := r.ContentLength
+	body := make([]byte, len)
+	body, err = ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Println("Error read request body:", err)
+		return err
+	}
+	// unmarshal json body
+	var t TNetsUnpackVerboseReq
+	err = json.Unmarshal(body, &t)
+	if err != nil {
+		http.Error(w, "Incorrect request body!", http.StatusBadRequest)
+		log.Println("Error unmarshal json body:", err)
+		log.Printf("%d Bad Request", http.StatusBadRequest)
+		return nil
+	}
+	// check request parameters
+	b, err := checkNetsUnpackVerboseParameters(t)
+	if err != nil {
+		log.Println("Error check unpack verbose parameters:", err)
+		return err
+	}
+	if !b {
+		http.Error(w, "Illegal parameters!", http.StatusUnprocessableEntity)
+		log.Println("Illegal parameters")
+		log.Printf("%d Unprocessable Entity", http.StatusUnprocessableEntity)
+		return nil
+	}
+	// unpack file verbose information
+	var resp TNetsUnpackVerboseResp
+	ch := make(chan bool)
+	count := 0
+	finish := false
+	go func(resp *TNetsUnpackVerboseResp) {
+		var files []string
+		var sizes []int
+		var algorithm string
+		err = unpack.ExtractInfo(t.Src, &files, &sizes, &algorithm)
+		if err != nil {
+			log.Println("Error extract unpack information")
+			ch <- false
+			return
+		}
+		for k, v := range files {
+			var t TNetsUnpackFileInfo
+			t.Name = v
+			t.Size = fmt.Sprintf("%dkb", sizes[k]/1024)
+			t.Type = algorithm
+			(*resp).Files = append((*resp).Files, t)
+		}
+		ch <- true
+		return
+	}(&resp)
+	for {
+		select {
+		case r := <-ch:
+			if r == false {
+				log.Println("Unpack verbose failure:", err)
+				return err
+			}
+			log.Println("Unpack verbose success.")
+			finish = true
+			break
+		default:
+			count++
+			time.Sleep(100 * time.Millisecond)
+		}
+		if finish {
+			break
+		}
+		if count >= 100 {
+			err = errors.New("timeout")
+			return err
+		}
+	}
+	// marshal json
+	js, err := json.MarshalIndent(&resp, "", "\t\t")
+	if err != nil {
+		log.Println("Error marshal to json:", err)
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(js)
 	log.Printf("%d Ok", http.StatusOK)
 	return err
 }
