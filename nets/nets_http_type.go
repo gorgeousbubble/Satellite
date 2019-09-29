@@ -16,11 +16,11 @@ type TNetsUnpackVerboseReq struct {
 }
 
 type TNetsUnpackVerboseResp struct {
-	files []TNetUnpackFileInfo `json:"files"`
+	Files []TNetsUnpackFileInfo `json:"files"`
 }
 
-type TNetUnpackFileInfo struct {
-	name      string `json:"name"`
-	size      string `json:"size"`
-	algorithm string `json:"type"`
+type TNetsUnpackFileInfo struct {
+	Name string `json:"name"`
+	Size string `json:"size"`
+	Type string `json:"type"`
 }

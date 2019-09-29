@@ -227,7 +227,7 @@ func UnpackRSAExtractInfo(src string, dest *[]string, sz *[]int) (err error) {
 			return err
 		}
 		// eight, extract packet information
-		*dest = append(*dest, string(hh.Name))
+		*dest = append(*dest, string(bytes.Trim(hh.Name, "\x00")))
 		*sz = append(*sz, BytesToInt(hh.OriginSize))
 	}
 	return err

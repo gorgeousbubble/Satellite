@@ -258,11 +258,11 @@ func handleGetNetsUnpack(w http.ResponseWriter, r *http.Request) (err error) {
 			return
 		}
 		for k, v := range files {
-			var t TNetUnpackFileInfo
-			t.name = v
-			t.size = fmt.Sprintf("%dkb", sizes[k])
-			t.algorithm = algorithm
-			(*resp).files = append((*resp).files, t)
+			var t TNetsUnpackFileInfo
+			t.Name = v
+			t.Size = fmt.Sprintf("%dkb", sizes[k]/1024)
+			t.Type = algorithm
+			(*resp).Files = append((*resp).Files, t)
 		}
 		ch <- true
 		return
