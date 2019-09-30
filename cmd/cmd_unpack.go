@@ -64,12 +64,12 @@ func handleCmdUnpack(src string, dest string, verbose bool) (err error) {
 			return err
 		}
 		fmt.Println(line)
-		fmt.Println("file\t\t\t\t\tsize\t\t\t\t\talgorithm")
+		fmt.Println("file\t\t\t\t\t\tsize\t\t\t\t\ttype")
 		fmt.Println(line)
 		for i := 0; i < len(files); i++ {
 			name := files[i]
 			size := sizes[i] / 1024
-			fmt.Println(name + "\t" + strconv.Itoa(size) + "kb\t\t\t\t\t" + algorithm)
+			fmt.Println(name + "\t\t\t\t\t" + strconv.Itoa(size) + "kb\t\t\t\t\t" + algorithm)
 		}
 		fmt.Println(line)
 		return nil
