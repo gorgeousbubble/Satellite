@@ -81,6 +81,26 @@ func checkNetsUnpackVerboseParameters(t TNetsUnpackVerboseReq) (b bool, err erro
 	return b, err
 }
 
+func checkNetsUnpackToMemoryParameters(t TNetsUnpackToMemory) (b bool, err error) {
+	b = true
+	// check src files
+	if t.Src == "" {
+		b = false
+		log.Println("Source file can't be empty.")
+		return b, err
+	}
+	b, err = PathExist(t.Src)
+	if err != nil {
+		log.Println("Error check path exist:", err)
+		return b, err
+	}
+	if !b {
+		log.Println("Source file path not exist.")
+		return b, err
+	}
+	return b, err
+}
+
 func refactorNetsPackSource(src []string) (dest []string, err error) {
 	for i := 0; i < len(src); {
 		is, err := IsDir(src[i])

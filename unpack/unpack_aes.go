@@ -227,7 +227,7 @@ func UnpackAESToMemory(src string, target string, dest *[]byte) (err error) {
 			return err
 		}
 		// eight, when it is target file, then run unpack one file
-		if target == string(hh.Name) {
+		if target == string(bytes.Trim(hh.Name, "\x00")) {
 			err = UnpackAESOneToMemory(s, hh, dest)
 			if err != nil {
 				log.Println("Error unpack aes one to memroy:", err)
