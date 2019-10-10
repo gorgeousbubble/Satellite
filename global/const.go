@@ -23,10 +23,12 @@ const (
 )
 
 const (
-	HttpURLRoot      = "/"
-	HttpURLSatellite = HttpURLRoot + "satellite"
-	HttpURLPack      = HttpURLSatellite + "/pack"
-	HttpURLUnpack    = HttpURLSatellite + "/unpack"
+	HttpURLRoot           = "/"
+	HttpURLSatellite      = HttpURLRoot + "satellite"
+	HttpURLPack           = HttpURLSatellite + "/pack"
+	HttpURLUnpack         = HttpURLSatellite + "/unpack"
+	HttpURLUnpackToFile   = HttpURLUnpack + "/f"
+	HttpURLUnpackToMemory = HttpURLUnpack + "/m"
 )
 
 const (

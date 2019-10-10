@@ -203,7 +203,7 @@ func UnpackBase64ToMemory(src string, target string, dest *[]byte) (err error) {
 			return err
 		}
 		// eight, when it is target file, then run unpack one file
-		if target == string(hh.Name) {
+		if target == string(bytes.Trim(hh.Name, "\x00")) {
 			var r string
 			err = UnpackBase64OneToMemory(s, &r)
 			if err != nil {

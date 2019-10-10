@@ -338,7 +338,7 @@ func Unpack3DESToMemory(src string, target string, dest *[]byte) (err error) {
 			return err
 		}
 		// eight, when it is target file, then run unpack one file
-		if target == string(hh.Name) {
+		if target == string(bytes.Trim(hh.Name, "\x00")) {
 			err = Unpack3DESOneToMemory(s, hh, dest)
 			if err != nil {
 				log.Println("Error unpack 3des one to memroy:", err)
@@ -451,7 +451,7 @@ func UnpackDESToMemory(src string, target string, dest *[]byte) (err error) {
 			return err
 		}
 		// eight, when it is target file, then run unpack one file
-		if target == string(hh.Name) {
+		if target == string(bytes.Trim(hh.Name, "\x00")) {
 			err = UnpackDESOneToMemory(s, hh, dest)
 			if err != nil {
 				log.Println("Error unpack des one to memroy:", err)
