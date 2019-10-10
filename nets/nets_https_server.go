@@ -16,7 +16,11 @@ func StartHttpsServer(ip string, port string) {
 		Handler:      createHttpRouter(),
 	}
 	fmt.Println("Start Listen And Server on ", ip+":"+port)
-	err := server.ListenAndServeTLS("cert.pem", "key.pem")
+	err := GenerateCA(ip)
+	if err != nil {
+		log.Println("Error Create CA:", err)
+	}
+	err = server.ListenAndServeTLS("cert.pem", "key.pem")
 	if err != nil {
 		log.Println("Error Listen And Server:", err)
 	}
