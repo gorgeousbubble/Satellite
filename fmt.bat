@@ -1,4 +1,4 @@
-:: Satellite Project - Build(Golang)
+:: Satellite Project - Format(Golang)
 :: Copyright(C) 2019, Team Gorgeous Bubble, All Rights Reserved.
 @echo off
 
