@@ -382,7 +382,6 @@ func handleGetNetsUnpackToMemory(w http.ResponseWriter, r *http.Request) (err er
 			return err
 		}
 	}
-	log.Println(string(dest))
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(dest)
 	log.Printf("%d Ok", http.StatusOK)
