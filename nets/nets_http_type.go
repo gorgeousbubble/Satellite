@@ -25,6 +25,12 @@ type TNetsUnpackFileInfo struct {
 	Type string `json:"type"`
 }
 
+type TNetsUnpackToFile struct {
+	Src    string `json:"src"`
+	Target string `json:"target"`
+	Dest   string `json:"dest"`
+}
+
 type TNetsUnpackToMemory struct {
 	Src    string `json:"src"`
 	Target string `json:"target"`

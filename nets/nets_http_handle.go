@@ -57,6 +57,20 @@ func handleNetsUnpack(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func handleNetsUnpackToFile(w http.ResponseWriter, r *http.Request) {
+	var err error
+	switch r.Method {
+	case "GET":
+		log.Printf("GET %s", r.RequestURI)
+		err = handleGetNetsUnpackToFile(w, r)
+	}
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		log.Printf("%d Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+}
+
 func handleNetsUnpackToMemory(w http.ResponseWriter, r *http.Request) {
 	var err error
 	switch r.Method {
@@ -311,6 +325,77 @@ func handleGetNetsUnpack(w http.ResponseWriter, r *http.Request) (err error) {
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(js)
+	log.Printf("%d Ok", http.StatusOK)
+	return err
+}
+
+func handleGetNetsUnpackToFile(w http.ResponseWriter, r *http.Request) (err error) {
+	defer r.Body.Close()
+	// read request body
+	len := r.ContentLength
+	body := make([]byte, len)
+	body, err = ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Println("Error read request body:", err)
+		return err
+	}
+	// unmarshal json body
+	var t TNetsUnpackToFile
+	err = json.Unmarshal(body, &t)
+	if err != nil {
+		http.Error(w, "Incorrect request body!", http.StatusBadRequest)
+		log.Println("Error unmarshal json body:", err)
+		log.Printf("%d Bad Request", http.StatusBadRequest)
+		return nil
+	}
+	// check request parameters
+	b, err := checkNetsUnpackToFileParameters(t)
+	if err != nil {
+		log.Println("Error check unpack to file parameters:", err)
+		return err
+	}
+	if !b {
+		http.Error(w, "Illegal parameters!", http.StatusUnprocessableEntity)
+		log.Println("Illegal parameters")
+		log.Printf("%d Unprocessable Entity", http.StatusUnprocessableEntity)
+		return nil
+	}
+	// unpack file to file
+	ch := make(chan bool)
+	count := 0
+	finish := false
+	go func() {
+		err = unpack.UnpackToFile(t.Src, t.Target, t.Dest)
+		if err != nil {
+			ch <- false
+			return
+		}
+		ch <- true
+		return
+	}()
+	for {
+		select {
+		case r := <-ch:
+			if r == false {
+				log.Println("Unpack to file failure:", err)
+				return err
+			}
+			log.Println("Unpack to file success.")
+			finish = true
+			break
+		default:
+			count++
+			time.Sleep(100 * time.Millisecond)
+		}
+		if finish {
+			break
+		}
+		if count >= 100 {
+			err = errors.New("timeout")
+			return err
+		}
+	}
+	w.Header().Set("Content-Type", "application/json")
 	log.Printf("%d Ok", http.StatusOK)
 	return err
 }
