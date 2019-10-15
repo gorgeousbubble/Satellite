@@ -98,50 +98,50 @@ func TestUnpackToFile5(t *testing.T) {
 }
 
 func TestUnpackToMemory(t *testing.T) {
+	var dest []byte
 	src := "../test/data/unpack/file_aes.txt"
-	dest := "../test/data/unpack/"
 	target := "file_1.txt"
-	err := UnpackToMemory(src, target, dest)
+	err := UnpackToMemory(src, target, &dest)
 	if err != nil {
 		t.Fatal("Error Unpack To Memory:", err)
 	}
 }
 
 func TestUnpackToMemory2(t *testing.T) {
+	var dest []byte
 	src := "../test/data/unpack/file_des.txt"
-	dest := "../test/data/unpack/"
 	target := "file_1.txt"
-	err := UnpackToMemory(src, target, dest)
+	err := UnpackToMemory(src, target, &dest)
 	if err != nil {
 		t.Fatal("Error Unpack To Memory:", err)
 	}
 }
 
 func TestUnpackToMemory3(t *testing.T) {
+	var dest []byte
 	src := "../test/data/unpack/file_3des.txt"
-	dest := "../test/data/unpack/"
 	target := "file_1.txt"
-	err := UnpackToMemory(src, target, dest)
+	err := UnpackToMemory(src, target, &dest)
 	if err != nil {
 		t.Fatal("Error Unpack To Memory:", err)
 	}
 }
 
 func TestUnpackToMemory4(t *testing.T) {
+	var dest []byte
 	src := "../test/data/unpack/file_rsa.txt"
-	dest := "../test/data/unpack/"
 	target := "file_1.txt"
-	err := UnpackToMemory(src, target, dest)
+	err := UnpackToMemory(src, target, &dest)
 	if err != nil {
 		t.Fatal("Error Unpack To Memory:", err)
 	}
 }
 
 func TestUnpackToMemory5(t *testing.T) {
+	var dest []byte
 	src := "../test/data/unpack/file_base64.txt"
-	dest := "../test/data/unpack/"
 	target := "file_1.txt"
-	err := UnpackToMemory(src, target, dest)
+	err := UnpackToMemory(src, target, &dest)
 	if err != nil {
 		t.Fatal("Error Unpack To Memory:", err)
 	}
