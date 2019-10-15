@@ -246,6 +246,30 @@ func BenchmarkUnpackAES(b *testing.B) {
 	}
 }
 
+func BenchmarkUnpackAESToFile(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		src := "../test/data/unpack/file_aes.txt"
+		dest := "../test/data/unpack/"
+		target := "file_1.txt"
+		err := UnpackAESToFile(src, target, dest)
+		if err != nil {
+			b.Fatal("Error Unpack AES To File:", err)
+		}
+	}
+}
+
+func BenchmarkUnpackAESToMemory(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		var dest []byte
+		src := "../test/data/unpack/file_aes.txt"
+		target := "file_1.txt"
+		err := UnpackToMemory(src, target, &dest)
+		if err != nil {
+			b.Fatal("Error Unpack AES To Memory:", err)
+		}
+	}
+}
+
 func BenchmarkUnpackAESExtractInfo(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var dest []string
