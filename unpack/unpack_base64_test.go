@@ -17,6 +17,26 @@ func TestUnpackBase64(t *testing.T) {
 	}
 }
 
+func TestUnpackBase64ToFile(t *testing.T) {
+	src := "../test/data/unpack/file_base64.txt"
+	dest := "../test/data/unpack/"
+	target := "file_1.txt"
+	err := UnpackBase64ToFile(src, target, dest)
+	if err != nil {
+		t.Fatal("Error Unpack Base64 To File:", err)
+	}
+}
+
+func TestUnpackBase64ToMemory(t *testing.T) {
+	var dest []byte
+	src := "../test/data/unpack/file_base64.txt"
+	target := "file_1.txt"
+	err := UnpackBase64ToMemory(src, target, &dest)
+	if err != nil {
+		t.Fatal("Error Unpack Base64 To Memory:", err)
+	}
+}
+
 func TestBase64ExtractInfo(t *testing.T) {
 	var dest []string
 	var sz []int
