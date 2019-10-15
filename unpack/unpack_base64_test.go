@@ -195,6 +195,30 @@ func BenchmarkUnpackBase64(b *testing.B) {
 	}
 }
 
+func BenchmarkUnpackBase64ToFile(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		src := "../test/data/unpack/file_base64.txt"
+		dest := "../test/data/unpack/"
+		target := "file_1.txt"
+		err := UnpackBase64ToFile(src, target, dest)
+		if err != nil {
+			b.Fatal("Error Unpack Base64 To File:", err)
+		}
+	}
+}
+
+func BenchmarkUnpackBase64ToMemory(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		var dest []byte
+		src := "../test/data/unpack/file_base64.txt"
+		target := "file_1.txt"
+		err := UnpackBase64ToMemory(src, target, &dest)
+		if err != nil {
+			b.Fatal("Error Unpack Base64 To Memory:", err)
+		}
+	}
+}
+
 func BenchmarkUnpackBase64ExtractInfo(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var dest []string
