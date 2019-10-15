@@ -15,7 +15,7 @@ import (
 	"github.com/schollz/progressbar"
 )
 
-const line string = "----------------------------------------------------------------------------------------------------"
+const line string = "------------------------------------------------------------------------------------"
 
 var unpackCmd = flag.NewFlagSet(CmdUnpack, flag.ExitOnError)
 var unpackSrc string
@@ -64,12 +64,12 @@ func handleCmdUnpack(src string, dest string, verbose bool) (err error) {
 			return err
 		}
 		fmt.Println(line)
-		fmt.Println("file\t\t\t\t\t\tsize\t\t\t\t\ttype")
+		fmt.Printf("%-32s\t%-16s\t%-16s\n", "file", "size", "type")
 		fmt.Println(line)
 		for i := 0; i < len(files); i++ {
 			name := files[i]
 			size := sizes[i] / 1024
-			fmt.Println(name + "\t\t\t\t\t" + strconv.Itoa(size) + "kb\t\t\t\t\t" + algorithm)
+			fmt.Printf("%-32s\t%-16s\t%-16s\n", name, strconv.Itoa(size)+"kb", algorithm)
 		}
 		fmt.Println(line)
 		return nil
