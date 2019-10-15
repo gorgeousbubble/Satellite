@@ -26,6 +26,46 @@ func TestUnpackDES(t *testing.T) {
 	}
 }
 
+func TestUnpack3DESToFile(t *testing.T) {
+	src := "../test/data/unpack/file_3des.txt"
+	dest := "../test/data/unpack/"
+	target := "file_1.txt"
+	err := Unpack3DESToFile(src, target, dest)
+	if err != nil {
+		t.Fatal("Error Unpack 3DES To File:", err)
+	}
+}
+
+func TestUnpackDESToFile(t *testing.T) {
+	src := "../test/data/unpack/file_des.txt"
+	dest := "../test/data/unpack/"
+	target := "file_1.txt"
+	err := UnpackDESToFile(src, target, dest)
+	if err != nil {
+		t.Fatal("Error Unpack DES To File:", err)
+	}
+}
+
+func TestUnpack3DESToMemory(t *testing.T) {
+	var dest []byte
+	src := "../test/data/unpack/file_3des.txt"
+	target := "file_1.txt"
+	err := Unpack3DESToMemory(src, target, &dest)
+	if err != nil {
+		t.Fatal("Error Unpack 3DES To Memory:", err)
+	}
+}
+
+func TestUnpackDESToMemory(t *testing.T) {
+	var dest []byte
+	src := "../test/data/unpack/file_des.txt"
+	target := "file_1.txt"
+	err := UnpackDESToMemory(src, target, &dest)
+	if err != nil {
+		t.Fatal("Error Unpack DES To Memory:", err)
+	}
+}
+
 func TestUnpack3DESExtractInfo(t *testing.T) {
 	var dest []string
 	var sz []int
