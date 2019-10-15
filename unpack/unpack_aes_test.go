@@ -31,7 +31,7 @@ func TestUnpackAESToMemory(t *testing.T) {
 	var dest []byte
 	src := "../test/data/unpack/file_aes.txt"
 	target := "file_1.txt"
-	err := UnpackToMemory(src, target, &dest)
+	err := UnpackAESToMemory(src, target, &dest)
 	if err != nil {
 		t.Fatal("Error Unpack AES To Memory:", err)
 	}
@@ -263,7 +263,7 @@ func BenchmarkUnpackAESToMemory(b *testing.B) {
 		var dest []byte
 		src := "../test/data/unpack/file_aes.txt"
 		target := "file_1.txt"
-		err := UnpackToMemory(src, target, &dest)
+		err := UnpackAESToMemory(src, target, &dest)
 		if err != nil {
 			b.Fatal("Error Unpack AES To Memory:", err)
 		}
