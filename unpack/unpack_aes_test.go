@@ -17,6 +17,26 @@ func TestUnpackAES(t *testing.T) {
 	}
 }
 
+func TestUnpackAESToFile(t *testing.T) {
+	src := "../test/data/unpack/file_aes.txt"
+	dest := "../test/data/unpack/"
+	target := "file_1.txt"
+	err := UnpackAESToFile(src, target, dest)
+	if err != nil {
+		t.Fatal("Error Unpack AES To File:", err)
+	}
+}
+
+func TestUnpackAESToMemory(t *testing.T) {
+	var dest []byte
+	src := "../test/data/unpack/file_aes.txt"
+	target := "file_1.txt"
+	err := UnpackToMemory(src, target, &dest)
+	if err != nil {
+		t.Fatal("Error Unpack AES To Memory:", err)
+	}
+}
+
 func TestUnpackAESExtractInfo(t *testing.T) {
 	var dest []string
 	var sz []int
