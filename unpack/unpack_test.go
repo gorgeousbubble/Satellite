@@ -47,6 +47,106 @@ func TestUnpack5(t *testing.T) {
 	}
 }
 
+func TestUnpackToFile(t *testing.T) {
+	src := "../test/data/unpack/file_aes.txt"
+	dest := "../test/data/unpack/"
+	target := "file_1.txt"
+	err := UnpackToFile(src, target, dest)
+	if err != nil {
+		t.Fatal("Error Unpack To File:", err)
+	}
+}
+
+func TestUnpackToFile2(t *testing.T) {
+	src := "../test/data/unpack/file_des.txt"
+	dest := "../test/data/unpack/"
+	target := "file_1.txt"
+	err := UnpackToFile(src, target, dest)
+	if err != nil {
+		t.Fatal("Error Unpack To File:", err)
+	}
+}
+
+func TestUnpackToFile3(t *testing.T) {
+	src := "../test/data/unpack/file_3des.txt"
+	dest := "../test/data/unpack/"
+	target := "file_1.txt"
+	err := UnpackToFile(src, target, dest)
+	if err != nil {
+		t.Fatal("Error Unpack To File:", err)
+	}
+}
+
+func TestUnpackToFile4(t *testing.T) {
+	src := "../test/data/unpack/file_rsa.txt"
+	dest := "../test/data/unpack/"
+	target := "file_1.txt"
+	err := UnpackToFile(src, target, dest)
+	if err != nil {
+		t.Fatal("Error Unpack To File:", err)
+	}
+}
+
+func TestUnpackToFile5(t *testing.T) {
+	src := "../test/data/unpack/file_base64.txt"
+	dest := "../test/data/unpack/"
+	target := "file_1.txt"
+	err := UnpackToFile(src, target, dest)
+	if err != nil {
+		t.Fatal("Error Unpack To File:", err)
+	}
+}
+
+func TestUnpackToMemory(t *testing.T) {
+	var dest []byte
+	src := "../test/data/unpack/file_aes.txt"
+	target := "file_1.txt"
+	err := UnpackToMemory(src, target, &dest)
+	if err != nil {
+		t.Fatal("Error Unpack To Memory:", err)
+	}
+}
+
+func TestUnpackToMemory2(t *testing.T) {
+	var dest []byte
+	src := "../test/data/unpack/file_des.txt"
+	target := "file_1.txt"
+	err := UnpackToMemory(src, target, &dest)
+	if err != nil {
+		t.Fatal("Error Unpack To Memory:", err)
+	}
+}
+
+func TestUnpackToMemory3(t *testing.T) {
+	var dest []byte
+	src := "../test/data/unpack/file_3des.txt"
+	target := "file_1.txt"
+	err := UnpackToMemory(src, target, &dest)
+	if err != nil {
+		t.Fatal("Error Unpack To Memory:", err)
+	}
+}
+
+func TestUnpackToMemory4(t *testing.T) {
+	var dest []byte
+	src := "../test/data/unpack/file_rsa.txt"
+	target := "file_1.txt"
+	err := UnpackToMemory(src, target, &dest)
+	if err != nil {
+		t.Fatal("Error Unpack To Memory:", err)
+	}
+}
+
+func TestUnpackToMemory5(t *testing.T) {
+	var dest []byte
+	src := "../test/data/unpack/file_base64.txt"
+	target := "file_1.txt"
+	err := UnpackToMemory(src, target, &dest)
+	if err != nil {
+		t.Fatal("Error Unpack To Memory:", err)
+	}
+}
+
 func TestExtractInfo(t *testing.T) {
 	var dest []string
 	var size []int
@@ -218,6 +318,126 @@ func BenchmarkUnpack5(b *testing.B) {
 		err := Unpack(src, dest)
 		if err != nil {
 			b.Fatal("Error Unpack:", err)
+		}
+	}
+}
+
+func BenchmarkUnpackToFile(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		src := "../test/data/unpack/file_aes.txt"
+		dest := "../test/data/unpack/"
+		target := "file_1.txt"
+		err := UnpackToFile(src, target, dest)
+		if err != nil {
+			b.Fatal("Error Unpack To File:", err)
+		}
+	}
+}
+
+func BenchmarkUnpackToFile2(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		src := "../test/data/unpack/file_des.txt"
+		dest := "../test/data/unpack/"
+		target := "file_1.txt"
+		err := UnpackToFile(src, target, dest)
+		if err != nil {
+			b.Fatal("Error Unpack To File:", err)
+		}
+	}
+}
+
+func BenchmarkUnpackToFile3(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		src := "../test/data/unpack/file_3des.txt"
+		dest := "../test/data/unpack/"
+		target := "file_1.txt"
+		err := UnpackToFile(src, target, dest)
+		if err != nil {
+			b.Fatal("Error Unpack To File:", err)
+		}
+	}
+}
+
+func BenchmarkUnpackToFile4(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		src := "../test/data/unpack/file_rsa.txt"
+		dest := "../test/data/unpack/"
+		target := "file_1.txt"
+		err := UnpackToFile(src, target, dest)
+		if err != nil {
+			b.Fatal("Error Unpack To File:", err)
+		}
+	}
+}
+
+func BenchmarkUnpackToFile5(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		src := "../test/data/unpack/file_base64.txt"
+		dest := "../test/data/unpack/"
+		target := "file_1.txt"
+		err := UnpackToFile(src, target, dest)
+		if err != nil {
+			b.Fatal("Error Unpack To File:", err)
+		}
+	}
+}
+
+func BenchmarkUnpackToMemory(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		var dest []byte
+		src := "../test/data/unpack/file_aes.txt"
+		target := "file_1.txt"
+		err := UnpackToMemory(src, target, &dest)
+		if err != nil {
+			b.Fatal("Error Unpack To Memory:", err)
+		}
+	}
+}
+
+func BenchmarkUnpackToMemory2(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		var dest []byte
+		src := "../test/data/unpack/file_des.txt"
+		target := "file_1.txt"
+		err := UnpackToMemory(src, target, &dest)
+		if err != nil {
+			b.Fatal("Error Unpack To Memory:", err)
+		}
+	}
+}
+
+func BenchmarkUnpackToMemory3(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		var dest []byte
+		src := "../test/data/unpack/file_3des.txt"
+		target := "file_1.txt"
+		err := UnpackToMemory(src, target, &dest)
+		if err != nil {
+			b.Fatal("Error Unpack To Memory:", err)
+		}
+	}
+}
+
+func BenchmarkUnpackToMemory4(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		var dest []byte
+		src := "../test/data/unpack/file_rsa.txt"
+		target := "file_1.txt"
+		err := UnpackToMemory(src, target, &dest)
+		if err != nil {
+			b.Fatal("Error Unpack To Memory:", err)
+		}
+	}
+}
+
+func BenchmarkUnpackToMemory5(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		var dest []byte
+		src := "../test/data/unpack/file_base64.txt"
+		target := "file_1.txt"
+		err := UnpackToMemory(src, target, &dest)
+		if err != nil {
+			b.Fatal("Error Unpack To Memory:", err)
 		}
 	}
 }

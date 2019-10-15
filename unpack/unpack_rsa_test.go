@@ -17,6 +17,26 @@ func TestUnpackRSA(t *testing.T) {
 	}
 }
 
+func TestUnpackRSAToFile(t *testing.T) {
+	src := "../test/data/unpack/file_rsa.txt"
+	dest := "../test/data/unpack/"
+	target := "file_1.txt"
+	err := UnpackRSAToFile(src, target, dest)
+	if err != nil {
+		t.Fatal("Error Unpack RSA To File:", err)
+	}
+}
+
+func TestUnpackRSAToMemory(t *testing.T) {
+	var dest []byte
+	src := "../test/data/unpack/file_rsa.txt"
+	target := "file_1.txt"
+	err := UnpackRSAToMemory(src, target, &dest)
+	if err != nil {
+		t.Fatal("Error Unpack RSA To Memory:", err)
+	}
+}
+
 func TestUnpackRSAExtractInfo(t *testing.T) {
 	var dest []string
 	var sz []int
@@ -430,6 +450,30 @@ func BenchmarkUnpackRSA(b *testing.B) {
 		err := UnpackRSA(src, dest)
 		if err != nil {
 			b.Fatal("Error Unpack AES:", err)
+		}
+	}
+}
+
+func BenchmarkUnpackRSAToFile(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		src := "../test/data/unpack/file_rsa.txt"
+		dest := "../test/data/unpack/"
+		target := "file_1.txt"
+		err := UnpackRSAToFile(src, target, dest)
+		if err != nil {
+			b.Fatal("Error Unpack RSA To File:", err)
+		}
+	}
+}
+
+func BenchmarkUnpackRSAToMemory(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		var dest []byte
+		src := "../test/data/unpack/file_rsa.txt"
+		target := "file_1.txt"
+		err := UnpackRSAToMemory(src, target, &dest)
+		if err != nil {
+			b.Fatal("Error Unpack RSA To Memory:", err)
 		}
 	}
 }

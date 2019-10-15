@@ -17,6 +17,26 @@ func TestUnpackBase64(t *testing.T) {
 	}
 }
 
+func TestUnpackBase64ToFile(t *testing.T) {
+	src := "../test/data/unpack/file_base64.txt"
+	dest := "../test/data/unpack/"
+	target := "file_1.txt"
+	err := UnpackBase64ToFile(src, target, dest)
+	if err != nil {
+		t.Fatal("Error Unpack Base64 To File:", err)
+	}
+}
+
+func TestUnpackBase64ToMemory(t *testing.T) {
+	var dest []byte
+	src := "../test/data/unpack/file_base64.txt"
+	target := "file_1.txt"
+	err := UnpackBase64ToMemory(src, target, &dest)
+	if err != nil {
+		t.Fatal("Error Unpack Base64 To Memory:", err)
+	}
+}
+
 func TestBase64ExtractInfo(t *testing.T) {
 	var dest []string
 	var sz []int
@@ -171,6 +191,30 @@ func BenchmarkUnpackBase64(b *testing.B) {
 		err := UnpackBase64(src, dest)
 		if err != nil {
 			b.Fatal("Error Unpack Base64:", err)
+		}
+	}
+}
+
+func BenchmarkUnpackBase64ToFile(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		src := "../test/data/unpack/file_base64.txt"
+		dest := "../test/data/unpack/"
+		target := "file_1.txt"
+		err := UnpackBase64ToFile(src, target, dest)
+		if err != nil {
+			b.Fatal("Error Unpack Base64 To File:", err)
+		}
+	}
+}
+
+func BenchmarkUnpackBase64ToMemory(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		var dest []byte
+		src := "../test/data/unpack/file_base64.txt"
+		target := "file_1.txt"
+		err := UnpackBase64ToMemory(src, target, &dest)
+		if err != nil {
+			b.Fatal("Error Unpack Base64 To Memory:", err)
 		}
 	}
 }
