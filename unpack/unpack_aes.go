@@ -585,13 +585,12 @@ func UnpackAESOneToMemory(data []byte, head TUnpackAESOne, dest *[]byte) (err er
 }
 
 func UnpackAESOneGo(data []byte, head TUnpackAESOne, dest string, wg *sync.WaitGroup) (err error) {
+	defer wg.Done()
 	err = UnpackAESOne(data, head, dest)
 	if err != nil {
 		log.Println("Error aes unpack one:", err)
-		wg.Done()
 		return err
 	}
-	wg.Done()
 	return err
 }
 
@@ -634,14 +633,13 @@ func UnpackAESOne(data []byte, head TUnpackAESOne, path string) (err error) {
 }
 
 func AESDecryptGo(src, key []byte, dest *[]byte, wg *sync.WaitGroup) (err error) {
+	defer wg.Done()
 	*dest, err = AESDecrypt(src, key)
 	if err != nil {
 		log.Println("Error aes decrypt data:", err)
-		wg.Done()
 		return err
 	}
 	atomic.AddInt64(&Done, 1)
-	wg.Done()
 	return err
 }
 

@@ -1132,13 +1132,12 @@ func Unpack3DESOneToMemory(data []byte, head TUnpack3DESOne, dest *[]byte) (err 
 }
 
 func Unpack3DESOneGo(data []byte, head TUnpack3DESOne, dest string, wg *sync.WaitGroup) (err error) {
+	defer wg.Done()
 	err = Unpack3DESOne(data, head, dest)
 	if err != nil {
 		log.Println("Error 3des unpack one file:", err)
-		wg.Done()
 		return err
 	}
-	wg.Done()
 	return err
 }
 
@@ -1205,13 +1204,12 @@ func UnpackDESOneToMemory(data []byte, head TUnpackDESOne, dest *[]byte) (err er
 }
 
 func UnpackDESOneGo(data []byte, head TUnpackDESOne, dest string, wg *sync.WaitGroup) (err error) {
+	defer wg.Done()
 	err = UnpackDESOne(data, head, dest)
 	if err != nil {
 		log.Println("Error des unpack one:", err)
-		wg.Done()
 		return err
 	}
-	wg.Done()
 	return err
 }
 
@@ -1254,14 +1252,13 @@ func UnpackDESOne(data []byte, head TUnpackDESOne, path string) (err error) {
 }
 
 func TripleDESDecryptGo(src, key []byte, dest *[]byte, wg *sync.WaitGroup) (err error) {
+	defer wg.Done()
 	*dest, err = TripleDESDecrypt(src, key)
 	if err != nil {
 		log.Println("Error 3des decrypt data:", err)
-		wg.Done()
 		return err
 	}
 	atomic.AddInt64(&Done, 1)
-	wg.Done()
 	return err
 }
 
@@ -1286,14 +1283,13 @@ func TripleDESDecrypt(src, key []byte) (dest []byte, err error) {
 }
 
 func DESDecryptGo(src, key []byte, dest *[]byte, wg *sync.WaitGroup) (err error) {
+	defer wg.Done()
 	*dest, err = DESDecrypt(src, key)
 	if err != nil {
 		log.Println("Error des decrypt data:", err)
-		wg.Done()
 		return err
 	}
 	atomic.AddInt64(&Done, 1)
-	wg.Done()
 	return err
 }
 
