@@ -99,13 +99,12 @@ func PackAESWorkCalculate(src []string) (work int64, err error) {
 }
 
 func PackAESOneGo(src string, r *[]byte, wg *sync.WaitGroup) (err error) {
+	defer wg.Done()
 	*r, err = PackAESOne(src)
 	if err != nil {
 		log.Println("Error aes pack one file:", err)
-		wg.Done()
 		return err
 	}
-	wg.Done()
 	return err
 }
 
