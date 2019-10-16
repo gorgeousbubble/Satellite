@@ -20,11 +20,13 @@ const line string = "-----------------------------------------------------------
 var unpackCmd = flag.NewFlagSet(CmdUnpack, flag.ExitOnError)
 var unpackSrc string
 var unpackDest string
+var unpackTarget string
 var unpackVerbose bool
 
 func init() {
 	unpackCmd.StringVar(&unpackSrc, "i", "", "input files: packet file, such as \"file.dat\" or \"file.pak\"")
 	unpackCmd.StringVar(&unpackDest, "o", "", "output files: one or more origin files. (should be path not file)")
+	unpackCmd.StringVar(&unpackTarget, "t", "", "target file name: unpack choose one file. (should be file name)")
 	unpackCmd.BoolVar(&unpackVerbose, "v", false, "verbose information list.")
 }
 
@@ -41,7 +43,7 @@ func ParseCmdUnpack() {
 		os.Exit(1)
 	}
 	// handle command parameters
-	err = handleCmdUnpack(unpackSrc, unpackDest, unpackVerbose)
+	err = handleCmdUnpack(unpackSrc, unpackDest, unpackTarget, unpackVerbose)
 	if err != nil {
 		fmt.Print("\n")
 		fmt.Println("Unpack Failure:", err)
@@ -51,7 +53,7 @@ func ParseCmdUnpack() {
 	fmt.Println("Unpack Success.")
 }
 
-func handleCmdUnpack(src string, dest string, verbose bool) (err error) {
+func handleCmdUnpack(src string, dest string, target string, verbose bool) (err error) {
 	var algorithm string
 	ch := make(chan bool)
 	// whether look up verbose information
@@ -85,7 +87,7 @@ func handleCmdUnpack(src string, dest string, verbose bool) (err error) {
 	// create process bar
 	bar := progressbar.New64(work)
 	// execute unpack function
-	go execUnpack(src, dest, &err, ch)
+	go execUnpack(src, dest, target, &err, ch)
 	for {
 		select {
 		case r := <-ch:
@@ -124,8 +126,12 @@ func handleCmdUnpack(src string, dest string, verbose bool) (err error) {
 	}
 }
 
-func execUnpack(src string, dest string, err *error, ch chan bool) {
-	*err = unpack.Unpack(src, dest)
+func execUnpack(src string, dest string, target string, err *error, ch chan bool) {
+	if target != "" {
+		*err = unpack.UnpackToFile(src, target, dest)
+	} else {
+		*err = unpack.Unpack(src, dest)
+	}
 	if *err != nil {
 		ch <- false
 		return
