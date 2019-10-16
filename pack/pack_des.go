@@ -149,13 +149,12 @@ func PackDESWorkCalculate(src []string) (work int64, err error) {
 }
 
 func Pack3DESOneGo(src string, r *[]byte, wg *sync.WaitGroup) (err error) {
+	defer wg.Done()
 	*r, err = Pack3DESOne(src)
 	if err != nil {
 		log.Println("Error 3des pack one file:", err)
-		wg.Done()
 		return err
 	}
-	wg.Done()
 	return err
 }
 
@@ -227,13 +226,12 @@ func Pack3DESOne(src string) (r []byte, err error) {
 }
 
 func PackDESOneGo(src string, r *[]byte, wg *sync.WaitGroup) (err error) {
+	defer wg.Done()
 	*r, err = PackDESOne(src)
 	if err != nil {
 		log.Println("Error des pack one file:", err)
-		wg.Done()
 		return err
 	}
-	wg.Done()
 	return err
 }
 
@@ -305,14 +303,13 @@ func PackDESOne(src string) (r []byte, err error) {
 }
 
 func TripleDESEncryptGo(src, key []byte, dest *[]byte, wg *sync.WaitGroup) (err error) {
+	defer wg.Done()
 	*dest, err = TripleDESEncrypt(src, key)
 	if err != nil {
 		log.Println("Error 3des encrypt data:", err)
-		wg.Done()
 		return err
 	}
 	atomic.AddInt64(&Done, 1)
-	wg.Done()
 	return err
 }
 
@@ -337,14 +334,13 @@ func TripleDESEncrypt(src, key []byte) (dest []byte, err error) {
 }
 
 func DESEncryptGo(src, key []byte, dest *[]byte, wg *sync.WaitGroup) (err error) {
+	defer wg.Done()
 	*dest, err = DESEncrypt(src, key)
 	if err != nil {
 		log.Println("Error des encrypt data:", err)
-		wg.Done()
 		return err
 	}
 	atomic.AddInt64(&Done, 1)
-	wg.Done()
 	return err
 }
 
