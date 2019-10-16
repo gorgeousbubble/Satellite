@@ -96,13 +96,12 @@ func PackBase64WorkCalculate(src []string) (work int64, err error) {
 }
 
 func PackBase64OneGo(src string, r *string, wg *sync.WaitGroup) (err error) {
+	defer wg.Done()
 	*r, err = PackBase64One(src)
 	if err != nil {
 		log.Println("Error base64 pack one file:", err)
-		wg.Done()
 		return err
 	}
-	wg.Done()
 	return err
 }
 
@@ -161,9 +160,9 @@ func PackBase64One(src string) (r string, err error) {
 }
 
 func Base64EncryptGo(str string, r *string, wg *sync.WaitGroup) {
+	defer wg.Done()
 	*r = Base64Encrypt(str)
 	atomic.AddInt64(&Done, 1)
-	wg.Done()
 }
 
 func Base64Encrypt(str string) string {
