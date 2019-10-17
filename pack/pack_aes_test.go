@@ -151,7 +151,11 @@ func BenchmarkAESEncrypt(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := []byte("hello,world!")
 		key := []byte("Satellite-266414")
-		_, err := AESEncrypt(src, key)
+		r, err := AESEncrypt(src, key)
+		if err != nil {
+			b.Fatal("Error Write AES Encrypt:", err)
+		}
+		err = ioutil.WriteFile("../test/data/pack/file_aes.txt", r, 0644)
 		if err != nil {
 			b.Fatal("Error Write AES Encrypt:", err)
 		}
