@@ -1,14 +1,14 @@
 package nets
 
 import (
-	"Satellite/comp"
-	"Satellite/decomp"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"satellite/comp"
+	"satellite/decomp"
 	"satellite/pack"
 	"satellite/unpack"
 	"time"
