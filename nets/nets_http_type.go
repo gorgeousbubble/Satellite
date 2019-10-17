@@ -35,3 +35,15 @@ type TNetsUnpackToMemory struct {
 	Src    string `json:"src"`
 	Target string `json:"target"`
 }
+
+type TNetsComp struct {
+	Src  []string `json:"src"`
+	Dest string   `json:"dest"`
+	Type string   `json:"type"`
+}
+
+type TNetsDecomp struct {
+	Src  string `json:"src"`
+	Dest string `json:"dest"`
+	Type string `json:"type"`
+}
