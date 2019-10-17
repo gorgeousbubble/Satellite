@@ -15,6 +15,15 @@ func TestPackAES(t *testing.T) {
 	}
 }
 
+func TestPackAESConfine(t *testing.T) {
+	src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
+	dest := "../test/data/pack/file_aes.txt"
+	err := PackAESConfine(src, dest)
+	if err != nil {
+		t.Fatal("Error Pack AES:", err)
+	}
+}
+
 func TestPackAESWorkCalculate(t *testing.T) {
 	src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
 	_, err := PackAESWorkCalculate(src)
@@ -42,6 +51,18 @@ func TestPackAESOneGo(t *testing.T) {
 func TestPackAESOne(t *testing.T) {
 	src := "../test/data/pack/file.txt"
 	r, err := PackAESOne(src)
+	if err != nil {
+		t.Fatal("Error Pack AES One:", err)
+	}
+	err = ioutil.WriteFile("../test/data/pack/file_aes.txt", r, 0644)
+	if err != nil {
+		t.Fatal("Error Write AES One:", err)
+	}
+}
+
+func TestPackAESOneConfine(t *testing.T) {
+	src := "../test/data/pack/file.txt"
+	r, err := PackAESOneConfine(src)
 	if err != nil {
 		t.Fatal("Error Pack AES One:", err)
 	}
@@ -83,6 +104,17 @@ func BenchmarkPackAES(b *testing.B) {
 		src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
 		dest := "../test/data/pack/file_aes.txt"
 		err := PackAES(src, dest)
+		if err != nil {
+			b.Fatal("Error Pack AES:", err)
+		}
+	}
+}
+
+func BenchmarkPackAESConfine(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
+		dest := "../test/data/pack/file_aes.txt"
+		err := PackAESConfine(src, dest)
 		if err != nil {
 			b.Fatal("Error Pack AES:", err)
 		}
@@ -131,6 +163,20 @@ func BenchmarkPackAESOne(b *testing.B) {
 	}
 }
 
+func BenchmarkPackAESOneConfine(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		src := "../test/data/pack/file.txt"
+		r, err := PackAESOneConfine(src)
+		if err != nil {
+			b.Fatal("Error Pack AES One:", err)
+		}
+		err = ioutil.WriteFile("../test/data/pack/file_aes.txt", r, 0644)
+		if err != nil {
+			b.Fatal("Error Write AES One:", err)
+		}
+	}
+}
+
 func BenchmarkAESEncryptGo(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var wg sync.WaitGroup
@@ -151,7 +197,11 @@ func BenchmarkAESEncrypt(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := []byte("hello,world!")
 		key := []byte("Satellite-266414")
-		_, err := AESEncrypt(src, key)
+		r, err := AESEncrypt(src, key)
+		if err != nil {
+			b.Fatal("Error Write AES Encrypt:", err)
+		}
+		err = ioutil.WriteFile("../test/data/pack/file_aes.txt", r, 0644)
 		if err != nil {
 			b.Fatal("Error Write AES Encrypt:", err)
 		}

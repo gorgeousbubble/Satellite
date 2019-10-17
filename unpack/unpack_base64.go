@@ -528,13 +528,12 @@ func UnpackBase64OneToMemory(data []byte, dest *string) (err error) {
 }
 
 func UnpackBase64OneGo(data []byte, head TUnpackBase64One, dest string, wg *sync.WaitGroup) (err error) {
+	defer wg.Done()
 	err = UnpackBase64One(data, head, dest)
 	if err != nil {
 		log.Println("Error base64 unpack one file:", err)
-		wg.Done()
 		return err
 	}
-	wg.Done()
 	return err
 }
 
@@ -578,9 +577,9 @@ func UnpackBase64One(data []byte, head TUnpackBase64One, path string) (err error
 }
 
 func Base64DecryptGo(str string, r *string, wg *sync.WaitGroup) {
+	defer wg.Done()
 	*r = Base64Decrypt(str)
 	atomic.AddInt64(&Done, 1)
-	wg.Done()
 }
 
 func Base64Decrypt(str string) string {

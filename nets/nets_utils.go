@@ -146,6 +146,8 @@ func createHttpRouter() (r *mux.Router) {
 	r.HandleFunc(HttpURLUnpack, handleNetsUnpack).Methods("GET", "POST")
 	r.HandleFunc(HttpURLUnpackToFile, handleNetsUnpackToFile).Methods("GET")
 	r.HandleFunc(HttpURLUnpackToMemory, handleNetsUnpackToMemory).Methods("GET")
+	r.HandleFunc(HttpURLComp, handleNetsComp).Methods("POST")
+	r.HandleFunc(HttpURLDecomp, handleNetsDecomp).Methods("POST")
 	return r
 }
 

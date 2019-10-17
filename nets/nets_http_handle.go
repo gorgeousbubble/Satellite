@@ -7,6 +7,8 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"satellite/comp"
+	"satellite/decomp"
 	"satellite/pack"
 	"satellite/unpack"
 	"time"
@@ -77,6 +79,34 @@ func handleNetsUnpackToMemory(w http.ResponseWriter, r *http.Request) {
 	case "GET":
 		log.Printf("GET %s", r.RequestURI)
 		err = handleGetNetsUnpackToMemory(w, r)
+	}
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		log.Printf("%d Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+}
+
+func handleNetsComp(w http.ResponseWriter, r *http.Request) {
+	var err error
+	switch r.Method {
+	case "POST":
+		log.Printf("POST %s", r.RequestURI)
+		err = handlePostNetsComp(w, r)
+	}
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		log.Printf("%d Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+}
+
+func handleNetsDecomp(w http.ResponseWriter, r *http.Request) {
+	var err error
+	switch r.Method {
+	case "POST":
+		log.Printf("POST %s", r.RequestURI)
+		err = handlePostNetsDecomp(w, r)
 	}
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -469,6 +499,154 @@ func handleGetNetsUnpackToMemory(w http.ResponseWriter, r *http.Request) (err er
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(dest)
+	log.Printf("%d Ok", http.StatusOK)
+	return err
+}
+
+func handlePostNetsComp(w http.ResponseWriter, r *http.Request) (err error) {
+	defer r.Body.Close()
+	// read request body
+	len := r.ContentLength
+	body := make([]byte, len)
+	body, err = ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Println("Error read request body:", err)
+		return err
+	}
+	// unmarshal json body
+	var t TNetsComp
+	err = json.Unmarshal(body, &t)
+	if err != nil {
+		http.Error(w, "Incorrect request body!", http.StatusBadRequest)
+		log.Println("Error unmarshal json body:", err)
+		log.Printf("%d Bad Request", http.StatusBadRequest)
+		return nil
+	}
+	// check request parameters
+	b, err := checkNetsCompParameters(t)
+	if err != nil {
+		log.Println("Error check comp parameters:", err)
+		return err
+	}
+	if !b {
+		http.Error(w, "Illegal parameters!", http.StatusUnprocessableEntity)
+		log.Println("Illegal parameters")
+		log.Printf("%d Unprocessable Entity", http.StatusUnprocessableEntity)
+		return nil
+	}
+	// refactor source files
+	t.Src, err = refactorNetsCompSource(t.Src)
+	if err != nil {
+		log.Println("Error refactor source files:", err)
+		return err
+	}
+	// start compress files
+	ch := make(chan bool)
+	count := 0
+	finish := false
+	go func() {
+		err = comp.Compress(t.Src, t.Dest, t.Type)
+		if err != nil {
+			ch <- false
+			return
+		}
+		ch <- true
+		return
+	}()
+	for {
+		select {
+		case r := <-ch:
+			if r == false {
+				log.Println("Compress failure:", err)
+				return err
+			}
+			log.Println("Compress success.")
+			finish = true
+			break
+		default:
+			count++
+			time.Sleep(100 * time.Millisecond)
+		}
+		if finish {
+			break
+		}
+		if count >= 100 {
+			err = errors.New("timeout")
+			return err
+		}
+	}
+	w.Header().Set("Content-Type", "text/plain")
+	log.Printf("%d Ok", http.StatusOK)
+	return err
+}
+
+func handlePostNetsDecomp(w http.ResponseWriter, r *http.Request) (err error) {
+	defer r.Body.Close()
+	// read request body
+	len := r.ContentLength
+	body := make([]byte, len)
+	body, err = ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Println("Error read request body:", err)
+		return err
+	}
+	// unmarshal json body
+	var t TNetsDecomp
+	err = json.Unmarshal(body, &t)
+	if err != nil {
+		http.Error(w, "Incorrect request body!", http.StatusBadRequest)
+		log.Println("Error unmarshal json body:", err)
+		log.Printf("%d Bad Request", http.StatusBadRequest)
+		return nil
+	}
+	// check request parameters
+	b, err := checkNetsDecompParameters(t)
+	if err != nil {
+		log.Println("Error check decomp parameters:", err)
+		return err
+	}
+	if !b {
+		http.Error(w, "Illegal parameters!", http.StatusUnprocessableEntity)
+		log.Println("Illegal parameters")
+		log.Printf("%d Unprocessable Entity", http.StatusUnprocessableEntity)
+		return nil
+	}
+	// start decompress files
+	ch := make(chan bool)
+	count := 0
+	finish := false
+	go func() {
+		err = decomp.DeCompress(t.Src, t.Dest, t.Type)
+		if err != nil {
+			ch <- false
+			return
+		}
+		ch <- true
+		return
+	}()
+	for {
+		select {
+		case r := <-ch:
+			if r == false {
+				log.Println("Decompress failure:", err)
+				return err
+			}
+			log.Println("Decompress success.")
+			finish = true
+			break
+		default:
+			count++
+			time.Sleep(100 * time.Millisecond)
+		}
+		if finish {
+			break
+		}
+		if count >= 100 {
+			err = errors.New("timeout")
+			return err
+		}
+	}
+	w.Header().Set("Content-Type", "text/plain")
 	log.Printf("%d Ok", http.StatusOK)
 	return err
 }

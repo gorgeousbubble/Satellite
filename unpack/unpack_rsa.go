@@ -589,13 +589,12 @@ func UnpackRSAOneToMemory(data []byte, head TUnpackRSAOne, dest *[]byte) (err er
 }
 
 func UnpackRSAOneGo(data []byte, head TUnpackRSAOne, dest string, wg *sync.WaitGroup) (err error) {
+	defer wg.Done()
 	err = UnpackRSAOne(data, head, dest)
 	if err != nil {
 		log.Println("Error rsa unpack one file:", err)
-		wg.Done()
 		return err
 	}
-	wg.Done()
 	return err
 }
 
@@ -638,14 +637,13 @@ func UnpackRSAOne(data []byte, head TUnpackRSAOne, path string) (err error) {
 }
 
 func RSADecryptGo(src, key []byte, dest *[]byte, wg *sync.WaitGroup) (err error) {
+	defer wg.Done()
 	*dest, err = RSADecrypt(src, key)
 	if err != nil {
 		log.Println("Error rsa decrypt data:", err)
-		wg.Done()
 		return err
 	}
 	atomic.AddInt64(&Done, 1)
-	wg.Done()
 	return err
 }
 
