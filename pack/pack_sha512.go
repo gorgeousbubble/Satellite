@@ -21,8 +21,8 @@ func SHA512Encode(src string) string {
 }
 
 func SHA512EncryptGo(data []byte, r *[sha512.Size]byte, wg *sync.WaitGroup) {
+	defer wg.Done()
 	*r = sha512.Sum512(data)
-	wg.Done()
 }
 
 func SHA512Encrypt(data []byte) [sha512.Size]byte {

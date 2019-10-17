@@ -21,8 +21,8 @@ func MD5Encode(src string) string {
 }
 
 func MD5EncryptGo(data []byte, r *[md5.Size]byte, wg *sync.WaitGroup) {
+	defer wg.Done()
 	*r = md5.Sum(data)
-	wg.Done()
 }
 
 func MD5Encrypt(data []byte) [md5.Size]byte {

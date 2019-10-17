@@ -99,13 +99,12 @@ func PackAESWorkCalculate(src []string) (work int64, err error) {
 }
 
 func PackAESOneGo(src string, r *[]byte, wg *sync.WaitGroup) (err error) {
+	defer wg.Done()
 	*r, err = PackAESOne(src)
 	if err != nil {
 		log.Println("Error aes pack one file:", err)
-		wg.Done()
 		return err
 	}
-	wg.Done()
 	return err
 }
 
@@ -183,14 +182,13 @@ func PackAESOne(src string) (r []byte, err error) {
 }
 
 func AESEncryptGo(src, key []byte, dest *[]byte, wg *sync.WaitGroup) (err error) {
+	defer wg.Done()
 	*dest, err = AESEncrypt(src, key)
 	if err != nil {
 		log.Println("Error aes encrypt data:", err)
-		wg.Done()
 		return err
 	}
 	atomic.AddInt64(&Done, 1)
-	wg.Done()
 	return err
 }
 

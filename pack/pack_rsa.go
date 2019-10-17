@@ -99,13 +99,12 @@ func PackRSAWorkCalculate(src []string) (work int64, err error) {
 }
 
 func PackRSAOneGo(src string, r *[]byte, wg *sync.WaitGroup) (err error) {
+	defer wg.Done()
 	*r, err = PackRSAOne(src)
 	if err != nil {
 		log.Println("Error rsa pack one file:", err)
-		wg.Done()
 		return err
 	}
-	wg.Done()
 	return err
 }
 
@@ -173,14 +172,13 @@ func PackRSAOne(src string) (r []byte, err error) {
 }
 
 func RSAEncryptGo(src, key []byte, dest *[]byte, wg *sync.WaitGroup) (err error) {
+	defer wg.Done()
 	*dest, err = RSAEncrypt(src, key)
 	if err != nil {
 		log.Println("Error rsa encrypt data:", err)
-		wg.Done()
 		return err
 	}
 	atomic.AddInt64(&Done, 1)
-	wg.Done()
 	return err
 }
 
