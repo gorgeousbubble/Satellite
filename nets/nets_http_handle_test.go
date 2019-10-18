@@ -157,3 +157,33 @@ func BenchmarkHandlePostNetsComp(b *testing.B) {
 		}
 	}
 }
+
+func TestHandlePostNetsDecomp(t *testing.T) {
+	mux := http.NewServeMux()
+	mux.HandleFunc(HttpURLDecomp, handleNetsDecomp)
+
+	writer := httptest.NewRecorder()
+	body := strings.NewReader(`{"src": "../test/data/decomp/file.tar.gz", "dest": "../test/data/decomp/", "type": "tar"}`)
+	request, _ := http.NewRequest("POST", HttpURLDecomp, body)
+	mux.ServeHTTP(writer, request)
+
+	if writer.Code != http.StatusOK {
+		t.Errorf("Response code is %v", writer.Code)
+	}
+}
+
+func BenchmarkHandlePostNetsDecomp(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		mux := http.NewServeMux()
+		mux.HandleFunc(HttpURLDecomp, handleNetsDecomp)
+
+		writer := httptest.NewRecorder()
+		body := strings.NewReader(`{"src": "../test/data/decomp/file.tar.gz", "dest": "../test/data/decomp/", "type": "tar"}`)
+		request, _ := http.NewRequest("POST", HttpURLDecomp, body)
+		mux.ServeHTTP(writer, request)
+
+		if writer.Code != http.StatusOK {
+			b.Errorf("Response code is %v", writer.Code)
+		}
+	}
+}
