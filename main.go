@@ -3,6 +3,8 @@ package main
 import (
 	"flag"
 	"fmt"
+	"net/http"
+	_ "net/http/pprof"
 	"os"
 	"runtime"
 	"satellite/cmd"
@@ -14,6 +16,10 @@ func init() {
 	// start multi-cpu
 	core := runtime.NumCPU()
 	runtime.GOMAXPROCS(core)
+	// start debug pprof
+	go func() {
+		http.ListenAndServe(":6060", nil)
+	}()
 }
 
 func main() {
