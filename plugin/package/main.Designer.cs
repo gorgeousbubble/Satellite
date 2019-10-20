@@ -1,6 +1,6 @@
 ﻿namespace package
 {
-    partial class main
+    partial class FormMain
     {
         /// <summary>
         /// 必需的设计器变量。
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(main));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             this.tab = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
@@ -83,10 +83,10 @@
             // 
             // tabPage2
             // 
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Location = new System.Drawing.Point(4, 26);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(752, 511);
+            this.tabPage2.Size = new System.Drawing.Size(752, 507);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "unpack";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -193,7 +193,7 @@
             this.comboBox1.Size = new System.Drawing.Size(607, 25);
             this.comboBox1.TabIndex = 12;
             // 
-            // main
+            // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -201,7 +201,7 @@
             this.Controls.Add(this.tab);
             this.DoubleBuffered = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "main";
+            this.Name = "FormMain";
             this.Text = "package";
             this.tab.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
