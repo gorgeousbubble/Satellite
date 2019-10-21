@@ -7,11 +7,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 namespace package
 {
     public partial class FormMain : Form
     {
+        struct T_PackInfo
+        {
+            public int Number;
+            public string Name;
+            public string Path;
+        }
+
+        private List<T_PackInfo> m_vecPackInfo = new List<T_PackInfo>();
+
         public FormMain()
         {
             InitializeComponent();
@@ -44,6 +54,58 @@ namespace package
         }
 
         private void FormMain_FormClosed(object sender, FormClosedEventArgs e)
+        {
+
+        }
+
+        private void Button_pack_add_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Filter = "All files(*.*)|*.*";
+            dialog.Multiselect = true;
+            dialog.RestoreDirectory = true;
+
+            DialogResult dr = dialog.ShowDialog();
+            if (dr == DialogResult.OK)
+            {
+                foreach (var i in dialog.FileNames)
+                {
+                    bool flag = false;
+                    foreach (var j in m_vecPackInfo)
+                    {
+                        if(j.Path == i)
+                        {
+                            flag = true;
+                            break;
+                        }
+                    }
+                    if(!flag)
+                    {
+                        T_PackInfo packInfo = new T_PackInfo();
+                        FileInfo file = new FileInfo(i);
+                        packInfo.Number = m_vecPackInfo.Count + 1;
+                        packInfo.Name = file.Name;
+                        packInfo.Path = i;
+                        m_vecPackInfo.Add(packInfo);
+                    }
+                }
+
+                listView_pack.Items.Clear();
+                listView_pack.BeginUpdate();
+                for(int i = 0; i < m_vecPackInfo.Count; ++i)
+                {
+                    ListViewItem item = new ListViewItem();
+                    item.Text = m_vecPackInfo[i].Number.ToString();
+                    item.SubItems.Add(m_vecPackInfo[i].Name);
+                    item.SubItems.Add(m_vecPackInfo[i].Path);
+                    listView_pack.Items.Add(item);
+                }
+                listView_pack.EndUpdate();
+            }
+
+        }
+
+        private void Button_pack_delete_Click(object sender, EventArgs e)
         {
 
         }

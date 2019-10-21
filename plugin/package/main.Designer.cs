@@ -122,6 +122,7 @@
             this.button_pack_add.TabIndex = 7;
             this.button_pack_add.Text = "add";
             this.button_pack_add.UseVisualStyleBackColor = true;
+            this.button_pack_add.Click += new System.EventHandler(this.Button_pack_add_Click);
             // 
             // button_pack_delete
             // 
@@ -131,6 +132,7 @@
             this.button_pack_delete.TabIndex = 6;
             this.button_pack_delete.Text = "delete";
             this.button_pack_delete.UseVisualStyleBackColor = true;
+            this.button_pack_delete.Click += new System.EventHandler(this.Button_pack_delete_Click);
             // 
             // label3
             // 
