@@ -18,6 +18,7 @@ func TestStartTcpServer(t *testing.T) {
 	if conn == nil {
 		t.Error("Invalid socket connect.")
 	}
+	// client send message to server
 	_, err = conn.Write([]byte("hello,world!"))
 	if err != nil {
 		t.Errorf("Error write data stream: %v", err)
