@@ -45,12 +45,23 @@ func handleNetsPack(w http.ResponseWriter, r *http.Request) {
 func handleNetsUnpack(w http.ResponseWriter, r *http.Request) {
 	var err error
 	switch r.Method {
-	case "GET":
-		log.Printf("GET %s", r.RequestURI)
-		err = handleGetNetsUnpack(w, r)
 	case "POST":
 		log.Printf("POST %s", r.RequestURI)
 		err = handlePostNetsUnpack(w, r)
+	}
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		log.Printf("%d Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+}
+
+func handleNetsUnpackVerbose(w http.ResponseWriter, r *http.Request) {
+	var err error
+	switch r.Method {
+	case "GET":
+		log.Printf("GET %s", r.RequestURI)
+		err = handleGetNetsUnpackVerbose(w, r)
 	}
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -269,7 +280,7 @@ func handlePostNetsUnpack(w http.ResponseWriter, r *http.Request) (err error) {
 	return err
 }
 
-func handleGetNetsUnpack(w http.ResponseWriter, r *http.Request) (err error) {
+func handleGetNetsUnpackVerbose(w http.ResponseWriter, r *http.Request) (err error) {
 	defer r.Body.Close()
 	// read request body
 	len := r.ContentLength
