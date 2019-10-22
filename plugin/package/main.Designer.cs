@@ -39,11 +39,13 @@
             this.button_pack_delete = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.button_pack_select = new System.Windows.Forms.Button();
-            this.textBox_pack = new System.Windows.Forms.TextBox();
+            this.textBox_pack_path = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.listView_pack = new System.Windows.Forms.ListView();
             this.label1 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.label5 = new System.Windows.Forms.Label();
+            this.textBox_pack_file = new System.Windows.Forms.TextBox();
             this.tab.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.SuspendLayout();
@@ -61,6 +63,8 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.textBox_pack_file);
+            this.tabPage1.Controls.Add(this.label5);
             this.tabPage1.Controls.Add(this.comboBox_pack);
             this.tabPage1.Controls.Add(this.label4);
             this.tabPage1.Controls.Add(this.button_pack_execute);
@@ -69,7 +73,7 @@
             this.tabPage1.Controls.Add(this.button_pack_delete);
             this.tabPage1.Controls.Add(this.label3);
             this.tabPage1.Controls.Add(this.button_pack_select);
-            this.tabPage1.Controls.Add(this.textBox_pack);
+            this.tabPage1.Controls.Add(this.textBox_pack_path);
             this.tabPage1.Controls.Add(this.label2);
             this.tabPage1.Controls.Add(this.listView_pack);
             this.tabPage1.Controls.Add(this.label1);
@@ -86,7 +90,7 @@
             this.comboBox_pack.FormattingEnabled = true;
             this.comboBox_pack.Location = new System.Drawing.Point(33, 389);
             this.comboBox_pack.Name = "comboBox_pack";
-            this.comboBox_pack.Size = new System.Drawing.Size(607, 25);
+            this.comboBox_pack.Size = new System.Drawing.Size(302, 25);
             this.comboBox_pack.TabIndex = 12;
             // 
             // label4
@@ -106,6 +110,7 @@
             this.button_pack_execute.TabIndex = 9;
             this.button_pack_execute.Text = "execute";
             this.button_pack_execute.UseVisualStyleBackColor = true;
+            this.button_pack_execute.Click += new System.EventHandler(this.Button_pack_execute_Click);
             // 
             // progressBar_pack
             // 
@@ -151,13 +156,14 @@
             this.button_pack_select.TabIndex = 4;
             this.button_pack_select.Text = "select";
             this.button_pack_select.UseVisualStyleBackColor = true;
+            this.button_pack_select.Click += new System.EventHandler(this.Button_pack_select_Click);
             // 
-            // textBox_pack
+            // textBox_pack_path
             // 
-            this.textBox_pack.Location = new System.Drawing.Point(33, 322);
-            this.textBox_pack.Name = "textBox_pack";
-            this.textBox_pack.Size = new System.Drawing.Size(607, 24);
-            this.textBox_pack.TabIndex = 3;
+            this.textBox_pack_path.Location = new System.Drawing.Point(33, 322);
+            this.textBox_pack_path.Name = "textBox_pack_path";
+            this.textBox_pack_path.Size = new System.Drawing.Size(607, 24);
+            this.textBox_pack_path.TabIndex = 3;
             // 
             // label2
             // 
@@ -196,6 +202,22 @@
             this.tabPage2.Text = "unpack";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(338, 369);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(98, 17);
+            this.label5.TabIndex = 14;
+            this.label5.Text = "pack file name:";
+            // 
+            // textBox_pack_file
+            // 
+            this.textBox_pack_file.Location = new System.Drawing.Point(341, 389);
+            this.textBox_pack_file.Name = "textBox_pack_file";
+            this.textBox_pack_file.Size = new System.Drawing.Size(299, 24);
+            this.textBox_pack_file.TabIndex = 15;
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -223,7 +245,7 @@
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ListView listView_pack;
-        private System.Windows.Forms.TextBox textBox_pack;
+        private System.Windows.Forms.TextBox textBox_pack_path;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button button_pack_select;
         private System.Windows.Forms.Button button_pack_add;
@@ -233,6 +255,8 @@
         private System.Windows.Forms.ProgressBar progressBar_pack;
         private System.Windows.Forms.ComboBox comboBox_pack;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox textBox_pack_file;
+        private System.Windows.Forms.Label label5;
     }
 }
 
