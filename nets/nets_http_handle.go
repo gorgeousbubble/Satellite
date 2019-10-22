@@ -73,9 +73,9 @@ func handleNetsUnpackVerbose(w http.ResponseWriter, r *http.Request) {
 func handleNetsUnpackToFile(w http.ResponseWriter, r *http.Request) {
 	var err error
 	switch r.Method {
-	case "GET":
-		log.Printf("GET %s", r.RequestURI)
-		err = handleGetNetsUnpackToFile(w, r)
+	case "POST":
+		log.Printf("POST %s", r.RequestURI)
+		err = handlePostNetsUnpackToFile(w, r)
 	}
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -370,7 +370,7 @@ func handleGetNetsUnpackVerbose(w http.ResponseWriter, r *http.Request) (err err
 	return err
 }
 
-func handleGetNetsUnpackToFile(w http.ResponseWriter, r *http.Request) (err error) {
+func handlePostNetsUnpackToFile(w http.ResponseWriter, r *http.Request) (err error) {
 	defer r.Body.Close()
 	// read request body
 	len := r.ContentLength
