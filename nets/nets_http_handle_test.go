@@ -68,13 +68,13 @@ func BenchmarkHandlePostNetsUnpack(b *testing.B) {
 	}
 }
 
-func TestHandleGetNetsUnpack(t *testing.T) {
+func TestHandleGetNetsUnpackVerbose(t *testing.T) {
 	mux := http.NewServeMux()
-	mux.HandleFunc(HttpURLUnpack, handleNetsUnpack)
+	mux.HandleFunc(HttpURLUnpackVerbose, handleNetsUnpackVerbose)
 
 	writer := httptest.NewRecorder()
 	body := strings.NewReader(`{"src": "../test/data/unpack/file_aes.txt"}`)
-	request, _ := http.NewRequest("GET", HttpURLUnpack, body)
+	request, _ := http.NewRequest("GET", HttpURLUnpackVerbose, body)
 	mux.ServeHTTP(writer, request)
 
 	if writer.Code != http.StatusOK {
@@ -82,14 +82,14 @@ func TestHandleGetNetsUnpack(t *testing.T) {
 	}
 }
 
-func BenchmarkHandleGetNetsUnpack(b *testing.B) {
+func BenchmarkHandleGetNetsUnpackVerbose(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		mux := http.NewServeMux()
-		mux.HandleFunc(HttpURLUnpack, handleNetsUnpack)
+		mux.HandleFunc(HttpURLUnpackVerbose, handleNetsUnpackVerbose)
 
 		writer := httptest.NewRecorder()
 		body := strings.NewReader(`{"src": "../test/data/unpack/file_aes.txt"}`)
-		request, _ := http.NewRequest("GET", HttpURLUnpack, body)
+		request, _ := http.NewRequest("GET", HttpURLUnpackVerbose, body)
 		mux.ServeHTTP(writer, request)
 
 		if writer.Code != http.StatusOK {
@@ -120,6 +120,36 @@ func BenchmarkHandleGetNetsUnpackToMemory(b *testing.B) {
 		writer := httptest.NewRecorder()
 		body := strings.NewReader(`{"src": "../test/data/unpack/file_aes.txt", "target": "file_1.txt"}`)
 		request, _ := http.NewRequest("GET", HttpURLUnpackToMemory, body)
+		mux.ServeHTTP(writer, request)
+
+		if writer.Code != http.StatusOK {
+			b.Errorf("Response code is %v", writer.Code)
+		}
+	}
+}
+
+func TestHandlePostNetsUnpackToFile(t *testing.T) {
+	mux := http.NewServeMux()
+	mux.HandleFunc(HttpURLUnpackToFile, handleNetsUnpackToFile)
+
+	writer := httptest.NewRecorder()
+	body := strings.NewReader(`{"src": "../test/data/unpack/file_aes.txt", "target": "file_1.txt", "dest": "../test/data/unpack/"}`)
+	request, _ := http.NewRequest("POST", HttpURLUnpackToFile, body)
+	mux.ServeHTTP(writer, request)
+
+	if writer.Code != http.StatusOK {
+		t.Errorf("Response code is %v", writer.Code)
+	}
+}
+
+func BenchmarkHandlePostNetsUnpackToFile(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		mux := http.NewServeMux()
+		mux.HandleFunc(HttpURLUnpackToFile, handleNetsUnpackToFile)
+
+		writer := httptest.NewRecorder()
+		body := strings.NewReader(`{"src": "../test/data/unpack/file_aes.txt", "target": "file_1.txt", "dest": "../test/data/unpack/"}`)
+		request, _ := http.NewRequest("POST", HttpURLUnpackToFile, body)
 		mux.ServeHTTP(writer, request)
 
 		if writer.Code != http.StatusOK {
