@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using System.Net;
 
 namespace package
 {
@@ -174,7 +175,57 @@ namespace package
 
         private void Button_pack_execute_Click(object sender, EventArgs e)
         {
+            string src = "";
+            string dest = "";
+            string type = "";
+            for(int i = 0; i < m_vecPackInfo.Count - 1; ++i)
+            {
+                src += string.Format("\"{0}\",", m_vecPackInfo[i].Path);
+            }
+            src += string.Format("\"{0}\"", m_vecPackInfo[m_vecPackInfo.Count - 1].Path);
+            dest = string.Format("\"{0}\"", textBox_pack_path.Text);
+            switch(comboBox_pack.SelectedIndex)
+            {
+                case 0:
+                    type = "\"aes\"";
+                    break;
+                case 1:
+                    type = "\"3des\"";
+                    break;
+                case 2:
+                    type = "\"des\"";
+                    break;
+                case 3:
+                    type = "\"rsa\"";
+                    break;
+                case 4:
+                    type = "\"base64\"";
+                    break;
+                default:
+                    type = "\"aes\"";
+                    break;
+            }
 
+            string body = "";
+            body += "{";
+            body += string.Format("\"src\":[{0}],\"dest\":{1},\"type\":{2}", src, dest, type);
+            body += "}";
+            body = body.Replace('\\', '/');
+
+            byte[] requestBody = Encoding.ASCII.GetBytes(body);
+
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://localhost:8080/satellite/pack");
+            request.Method = "POST";
+            request.ContentType = "application/json";
+            request.ContentLength = requestBody.Length;
+            using (Stream reqStream = request.GetRequestStream())
+            {
+                reqStream.Write(requestBody, 0, requestBody.Length);
+            }
+            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+            {
+                
+            }
         }
     }
 }
