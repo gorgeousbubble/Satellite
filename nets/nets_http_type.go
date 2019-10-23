@@ -25,6 +25,15 @@ type TNetsUnpackFileInfo struct {
 	Type string `json:"type"`
 }
 
+type TNetsUnpackProcessReq struct {
+	Src string `json:"src"`
+}
+
+type TNetsUnpackProcessResp struct {
+	Done int64 `json:"done"`
+	Work int64 `json:"work"`
+}
+
 type TNetsUnpackToFile struct {
 	Src    string `json:"src"`
 	Target string `json:"target"`

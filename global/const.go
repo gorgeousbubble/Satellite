@@ -30,6 +30,7 @@ const (
 	HttpURLComp           = HttpURLSatellite + "/comp"
 	HttpURLDecomp         = HttpURLSatellite + "/decomp"
 	HttpURLUnpackVerbose  = HttpURLUnpack + "/v"
+	HttpURLUnpackProcess  = HttpURLUnpack + "/p"
 	HttpURLUnpackToFile   = HttpURLUnpack + "/f"
 	HttpURLUnpackToMemory = HttpURLUnpack + "/m"
 )
