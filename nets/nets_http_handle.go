@@ -11,6 +11,7 @@ import (
 	"satellite/decomp"
 	"satellite/pack"
 	"satellite/unpack"
+	"sync/atomic"
 	"time"
 )
 
@@ -62,6 +63,20 @@ func handleNetsUnpackVerbose(w http.ResponseWriter, r *http.Request) {
 	case "GET":
 		log.Printf("GET %s", r.RequestURI)
 		err = handleGetNetsUnpackVerbose(w, r)
+	}
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		log.Printf("%d Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+}
+
+func handleNetsUnpackProcess(w http.ResponseWriter, r *http.Request) {
+	var err error
+	switch r.Method {
+	case "GET":
+		log.Printf("GET %s", r.RequestURI)
+		err = handleGetNetsUnpackProcess(w, r)
 	}
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -344,6 +359,93 @@ func handleGetNetsUnpackVerbose(w http.ResponseWriter, r *http.Request) (err err
 				return err
 			}
 			log.Println("Unpack verbose success.")
+			finish = true
+			break
+		default:
+			count++
+			time.Sleep(100 * time.Millisecond)
+		}
+		if finish {
+			break
+		}
+		if count >= 100 {
+			err = errors.New("timeout")
+			return err
+		}
+	}
+	// marshal json
+	js, err := json.MarshalIndent(&resp, "", "\t\t")
+	if err != nil {
+		log.Println("Error marshal to json:", err)
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(js)
+	log.Printf("%d Ok", http.StatusOK)
+	return err
+}
+
+func handleGetNetsUnpackProcess(w http.ResponseWriter, r *http.Request) (err error) {
+	defer r.Body.Close()
+	// read request body
+	len := r.ContentLength
+	body := make([]byte, len)
+	body, err = ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Println("Error read request body:", err)
+		return err
+	}
+	// unmarshal json body
+	var t TNetsUnpackProcessReq
+	err = json.Unmarshal(body, &t)
+	if err != nil {
+		http.Error(w, "Incorrect request body!", http.StatusBadRequest)
+		log.Println("Error unmarshal json body:", err)
+		log.Printf("%d Bad Request", http.StatusBadRequest)
+		return nil
+	}
+	// check request parameters
+	b, err := checkNetsUnpackProcessParameters(t)
+	if err != nil {
+		log.Println("Error check unpack process parameters:", err)
+		return err
+	}
+	if !b {
+		http.Error(w, "Illegal parameters!", http.StatusUnprocessableEntity)
+		log.Println("Illegal parameters")
+		log.Printf("%d Unprocessable Entity", http.StatusUnprocessableEntity)
+		return nil
+	}
+	// unpack file process information
+	var resp TNetsUnpackProcessResp
+	ch := make(chan bool)
+	count := 0
+	finish := false
+	go func(resp *TNetsUnpackProcessResp) {
+		var algorithm string
+		var work int64
+		// work value
+		err = unpack.WorkCalculate(t.Src, &algorithm, &work)
+		if err != nil || work <= 0 {
+			log.Println("Error calculate unpack work")
+			ch <- false
+			return
+		}
+		// done value
+		done := atomic.LoadInt64(&unpack.Done)
+		// assignment
+		(*resp).Done = done
+		(*resp).Work = work
+		ch <- true
+	}(&resp)
+	for {
+		select {
+		case r := <-ch:
+			if r == false {
+				log.Println("Unpack process failure:", err)
+				return err
+			}
+			log.Println("Unpack process success.")
 			finish = true
 			break
 		default:
