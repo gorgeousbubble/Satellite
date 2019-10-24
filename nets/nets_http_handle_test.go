@@ -98,6 +98,36 @@ func BenchmarkHandleGetNetsUnpackVerbose(b *testing.B) {
 	}
 }
 
+func TestHandleGetNetsUnpackProcess(t *testing.T) {
+	mux := http.NewServeMux()
+	mux.HandleFunc(HttpURLUnpackProcess, handleNetsUnpackProcess)
+
+	writer := httptest.NewRecorder()
+	body := strings.NewReader(`{"src": "../test/data/unpack/file_aes.txt"}`)
+	request, _ := http.NewRequest("GET", HttpURLUnpackProcess, body)
+	mux.ServeHTTP(writer, request)
+
+	if writer.Code != http.StatusOK {
+		t.Errorf("Response code is %v", writer.Code)
+	}
+}
+
+func BenchmarkHandleGetNetsUnpackProcess(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		mux := http.NewServeMux()
+		mux.HandleFunc(HttpURLUnpackProcess, handleNetsUnpackProcess)
+
+		writer := httptest.NewRecorder()
+		body := strings.NewReader(`{"src": "../test/data/unpack/file_aes.txt"}`)
+		request, _ := http.NewRequest("GET", HttpURLUnpackProcess, body)
+		mux.ServeHTTP(writer, request)
+
+		if writer.Code != http.StatusOK {
+			b.Errorf("Response code is %v", writer.Code)
+		}
+	}
+}
+
 func TestHandleGetNetsUnpackToMemory(t *testing.T) {
 	mux := http.NewServeMux()
 	mux.HandleFunc(HttpURLUnpackToMemory, handleNetsUnpackToMemory)
