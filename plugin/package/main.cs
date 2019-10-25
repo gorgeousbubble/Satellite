@@ -55,6 +55,15 @@ namespace package
 
             textBox_pack_path.ReadOnly = true;
 
+            // TabUnpack Initial
+            listView_unpack.View = View.Details;
+            listView_unpack.Columns.Add("number", 60, HorizontalAlignment.Center);
+            listView_unpack.Columns.Add("files", 240, HorizontalAlignment.Center);
+            listView_unpack.Columns.Add("size", 200, HorizontalAlignment.Center);
+            listView_unpack.Columns.Add("type", 200, HorizontalAlignment.Center);
+
+            textBox_unpack_src.ReadOnly = true;
+            textBox_unpack_dest.ReadOnly = true;
         }
 
         private void FormMain_FormClosed(object sender, FormClosedEventArgs e)
