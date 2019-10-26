@@ -57,6 +57,20 @@ func handleNetsUnpack(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func handleNetsPackProcess(w http.ResponseWriter, r *http.Request) {
+	var err error
+	switch r.Method {
+	case "GET":
+		log.Printf("GET %s", r.RequestURI)
+		err = handleGetNetsPackProcess(w, r)
+	}
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		log.Printf("%d Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+}
+
 func handleNetsUnpackVerbose(w http.ResponseWriter, r *http.Request) {
 	var err error
 	switch r.Method {
@@ -291,6 +305,92 @@ func handlePostNetsUnpack(w http.ResponseWriter, r *http.Request) (err error) {
 		}
 	}
 	w.Header().Set("Content-Type", "text/plain")
+	log.Printf("%d Ok", http.StatusOK)
+	return err
+}
+
+func handleGetNetsPackProcess(w http.ResponseWriter, r *http.Request) (err error) {
+	defer r.Body.Close()
+	// read request body
+	len := r.ContentLength
+	body := make([]byte, len)
+	body, err = ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Println("Error read request body:", err)
+		return err
+	}
+	// unmarshal json body
+	var t TNetsPackProcessReq
+	err = json.Unmarshal(body, &t)
+	if err != nil {
+		http.Error(w, "Incorrect request body!", http.StatusBadRequest)
+		log.Println("Error unmarshal json body:", err)
+		log.Printf("%d Bad Request", http.StatusBadRequest)
+		return nil
+	}
+	// check request parameters
+	b, err := checkNetsPackProcessParameters(t)
+	if err != nil {
+		log.Println("Error check pack process parameters:", err)
+		return err
+	}
+	if !b {
+		http.Error(w, "Illegal parameters!", http.StatusUnprocessableEntity)
+		log.Println("Illegal parameters")
+		log.Printf("%d Unprocessable Entity", http.StatusUnprocessableEntity)
+		return nil
+	}
+	// pack file process information
+	var resp TNetsPackProcessResp
+	ch := make(chan bool)
+	count := 0
+	finish := false
+	go func(resp *TNetsPackProcessResp) {
+		var work int64
+		// work value
+		err = pack.WorkCalculate(t.Src, t.Type, &work)
+		if err != nil || work <= 0 {
+			log.Println("Error calculate pack work")
+			ch <- false
+			return
+		}
+		// done value
+		done := atomic.LoadInt64(&unpack.Done)
+		// assignment
+		(*resp).Done = done
+		(*resp).Work = work
+		ch <- true
+	}(&resp)
+	for {
+		select {
+		case r := <-ch:
+			if r == false {
+				log.Println("Pack process failure:", err)
+				return err
+			}
+			log.Println("Pack process success.")
+			finish = true
+			break
+		default:
+			count++
+			time.Sleep(100 * time.Millisecond)
+		}
+		if finish {
+			break
+		}
+		if count >= 100 {
+			err = errors.New("timeout")
+			return err
+		}
+	}
+	// marshal json
+	js, err := json.MarshalIndent(&resp, "", "\t\t")
+	if err != nil {
+		log.Println("Error marshal to json:", err)
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(js)
 	log.Printf("%d Ok", http.StatusOK)
 	return err
 }
