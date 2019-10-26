@@ -61,6 +61,39 @@ func checkNetsUnpackParameters(t TNetsUnpack) (b bool, err error) {
 	return b, err
 }
 
+func checkNetsPackProcessParameters(t TNetsPackProcessReq) (b bool, err error) {
+	b = true
+	// check src files
+	if t.Src == nil {
+		b = false
+		log.Println("Source file list can't be empty.")
+		return b, err
+	}
+	for _, v := range t.Src {
+		b, err = PathExist(v)
+		if err != nil {
+			log.Println("Error check path exist:", err)
+			return b, err
+		}
+		if !b {
+			log.Printf("Source file path not exist: '%v'\n", v)
+			return b, err
+		}
+	}
+	// check algorithm
+	switch t.Type {
+	case "AES", "aes":
+	case "DES", "des":
+	case "3DES", "3des":
+	case "RSA", "rsa":
+	case "BASE64", "base64":
+	default:
+		b = false
+		fmt.Printf("Algorithm %v not support.\n", t.Type)
+	}
+	return b, err
+}
+
 func checkNetsUnpackVerboseParameters(t TNetsUnpackVerboseReq) (b bool, err error) {
 	b = true
 	// check src files

@@ -11,6 +11,16 @@ type TNetsUnpack struct {
 	Dest string `json:"dest"`
 }
 
+type TNetsPackProcessReq struct {
+	Src  []string `json:"src"`
+	Type string   `json:"type"`
+}
+
+type TNetsPackProcessResp struct {
+	Done int64 `json:"done"`
+	Work int64 `json:"work"`
+}
+
 type TNetsUnpackVerboseReq struct {
 	Src string `json:"src"`
 }
