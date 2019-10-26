@@ -63,6 +63,9 @@ func handleNetsPackProcess(w http.ResponseWriter, r *http.Request) {
 	case "GET":
 		log.Printf("GET %s", r.RequestURI)
 		err = handleGetNetsPackProcess(w, r)
+	case "POST":
+		log.Printf("POST %s", r.RequestURI)
+		err = handlePostNetsPackProcess(w, r)
 	}
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -355,7 +358,7 @@ func handleGetNetsPackProcess(w http.ResponseWriter, r *http.Request) (err error
 			return
 		}
 		// done value
-		done := atomic.LoadInt64(&unpack.Done)
+		done := atomic.LoadInt64(&pack.Done)
 		// assignment
 		(*resp).Done = done
 		(*resp).Work = work
@@ -393,6 +396,10 @@ func handleGetNetsPackProcess(w http.ResponseWriter, r *http.Request) (err error
 	w.Write(js)
 	log.Printf("%d Ok", http.StatusOK)
 	return err
+}
+
+func handlePostNetsPackProcess(w http.ResponseWriter, r *http.Request) (err error) {
+	return handleGetNetsPackProcess(w, r)
 }
 
 func handleGetNetsUnpackVerbose(w http.ResponseWriter, r *http.Request) (err error) {
