@@ -80,6 +80,9 @@ func handleNetsUnpackVerbose(w http.ResponseWriter, r *http.Request) {
 	case "GET":
 		log.Printf("GET %s", r.RequestURI)
 		err = handleGetNetsUnpackVerbose(w, r)
+	case "POST":
+		log.Printf("POST %s", r.RequestURI)
+		err = handlePostNetsUnpackVerbose(w, r)
 	}
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -490,6 +493,10 @@ func handleGetNetsUnpackVerbose(w http.ResponseWriter, r *http.Request) (err err
 	w.Write(js)
 	log.Printf("%d Ok", http.StatusOK)
 	return err
+}
+
+func handlePostNetsUnpackVerbose(w http.ResponseWriter, r *http.Request) (err error) {
+	return handleGetNetsUnpackVerbose(w, r)
 }
 
 func handleGetNetsUnpackProcess(w http.ResponseWriter, r *http.Request) (err error) {
