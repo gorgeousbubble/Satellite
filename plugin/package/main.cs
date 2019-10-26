@@ -55,6 +55,15 @@ namespace package
 
             textBox_pack_path.ReadOnly = true;
 
+            // TabUnpack Initial
+            listView_unpack.View = View.Details;
+            listView_unpack.Columns.Add("number", 60, HorizontalAlignment.Center);
+            listView_unpack.Columns.Add("files", 240, HorizontalAlignment.Center);
+            listView_unpack.Columns.Add("size", 200, HorizontalAlignment.Center);
+            listView_unpack.Columns.Add("type", 200, HorizontalAlignment.Center);
+
+            textBox_unpack_src.ReadOnly = true;
+            textBox_unpack_dest.ReadOnly = true;
         }
 
         private void FormMain_FormClosed(object sender, FormClosedEventArgs e)
@@ -144,10 +153,10 @@ namespace package
 
         private void Button_pack_select_Click(object sender, EventArgs e)
         {
-            // check pack file name
+            // check dest file name
             if(textBox_pack_file.Text == "")
             {
-                MessageBox.Show("Please enter pack file name!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Please enter dest file name!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -175,57 +184,100 @@ namespace package
 
         private void Button_pack_execute_Click(object sender, EventArgs e)
         {
-            string src = "";
-            string dest = "";
-            string type = "";
-            for(int i = 0; i < m_vecPackInfo.Count - 1; ++i)
+            try
             {
-                src += string.Format("\"{0}\",", m_vecPackInfo[i].Path);
-            }
-            src += string.Format("\"{0}\"", m_vecPackInfo[m_vecPackInfo.Count - 1].Path);
-            dest = string.Format("\"{0}\"", textBox_pack_path.Text);
-            switch(comboBox_pack.SelectedIndex)
-            {
-                case 0:
-                    type = "\"aes\"";
-                    break;
-                case 1:
-                    type = "\"3des\"";
-                    break;
-                case 2:
-                    type = "\"des\"";
-                    break;
-                case 3:
-                    type = "\"rsa\"";
-                    break;
-                case 4:
-                    type = "\"base64\"";
-                    break;
-                default:
-                    type = "\"aes\"";
-                    break;
-            }
+                string src = "";
+                string dest = "";
+                string type = "";
 
-            string body = "";
-            body += "{";
-            body += string.Format("\"src\":[{0}],\"dest\":{1},\"type\":{2}", src, dest, type);
-            body += "}";
-            body = body.Replace('\\', '/');
+                // check src file list
+                if(m_vecPackInfo.Count <= 0)
+                {
+                    MessageBox.Show("Please select src files name!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
 
-            byte[] requestBody = Encoding.ASCII.GetBytes(body);
+                // check dest file
+                if (textBox_pack_path.Text == "")
+                {
+                    MessageBox.Show("Please select dest file path!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
 
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://localhost:8080/satellite/pack");
-            request.Method = "POST";
-            request.ContentType = "application/json";
-            request.ContentLength = requestBody.Length;
-            using (Stream reqStream = request.GetRequestStream())
-            {
-                reqStream.Write(requestBody, 0, requestBody.Length);
+                // check dest name
+                if (textBox_pack_file.Text == "")
+                {
+                    MessageBox.Show("Please enter dest file name!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                for (int i = 0; i < m_vecPackInfo.Count - 1; ++i)
+                {
+                    src += string.Format("\"{0}\",", m_vecPackInfo[i].Path);
+                }
+                src += string.Format("\"{0}\"", m_vecPackInfo[m_vecPackInfo.Count - 1].Path);
+                dest = string.Format("\"{0}\"", textBox_pack_path.Text);
+                switch (comboBox_pack.SelectedIndex)
+                {
+                    case 0:
+                        type = "\"aes\"";
+                        break;
+                    case 1:
+                        type = "\"3des\"";
+                        break;
+                    case 2:
+                        type = "\"des\"";
+                        break;
+                    case 3:
+                        type = "\"rsa\"";
+                        break;
+                    case 4:
+                        type = "\"base64\"";
+                        break;
+                    default:
+                        type = "\"aes\"";
+                        break;
+                }
+
+                string body = "";
+                body += "{";
+                body += string.Format("\"src\":[{0}],\"dest\":{1},\"type\":{2}", src, dest, type);
+                body += "}";
+                body = body.Replace('\\', '/');
+
+                byte[] requestBody = Encoding.ASCII.GetBytes(body);
+
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://localhost:8080/satellite/pack");
+                request.Method = "POST";
+                request.ContentType = "application/json";
+                request.ContentLength = requestBody.Length;
+                using (Stream reqStream = request.GetRequestStream())
+                {
+                    reqStream.Write(requestBody, 0, requestBody.Length);
+                }
+                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+                {
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        MessageBox.Show("pack success!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Response status code not right!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+                    //timer_pack_process.Enabled = true;
+                    //timer_pack_process.Start();
+                }
             }
-            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+            catch(Exception ex)
             {
-                
-            }
+                MessageBox.Show(ex.Message, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }   
+        }
+
+        private void Timer_pack_process_Tick(object sender, EventArgs e)
+        {
+            
         }
     }
 }

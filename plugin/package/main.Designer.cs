@@ -28,9 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             this.tab = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.textBox_pack_file = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
             this.comboBox_pack = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.button_pack_execute = new System.Windows.Forms.Button();
@@ -44,10 +47,21 @@
             this.listView_pack = new System.Windows.Forms.ListView();
             this.label1 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.label5 = new System.Windows.Forms.Label();
-            this.textBox_pack_file = new System.Windows.Forms.TextBox();
+            this.timer_pack_process = new System.Windows.Forms.Timer(this.components);
+            this.label6 = new System.Windows.Forms.Label();
+            this.listView_unpack = new System.Windows.Forms.ListView();
+            this.textBox_unpack_src = new System.Windows.Forms.TextBox();
+            this.button_unpack_src = new System.Windows.Forms.Button();
+            this.button_unpack_verbose = new System.Windows.Forms.Button();
+            this.label7 = new System.Windows.Forms.Label();
+            this.textBox_unpack_dest = new System.Windows.Forms.TextBox();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.label8 = new System.Windows.Forms.Label();
             this.tab.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.tabPage2.SuspendLayout();
             this.SuspendLayout();
             // 
             // tab
@@ -84,6 +98,22 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "pack";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // textBox_pack_file
+            // 
+            this.textBox_pack_file.Location = new System.Drawing.Point(341, 389);
+            this.textBox_pack_file.Name = "textBox_pack_file";
+            this.textBox_pack_file.Size = new System.Drawing.Size(299, 24);
+            this.textBox_pack_file.TabIndex = 15;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(338, 369);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(98, 17);
+            this.label5.TabIndex = 14;
+            this.label5.Text = "pack file name:";
             // 
             // comboBox_pack
             // 
@@ -194,6 +224,17 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.button2);
+            this.tabPage2.Controls.Add(this.progressBar1);
+            this.tabPage2.Controls.Add(this.label8);
+            this.tabPage2.Controls.Add(this.button1);
+            this.tabPage2.Controls.Add(this.textBox_unpack_dest);
+            this.tabPage2.Controls.Add(this.label7);
+            this.tabPage2.Controls.Add(this.button_unpack_verbose);
+            this.tabPage2.Controls.Add(this.button_unpack_src);
+            this.tabPage2.Controls.Add(this.textBox_unpack_src);
+            this.tabPage2.Controls.Add(this.listView_unpack);
+            this.tabPage2.Controls.Add(this.label6);
             this.tabPage2.Location = new System.Drawing.Point(4, 26);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
@@ -202,21 +243,102 @@
             this.tabPage2.Text = "unpack";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // label5
+            // timer_pack_process
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(338, 369);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(98, 17);
-            this.label5.TabIndex = 14;
-            this.label5.Text = "pack file name:";
+            this.timer_pack_process.Tick += new System.EventHandler(this.Timer_pack_process_Tick);
             // 
-            // textBox_pack_file
+            // label6
             // 
-            this.textBox_pack_file.Location = new System.Drawing.Point(341, 389);
-            this.textBox_pack_file.Name = "textBox_pack_file";
-            this.textBox_pack_file.Size = new System.Drawing.Size(299, 24);
-            this.textBox_pack_file.TabIndex = 15;
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(30, 30);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(126, 17);
+            this.label6.TabIndex = 1;
+            this.label6.Text = "unpack source files:";
+            // 
+            // listView_unpack
+            // 
+            this.listView_unpack.Location = new System.Drawing.Point(33, 80);
+            this.listView_unpack.Name = "listView_unpack";
+            this.listView_unpack.Size = new System.Drawing.Size(688, 187);
+            this.listView_unpack.TabIndex = 2;
+            this.listView_unpack.UseCompatibleStateImageBehavior = false;
+            this.listView_unpack.View = System.Windows.Forms.View.Details;
+            // 
+            // textBox_unpack_src
+            // 
+            this.textBox_unpack_src.Location = new System.Drawing.Point(33, 50);
+            this.textBox_unpack_src.Name = "textBox_unpack_src";
+            this.textBox_unpack_src.Size = new System.Drawing.Size(607, 24);
+            this.textBox_unpack_src.TabIndex = 4;
+            // 
+            // button_unpack_src
+            // 
+            this.button_unpack_src.Location = new System.Drawing.Point(646, 50);
+            this.button_unpack_src.Name = "button_unpack_src";
+            this.button_unpack_src.Size = new System.Drawing.Size(75, 23);
+            this.button_unpack_src.TabIndex = 5;
+            this.button_unpack_src.Text = "select";
+            this.button_unpack_src.UseVisualStyleBackColor = true;
+            // 
+            // button_unpack_verbose
+            // 
+            this.button_unpack_verbose.Location = new System.Drawing.Point(646, 273);
+            this.button_unpack_verbose.Name = "button_unpack_verbose";
+            this.button_unpack_verbose.Size = new System.Drawing.Size(75, 23);
+            this.button_unpack_verbose.TabIndex = 7;
+            this.button_unpack_verbose.Text = "verbose";
+            this.button_unpack_verbose.UseVisualStyleBackColor = true;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(30, 302);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(157, 17);
+            this.label7.TabIndex = 8;
+            this.label7.Text = "unpack destination path:";
+            // 
+            // textBox_unpack_dest
+            // 
+            this.textBox_unpack_dest.Location = new System.Drawing.Point(33, 322);
+            this.textBox_unpack_dest.Name = "textBox_unpack_dest";
+            this.textBox_unpack_dest.Size = new System.Drawing.Size(607, 24);
+            this.textBox_unpack_dest.TabIndex = 9;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(646, 322);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 10;
+            this.button1.Text = "select";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(646, 451);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 13;
+            this.button2.Text = "execute";
+            this.button2.UseVisualStyleBackColor = true;
+            // 
+            // progressBar1
+            // 
+            this.progressBar1.Location = new System.Drawing.Point(33, 451);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(607, 23);
+            this.progressBar1.TabIndex = 12;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(30, 431);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(102, 17);
+            this.label8.TabIndex = 11;
+            this.label8.Text = "unpack process:";
             // 
             // FormMain
             // 
@@ -234,6 +356,8 @@
             this.tab.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
+            this.tabPage2.ResumeLayout(false);
+            this.tabPage2.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -257,6 +381,18 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox textBox_pack_file;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Timer timer_pack_process;
+        private System.Windows.Forms.Button button_unpack_src;
+        private System.Windows.Forms.TextBox textBox_unpack_src;
+        private System.Windows.Forms.ListView listView_unpack;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Button button_unpack_verbose;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.TextBox textBox_unpack_dest;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.Label label8;
     }
 }
 
