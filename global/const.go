@@ -45,8 +45,8 @@ const (
 )
 
 const (
-	TCPBufferSize    = 4096 // TCP buffer size(Receive)
-	UDPBufferSize    = 4096 // UDP buffer size(Receive)
-	HTTPWriteTimeout = 1000 // HTTP Write Timeout Time(Millisecond)
-	HTTPReadTimeout  = 1000 // HTTP Read Timeout Time(Millisecond)
+	TCPBufferSize    = 4096  // TCP buffer size(Receive)
+	UDPBufferSize    = 4096  // UDP buffer size(Receive)
+	HTTPWriteTimeout = 10000 // HTTP Write Timeout Time(Millisecond)
+	HTTPReadTimeout  = 10000 // HTTP Read Timeout Time(Millisecond)
 )

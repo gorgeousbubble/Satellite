@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.Net;
 using System.Threading;
+using System.Runtime.Serialization;
 
 namespace package
 {
@@ -156,6 +157,59 @@ namespace package
             return body;
         }
 
+        private string Get_pack_process_json()
+        {
+            // check src file list
+            if (m_vecPackInfo.Count <= 0)
+            {
+                MessageBox.Show("Please select src files name!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return "";
+            }
+            // check dest file
+            if (textBox_pack_path.Text == "")
+            {
+                MessageBox.Show("Please select dest file path!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return "";
+            }
+
+            string src = "";
+            for (int i = 0; i < m_vecPackInfo.Count - 1; ++i)
+            {
+                src += string.Format("\"{0}\",", m_vecPackInfo[i].Path);
+            }
+            src += string.Format("\"{0}\"", m_vecPackInfo[m_vecPackInfo.Count - 1].Path);
+
+            string type = "";
+            switch (comboBox_pack.SelectedIndex)
+            {
+                case 0:
+                    type = "\"aes\"";
+                    break;
+                case 1:
+                    type = "\"3des\"";
+                    break;
+                case 2:
+                    type = "\"des\"";
+                    break;
+                case 3:
+                    type = "\"rsa\"";
+                    break;
+                case 4:
+                    type = "\"base64\"";
+                    break;
+                default:
+                    type = "\"aes\"";
+                    break;
+            }
+
+            string body = "";
+            body += "{";
+            body += string.Format("\"src\":[{0}],\"type\":{1}", src, type);
+            body += "}";
+            body = body.Replace('\\', '/');
+            return body;
+        }
+
         private string Get_unpack_json()
         {
             // check src file
@@ -191,6 +245,7 @@ namespace package
 
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://localhost:8080/satellite/pack");
                 request.Method = "POST";
+                request.KeepAlive = false;
                 request.ProtocolVersion = HttpVersion.Version11;
                 request.ContentType = "application/json";
                 request.ContentLength = requestBody.Length;
@@ -200,14 +255,23 @@ namespace package
                 }
                 using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
                 {
-                    if (response.StatusCode == HttpStatusCode.OK)
+                    if(response.StatusCode != HttpStatusCode.OK)
                     {
-                        MessageBox.Show("pack success!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        switch(response.StatusCode)
+                        {
+                            case HttpStatusCode.BadRequest:
+                                MessageBox.Show("Bad Request(400)!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                break;
+                            case HttpStatusCode.InternalServerError:
+                                MessageBox.Show("Internal Server Error(500)!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                break;
+                            default:
+                                MessageBox.Show("Unknown Error!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                break;
+                        }
+                        return;
                     }
-                    else
-                    {
-                        MessageBox.Show("Response status code not right!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    }
+                    MessageBox.Show("Pack Success!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
             catch (Exception ex)
@@ -225,6 +289,7 @@ namespace package
 
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://localhost:8080/satellite/unpack");
                 request.Method = "POST";
+                request.KeepAlive = false;
                 request.ProtocolVersion = HttpVersion.Version11;
                 request.ContentType = "application/json";
                 request.ContentLength = requestBody.Length;
@@ -234,14 +299,23 @@ namespace package
                 }
                 using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
                 {
-                    if (response.StatusCode == HttpStatusCode.OK)
+                    if (response.StatusCode != HttpStatusCode.OK)
                     {
-                        MessageBox.Show("unpack success!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        switch (response.StatusCode)
+                        {
+                            case HttpStatusCode.BadRequest:
+                                MessageBox.Show("Bad Request(400)!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                break;
+                            case HttpStatusCode.InternalServerError:
+                                MessageBox.Show("Internal Server Error(500)!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                break;
+                            default:
+                                MessageBox.Show("Unknown Error!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                break;
+                        }
+                        return;
                     }
-                    else
-                    {
-                        MessageBox.Show("Response status code not right!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    }
+                    MessageBox.Show("Unpack Success!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
             catch (Exception ex)
@@ -339,54 +413,23 @@ namespace package
             m_tPack = new Thread(new ParameterizedThreadStart(PackThread));
             m_tPack.IsBackground = true;
             m_tPack.Start(body);
+            timer_pack_process.Start();
         }
 
         private void Timer_pack_process_Tick(object sender, EventArgs e)
         {
             try
             {
-                string src = "";
-                string type = "";
-
-                for (int i = 0; i < m_vecPackInfo.Count - 1; ++i)
-                {
-                    src += string.Format("\"{0}\",", m_vecPackInfo[i].Path);
-                }
-                src += string.Format("\"{0}\"", m_vecPackInfo[m_vecPackInfo.Count - 1].Path);
-
-                switch (comboBox_pack.SelectedIndex)
-                {
-                    case 0:
-                        type = "\"aes\"";
-                        break;
-                    case 1:
-                        type = "\"3des\"";
-                        break;
-                    case 2:
-                        type = "\"des\"";
-                        break;
-                    case 3:
-                        type = "\"rsa\"";
-                        break;
-                    case 4:
-                        type = "\"base64\"";
-                        break;
-                    default:
-                        type = "\"aes\"";
-                        break;
-                }
-
-                string body = "";
-                body += "{";
-                body += string.Format("\"src\":[{0}],\"type\":{1}", src, type);
-                body += "}";
-                body = body.Replace('\\', '/');
+                string body = Get_pack_process_json();
+                if (body == "")
+                    return;
 
                 byte[] requestBody = Encoding.ASCII.GetBytes(body);
 
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://localhost:8080/satellite/pack/p");
                 request.Method = "POST";
-                request.ProtocolVersion = HttpVersion.Version10;
+                request.KeepAlive = false;
+                request.ProtocolVersion = HttpVersion.Version11;
                 request.ContentType = "application/json";
                 request.ContentLength = requestBody.Length;
                 using (Stream reqStream = request.GetRequestStream())
@@ -395,7 +438,6 @@ namespace package
                 }
                 using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
                 {
-                    //request.Abort();
                     if (response.StatusCode == HttpStatusCode.OK)
                     {
                         string responseContent = "";
@@ -403,22 +445,18 @@ namespace package
                         {
                             using (StreamReader reader = new StreamReader(resStream, Encoding.UTF8))
                             {
+                                string done = "";
+                                string work = "";
                                 responseContent = reader.ReadToEnd().ToString();
+                                done = 
                             }
                         }
                     }
-                    else
-                    {
-                        MessageBox.Show("Response status code not right!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        timer_pack_process.Stop();
-                    }
-                    //response.Close();
                 }
             }
             catch(Exception ex)
             {
-                MessageBox.Show(ex.Message, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                timer_pack_process.Stop();
+                MessageBox.Show(ex.Message, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);   
             }
         }
 
