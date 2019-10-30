@@ -97,6 +97,9 @@ func handleNetsUnpackProcess(w http.ResponseWriter, r *http.Request) {
 	case "GET":
 		log.Printf("GET %s", r.RequestURI)
 		err = handleGetNetsUnpackProcess(w, r)
+	case "POST":
+		log.Printf("POST %s", r.RequestURI)
+		err = handlePostNetsUnpackProcess(w, r)
 	}
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -584,6 +587,10 @@ func handleGetNetsUnpackProcess(w http.ResponseWriter, r *http.Request) (err err
 	w.Write(js)
 	log.Printf("%d Ok", http.StatusOK)
 	return err
+}
+
+func handlePostNetsUnpackProcess(w http.ResponseWriter, r *http.Request) (err error) {
+	return handleGetNetsUnpackProcess(w, r)
 }
 
 func handlePostNetsUnpackToFile(w http.ResponseWriter, r *http.Request) (err error) {
