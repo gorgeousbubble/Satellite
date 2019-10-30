@@ -25,6 +25,15 @@ func (db *TMySQL) Connect() (err error) {
 	return err
 }
 
+func (db *TMySQL) Close() (err error) {
+	err = db.DB.Close()
+	if err != nil {
+		log.Println("Error close MySQL database:", err)
+		return err
+	}
+	return err
+}
+
 func (db *TMySQL) QueryRow(id int64) (user TUser, err error) {
 	query := fmt.Sprintf("select * from %s where id=?", db.DataBase)
 	// query one row from database
