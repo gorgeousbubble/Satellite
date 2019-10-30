@@ -6,16 +6,16 @@ import (
 	"log"
 	"time"
 
-	_ "github.com/go-sql-driver/mysql"
+	_ "github.com/denisenkom/go-mssqldb"
 )
 
-func (db *TMySQL) Connect() (err error) {
+func (db *TMSSQL) Connect() (err error) {
 	// splice data source name
-	dsn := fmt.Sprintf("%s:%s@%s(%s:%d)/%s?charset=utf8", db.User, db.Password, db.Protocol, db.Host, db.Port, db.DataBase)
-	// connect to mysql database
-	db.DB, err = sql.Open("mysql", dsn)
+	dsn := fmt.Sprintf("server=%s;port=%d;database=%s;user id=%s;password=%s", db.Host, db.Port, db.DataBase, db.User, db.Password)
+	// connect to sql server database
+	db.DB, err = sql.Open("mssql", dsn)
 	if err != nil {
-		log.Println("Error connect to MySQL database:", err)
+		log.Println("Error connect to SQL Server database:", err)
 		return err
 	}
 	// set database configuration
@@ -25,16 +25,16 @@ func (db *TMySQL) Connect() (err error) {
 	return err
 }
 
-func (db *TMySQL) Close() (err error) {
+func (db *TMSSQL) Close() (err error) {
 	err = db.DB.Close()
 	if err != nil {
-		log.Println("Error close MySQL database:", err)
+		log.Println("Error close SQL Server database:", err)
 		return err
 	}
 	return err
 }
 
-func (db *TMySQL) QueryRow(id int64) (user TUser, err error) {
+func (db *TMSSQL) QueryRow(id int64) (user TUser, err error) {
 	query := fmt.Sprintf("select * from %s where id=?", db.DataBase)
 	// query one row from database
 	err = db.DB.QueryRow(query, id).Scan(&user.ID, &user.Name, &user.Password)
@@ -45,7 +45,7 @@ func (db *TMySQL) QueryRow(id int64) (user TUser, err error) {
 	return user, err
 }
 
-func (db *TMySQL) Query() (users []TUser, err error) {
+func (db *TMSSQL) Query() (users []TUser, err error) {
 	query := fmt.Sprintf("select * from %s", db.DataBase)
 	// query all rows from database
 	rows, err := db.DB.Query(query)
@@ -76,7 +76,7 @@ func (db *TMySQL) Query() (users []TUser, err error) {
 	return users, err
 }
 
-func (db *TMySQL) Insert(user TUser) (id int64, ra int64, err error) {
+func (db *TMSSQL) Insert(user TUser) (id int64, ra int64, err error) {
 	query := fmt.Sprintf("insert into %s(name,password) value(?,?)", db.DataBase)
 	// insert one row into database
 	r, err := db.DB.Exec(query, user.Name, user.Password)
@@ -99,7 +99,7 @@ func (db *TMySQL) Insert(user TUser) (id int64, ra int64, err error) {
 	return id, ra, err
 }
 
-func (db *TMySQL) Update(user TUser) (ra int64, err error) {
+func (db *TMSSQL) Update(user TUser) (ra int64, err error) {
 	query := fmt.Sprintf("update %s set password=? where id=?", db.DataBase)
 	// update one row in database
 	r, err := db.DB.Exec(query, user.Password, user.ID)
@@ -116,7 +116,7 @@ func (db *TMySQL) Update(user TUser) (ra int64, err error) {
 	return ra, err
 }
 
-func (db *TMySQL) Delete(user TUser) (id int64, ra int64, err error) {
+func (db *TMSSQL) Delete(user TUser) (id int64, ra int64, err error) {
 	query := fmt.Sprintf("delete from %s where id=?", db.DataBase)
 	// delete one row in database
 	r, err := db.DB.Exec(query, user.ID)

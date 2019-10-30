@@ -448,7 +448,7 @@ namespace package
                                 string done = "";
                                 string work = "";
                                 responseContent = reader.ReadToEnd().ToString();
-                                done = 
+                                // parser json struct...
                             }
                         }
                     }
