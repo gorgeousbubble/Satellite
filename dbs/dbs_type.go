@@ -21,6 +21,11 @@ type TMSSQL struct {
 	DataBase string
 }
 
+type TSQLite3 struct {
+	DB       *sql.DB
+	DataBase string
+}
+
 type TUser struct {
 	ID       int64          `db:"id"`
 	Name     sql.NullString `db:"name"`
