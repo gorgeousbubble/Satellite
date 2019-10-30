@@ -12,6 +12,15 @@ type TMySQL struct {
 	DataBase string
 }
 
+type TMSSQL struct {
+	DB       *sql.DB
+	User     string
+	Password string
+	Host     string
+	Port     int
+	DataBase string
+}
+
 type TUser struct {
 	ID       int64          `db:"id"`
 	Name     sql.NullString `db:"name"`
