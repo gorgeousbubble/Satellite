@@ -10,7 +10,8 @@ using System.Windows.Forms;
 using System.IO;
 using System.Net;
 using System.Threading;
-using System.Runtime.Serialization;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace package
 {
@@ -236,6 +237,25 @@ namespace package
             return body;
         }
 
+        private string Get_unpack_process_json()
+        {
+            // check src file
+            if (textBox_unpack_src.Text == "")
+            {
+                MessageBox.Show("Please select src file name!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return "";
+            }
+
+            string src = string.Format("\"{0}\"", textBox_unpack_src.Text);
+
+            string body = "";
+            body += "{";
+            body += string.Format("\"src\":{0}", src);
+            body += "}";
+            body = body.Replace('\\', '/');
+            return body;
+        }
+
         private void PackThread(object sender)
         {
             string body = sender as string;
@@ -445,10 +465,19 @@ namespace package
                         {
                             using (StreamReader reader = new StreamReader(resStream, Encoding.UTF8))
                             {
-                                string done = "";
-                                string work = "";
                                 responseContent = reader.ReadToEnd().ToString();
                                 // parser json struct...
+                                JObject jObject = (JObject)JsonConvert.DeserializeObject(responseContent);
+                                Int64 done = Convert.ToInt64(jObject["done"].ToString());
+                                Int64 work = Convert.ToInt64(jObject["work"].ToString()) / 128;
+
+                                int value = (int)((float)done * 100 / (float)work);
+                                if(value >= 100)
+                                {
+                                    value = 100;
+                                    timer_pack_process.Stop();
+                                }
+                                progressBar_pack.Value = value;
                             }
                         }
                     }
@@ -456,7 +485,8 @@ namespace package
             }
             catch(Exception ex)
             {
-                MessageBox.Show(ex.Message, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);   
+                timer_pack_process.Stop();
+                MessageBox.Show(ex.Message, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
@@ -502,6 +532,61 @@ namespace package
             m_tUnpack = new Thread(new ParameterizedThreadStart(UnpackThread));
             m_tUnpack.IsBackground = true;
             m_tUnpack.Start(body);
+            timer_unpack_process.Start();
+        }
+
+        private void Timer_unpack_process_Tick(object sender, EventArgs e)
+        {
+            try
+            {
+                string body = Get_unpack_process_json();
+                if (body == "")
+                    return;
+
+                byte[] requestBody = Encoding.ASCII.GetBytes(body);
+
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://localhost:8080/satellite/unpack/p");
+                request.Method = "POST";
+                request.KeepAlive = false;
+                request.ProtocolVersion = HttpVersion.Version11;
+                request.ContentType = "application/json";
+                request.ContentLength = requestBody.Length;
+                using (Stream reqStream = request.GetRequestStream())
+                {
+                    reqStream.Write(requestBody, 0, requestBody.Length);
+                }
+                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+                {
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        string responseContent = "";
+                        using (Stream resStream = response.GetResponseStream())
+                        {
+                            using (StreamReader reader = new StreamReader(resStream, Encoding.UTF8))
+                            {
+                                responseContent = reader.ReadToEnd().ToString();
+                                // parser json struct...
+                                JObject jObject = (JObject)JsonConvert.DeserializeObject(responseContent);
+                                Int64 done = Convert.ToInt64(jObject["done"].ToString());
+                                Int64 work = Convert.ToInt64(jObject["work"].ToString()) / 128;
+
+                                int value = (int)((float)done * 100 / (float)work);
+                                if (value >= 100)
+                                {
+                                    value = 100;
+                                    timer_unpack_process.Stop();
+                                }
+                                progressBar_unpack.Value = value;
+                            }
+                        }
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                timer_unpack_process.Stop();
+                MessageBox.Show(ex.Message, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
     }
 }

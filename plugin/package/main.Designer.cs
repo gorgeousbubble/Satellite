@@ -46,7 +46,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.button_unpack_execute = new System.Windows.Forms.Button();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.progressBar_unpack = new System.Windows.Forms.ProgressBar();
             this.label8 = new System.Windows.Forms.Label();
             this.button_unpack_dest = new System.Windows.Forms.Button();
             this.textBox_unpack_dest = new System.Windows.Forms.TextBox();
@@ -57,6 +57,7 @@
             this.listView_unpack = new System.Windows.Forms.ListView();
             this.label6 = new System.Windows.Forms.Label();
             this.timer_pack_process = new System.Windows.Forms.Timer(this.components);
+            this.timer_unpack_process = new System.Windows.Forms.Timer(this.components);
             this.tab.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -205,7 +206,7 @@
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.button_unpack_execute);
-            this.tabPage2.Controls.Add(this.progressBar1);
+            this.tabPage2.Controls.Add(this.progressBar_unpack);
             this.tabPage2.Controls.Add(this.label8);
             this.tabPage2.Controls.Add(this.button_unpack_dest);
             this.tabPage2.Controls.Add(this.textBox_unpack_dest);
@@ -233,12 +234,12 @@
             this.button_unpack_execute.UseVisualStyleBackColor = true;
             this.button_unpack_execute.Click += new System.EventHandler(this.Button_unpack_execute_Click);
             // 
-            // progressBar1
+            // progressBar_unpack
             // 
-            this.progressBar1.Location = new System.Drawing.Point(33, 451);
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(607, 23);
-            this.progressBar1.TabIndex = 12;
+            this.progressBar_unpack.Location = new System.Drawing.Point(33, 451);
+            this.progressBar_unpack.Name = "progressBar_unpack";
+            this.progressBar_unpack.Size = new System.Drawing.Size(607, 23);
+            this.progressBar_unpack.TabIndex = 12;
             // 
             // label8
             // 
@@ -324,6 +325,10 @@
             // 
             this.timer_pack_process.Tick += new System.EventHandler(this.Timer_pack_process_Tick);
             // 
+            // timer_unpack_process
+            // 
+            this.timer_unpack_process.Tick += new System.EventHandler(this.Timer_unpack_process_Tick);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -373,8 +378,9 @@
         private System.Windows.Forms.Button button_unpack_dest;
         private System.Windows.Forms.TextBox textBox_unpack_dest;
         private System.Windows.Forms.Button button_unpack_execute;
-        private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.ProgressBar progressBar_unpack;
         private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Timer timer_unpack_process;
     }
 }
 
