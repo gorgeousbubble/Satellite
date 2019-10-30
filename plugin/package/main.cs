@@ -10,7 +10,8 @@ using System.Windows.Forms;
 using System.IO;
 using System.Net;
 using System.Threading;
-using System.Runtime.Serialization;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace package
 {
@@ -445,10 +446,19 @@ namespace package
                         {
                             using (StreamReader reader = new StreamReader(resStream, Encoding.UTF8))
                             {
-                                string done = "";
-                                string work = "";
                                 responseContent = reader.ReadToEnd().ToString();
                                 // parser json struct...
+                                JObject jObject = (JObject)JsonConvert.DeserializeObject(responseContent);
+                                Int64 done = Convert.ToInt64(jObject["done"].ToString());
+                                Int64 work = Convert.ToInt64(jObject["work"].ToString()) / 128;
+
+                                int value = (int)((float)done * 100 / (float)work);
+                                if(value >= 100)
+                                {
+                                    value = 100;
+                                    timer_pack_process.Stop();
+                                }
+                                progressBar_pack.Value = value;
                             }
                         }
                     }
