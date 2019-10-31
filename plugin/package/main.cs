@@ -85,7 +85,7 @@ namespace package
 
         private void FormMain_FormClosed(object sender, FormClosedEventArgs e)
         {
-            
+
         }
 
         private void Update_pack_listView()
@@ -275,9 +275,9 @@ namespace package
                 }
                 using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
                 {
-                    if(response.StatusCode != HttpStatusCode.OK)
+                    if (response.StatusCode != HttpStatusCode.OK)
                     {
-                        switch(response.StatusCode)
+                        switch (response.StatusCode)
                         {
                             case HttpStatusCode.BadRequest:
                                 MessageBox.Show("Bad Request(400)!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -359,13 +359,13 @@ namespace package
                     bool flag = false;
                     foreach (var j in m_vecPackInfo)
                     {
-                        if(j.Path == i)
+                        if (j.Path == i)
                         {
                             flag = true;
                             break;
                         }
                     }
-                    if(!flag)
+                    if (!flag)
                     {
                         T_PackInfo packInfo = new T_PackInfo();
                         FileInfo file = new FileInfo(i);
@@ -383,13 +383,13 @@ namespace package
 
         private void Button_pack_delete_Click(object sender, EventArgs e)
         {
-            if(listView_pack.CheckedItems.Count > 0)
+            if (listView_pack.CheckedItems.Count > 0)
             {
                 for (int i = 0; i < listView_pack.CheckedItems.Count; ++i)
                 {
                     for (int j = 0; j < m_vecPackInfo.Count;)
                     {
-                        if(m_vecPackInfo[j].Number.ToString() == listView_pack.CheckedItems[i].Text)
+                        if (m_vecPackInfo[j].Number.ToString() == listView_pack.CheckedItems[i].Text)
                         {
                             m_vecPackInfo.RemoveAt(j);
                         }
@@ -400,7 +400,7 @@ namespace package
                     }
                 }
 
-                for(int i = 0; i < m_vecPackInfo.Count; ++i)
+                for (int i = 0; i < m_vecPackInfo.Count; ++i)
                 {
                     m_vecPackInfo[i].Number = i + 1;
                 }
@@ -472,7 +472,7 @@ namespace package
                                 Int64 work = Convert.ToInt64(jObject["work"].ToString()) / 128;
 
                                 int value = (int)((float)done * 100 / (float)work);
-                                if(value >= 100)
+                                if (value >= 100)
                                 {
                                     value = 100;
                                     timer_pack_process.Stop();
@@ -483,7 +483,7 @@ namespace package
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 timer_pack_process.Stop();
                 MessageBox.Show(ex.Message, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -582,7 +582,7 @@ namespace package
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 timer_unpack_process.Stop();
                 MessageBox.Show(ex.Message, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
