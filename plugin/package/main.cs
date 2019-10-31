@@ -34,8 +34,12 @@ namespace package
 
         private Thread m_tPack;
         private Thread m_tUnpack;
+        private Thread m_tVerbose;
         private List<T_PackInfo> m_vecPackInfo = new List<T_PackInfo>();
         private List<T_UnpackInfo> m_vecUnpackInfo = new List<T_UnpackInfo>();
+
+        private delegate void UPDATELISTVIEWCALLBACK();
+        private UPDATELISTVIEWCALLBACK UpdateListViewCallback;
 
         public FormMain()
         {
@@ -81,6 +85,8 @@ namespace package
 
             textBox_unpack_src.ReadOnly = true;
             textBox_unpack_dest.ReadOnly = true;
+
+            UpdateListViewCallback = new UPDATELISTVIEWCALLBACK(Update_unpack_listView);
         }
 
         private void FormMain_FormClosed(object sender, FormClosedEventArgs e)
@@ -101,6 +107,22 @@ namespace package
                 listView_pack.Items.Add(item);
             }
             listView_pack.EndUpdate();
+        }
+
+        private void Update_unpack_listView()
+        {
+            listView_unpack.Items.Clear();
+            listView_unpack.BeginUpdate();
+            for (int i = 0; i < m_vecUnpackInfo.Count; ++i)
+            {
+                ListViewItem item = new ListViewItem();
+                item.Text = m_vecUnpackInfo[i].Number.ToString();
+                item.SubItems.Add(m_vecUnpackInfo[i].Name);
+                item.SubItems.Add(m_vecUnpackInfo[i].Size);
+                item.SubItems.Add(m_vecUnpackInfo[i].Type);
+                listView_unpack.Items.Add(item);
+            }
+            listView_unpack.EndUpdate();
         }
 
         private string Get_pack_json()
@@ -237,6 +259,25 @@ namespace package
             return body;
         }
 
+        private string Get_unpack_verbose_json()
+        {
+            // check src file
+            if (textBox_unpack_src.Text == "")
+            {
+                MessageBox.Show("Please select src file name!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return "";
+            }
+
+            string src = string.Format("\"{0}\"", textBox_unpack_src.Text);
+
+            string body = "";
+            body += "{";
+            body += string.Format("\"src\":{0}", src);
+            body += "}";
+            body = body.Replace('\\', '/');
+            return body;
+        }
+
         private string Get_unpack_process_json()
         {
             // check src file
@@ -336,6 +377,73 @@ namespace package
                         return;
                     }
                     MessageBox.Show("Unpack Success!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        private void UnpackVerboseThread(object sender)
+        {
+            string body = sender as string;
+            try
+            {
+                byte[] requestBody = Encoding.ASCII.GetBytes(body);
+
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://localhost:8080/satellite/unpack/v");
+                request.Method = "POST";
+                request.KeepAlive = false;
+                request.ProtocolVersion = HttpVersion.Version11;
+                request.ContentType = "application/json";
+                request.ContentLength = requestBody.Length;
+                using (Stream reqStream = request.GetRequestStream())
+                {
+                    reqStream.Write(requestBody, 0, requestBody.Length);
+                }
+                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+                {
+                    if (response.StatusCode != HttpStatusCode.OK)
+                    {
+                        switch (response.StatusCode)
+                        {
+                            case HttpStatusCode.BadRequest:
+                                MessageBox.Show("Bad Request(400)!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                break;
+                            case HttpStatusCode.InternalServerError:
+                                MessageBox.Show("Internal Server Error(500)!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                break;
+                            default:
+                                MessageBox.Show("Unknown Error!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                break;
+                        }
+                        return;
+                    }
+
+                    string responseContent = "";
+                    using (Stream resStream = response.GetResponseStream())
+                    {
+                        using (StreamReader reader = new StreamReader(resStream, Encoding.UTF8))
+                        {
+                            responseContent = reader.ReadToEnd().ToString();
+                            // parser json struct...
+                            m_vecUnpackInfo.Clear();
+                            JObject jFiles = (JObject)JsonConvert.DeserializeObject(responseContent);
+                            JArray jArray = JArray.Parse(jFiles["files"].ToString());
+                            foreach (var jItem in jArray)
+                            {
+                                JObject jObject = (JObject)jItem;
+                                T_UnpackInfo info = new T_UnpackInfo();
+                                info.Number = m_vecUnpackInfo.Count + 1;
+                                info.Name = jObject["name"].ToString();
+                                info.Size = jObject["size"].ToString();
+                                info.Type = jObject["type"].ToString();
+                                m_vecUnpackInfo.Add(info);
+                            }
+                        }
+                    }
+                    listView_unpack.Invoke(UpdateListViewCallback);
                 }
             }
             catch (Exception ex)
@@ -506,7 +614,13 @@ namespace package
 
         private void Button_unpack_verbose_Click(object sender, EventArgs e)
         {
+            string body = Get_unpack_verbose_json();
+            if (body == "")
+                return;
 
+            m_tVerbose = new Thread(new ParameterizedThreadStart(UnpackVerboseThread));
+            m_tVerbose.IsBackground = true;
+            m_tVerbose.Start(body);
         }
 
         private void Button_unpack_dest_Click(object sender, EventArgs e)
