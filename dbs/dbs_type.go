@@ -1,6 +1,10 @@
 package dbs
 
-import "database/sql"
+import (
+	"database/sql"
+
+	"github.com/go-redis/redis"
+)
 
 type TMySQL struct {
 	DB       *sql.DB
@@ -24,6 +28,13 @@ type TMSSQL struct {
 type TSQLite3 struct {
 	DB       *sql.DB
 	DataBase string
+}
+
+type TRedis struct {
+	DB       *redis.Client
+	Host     string
+	Port     string
+	Password string
 }
 
 type TUser struct {
