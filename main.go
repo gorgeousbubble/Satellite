@@ -48,6 +48,8 @@ func main() {
 		cmd.ParseCmdHttp()
 	case CmdHttps:
 		cmd.ParseCmdHttps()
+	case CmdFtp:
+		cmd.ParseCmdFtp()
 	default:
 		fmt.Println("Invalid command~")
 		os.Exit(1)
