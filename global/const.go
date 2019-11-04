@@ -15,6 +15,7 @@ const (
 	CmdUdp        = "udp"
 	CmdHttp       = "http"
 	CmdHttps      = "https"
+	CmdFtp        = "ftp"
 )
 
 const (
