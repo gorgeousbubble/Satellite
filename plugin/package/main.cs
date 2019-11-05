@@ -702,5 +702,10 @@ namespace package
                 MessageBox.Show(ex.Message, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
+
+        private void Button_unpack_choose_Click(object sender, EventArgs e)
+        {
+            listView_unpack.CheckBoxes = true;
+        }
     }
 }

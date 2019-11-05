@@ -58,6 +58,7 @@
             this.label6 = new System.Windows.Forms.Label();
             this.timer_pack_process = new System.Windows.Forms.Timer(this.components);
             this.timer_unpack_process = new System.Windows.Forms.Timer(this.components);
+            this.button_unpack_choose = new System.Windows.Forms.Button();
             this.tab.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -205,6 +206,7 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.button_unpack_choose);
             this.tabPage2.Controls.Add(this.button_unpack_execute);
             this.tabPage2.Controls.Add(this.progressBar_unpack);
             this.tabPage2.Controls.Add(this.label8);
@@ -329,6 +331,16 @@
             // 
             this.timer_unpack_process.Tick += new System.EventHandler(this.Timer_unpack_process_Tick);
             // 
+            // button_unpack_choose
+            // 
+            this.button_unpack_choose.Location = new System.Drawing.Point(565, 273);
+            this.button_unpack_choose.Name = "button_unpack_choose";
+            this.button_unpack_choose.Size = new System.Drawing.Size(75, 23);
+            this.button_unpack_choose.TabIndex = 14;
+            this.button_unpack_choose.Text = "choose";
+            this.button_unpack_choose.UseVisualStyleBackColor = true;
+            this.button_unpack_choose.Click += new System.EventHandler(this.Button_unpack_choose_Click);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -381,6 +393,7 @@
         private System.Windows.Forms.ProgressBar progressBar_unpack;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Timer timer_unpack_process;
+        private System.Windows.Forms.Button button_unpack_choose;
     }
 }
 
