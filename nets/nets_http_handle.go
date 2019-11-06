@@ -128,6 +128,9 @@ func handleNetsUnpackToMemory(w http.ResponseWriter, r *http.Request) {
 	case "GET":
 		log.Printf("GET %s", r.RequestURI)
 		err = handleGetNetsUnpackToMemory(w, r)
+	case "POST":
+		log.Printf("POST %s", r.RequestURI)
+		err = handlePostNetsUnpackToMemory(w, r)
 	}
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -735,6 +738,10 @@ func handleGetNetsUnpackToMemory(w http.ResponseWriter, r *http.Request) (err er
 	w.Write(dest)
 	log.Printf("%d Ok", http.StatusOK)
 	return err
+}
+
+func handlePostNetsUnpackToMemory(w http.ResponseWriter, r *http.Request) (err error) {
+	return handleGetNetsUnpackToMemory(w, r)
 }
 
 func handlePostNetsComp(w http.ResponseWriter, r *http.Request) (err error) {
