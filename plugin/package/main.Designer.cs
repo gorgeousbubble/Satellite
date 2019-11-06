@@ -45,6 +45,7 @@
             this.listView_pack = new System.Windows.Forms.ListView();
             this.label1 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.button_unpack_choose = new System.Windows.Forms.Button();
             this.button_unpack_execute = new System.Windows.Forms.Button();
             this.progressBar_unpack = new System.Windows.Forms.ProgressBar();
             this.label8 = new System.Windows.Forms.Label();
@@ -58,7 +59,6 @@
             this.label6 = new System.Windows.Forms.Label();
             this.timer_pack_process = new System.Windows.Forms.Timer(this.components);
             this.timer_unpack_process = new System.Windows.Forms.Timer(this.components);
-            this.button_unpack_choose = new System.Windows.Forms.Button();
             this.tab.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -226,6 +226,16 @@
             this.tabPage2.Text = "unpack";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // button_unpack_choose
+            // 
+            this.button_unpack_choose.Location = new System.Drawing.Point(565, 273);
+            this.button_unpack_choose.Name = "button_unpack_choose";
+            this.button_unpack_choose.Size = new System.Drawing.Size(75, 23);
+            this.button_unpack_choose.TabIndex = 14;
+            this.button_unpack_choose.Text = "choose";
+            this.button_unpack_choose.UseVisualStyleBackColor = true;
+            this.button_unpack_choose.Click += new System.EventHandler(this.Button_unpack_choose_Click);
+            // 
             // button_unpack_execute
             // 
             this.button_unpack_execute.Location = new System.Drawing.Point(646, 451);
@@ -313,6 +323,7 @@
             this.listView_unpack.TabIndex = 2;
             this.listView_unpack.UseCompatibleStateImageBehavior = false;
             this.listView_unpack.View = System.Windows.Forms.View.Details;
+            this.listView_unpack.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.ListView_unpack_ItemChecked);
             // 
             // label6
             // 
@@ -330,16 +341,6 @@
             // timer_unpack_process
             // 
             this.timer_unpack_process.Tick += new System.EventHandler(this.Timer_unpack_process_Tick);
-            // 
-            // button_unpack_choose
-            // 
-            this.button_unpack_choose.Location = new System.Drawing.Point(565, 273);
-            this.button_unpack_choose.Name = "button_unpack_choose";
-            this.button_unpack_choose.Size = new System.Drawing.Size(75, 23);
-            this.button_unpack_choose.TabIndex = 14;
-            this.button_unpack_choose.Text = "choose";
-            this.button_unpack_choose.UseVisualStyleBackColor = true;
-            this.button_unpack_choose.Click += new System.EventHandler(this.Button_unpack_choose_Click);
             // 
             // FormMain
             // 

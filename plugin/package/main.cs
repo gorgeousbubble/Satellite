@@ -41,6 +41,8 @@ namespace package
         private delegate void UPDATELISTVIEWCALLBACK();
         private UPDATELISTVIEWCALLBACK UpdateListViewCallback;
 
+        private bool m_bChoose = false;
+
         public FormMain()
         {
             InitializeComponent();
@@ -253,7 +255,15 @@ namespace package
 
             string body = "";
             body += "{";
-            body += string.Format("\"src\":{0},\"dest\":{1}", src, dest);
+            if (m_bChoose == true && listView_unpack.CheckedItems.Count > 0)
+            {
+                string target = string.Format("\"{0}\"", m_vecUnpackInfo[listView_unpack.CheckedItems[0].Index].Name);
+                body += string.Format("\"src\":{0},\"target\":{1},\"dest\":{2}", src, target, dest);
+            }
+            else
+            {
+                body += string.Format("\"src\":{0},\"dest\":{1}", src, dest);
+            }
             body += "}";
             body = body.Replace('\\', '/');
             return body;
@@ -347,8 +357,17 @@ namespace package
             try
             {
                 byte[] requestBody = Encoding.ASCII.GetBytes(body);
+                string url = "";
+                if (m_bChoose == true)
+                {
+                    url = "http://localhost:8080/satellite/unpack/f";
+                }
+                else
+                {
+                    url = "http://localhost:8080/satellite/unpack";
+                }
 
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://localhost:8080/satellite/unpack");
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
                 request.Method = "POST";
                 request.KeepAlive = false;
                 request.ProtocolVersion = HttpVersion.Version11;
@@ -705,7 +724,32 @@ namespace package
 
         private void Button_unpack_choose_Click(object sender, EventArgs e)
         {
-            listView_unpack.CheckBoxes = true;
+            if (m_bChoose == false)
+            {
+                m_bChoose = true;
+                listView_unpack.CheckBoxes = true;
+                button_unpack_choose.Text = "Cancel";
+            }
+            else
+            {
+                m_bChoose = false;
+                listView_unpack.CheckBoxes = false;
+                button_unpack_choose.Text = "Choose";
+            }
+        }
+
+        private void ListView_unpack_ItemChecked(object sender, ItemCheckedEventArgs e)
+        {
+            if (e.Item.Checked)
+            {
+                foreach (ListViewItem item in listView_unpack.CheckedItems)
+                {
+                    if (item != e.Item)
+                    {
+                        item.Checked = false;
+                    }
+                }
+            }
         }
     }
 }
