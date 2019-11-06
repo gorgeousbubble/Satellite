@@ -45,6 +45,7 @@
             this.listView_pack = new System.Windows.Forms.ListView();
             this.label1 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.button_unpack_choose = new System.Windows.Forms.Button();
             this.button_unpack_execute = new System.Windows.Forms.Button();
             this.progressBar_unpack = new System.Windows.Forms.ProgressBar();
             this.label8 = new System.Windows.Forms.Label();
@@ -205,6 +206,7 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.button_unpack_choose);
             this.tabPage2.Controls.Add(this.button_unpack_execute);
             this.tabPage2.Controls.Add(this.progressBar_unpack);
             this.tabPage2.Controls.Add(this.label8);
@@ -223,6 +225,16 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "unpack";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // button_unpack_choose
+            // 
+            this.button_unpack_choose.Location = new System.Drawing.Point(565, 273);
+            this.button_unpack_choose.Name = "button_unpack_choose";
+            this.button_unpack_choose.Size = new System.Drawing.Size(75, 23);
+            this.button_unpack_choose.TabIndex = 14;
+            this.button_unpack_choose.Text = "choose";
+            this.button_unpack_choose.UseVisualStyleBackColor = true;
+            this.button_unpack_choose.Click += new System.EventHandler(this.Button_unpack_choose_Click);
             // 
             // button_unpack_execute
             // 
@@ -311,6 +323,7 @@
             this.listView_unpack.TabIndex = 2;
             this.listView_unpack.UseCompatibleStateImageBehavior = false;
             this.listView_unpack.View = System.Windows.Forms.View.Details;
+            this.listView_unpack.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.ListView_unpack_ItemChecked);
             // 
             // label6
             // 
@@ -381,6 +394,7 @@
         private System.Windows.Forms.ProgressBar progressBar_unpack;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Timer timer_unpack_process;
+        private System.Windows.Forms.Button button_unpack_choose;
     }
 }
 
