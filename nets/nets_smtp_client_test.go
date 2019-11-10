@@ -6,18 +6,18 @@ import (
 
 func TestMailSmtpSend(t *testing.T) {
 	mail := MailSmtp{
-		user:     "Alopex6414@outlook.com",
-		password: "hyx13313541292",
-		host:     "smtp.office365.com",
-		port:     "587",
+		user:     "1029535012@qq.com",
+		password: "amdepjytfocvbfbc",
+		host:     "smtp.qq.com",
+		port:     "465",
 	}
 	message := Message{
-		from:        "Alopex6414@outlook.com",
-		to:          []string{"1029535012@qq.com"},
+		from:        "1029535012@qq.com",
+		to:          []string{"alopex6414@outlook.com", "1029535012@qq.com"},
 		cc:          []string{},
 		bcc:         []string{},
 		subject:     "Satellite",
-		body:        "hello,world!",
+		body:        "hello,world!(Automatic send by Satellite smpt client.)",
 		contentType: "text/plain;charset=utf-8",
 		attachment: Attachment{
 			name:        "test.jpg",
