@@ -151,6 +151,7 @@ func createHttpRouter() (r *mux.Router) {
 	r.HandleFunc(HttpURLUnpackToMemory, handleNetsUnpackToMemory).Methods("GET", "POST")
 	r.HandleFunc(HttpURLComp, handleNetsComp).Methods("POST")
 	r.HandleFunc(HttpURLDecomp, handleNetsDecomp).Methods("POST")
+	r.HandleFunc(HttpURLImagesQRCode, handleNetsImagesQRCode).Methods("POST")
 	return r
 }
 

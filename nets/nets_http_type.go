@@ -66,3 +66,12 @@ type TNetsDecomp struct {
 	Dest string `json:"dest"`
 	Type string `json:"type"`
 }
+
+type TNetsImagesQRCodeReq struct {
+	Content string `json:"content"`
+	Size    int    `json:"size"`
+}
+
+type TNetsImagesQRCodeResp struct {
+	Image []byte `json:"image"`
+}

@@ -9,10 +9,13 @@ import (
 	"net/http"
 	"satellite/comp"
 	"satellite/decomp"
+	"satellite/images"
 	"satellite/pack"
 	"satellite/unpack"
 	"sync/atomic"
 	"time"
+
+	"github.com/skip2/go-qrcode"
 )
 
 func handleRoot(w http.ResponseWriter, r *http.Request) {
@@ -159,6 +162,20 @@ func handleNetsDecomp(w http.ResponseWriter, r *http.Request) {
 	case "POST":
 		log.Printf("POST %s", r.RequestURI)
 		err = handlePostNetsDecomp(w, r)
+	}
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		log.Printf("%d Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+}
+
+func handleNetsImagesQRCode(w http.ResponseWriter, r *http.Request) {
+	var err error
+	switch r.Method {
+	case "POST":
+		log.Printf("POST %s", r.RequestURI)
+		err = handlePostNetsImagesQRCode(w, r)
 	}
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -888,6 +905,59 @@ func handlePostNetsDecomp(w http.ResponseWriter, r *http.Request) (err error) {
 		}
 	}
 	w.Header().Set("Content-Type", "text/plain")
+	log.Printf("%d Ok", http.StatusOK)
+	return err
+}
+
+func handlePostNetsImagesQRCode(w http.ResponseWriter, r *http.Request) (err error) {
+	defer r.Body.Close()
+	// read request body
+	len := r.ContentLength
+	body := make([]byte, len)
+	body, err = ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Println("Error read request body:", err)
+		return err
+	}
+	// unmarshal json body
+	var t TNetsImagesQRCodeReq
+	err = json.Unmarshal(body, &t)
+	if err != nil {
+		http.Error(w, "Incorrect request body!", http.StatusBadRequest)
+		log.Println("Error unmarshal json body:", err)
+		log.Printf("%d Bad Request", http.StatusBadRequest)
+		return nil
+	}
+	// check request parameters
+	b, err := checkNetsImagesQRCodeParameters(t)
+	if err != nil {
+		log.Println("Error check images qrcode parameters:", err)
+		return err
+	}
+	if !b {
+		http.Error(w, "Illegal parameters!", http.StatusUnprocessableEntity)
+		log.Println("Illegal parameters")
+		log.Printf("%d Unprocessable Entity", http.StatusUnprocessableEntity)
+		return nil
+	}
+	// generate qrcode
+	qr, err := images.QRCodeGenerateToMemory(t.Content, qrcode.Highest, t.Size)
+	if err != nil {
+		log.Println("Images QRCode failure:", err)
+		return err
+	}
+	log.Println("Images QRCode success.")
+	// response
+	var resp TNetsImagesQRCodeResp
+	resp.Image = qr
+	// marshal json
+	js, err := json.MarshalIndent(&resp, "", "\t\t")
+	if err != nil {
+		log.Println("Error marshal to json:", err)
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(js)
 	log.Printf("%d Ok", http.StatusOK)
 	return err
 }

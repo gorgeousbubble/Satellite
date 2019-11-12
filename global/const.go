@@ -35,6 +35,8 @@ const (
 	HttpURLUnpackToMemory = HttpURLUnpack + "/m"
 	HttpURLComp           = HttpURLSatellite + "/comp"
 	HttpURLDecomp         = HttpURLSatellite + "/decomp"
+	HttpURLImages         = HttpURLSatellite + "/images"
+	HttpURLImagesQRCode   = HttpURLImages + "/qrcode"
 )
 
 const (
