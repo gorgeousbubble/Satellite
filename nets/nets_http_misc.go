@@ -232,6 +232,23 @@ func checkNetsDecompParameters(t TNetsDecomp) (b bool, err error) {
 	return b, err
 }
 
+func checkNetsImagesQRCodeParameters(t TNetsImagesQRCodeReq) (b bool, err error) {
+	b = true
+	// check content
+	if t.Content == "" {
+		b = false
+		log.Println("Content string can't be empty.")
+		return b, err
+	}
+	// check size
+	if t.Size <= 0 {
+		b = false
+		log.Println("Size should >= 0.")
+		return b, err
+	}
+	return b, err
+}
+
 func refactorNetsPackSource(src []string) (dest []string, err error) {
 	for i := 0; i < len(src); {
 		is, err := IsDir(src[i])
