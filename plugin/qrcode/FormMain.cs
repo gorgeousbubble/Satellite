@@ -16,5 +16,38 @@ namespace qrcode
         {
             InitializeComponent();
         }
+
+        private void FormMain_Load(object sender, EventArgs e)
+        {
+            // FormMain Initial
+            AutoScaleMode = AutoScaleMode.Dpi;
+            MaximizeBox = false;
+            MinimizeBox = true;
+            DoubleBuffered = true;
+            StartPosition = FormStartPosition.CenterScreen;
+
+            // QRCode
+            this.textBox_content.ReadOnly = true;
+        }
+
+        private void FormMain_FormClosed(object sender, FormClosedEventArgs e)
+        {
+
+        }
+
+        private void Button_generate_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Button_clear_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Button_select_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
