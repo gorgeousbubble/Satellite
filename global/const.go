@@ -16,6 +16,7 @@ const (
 	CmdHttp       = "http"
 	CmdHttps      = "https"
 	CmdFtp        = "ftp"
+	CmdQRCode     = "qrcode"
 )
 
 const (

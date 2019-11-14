@@ -34,7 +34,7 @@ Satellite Project - We share beautiful dreams together.
 Version: v1.00a
 Author: alopex
 
-Usage: satellite [pack/unpack] [comp/decomp] [tcp/udp] [http/https/ftp]
+Usage: satellite [pack/unpack] [comp/decomp] [tcp/udp] [http/https/ftp] [qrcode]
 
 Options:
 	pack 	- packet files to user customize type.
@@ -46,6 +46,7 @@ Options:
 	http 	- http restful server
 	https 	- https restful server
 	ftp     - ftp server/client.
+	qrcode  - generate qrcode save as images.
 `)
 	if err != nil {
 		log.Println("Error print information:", err)
