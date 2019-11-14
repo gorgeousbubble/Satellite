@@ -1,13 +1,13 @@
 package cmd
 
 import (
-	"Satellite/images"
 	"errors"
 	"flag"
 	"fmt"
 	"log"
 	"os"
 	. "satellite/global"
+	"satellite/images"
 
 	"github.com/skip2/go-qrcode"
 )
