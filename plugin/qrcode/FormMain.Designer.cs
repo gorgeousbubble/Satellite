@@ -35,6 +35,8 @@
             this.button_generate = new System.Windows.Forms.Button();
             this.button_clear = new System.Windows.Forms.Button();
             this.button_select = new System.Windows.Forms.Button();
+            this.textBox_images = new System.Windows.Forms.TextBox();
+            this.label_path = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_qrcode)).BeginInit();
             this.SuspendLayout();
             // 
@@ -59,15 +61,16 @@
             // 
             // textBox_content
             // 
+            this.textBox_content.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox_content.Location = new System.Drawing.Point(12, 288);
             this.textBox_content.Name = "textBox_content";
-            this.textBox_content.Size = new System.Drawing.Size(256, 21);
+            this.textBox_content.Size = new System.Drawing.Size(256, 22);
             this.textBox_content.TabIndex = 2;
             // 
             // button_generate
             // 
             this.button_generate.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button_generate.Location = new System.Drawing.Point(12, 315);
+            this.button_generate.Location = new System.Drawing.Point(12, 358);
             this.button_generate.Name = "button_generate";
             this.button_generate.Size = new System.Drawing.Size(75, 23);
             this.button_generate.TabIndex = 3;
@@ -78,7 +81,7 @@
             // button_clear
             // 
             this.button_clear.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button_clear.Location = new System.Drawing.Point(93, 315);
+            this.button_clear.Location = new System.Drawing.Point(93, 358);
             this.button_clear.Name = "button_clear";
             this.button_clear.Size = new System.Drawing.Size(75, 23);
             this.button_clear.TabIndex = 4;
@@ -89,7 +92,7 @@
             // button_select
             // 
             this.button_select.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button_select.Location = new System.Drawing.Point(193, 315);
+            this.button_select.Location = new System.Drawing.Point(193, 358);
             this.button_select.Name = "button_select";
             this.button_select.Size = new System.Drawing.Size(75, 23);
             this.button_select.TabIndex = 5;
@@ -97,11 +100,31 @@
             this.button_select.UseVisualStyleBackColor = true;
             this.button_select.Click += new System.EventHandler(this.Button_select_Click);
             // 
+            // textBox_images
+            // 
+            this.textBox_images.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox_images.Location = new System.Drawing.Point(12, 330);
+            this.textBox_images.Name = "textBox_images";
+            this.textBox_images.Size = new System.Drawing.Size(256, 22);
+            this.textBox_images.TabIndex = 7;
+            // 
+            // label_path
+            // 
+            this.label_path.AutoSize = true;
+            this.label_path.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_path.Location = new System.Drawing.Point(9, 313);
+            this.label_path.Name = "label_path";
+            this.label_path.Size = new System.Drawing.Size(135, 14);
+            this.label_path.TabIndex = 6;
+            this.label_path.Text = "Please input save path:";
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(280, 350);
+            this.ClientSize = new System.Drawing.Size(280, 393);
+            this.Controls.Add(this.textBox_images);
+            this.Controls.Add(this.label_path);
             this.Controls.Add(this.button_select);
             this.Controls.Add(this.button_clear);
             this.Controls.Add(this.button_generate);
@@ -127,6 +150,8 @@
         private System.Windows.Forms.Button button_generate;
         private System.Windows.Forms.Button button_clear;
         private System.Windows.Forms.Button button_select;
+        private System.Windows.Forms.TextBox textBox_images;
+        private System.Windows.Forms.Label label_path;
     }
 }
 
