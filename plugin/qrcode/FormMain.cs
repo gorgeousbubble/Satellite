@@ -59,14 +59,27 @@ namespace qrcode
             return body;
         }
 
+        private void Save_image(string path, string content)
+        {
+            using (StreamWriter writer = new StreamWriter(path))
+            {
+                byte[] imageBytes = Encoding.ASCII.GetBytes(content);
+                writer.Write(imageBytes);
+            }
+        }
+
         private void Button_generate_Click(object sender, EventArgs e)
         {
             try
             {
                 string body = Get_json();
                 if (body == "")
+                    return;
+
+                string path = textBox_images.Text;
+                if (path == "")
                 {
-                    MessageBox.Show("Please input content!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Please input save path!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
@@ -89,12 +102,13 @@ namespace qrcode
                         string responseContent = "";
                         using (Stream resStream = response.GetResponseStream())
                         {
-                            using (StreamReader reader = new StreamReader(resStream, Encoding.UTF8))
+                            using (StreamReader reader = new StreamReader(resStream, Encoding.Default))
                             {
                                 responseContent = reader.ReadToEnd().ToString();
                                 // parser json struct...
-                                JObject jObject = (JObject)JsonConvert.DeserializeObject(responseContent);
-                                byte[] imageBytes = Encoding.Default.GetBytes(jObject["image"].ToString());
+                                //JObject jObject = (JObject)JsonConvert.DeserializeObject(responseContent);
+                                byte[] imageBytes = Encoding.Default.GetBytes(responseContent);
+                                //Save_image(path, responseContent);
                                 // show qrcode images...
                                 MemoryStream memoryStream = new MemoryStream(imageBytes, 0, imageBytes.Length);
                                 Image image = Image.FromStream(memoryStream);

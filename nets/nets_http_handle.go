@@ -920,7 +920,7 @@ func handlePostNetsImagesQRCode(w http.ResponseWriter, r *http.Request) (err err
 		return err
 	}
 	// unmarshal json body
-	var t TNetsImagesQRCodeReq
+	var t TNetsImagesQRCode
 	err = json.Unmarshal(body, &t)
 	if err != nil {
 		http.Error(w, "Incorrect request body!", http.StatusBadRequest)
@@ -948,16 +948,8 @@ func handlePostNetsImagesQRCode(w http.ResponseWriter, r *http.Request) (err err
 	}
 	log.Println("Images QRCode success.")
 	// response
-	var resp TNetsImagesQRCodeResp
-	resp.Image = qr
-	// marshal json
-	js, err := json.MarshalIndent(&resp, "", "\t\t")
-	if err != nil {
-		log.Println("Error marshal to json:", err)
-		return err
-	}
 	w.Header().Set("Content-Type", "application/json")
-	w.Write(js)
+	w.Write(qr)
 	log.Printf("%d Ok", http.StatusOK)
 	return err
 }
