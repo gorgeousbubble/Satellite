@@ -24,10 +24,10 @@ jobs:
     #        dep ensure
     #    fi
 
-    - name: Set GOPATH
-      run: |
-        export GOPATH=/home/runner/work/Satellite
-        go build -v .
+    #- name: Set GOPATH
+    #  run: |
+    #    export GOPATH=/home/runner/work/Satellite
+    #    go build -v .
 
     - name: Build
       run: go build -v .
