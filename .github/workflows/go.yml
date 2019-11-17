@@ -43,7 +43,8 @@ jobs:
         mkdir satellite
         cd satellite
         pwd
-        cp -r /home/runner/work/Satellite/Satellite/ /home/runner/go/src/satellite
+        cp -rf /home/runner/work/Satellite/Satellite /home/runner/go/src/satellite
+        ls -al
         go build -v .
 
     - name: Test
