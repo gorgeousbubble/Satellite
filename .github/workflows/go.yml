@@ -50,7 +50,12 @@ jobs:
     - name: Test
       run: |
         # Set GOPATH
+        cd $GOPATH
+        pwd
+        ls
         cd /home/runner/go/src/satellite
+        pwd
+        ls
         # Test
         for file in `ls`
         do
