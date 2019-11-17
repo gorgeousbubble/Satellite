@@ -118,10 +118,10 @@ namespace qrcode
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }   
+            }
         }
 
         private void Button_clear_Click(object sender, EventArgs e)
