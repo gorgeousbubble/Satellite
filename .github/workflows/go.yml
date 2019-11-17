@@ -26,11 +26,7 @@ jobs:
 
     - name: Debug
       run: cd $GOPATH
-
-    - name: Debug2
       run: pwd
-
-    - name: Debug3
       run: ls -al
 
     - name: Build
