@@ -44,6 +44,8 @@ jobs:
         ls -l
         cp -rf /home/runner/work/Satellite/Satellite /home/runner/go/src
         ls -al
+        cd Satellite
+        ls -al
         go build -v .
 
     - name: Test
