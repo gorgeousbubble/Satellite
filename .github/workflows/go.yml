@@ -26,7 +26,7 @@ jobs:
 
     - name: Set GOPATH
       run: |
-        export GOPATH = /home/runner/work/Satellite
+        export GOPATH=/home/runner/work/Satellite
         cd /home/runner/work
         pwd
         ls -al
