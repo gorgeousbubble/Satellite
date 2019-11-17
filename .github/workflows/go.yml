@@ -26,10 +26,9 @@ jobs:
 
     - name: Set GOPATH
       run: |
-        echo "##[set-env name=GOPATH;]$(dirname $GITHUB_WORKSPACE)"
-        echo "##[add-path]$(dirname $GITHUB_WORKSPACE)/bin"
-        go build -v .
-      shell: bash
+        cd $GOPATH
+        pwd
+        ls -al
 
     - name: Build
       run: go build -v .
