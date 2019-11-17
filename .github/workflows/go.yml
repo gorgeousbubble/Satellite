@@ -31,31 +31,36 @@ jobs:
 
     - name: Build
       run: |
+        # Set GOPATH
         cd $GOPATH
-        pwd
-        ls -l
-        mkdir go
-        cd go
-        pwd
-        ls -l
-        mkdir src
-        cd src
-        pwd
-        ls -l
+        mkdir -p go/src
+        cd go/src
         cp -rf /home/runner/work/Satellite/Satellite /home/runner/go/src
         mv Satellite satellite
-        ls -al
         cd satellite
-        ls -al
-        pwd
-
+        # Get dependencies
         go get -v -t -d ./...
         if [ -f Gopkg.toml ]; then
             curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
             dep ensure
         fi
-        
+        # Build
         go build -v .
 
     - name: Test
-      run: go test -v -cover -bench .
+      run: |
+        # Set GOPATH
+        cd $GOPATH
+        mkdir -p go/src
+        cd go/src
+        cp -rf /home/runner/work/Satellite/Satellite /home/runner/go/src
+        mv Satellite satellite
+        cd satellite
+        # Get dependencies
+        go get -v -t -d ./...
+        if [ -f Gopkg.toml ]; then
+            curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+            dep ensure
+        fi
+        # Test
+        go test -v -cover -bench .
