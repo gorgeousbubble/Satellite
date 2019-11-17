@@ -45,7 +45,7 @@ jobs:
         cp -rf /home/runner/work/Satellite/Satellite /home/runner/go/src
         mv Satellite satellite
         ls -al
-        cd Satellite
+        cd satellite
         ls -al
         pwd
         go build -v .
