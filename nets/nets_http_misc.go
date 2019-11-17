@@ -232,7 +232,7 @@ func checkNetsDecompParameters(t TNetsDecomp) (b bool, err error) {
 	return b, err
 }
 
-func checkNetsImagesQRCodeParameters(t TNetsImagesQRCodeReq) (b bool, err error) {
+func checkNetsImagesQRCodeParameters(t TNetsImagesQRCode) (b bool, err error) {
 	b = true
 	// check content
 	if t.Content == "" {
