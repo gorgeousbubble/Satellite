@@ -25,7 +25,7 @@ jobs:
     #    fi
 
     - name: Debug
-      run: pwd
+      run: ls -al
 
     - name: Build
       run: go build -v .
