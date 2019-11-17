@@ -42,10 +42,7 @@ jobs:
         cd src
         pwd
         ls -l
-        mkdir satellite
-        cd satellite
-        pwd
-        cp -rf /home/runner/work/Satellite/Satellite/ /home/runner/go/src/satellite/
+        cp -rf /home/runner/work/Satellite/Satellite /home/runner/go/src
         ls -al
         go build -v .
 
