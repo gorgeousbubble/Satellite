@@ -368,13 +368,13 @@ func BenchmarkHandlePostNetsDecomp(b *testing.B) {
 	}
 }
 
-func TestHandlePostNetsImagesQRCode(t *testing.T) {
+func TestHandlePostNetsImagesQRCodeToMemory(t *testing.T) {
 	mux := http.NewServeMux()
-	mux.HandleFunc(HttpURLImagesQRCode, handleNetsImagesQRCode)
+	mux.HandleFunc(HttpURLImagesQRCodeToMemory, handleNetsImagesQRCodeToMemory)
 
 	writer := httptest.NewRecorder()
 	body := strings.NewReader(`{"content": "https://localhost:8080/", "size": 256}`)
-	request, _ := http.NewRequest("POST", HttpURLImagesQRCode, body)
+	request, _ := http.NewRequest("POST", HttpURLImagesQRCodeToMemory, body)
 	mux.ServeHTTP(writer, request)
 
 	if writer.Code != http.StatusOK {
@@ -382,14 +382,14 @@ func TestHandlePostNetsImagesQRCode(t *testing.T) {
 	}
 }
 
-func BenchmarkHandlePostNetsImagesQRCode(b *testing.B) {
+func BenchmarkHandlePostNetsImagesQRCodeToFile(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		mux := http.NewServeMux()
-		mux.HandleFunc(HttpURLImagesQRCode, handleNetsImagesQRCode)
+		mux.HandleFunc(HttpURLImagesQRCodeToMemory, handleNetsImagesQRCodeToMemory)
 
 		writer := httptest.NewRecorder()
 		body := strings.NewReader(`{"content": "https://localhost:8080/", "size": 256}`)
-		request, _ := http.NewRequest("POST", HttpURLImagesQRCode, body)
+		request, _ := http.NewRequest("POST", HttpURLImagesQRCodeToMemory, body)
 		mux.ServeHTTP(writer, request)
 
 		if writer.Code != http.StatusOK {
