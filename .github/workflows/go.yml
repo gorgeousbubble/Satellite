@@ -50,18 +50,7 @@ jobs:
     - name: Test
       run: |
         # Set GOPATH
-        cd $GOPATH
-        mkdir -p go/src
-        cd go/src
-        cp -rf /home/runner/work/Satellite/Satellite /home/runner/go/src
-        mv Satellite satellite
-        cd satellite
-        # Get dependencies
-        go get -v -t -d ./...
-        if [ -f Gopkg.toml ]; then
-            curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-            dep ensure
-        fi
+        cd /home/runner/go/src/satellite
         # Test
         for file in `ls`
         do
