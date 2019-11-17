@@ -16,22 +16,9 @@ jobs:
     - name: Check out code into the Go module directory
       uses: actions/checkout@v1
 
-    #- name: Get dependencies
-    #  run: |
-    #    go get -v -t -d ./...
-    #    if [ -f Gopkg.toml ]; then
-    #        curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-    #        dep ensure
-    #    fi
-
-    #- name: Set GOPATH
-    #  run: |
-    #    export GOPATH=/home/runner/work/Satellite
-    #    go build -v .
-
-    - name: Build
+    - name: Get dependencies
       run: |
-        # Set GOPATH
+        # Set env
         cd $GOPATH
         mkdir -p go/src
         cd go/src
@@ -44,14 +31,17 @@ jobs:
             curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
             dep ensure
         fi
+
+    - name: Build
+      run: |
         # Build
+        cd /home/runner/go/src/satellite
         go build -v .
 
     - name: Test
       run: |
-        # Set GOPATH
-        cd /home/runner/go/src/satellite
         # Test
+        cd /home/runner/go/src/satellite
         cd pack
         echo "test pack..."
         go test -v -cover -bench .
@@ -59,5 +49,45 @@ jobs:
 
         cd unpack
         echo "test unpack..."
+        go test -v -cover -bench .
+        cd ..
+
+        cd comp
+        echo "test comp..."
+        go test -v -cover -bench .
+        cd ..
+
+        cd decomp
+        echo "test decomp..."
+        go test -v -cover -bench .
+        cd ..
+
+        cd images
+        echo "test images..."
+        go test -v -cover -bench .
+        cd ..
+
+        cd nets
+        echo "test nets..."
+        go test -v -cover -bench .
+        cd ..
+
+        cd parses
+        echo "test parses..."
+        go test -v -cover -bench .
+        cd ..
+
+        cd searches
+        echo "test searches..."
+        go test -v -cover -bench .
+        cd ..
+
+        cd sorts
+        echo "test sorts..."
+        go test -v -cover -bench .
+        cd ..
+
+        cd utils
+        echo "test utils..."
         go test -v -cover -bench .
         cd ..
