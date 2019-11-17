@@ -48,24 +48,22 @@ namespace qrcode
                 MessageBox.Show("Please input content!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return "";
             }
+            // check file path
+            if (textBox_images.Text == "")
+            {
+                MessageBox.Show("Please input save path!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return "";
+            }
 
             string content = string.Format("\"{0}\"", textBox_content.Text);
+            string path = string.Format("\"{0}\"", textBox_images.Text);
 
             string body = "";
             body += "{";
-            body += string.Format("\"content\":{0},\"size\":256", content);
+            body += string.Format("\"content\":{0},\"size\":256,\"dest\":{1}", content, path);
             body += "}";
             body = body.Replace('\\', '/');
             return body;
-        }
-
-        private void Save_image(string path, string content)
-        {
-            using (StreamWriter writer = new StreamWriter(path))
-            {
-                byte[] imageBytes = Encoding.ASCII.GetBytes(content);
-                writer.Write(imageBytes);
-            }
         }
 
         private void Button_generate_Click(object sender, EventArgs e)
@@ -76,16 +74,21 @@ namespace qrcode
                 if (body == "")
                     return;
 
-                string path = textBox_images.Text;
-                if (path == "")
+                if (this.pictureBox_qrcode.Image != null)
                 {
-                    MessageBox.Show("Please input save path!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
+                    this.pictureBox_qrcode.Image.Dispose();
+                }
+                this.pictureBox_qrcode.Image = null;
+
+                string path = this.textBox_images.Text;
+                if (File.Exists(path))
+                {
+                    File.Delete(path);
                 }
 
                 byte[] requestBody = Encoding.ASCII.GetBytes(body);
 
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://localhost:8080/satellite/images/qrcode");
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://localhost:8080/satellite/images/qrcode/f");
                 request.Method = "POST";
                 request.KeepAlive = false;
                 request.ProtocolVersion = HttpVersion.Version11;
@@ -106,13 +109,9 @@ namespace qrcode
                             {
                                 responseContent = reader.ReadToEnd().ToString();
                                 // parser json struct...
-                                //JObject jObject = (JObject)JsonConvert.DeserializeObject(responseContent);
-                                byte[] imageBytes = Encoding.Default.GetBytes(responseContent);
-                                //Save_image(path, responseContent);
-                                // show qrcode images...
-                                MemoryStream memoryStream = new MemoryStream(imageBytes, 0, imageBytes.Length);
-                                Image image = Image.FromStream(memoryStream);
-                                this.pictureBox_qrcode.SizeMode = PictureBoxSizeMode.StretchImage;
+                                JObject jObject = (JObject)JsonConvert.DeserializeObject(responseContent);
+                                // load qrcode images
+                                Image image = Image.FromFile(textBox_images.Text);
                                 this.pictureBox_qrcode.Image = image;
                             }
                         }
@@ -127,7 +126,16 @@ namespace qrcode
 
         private void Button_clear_Click(object sender, EventArgs e)
         {
-
+            if (this.pictureBox_qrcode.Image != null)
+            {
+                this.pictureBox_qrcode.Image.Dispose();
+            }
+            this.pictureBox_qrcode.Image = null;
+            string path = this.textBox_images.Text;
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            }
         }
 
         private void Button_select_Click(object sender, EventArgs e)
