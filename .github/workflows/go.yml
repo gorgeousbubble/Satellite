@@ -33,6 +33,17 @@ jobs:
       run: |
         echo $GOPATH
         cd $GOPATH
+        pwd
+        mkdir go
+        cd go
+        pwd
+        mkdir src
+        cd src
+        pwd
+        mkdir satellite
+        cd satellite
+        pwd
+        cp -r /home/runner/work/Satellite/Satellite/ /home/runner/go/src/satellite
         go build -v .
 
     - name: Test
