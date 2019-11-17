@@ -63,4 +63,11 @@ jobs:
             dep ensure
         fi
         # Test
-        go test -v -cover -bench .
+        for file in `ls`
+        do
+          if [ -d $file ]  
+          then
+            go test -v -cover -bench .
+          fi
+        done
+        # go test -v -cover -bench .
