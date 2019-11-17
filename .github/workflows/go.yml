@@ -30,7 +30,10 @@ jobs:
     #    go build -v .
 
     - name: Build
-      run: go build -v .
+      run: |
+      echo $GOPATH
+      cd $GOPATH
+      go build -v .
 
     - name: Test
       run: go test -v -cover -bench .
