@@ -50,18 +50,14 @@ jobs:
     - name: Test
       run: |
         # Set GOPATH
-        cd $GOPATH
-        pwd
-        ls
         cd /home/runner/go/src/satellite
-        pwd
-        ls
         # Test
-        for file in `ls`
-        do
-          if [ -d $file ]  
-          then
-            go test -v -cover -bench .
-          fi
-        done
-        # go test -v -cover -bench .
+        cd pack
+        echo "test pack..."
+        go test -v -cover -bench .
+        cd ..
+
+        cd unpack
+        echo "test unpack..."
+        go test -v -cover -bench .
+        cd ..
