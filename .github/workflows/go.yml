@@ -24,10 +24,11 @@ jobs:
     #        dep ensure
     #    fi
 
-    - name: Debug
-      run: cd $GOPATH
-      run: pwd
-      run: ls -al
+    - name: Set env
+      run: |
+        echo "##[set-env name=GOPATH;]$(dirname $GITHUB_WORKSPACE)"
+        echo "##[add-path]$(dirname $GITHUB_WORKSPACE)/bin"
+      shell: bash
 
     - name: Build
       run: go build -v .
