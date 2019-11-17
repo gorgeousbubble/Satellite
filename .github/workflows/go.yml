@@ -31,9 +31,9 @@ jobs:
 
     - name: Build
       run: |
-      echo $GOPATH
-      cd $GOPATH
-      go build -v .
+        echo $GOPATH
+        cd $GOPATH
+        go build -v .
 
     - name: Test
       run: go test -v -cover -bench .
