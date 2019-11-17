@@ -25,19 +25,21 @@ const (
 )
 
 const (
-	HttpURLRoot           = "/"
-	HttpURLSatellite      = HttpURLRoot + "satellite"
-	HttpURLPack           = HttpURLSatellite + "/pack"
-	HttpURLUnpack         = HttpURLSatellite + "/unpack"
-	HttpURLPackProcess    = HttpURLPack + "/p"
-	HttpURLUnpackVerbose  = HttpURLUnpack + "/v"
-	HttpURLUnpackProcess  = HttpURLUnpack + "/p"
-	HttpURLUnpackToFile   = HttpURLUnpack + "/f"
-	HttpURLUnpackToMemory = HttpURLUnpack + "/m"
-	HttpURLComp           = HttpURLSatellite + "/comp"
-	HttpURLDecomp         = HttpURLSatellite + "/decomp"
-	HttpURLImages         = HttpURLSatellite + "/images"
-	HttpURLImagesQRCode   = HttpURLImages + "/qrcode"
+	HttpURLRoot                 = "/"
+	HttpURLSatellite            = HttpURLRoot + "satellite"
+	HttpURLPack                 = HttpURLSatellite + "/pack"
+	HttpURLUnpack               = HttpURLSatellite + "/unpack"
+	HttpURLPackProcess          = HttpURLPack + "/p"
+	HttpURLUnpackVerbose        = HttpURLUnpack + "/v"
+	HttpURLUnpackProcess        = HttpURLUnpack + "/p"
+	HttpURLUnpackToFile         = HttpURLUnpack + "/f"
+	HttpURLUnpackToMemory       = HttpURLUnpack + "/m"
+	HttpURLComp                 = HttpURLSatellite + "/comp"
+	HttpURLDecomp               = HttpURLSatellite + "/decomp"
+	HttpURLImages               = HttpURLSatellite + "/images"
+	HttpURLImagesQRCode         = HttpURLImages + "/qrcode"
+	HttpURLImagesQRCodeToFile   = HttpURLImagesQRCode + "/f"
+	HttpURLImagesQRCodeToMemory = HttpURLImagesQRCode + "/m"
 )
 
 const (
