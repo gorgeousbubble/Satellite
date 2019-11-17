@@ -25,7 +25,9 @@ jobs:
     #    fi
 
     - name: Debug
-      run: export GOPATH = $GOPATH;/home/runner/work/Satellite
+      run: cd $GOPATH
+        pwd
+        ls -al
 
     - name: Build
       run: go build -v .
