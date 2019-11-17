@@ -31,19 +31,20 @@ jobs:
 
     - name: Build
       run: |
-        echo $GOPATH
-        cd $GOPATH
         pwd
+        ls -l
         mkdir go
         cd go
         pwd
+        ls -l
         mkdir src
         cd src
         pwd
+        ls -l
         mkdir satellite
         cd satellite
         pwd
-        cp -rf /home/runner/work/Satellite/Satellite /home/runner/go/src/satellite
+        cp -rf /home/runner/work/Satellite/Satellite/ /home/runner/go/src/satellite/
         ls -al
         go build -v .
 
