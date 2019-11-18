@@ -978,7 +978,7 @@ func handlePostNetsImagesQRCodeToMemory(w http.ResponseWriter, r *http.Request) 
 		return err
 	}
 	// unmarshal json body
-	var t TNetsImagesQRCode
+	var t TNetsImagesQRCodeToMemory
 	err = json.Unmarshal(body, &t)
 	if err != nil {
 		http.Error(w, "Incorrect request body!", http.StatusBadRequest)
