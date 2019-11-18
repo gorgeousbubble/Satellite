@@ -368,6 +368,36 @@ func BenchmarkHandlePostNetsDecomp(b *testing.B) {
 	}
 }
 
+func TestHandlePostNetsImagesQRCodeToFile(t *testing.T) {
+	mux := http.NewServeMux()
+	mux.HandleFunc(HttpURLImagesQRCodeToFile, handleNetsImagesQRCodeToFile)
+
+	writer := httptest.NewRecorder()
+	body := strings.NewReader(`{"content": "https://github.com/gorgeousbubble", "size": 256, "dest":"../test/data/images/qrcode/qr_test.png"}`)
+	request, _ := http.NewRequest("POST", HttpURLImagesQRCodeToFile, body)
+	mux.ServeHTTP(writer, request)
+
+	if writer.Code != http.StatusOK {
+		t.Errorf("Response code is %v", writer.Code)
+	}
+}
+
+func BenchmarkHandlePostNetsImagesQRCodeToFile(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		mux := http.NewServeMux()
+		mux.HandleFunc(HttpURLImagesQRCodeToFile, handleNetsImagesQRCodeToFile)
+
+		writer := httptest.NewRecorder()
+		body := strings.NewReader(`{"content": "https://github.com/gorgeousbubble", "size": 256, "dest":"../test/data/images/qrcode/qr_test.png"}`)
+		request, _ := http.NewRequest("POST", HttpURLImagesQRCodeToFile, body)
+		mux.ServeHTTP(writer, request)
+
+		if writer.Code != http.StatusOK {
+			b.Errorf("Response code is %v", writer.Code)
+		}
+	}
+}
+
 func TestHandlePostNetsImagesQRCodeToMemory(t *testing.T) {
 	mux := http.NewServeMux()
 	mux.HandleFunc(HttpURLImagesQRCodeToMemory, handleNetsImagesQRCodeToMemory)
