@@ -67,7 +67,7 @@ type TNetsDecomp struct {
 	Type string `json:"type"`
 }
 
-type TNetsImagesQRCode struct {
+type TNetsImagesQRCodeToMemory struct {
 	Content string `json:"content"`
 	Size    int    `json:"size"`
 }
