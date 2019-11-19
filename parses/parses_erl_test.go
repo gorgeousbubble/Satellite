@@ -69,3 +69,35 @@ func BenchmarkExtractOneList(b *testing.B) {
 		}
 	}
 }
+
+func TestExtractOneTuple(t *testing.T) {
+	s := []byte("{stars,514},1,[1,2,3],{simple,12}")
+	r, sub, err := extractOneTuple(s)
+	if err != nil {
+		t.Fatal("Error extract one tuple:", err)
+	}
+	fmt.Println("extract return:", string(r))
+	fmt.Println("extract substring:", string(sub))
+	if !bytes.Equal(r, []byte("{stars,514}")) {
+		t.Fatal("Error extract return")
+	}
+	if !bytes.Equal(sub, []byte("1,[1,2,3],{simple,12}")) {
+		t.Fatal("Error extract substring")
+	}
+}
+
+func BenchmarkExtractOneTuple(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		s := []byte("{stars,514},1,[1,2,3],{simple,12}")
+		r, sub, err := extractOneTuple(s)
+		if err != nil {
+			b.Fatal("Error extract one tuple:", err)
+		}
+		if !bytes.Equal(r, []byte("{stars,514}")) {
+			b.Fatal("Error extract return")
+		}
+		if !bytes.Equal(sub, []byte("1,[1,2,3],{simple,12}")) {
+			b.Fatal("Error extract substring")
+		}
+	}
+}
