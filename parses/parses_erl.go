@@ -7,7 +7,7 @@ import (
 
 func extractOneElement(s []byte) (r []byte, sub []byte, err error) {
 	// erlang bytes contains ',' for element
-	if bytes.Contains(s, []byte(",")) {
+	if !bytes.Contains(s, []byte(",")) {
 		err = errors.New("bytes don't have element")
 		return r, sub, err
 	}
