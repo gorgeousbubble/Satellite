@@ -269,19 +269,21 @@ func decodeOneParameter(in []byte, out interface{}) (err error) {
 				r = repairTrim(r)
 				err = decodeOneParameter(r, f.Addr().Interface())
 			default:
-				err = errors.New("unrecognized erl type")
+				err = errors.New("unrecognized struct field type")
 				return err
 			}
 		}
 	case reflect.Slice:
 		var rem = in
 		// switch the kind of sub type...
+		fmt.Println(rValue.Type().Elem().Kind())
 		switch rValue.Type().Elem().Kind() {
 		case reflect.Int:
-			// traverse slice elements
+			// traverse slice elements(int)
+			var e error
 			for {
-				r, sub, err := extractOneInt(rem)
-				if err != nil {
+				r, sub, e := extractOneInt(rem)
+				if e != nil {
 					break
 				}
 				rValue = reflect.Append(rValue, reflect.ValueOf(r))
@@ -289,10 +291,50 @@ func decodeOneParameter(in []byte, out interface{}) (err error) {
 				rem = sub
 				fmt.Println("rem:", string(rem))
 			}
-			fmt.Println(err)
+			// parse error leave
+			if len(rem) != 0 {
+				err = e
+				fmt.Println(err)
+				return err
+			}
 			reflect.ValueOf(out).Elem().Set(rValue)
 		case reflect.Struct:
+			// traverse slice elements(struct)
+			var e error
+			for {
+				r, sub, e := extractOneTuple(rem)
+				if e != nil {
+					break
+				}
+				rem = sub
+				fmt.Println("rem:", string(rem))
+				r, err = trimTuple(r)
+				if err != nil {
+					return err
+				}
+				r = repairTrim(r)
+				fmt.Println(string(r))
+				// new struct value
+				o := reflect.New(rValue.Type().Elem())
+				fmt.Printf("type:%v,value:%v\n", reflect.TypeOf(o), reflect.ValueOf(o))
+				fmt.Println(o.CanAddr())
+				err = decodeOneParameter(r, o.Interface())
+				if err != nil {
+					return err
+				}
+				fmt.Printf("o:%v,elem:%v\n", o, o.Elem())
+				rValue = reflect.Append(rValue, reflect.ValueOf(o.Elem().Interface()))
+				fmt.Println("rValue:", rValue)
+			}
+			// parse error leave
+			if len(rem) != 0 {
+				err = e
+				fmt.Println(err)
+				return err
+			}
+			reflect.ValueOf(out).Elem().Set(rValue)
 		default:
+			err = errors.New("unrecognized list element type")
 		}
 	default:
 		err = errors.New("unrecognized reflect type")
