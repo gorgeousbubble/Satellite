@@ -3,6 +3,10 @@ package parses
 import (
 	"bytes"
 	"errors"
+	"fmt"
+	"reflect"
+	"strconv"
+	"strings"
 )
 
 func extractOneElement(s []byte) (r []byte, sub []byte, err error) {
@@ -23,6 +27,47 @@ func extractOneElement(s []byte) (r []byte, sub []byte, err error) {
 	}
 	sub = bytes.TrimPrefix(s, r)
 	sub = bytes.TrimPrefix(sub, []byte(","))
+	return r, sub, err
+}
+
+func extractOneString(s []byte) (r string, sub []byte, err error) {
+	// first, call function extract one element
+	sr, sub, err := extractOneElement(s)
+	if err != nil {
+		return r, sub, err
+	}
+	// convert []byte -> string
+	r = string(sr)
+	return r, sub, err
+}
+
+func extractOneInt(s []byte) (r int, sub []byte, err error) {
+	// first, call function extract one element
+	sr, sub, err := extractOneElement(s)
+	if err != nil {
+		return r, sub, err
+	}
+	// convert []byte -> int
+	r, err = strconv.Atoi(string(sr))
+	if err != nil {
+		err = errors.New("parameter may not integer")
+		return r, sub, err
+	}
+	return r, sub, err
+}
+
+func extractOneFloat64(s []byte) (r float64, sub []byte, err error) {
+	// first, call function extract one element
+	sr, sub, err := extractOneElement(s)
+	if err != nil {
+		return r, sub, err
+	}
+	// convert []byte -> int
+	r, err = strconv.ParseFloat(string(sr), 64)
+	if err != nil {
+		err = errors.New("parameter may not float64")
+		return r, sub, err
+	}
 	return r, sub, err
 }
 
@@ -94,4 +139,114 @@ func extractOneTuple(s []byte) (r []byte, sub []byte, err error) {
 	sub = bytes.TrimPrefix(s, r)
 	sub = bytes.TrimPrefix(sub, []byte(","))
 	return r, sub, err
+}
+
+func trimList(s []byte) (r []byte, err error) {
+	// check list whether start '[' and end ']'
+	if len(s) == 0 || s[0] != '[' || s[len(s)-1] != ']' {
+		err = errors.New("bytes is not normal list")
+		return r, err
+	}
+	// trim '[]' and return
+	r = bytes.TrimPrefix(s, []byte("["))
+	r = bytes.TrimSuffix(r, []byte("]"))
+	return r, err
+}
+
+func trimTuple(s []byte) (r []byte, err error) {
+	// check tuple whether start '{' and end '}'
+	if len(s) == 0 || s[0] != '{' || s[len(s)-1] != '}' {
+		err = errors.New("bytes is not normal tuple")
+		return r, err
+	}
+	// trim '{}' and return
+	r = bytes.TrimPrefix(s, []byte("{"))
+	r = bytes.TrimSuffix(r, []byte("}"))
+	return r, err
+}
+
+func decodeOneParameter(in []byte, out interface{}) (err error) {
+	var rType = reflect.TypeOf(out)
+	var rValue = reflect.ValueOf(out)
+	fmt.Println("type of out interface:", rType)
+	fmt.Println("value of out interface:", rValue)
+	// check the out type kind
+	if rType.Kind() != reflect.Ptr {
+		err = errors.New("out interface should be struct pointer")
+		return err
+	}
+	// pointer's value
+	rType = rType.Elem()
+	rValue = rValue.Elem()
+	// traverse struct fields
+	var rem = in
+	for i := 0; i < rType.NumField(); i++ {
+		t := rType.Field(i)
+		f := rValue.Field(i)
+		fmt.Printf("type:%v,value:%v\n", t, f)
+		// parse tag
+		tag := t.Tag.Get("erl")
+		primary := false
+		fields := strings.Split(tag, ",")
+		if len(fields) > 1 {
+			for _, flag := range fields[1:] {
+				switch flag {
+				case "primary":
+					primary = true
+				}
+			}
+			tag = fields[0]
+		}
+		fmt.Printf("primary:%v\n", primary)
+		// parse element
+		switch tag {
+		case "string":
+			r, sub, err := extractOneString(rem)
+			if err != nil {
+				return err
+			}
+			rem = sub
+			//fmt.Println(f.CanSet())
+			f.Set(reflect.ValueOf(r))
+		case "int":
+			r, sub, err := extractOneInt(rem)
+			if err != nil {
+				return err
+			}
+			rem = sub
+			f.Set(reflect.ValueOf(r))
+		case "float64":
+			r, sub, err := extractOneFloat64(rem)
+			if err != nil {
+				return err
+			}
+			rem = sub
+			f.Set(reflect.ValueOf(r))
+		case "list":
+			r, sub, err := extractOneList(rem)
+			if err != nil {
+				return err
+			}
+			rem = sub
+			r, err = trimList(r)
+			if err != nil {
+				return err
+			}
+			//err = decodeOneParameter(r, )
+		case "tuple":
+			r, sub, err := extractOneTuple(rem)
+			if err != nil {
+				return err
+			}
+			rem = sub
+			r, err = trimTuple(r)
+			if err != nil {
+				return err
+			}
+		default:
+			err = errors.New("unrecognized type")
+			return err
+		}
+	}
+	return err
 }
