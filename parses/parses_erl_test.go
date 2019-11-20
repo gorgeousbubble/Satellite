@@ -127,6 +127,31 @@ func BenchmarkTrimList(b *testing.B) {
 	}
 }
 
+func TestTrimTuple(t *testing.T) {
+	s := []byte("{stars,514}")
+	r, err := trimTuple(s)
+	if err != nil {
+		t.Fatal("Error trim tuple:", err)
+	}
+	fmt.Println("trim return:", string(r))
+	if !bytes.Equal(r, []byte("stars,514")) {
+		t.Fatal("Error trim result")
+	}
+}
+
+func BenchmarkTrimTuple(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		s := []byte("{stars,514}")
+		r, err := trimTuple(s)
+		if err != nil {
+			b.Fatal("Error trim tuple:", err)
+		}
+		if !bytes.Equal(r, []byte("stars,514")) {
+			b.Fatal("Error trim result")
+		}
+	}
+}
+
 func TestDecodeOneParameter(t *testing.T) {
 	type subtest struct {
 		Name   string `erl:"string"`
