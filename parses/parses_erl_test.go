@@ -170,4 +170,5 @@ func TestDecodeOneParameter(t *testing.T) {
 	if err != nil {
 		t.Fatal("Error decode on parameter:", err)
 	}
+	fmt.Println(out)
 }

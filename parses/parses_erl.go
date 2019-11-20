@@ -10,6 +10,11 @@ import (
 )
 
 func extractOneElement(s []byte) (r []byte, sub []byte, err error) {
+	// check bytes whether empty?
+	if bytes.Equal(s, []byte("")) {
+		err = errors.New("bytes is empty now")
+		return r, sub, err
+	}
 	// erlang bytes contains ',' for element
 	if !bytes.Contains(s, []byte(",")) {
 		err = errors.New("bytes don't have element")
@@ -165,88 +170,133 @@ func trimTuple(s []byte) (r []byte, err error) {
 	return r, err
 }
 
+func repairTrim(s []byte) (r []byte) {
+	// repair bytes after call trim function
+	r = append(s, ',')
+	return r
+}
+
 func decodeOneParameter(in []byte, out interface{}) (err error) {
+	// get pointer's value...
 	var rType = reflect.TypeOf(out)
 	var rValue = reflect.ValueOf(out)
 	fmt.Println("type of out interface:", rType)
 	fmt.Println("value of out interface:", rValue)
+	fmt.Println(rType.Kind())
 	// check the out type kind
 	if rType.Kind() != reflect.Ptr {
 		err = errors.New("out interface should be struct pointer")
+		fmt.Println(err)
 		return err
 	}
-	// pointer's value
+	// get real variable value...
 	rType = rType.Elem()
 	rValue = rValue.Elem()
-	// traverse struct fields
-	var rem = in
-	for i := 0; i < rType.NumField(); i++ {
-		t := rType.Field(i)
-		f := rValue.Field(i)
-		fmt.Printf("type:%v,value:%v\n", t, f)
-		// parse tag
-		tag := t.Tag.Get("erl")
-		primary := false
-		fields := strings.Split(tag, ",")
-		if len(fields) > 1 {
-			for _, flag := range fields[1:] {
-				switch flag {
-				case "primary":
-					primary = true
+	fmt.Println("type of point:", rType)
+	fmt.Println("value of point:", rValue)
+	fmt.Println(rType.Kind())
+	// switch the kind of type...
+	switch rType.Kind() {
+	case reflect.Struct:
+		var rem = in
+		// traverse struct fields
+		for i := 0; i < rType.NumField(); i++ {
+			// get struct field value...
+			t := rType.Field(i)
+			f := rValue.Field(i)
+			fmt.Printf("struct field[%v]\n", i)
+			fmt.Printf("type of field[%v]:%v\n", i, t)
+			fmt.Printf("value of field[%v]:%v\n", i, f)
+			// parse tag
+			tag := t.Tag.Get("erl")
+			primary := false
+			fields := strings.Split(tag, ",")
+			if len(fields) > 1 {
+				for _, flag := range fields[1:] {
+					switch flag {
+					case "primary":
+						primary = true
+					}
 				}
+				tag = fields[0]
 			}
-			tag = fields[0]
+			fmt.Printf("primary:%v\n", primary)
+			// swich the tag & parse element...
+			switch tag {
+			case "string":
+				r, sub, err := extractOneString(rem)
+				if err != nil {
+					return err
+				}
+				rem = sub
+				f.Set(reflect.ValueOf(r))
+			case "int":
+				r, sub, err := extractOneInt(rem)
+				if err != nil {
+					return err
+				}
+				rem = sub
+				f.Set(reflect.ValueOf(r))
+			case "float64":
+				r, sub, err := extractOneFloat64(rem)
+				if err != nil {
+					return err
+				}
+				rem = sub
+				f.Set(reflect.ValueOf(r))
+			case "list":
+				r, sub, err := extractOneList(rem)
+				if err != nil {
+					return err
+				}
+				rem = sub
+				r, err = trimList(r)
+				if err != nil {
+					return err
+				}
+				r = repairTrim(r)
+				err = decodeOneParameter(r, f.Addr().Interface())
+			case "tuple":
+				r, sub, err := extractOneTuple(rem)
+				if err != nil {
+					return err
+				}
+				rem = sub
+				r, err = trimTuple(r)
+				if err != nil {
+					return err
+				}
+				r = repairTrim(r)
+				err = decodeOneParameter(r, f.Addr().Interface())
+			default:
+				err = errors.New("unrecognized erl type")
+				return err
+			}
 		}
-		fmt.Printf("primary:%v\n", primary)
-		// parse element
-		switch tag {
-		case "string":
-			r, sub, err := extractOneString(rem)
-			if err != nil {
-				return err
+	case reflect.Slice:
+		var rem = in
+		// switch the kind of sub type...
+		switch rValue.Type().Elem().Kind() {
+		case reflect.Int:
+			// traverse slice elements
+			for {
+				r, sub, err := extractOneInt(rem)
+				if err != nil {
+					break
+				}
+				rValue = reflect.Append(rValue, reflect.ValueOf(r))
+				fmt.Println("rValue:", rValue)
+				rem = sub
+				fmt.Println("rem:", string(rem))
 			}
-			rem = sub
-			//fmt.Println(f.CanSet())
-			f.Set(reflect.ValueOf(r))
-		case "int":
-			r, sub, err := extractOneInt(rem)
-			if err != nil {
-				return err
-			}
-			rem = sub
-			f.Set(reflect.ValueOf(r))
-		case "float64":
-			r, sub, err := extractOneFloat64(rem)
-			if err != nil {
-				return err
-			}
-			rem = sub
-			f.Set(reflect.ValueOf(r))
-		case "list":
-			r, sub, err := extractOneList(rem)
-			if err != nil {
-				return err
-			}
-			rem = sub
-			r, err = trimList(r)
-			if err != nil {
-				return err
-			}
-			//err = decodeOneParameter(r, )
-		case "tuple":
-			r, sub, err := extractOneTuple(rem)
-			if err != nil {
-				return err
-			}
-			rem = sub
-			r, err = trimTuple(r)
-			if err != nil {
-				return err
-			}
+			fmt.Println(err)
+			reflect.ValueOf(out).Elem().Set(rValue)
+		case reflect.Struct:
 		default:
-			err = errors.New("unrecognized type")
-			return err
 		}
+	default:
+		err = errors.New("unrecognized reflect type")
+		return err
 	}
 	return err
 }
