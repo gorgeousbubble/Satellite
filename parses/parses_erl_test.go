@@ -210,3 +210,21 @@ func TestDecodeOneParameter2(t *testing.T) {
 	}
 	fmt.Println(out)
 }
+
+func TestDecodeOneParameter3(t *testing.T) {
+	type subtest struct {
+		Name   string `erl:"string"`
+		Number int    `erl:"int"`
+		List   []int  `erl:"list"`
+	}
+	type test struct {
+		List []subtest `erl:"list"`
+	}
+	in := []byte("[{apple,1,[2,3]},{orange,2,[1,5,4]},{lemon,5,[]}]")
+	out := test{}
+	err := decodeOneParameter(in, &out)
+	if err != nil {
+		t.Fatal("Error decode on parameter:", err)
+	}
+	fmt.Println(out)
+}
