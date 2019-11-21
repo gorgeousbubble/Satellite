@@ -152,6 +152,24 @@ func BenchmarkTrimTuple(b *testing.B) {
 	}
 }
 
+func TestRepairTrim(t *testing.T) {
+	s := []byte("apple,1")
+	r := repairTrim(s)
+	if !bytes.Equal(r, []byte("apple,1,")) {
+		t.Fatal("Error repair trim list or tuple")
+	}
+}
+
+func BenchmarkRepairTrim(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		s := []byte("apple,1")
+		r := repairTrim(s)
+		if !bytes.Equal(r, []byte("apple,1,")) {
+			b.Fatal("Error repair trim list or tuple")
+		}
+	}
+}
+
 func TestDecodeOneParameter(t *testing.T) {
 	type subtest struct {
 		Name   string `erl:"string"`
