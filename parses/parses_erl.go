@@ -9,6 +9,8 @@ import (
 	"strings"
 )
 
+var ParsesErl map[string]interface{}
+
 func extractOneElement(s []byte) (r []byte, sub []byte, err error) {
 	// check bytes whether empty?
 	if bytes.Equal(s, []byte("")) {
@@ -209,18 +211,10 @@ func decodeOneParameter(in []byte, out interface{}) (err error) {
 			fmt.Printf("value of field[%v]:%v\n", i, f)
 			// parse tag
 			tag := t.Tag.Get("erl")
-			primary := false
 			fields := strings.Split(tag, ",")
 			if len(fields) > 1 {
-				for _, flag := range fields[1:] {
-					switch flag {
-					case "primary":
-						primary = true
-					}
-				}
 				tag = fields[0]
 			}
-			fmt.Printf("primary:%v\n", primary)
 			// swich the tag & parse element...
 			switch tag {
 			case "string":
@@ -256,6 +250,9 @@ func decodeOneParameter(in []byte, out interface{}) (err error) {
 				}
 				r = repairTrim(r)
 				err = decodeOneParameter(r, f.Addr().Interface())
+				if err != nil {
+					return err
+				}
 			case "tuple":
 				r, sub, err := extractOneTuple(rem)
 				if err != nil {
@@ -268,6 +265,9 @@ func decodeOneParameter(in []byte, out interface{}) (err error) {
 				}
 				r = repairTrim(r)
 				err = decodeOneParameter(r, f.Addr().Interface())
+				if err != nil {
+					return err
+				}
 			default:
 				err = errors.New("unrecognized struct field type")
 				return err
@@ -333,9 +333,70 @@ func decodeOneParameter(in []byte, out interface{}) (err error) {
 				return err
 			}
 			reflect.ValueOf(out).Elem().Set(rValue)
+		case reflect.Interface:
+			// traverse slice elements(interface)
+			var e error
+			for {
+				r, sub, e := extractOneTuple(rem)
+				if e != nil {
+					break
+				}
+				rem = sub
+				fmt.Println("r:", string(r))
+				fmt.Println("rem:", string(rem))
+				r, err = trimTuple(r)
+				if err != nil {
+					return err
+				}
+				r = repairTrim(r)
+				fmt.Println(string(r))
+				// check type by name of interface(extract type name)
+				name, _, err := extractOneString(r)
+				if err != nil {
+					return err
+				}
+				fmt.Println("name of type:", string(name))
+				// traverse map elements
+				for k, v := range ParsesErl {
+					if k == string(name) {
+						// new struct value
+						o := reflect.New(reflect.TypeOf(v))
+						fmt.Printf("type:%v,value:%v\n", reflect.TypeOf(o), reflect.ValueOf(o))
+						fmt.Println(o.CanAddr())
+						err = decodeOneParameter(r, o.Interface())
+						if err != nil {
+							return err
+						}
+						fmt.Printf("o:%v,elem:%v\n", o, o.Elem())
+						rValue = reflect.Append(rValue, reflect.ValueOf(o.Elem().Interface()))
+						fmt.Println("rValue:", rValue)
+						break
+					}
+				}
+			}
+			// parse error leave
+			if len(rem) != 0 {
+				err = e
+				fmt.Println(err)
+				return err
+			}
+			reflect.ValueOf(out).Elem().Set(rValue)
 		default:
 			err = errors.New("unrecognized list element type")
+			return err
 		}
+	/*case reflect.Interface:
+	fmt.Println("hello reflect interface...")
+	var rem = in
+	// first, extract one parameter as string...
+	r, sub, err := extractOneString(rem)
+	if err != nil {
+		return err
+	}
+	rem = sub
+	fmt.Println("r:", string(r))
+	fmt.Println("rem:", string(rem))
+	fmt.Println("breakout...")*/
 	default:
 		err = errors.New("unrecognized reflect type")
 		return err

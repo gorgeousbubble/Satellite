@@ -152,6 +152,24 @@ func BenchmarkTrimTuple(b *testing.B) {
 	}
 }
 
+func TestRepairTrim(t *testing.T) {
+	s := []byte("apple,1")
+	r := repairTrim(s)
+	if !bytes.Equal(r, []byte("apple,1,")) {
+		t.Fatal("Error repair trim list or tuple")
+	}
+}
+
+func BenchmarkRepairTrim(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		s := []byte("apple,1")
+		r := repairTrim(s)
+		if !bytes.Equal(r, []byte("apple,1,")) {
+			b.Fatal("Error repair trim list or tuple")
+		}
+	}
+}
+
 func TestDecodeOneParameter(t *testing.T) {
 	type subtest struct {
 		Name   string `erl:"string"`
@@ -186,6 +204,64 @@ func TestDecodeOneParameter2(t *testing.T) {
 	}
 	in := []byte("asteroid,earth,9,[{apple,1},{orange,2},{lemon,5}]")
 	out := test{}
+	err := decodeOneParameter(in, &out)
+	if err != nil {
+		t.Fatal("Error decode on parameter:", err)
+	}
+	fmt.Println(out)
+}
+
+func TestDecodeOneParameter3(t *testing.T) {
+	type subtest struct {
+		Name   string `erl:"string"`
+		Number int    `erl:"int"`
+		List   []int  `erl:"list"`
+	}
+	type test struct {
+		List []subtest `erl:"list"`
+	}
+	in := []byte("[{apple,1,[2,3]},{orange,2,[1,5,4]},{lemon,5,[]}]")
+	out := test{}
+	err := decodeOneParameter(in, &out)
+	if err != nil {
+		t.Fatal("Error decode on parameter:", err)
+	}
+	fmt.Println(out)
+}
+
+func TestDecodeOneParameter4(t *testing.T) {
+	type subsub struct {
+		Name    string `erl:"string"`
+		Content string `erl:"string"`
+		Value   int    `erl:"int"`
+	}
+	type subtest1 struct {
+		Name  string   `erl:"string"`
+		Index int      `erl:"int"`
+		Sub   []subsub `erl:"list"`
+	}
+	type subtest2 struct {
+		Name    string `erl:"string"`
+		SubName string `erl:"string"`
+	}
+	type subtest3 struct {
+		Name string `erl:"string"`
+		Up   int    `erl:"int"`
+		Down int    `erl:"int"`
+		Sub  subsub `erl:"tuple"`
+	}
+	type test struct {
+		Name    string        `erl:"string"`
+		Index   int           `erl:"int"`
+		Options []interface{} `erl:"list"`
+	}
+	in := []byte("test,1,[{sub_1,2,[{subs,apple,3},{subs,lemon,5},{subs,banana,1}]},{sub_3,2,1,{subs,peach,7}},{sub_2,asteroid}]")
+	out := test{}
+	fmt.Println(out)
+	ParsesErl = make(map[string]interface{})
+	ParsesErl["sub_1"] = subtest1{}
+	ParsesErl["sub_2"] = subtest2{}
+	ParsesErl["sub_3"] = subtest3{}
 	err := decodeOneParameter(in, &out)
 	if err != nil {
 		t.Fatal("Error decode on parameter:", err)
