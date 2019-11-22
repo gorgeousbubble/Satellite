@@ -20,6 +20,17 @@ import (
 // ...
 var MParsesErl map[string]interface{}
 
+// Unmarshal erlang stream
+func Unmarshal(in []byte, out interface{}) (err error) {
+	return unmarshal(in, out)
+}
+
+// Marshal erlang stream
+func Marshal(in interface{}) (out []byte, err error) {
+	return marshal(in)
+}
+
+// decode
 func extractOneElement(s []byte) (r []byte, sub []byte, err error) {
 	// check bytes whether empty?
 	if bytes.Equal(s, []byte("")) {
@@ -265,6 +276,13 @@ func decodeOneParameter(in []byte, out interface{}) (err error) {
 				}
 				rem = sub
 				f.Set(reflect.ValueOf(r))
+			case "bool":
+				r, sub, err := extractOneFloat64(rem)
+				if err != nil {
+					return err
+				}
+				rem = sub
+				f.Set(reflect.ValueOf(r))
 			case "list":
 				r, sub, err := extractOneList(rem)
 				if err != nil {
@@ -305,11 +323,71 @@ func decodeOneParameter(in []byte, out interface{}) (err error) {
 		// switch the kind of sub type...
 		fmt.Println(rValue.Type().Elem().Kind())
 		switch rValue.Type().Elem().Kind() {
+		case reflect.String:
+			// traverse slice elements(string)
+			var e error
+			for {
+				r, sub, e := extractOneString(rem)
+				if e != nil {
+					break
+				}
+				rValue = reflect.Append(rValue, reflect.ValueOf(r))
+				fmt.Println("rValue:", rValue)
+				rem = sub
+				fmt.Println("rem:", string(rem))
+			}
+			// parse error leave
+			if len(rem) != 0 {
+				err = e
+				fmt.Println(err)
+				return err
+			}
+			reflect.ValueOf(out).Elem().Set(rValue)
 		case reflect.Int:
 			// traverse slice elements(int)
 			var e error
 			for {
 				r, sub, e := extractOneInt(rem)
+				if e != nil {
+					break
+				}
+				rValue = reflect.Append(rValue, reflect.ValueOf(r))
+				fmt.Println("rValue:", rValue)
+				rem = sub
+				fmt.Println("rem:", string(rem))
+			}
+			// parse error leave
+			if len(rem) != 0 {
+				err = e
+				fmt.Println(err)
+				return err
+			}
+			reflect.ValueOf(out).Elem().Set(rValue)
+		case reflect.Float64:
+			// traverse slice elements(float64)
+			var e error
+			for {
+				r, sub, e := extractOneFloat64(rem)
+				if e != nil {
+					break
+				}
+				rValue = reflect.Append(rValue, reflect.ValueOf(r))
+				fmt.Println("rValue:", rValue)
+				rem = sub
+				fmt.Println("rem:", string(rem))
+			}
+			// parse error leave
+			if len(rem) != 0 {
+				err = e
+				fmt.Println(err)
+				return err
+			}
+			reflect.ValueOf(out).Elem().Set(rValue)
+		case reflect.Bool:
+			// traverse slice elements(bool)
+			var e error
+			for {
+				r, sub, e := extractOneBool(rem)
 				if e != nil {
 					break
 				}
@@ -429,4 +507,76 @@ func decodeOneParameter(in []byte, out interface{}) (err error) {
 		return err
 	}
 	return err
+}
+
+func decode(in []byte, out interface{}) (err error) {
+	// get pointer's value...
+	var rType = reflect.TypeOf(out)
+	var rValue = reflect.ValueOf(out)
+	fmt.Println("type of out interface:", rType)
+	fmt.Println("value of out interface:", rValue)
+	fmt.Println(rType.Kind())
+	// check the out type kind
+	if rType.Kind() != reflect.Ptr {
+		err = errors.New("out interface should be struct pointer")
+		fmt.Println(err)
+		return err
+	}
+	// get real variable value...
+	rType = rType.Elem()
+	rValue = rValue.Elem()
+	fmt.Println("type of point:", rType)
+	fmt.Println("value of point:", rValue)
+	fmt.Println(rType.Kind())
+	// type should be struct
+	if rType.Kind() != reflect.Struct {
+		err = errors.New("real variable should be struct")
+		fmt.Println(err)
+		return err
+	}
+	// extract type name
+	var r = in
+	name, _, err := extractOneString(r)
+	if err != nil {
+		return err
+	}
+	fmt.Println("name of type:", string(name))
+	fmt.Println("global mapping:", MParsesErl)
+	// traverse struct fields
+	for i := 0; i < rType.NumField(); i++ {
+		// get struct field value...
+		t := rType.Field(i)
+		f := rValue.Field(i)
+		fmt.Printf("struct field[%v]\n", i)
+		fmt.Printf("type of field[%v]:%v\n", i, t)
+		fmt.Printf("value of field[%v]:%v\n", i, f)
+		// check list elements type
+		for k, v := range MParsesErl {
+			if k == string(name) && reflect.TypeOf(v).Name() == f.Type().Elem().Name() {
+				// new struct value
+				o := reflect.New(reflect.TypeOf(v))
+				fmt.Printf("type:%v,value:%v\n", reflect.TypeOf(o), reflect.ValueOf(o))
+				fmt.Println(o.CanAddr())
+				err = decodeOneParameter(r, o.Interface())
+				if err != nil {
+					return err
+				}
+				fmt.Printf("o:%v,elem:%v\n", o, o.Elem())
+				f = reflect.Append(f, reflect.ValueOf(o.Elem().Interface()))
+				fmt.Println("rValue:", f)
+				break
+			}
+		}
+		reflect.ValueOf(out).Elem().Field(i).Set(f)
+	}
+	return err
+}
+
+func unmarshal(in []byte, out interface{}) (err error) {
+	return err
+}
+
+// encode
+func marshal(in interface{}) (out []byte, err error) {
+	return out, err
 }
