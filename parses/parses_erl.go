@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-var ParsesErl map[string]interface{}
+var MParsesErl map[string]interface{}
 
 func extractOneElement(s []byte) (r []byte, sub []byte, err error) {
 	// check bytes whether empty?
@@ -357,7 +357,7 @@ func decodeOneParameter(in []byte, out interface{}) (err error) {
 				}
 				fmt.Println("name of type:", string(name))
 				// traverse map elements
-				for k, v := range ParsesErl {
+				for k, v := range MParsesErl {
 					if k == string(name) {
 						// new struct value
 						o := reflect.New(reflect.TypeOf(v))

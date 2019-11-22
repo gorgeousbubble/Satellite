@@ -280,10 +280,10 @@ func TestDecodeOneParameter4(t *testing.T) {
 	in := []byte("test,1,[{sub_1,2,[{subs,apple,3},{subs,lemon,5},{subs,banana,1}]},{sub_3,2,1,{subs,peach,7}},{sub_2,asteroid}]")
 	out := test{}
 	fmt.Println(out)
-	ParsesErl = make(map[string]interface{})
-	ParsesErl["sub_1"] = subtest1{}
-	ParsesErl["sub_2"] = subtest2{}
-	ParsesErl["sub_3"] = subtest3{}
+	MParsesErl = make(map[string]interface{})
+	MParsesErl["sub_1"] = subtest1{}
+	MParsesErl["sub_2"] = subtest2{}
+	MParsesErl["sub_3"] = subtest3{}
 	err := decodeOneParameter(in, &out)
 	if err != nil {
 		t.Fatal("Error decode on parameter:", err)
