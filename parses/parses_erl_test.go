@@ -191,6 +191,28 @@ func TestDecodeOneParameter(t *testing.T) {
 	fmt.Println(out)
 }
 
+func BenchmarkDecodeOneParameter(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		type subtest struct {
+			Name   string `erl:"string"`
+			Number int    `erl:"int"`
+		}
+		type test struct {
+			Name    string  `erl:"string"`
+			Content string  `erl:"string"`
+			Number  int     `erl:"int"`
+			List    []int   `erl:"list"`
+			Tuple   subtest `erl:"tuple"`
+		}
+		in := []byte("test_name,hello,1,[1,2,3],{simple,12}")
+		out := test{}
+		err := decodeOneParameter(in, &out)
+		if err != nil {
+			b.Fatal("Error decode on parameter:", err)
+		}
+	}
+}
+
 func TestDecodeOneParameter2(t *testing.T) {
 	type subtest struct {
 		Name   string `erl:"string"`
