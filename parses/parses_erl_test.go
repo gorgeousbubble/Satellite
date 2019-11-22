@@ -38,6 +38,134 @@ func BenchmarkExtractOneElement(b *testing.B) {
 	}
 }
 
+func TestExtractOneString(t *testing.T) {
+	s := []byte("hello,1,[1,2,3],{simple,12}")
+	r, sub, err := extractOneString(s)
+	if err != nil {
+		t.Fatal("Error extract one string:", err)
+	}
+	fmt.Println("extract return:", r)
+	fmt.Println("extract substring:", string(sub))
+	if r != "hello" {
+		t.Fatal("Error extract return")
+	}
+	if !bytes.Equal(sub, []byte("1,[1,2,3],{simple,12}")) {
+		t.Fatal("Error extract substring")
+	}
+}
+
+func BenchmarkExtractOneString(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		s := []byte("hello,1,[1,2,3],{simple,12}")
+		r, sub, err := extractOneString(s)
+		if err != nil {
+			b.Fatal("Error extract one string:", err)
+		}
+		if r != "hello" {
+			b.Fatal("Error extract return")
+		}
+		if !bytes.Equal(sub, []byte("1,[1,2,3],{simple,12}")) {
+			b.Fatal("Error extract substring")
+		}
+	}
+}
+
+func TestExtractOneInt(t *testing.T) {
+	s := []byte("15,atomsphere,[1,2,3],{simple,12}")
+	r, sub, err := extractOneInt(s)
+	if err != nil {
+		t.Fatal("Error extract one int:", err)
+	}
+	fmt.Println("extract return:", r)
+	fmt.Println("extract substring:", string(sub))
+	if r != 15 {
+		t.Fatal("Error extract return")
+	}
+	if !bytes.Equal(sub, []byte("atomsphere,[1,2,3],{simple,12}")) {
+		t.Fatal("Error extract substring")
+	}
+}
+
+func BenchmarkExtractOneInt(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		s := []byte("15,atomsphere,[1,2,3],{simple,12}")
+		r, sub, err := extractOneInt(s)
+		if err != nil {
+			b.Fatal("Error extract one int:", err)
+		}
+		if r != 15 {
+			b.Fatal("Error extract return")
+		}
+		if !bytes.Equal(sub, []byte("atomsphere,[1,2,3],{simple,12}")) {
+			b.Fatal("Error extract substring")
+		}
+	}
+}
+
+func TestExtractOneFloat64(t *testing.T) {
+	s := []byte("3.14,atomsphere,[1,2,3],{simple,12}")
+	r, sub, err := extractOneFloat64(s)
+	if err != nil {
+		t.Fatal("Error extract one float64:", err)
+	}
+	fmt.Println("extract return:", r)
+	fmt.Println("extract substring:", string(sub))
+	if r != 3.14 {
+		t.Fatal("Error extract return")
+	}
+	if !bytes.Equal(sub, []byte("atomsphere,[1,2,3],{simple,12}")) {
+		t.Fatal("Error extract substring")
+	}
+}
+
+func BenchmarkExtractOneFloat64(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		s := []byte("3.14,atomsphere,[1,2,3],{simple,12}")
+		r, sub, err := extractOneFloat64(s)
+		if err != nil {
+			b.Fatal("Error extract one float64:", err)
+		}
+		if r != 3.14 {
+			b.Fatal("Error extract return")
+		}
+		if !bytes.Equal(sub, []byte("atomsphere,[1,2,3],{simple,12}")) {
+			b.Fatal("Error extract substring")
+		}
+	}
+}
+
+func TestExtractOneBool(t *testing.T) {
+	s := []byte("true,atomsphere,[1,2,3],{simple,12}")
+	r, sub, err := extractOneBool(s)
+	if err != nil {
+		t.Fatal("Error extract one bool:", err)
+	}
+	fmt.Println("extract return:", r)
+	fmt.Println("extract substring:", string(sub))
+	if r != true {
+		t.Fatal("Error extract return")
+	}
+	if !bytes.Equal(sub, []byte("atomsphere,[1,2,3],{simple,12}")) {
+		t.Fatal("Error extract substring")
+	}
+}
+
+func BenchmarkExtractOneBool(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		s := []byte("true,atomsphere,[1,2,3],{simple,12}")
+		r, sub, err := extractOneBool(s)
+		if err != nil {
+			b.Fatal("Error extract one bool:", err)
+		}
+		if r != true {
+			b.Fatal("Error extract return")
+		}
+		if !bytes.Equal(sub, []byte("atomsphere,[1,2,3],{simple,12}")) {
+			b.Fatal("Error extract substring")
+		}
+	}
+}
+
 func TestExtractOneList(t *testing.T) {
 	s := []byte("[apple,orange],1,[1,2,3],{simple,12}")
 	r, sub, err := extractOneList(s)
@@ -186,9 +314,31 @@ func TestDecodeOneParameter(t *testing.T) {
 	out := test{}
 	err := decodeOneParameter(in, &out)
 	if err != nil {
-		t.Fatal("Error decode on parameter:", err)
+		t.Fatal("Error decode one parameter:", err)
 	}
 	fmt.Println(out)
+}
+
+func BenchmarkDecodeOneParameter(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		type subtest struct {
+			Name   string `erl:"string"`
+			Number int    `erl:"int"`
+		}
+		type test struct {
+			Name    string  `erl:"string"`
+			Content string  `erl:"string"`
+			Number  int     `erl:"int"`
+			List    []int   `erl:"list"`
+			Tuple   subtest `erl:"tuple"`
+		}
+		in := []byte("test_name,hello,1,[1,2,3],{simple,12}")
+		out := test{}
+		err := decodeOneParameter(in, &out)
+		if err != nil {
+			b.Fatal("Error decode one parameter:", err)
+		}
+	}
 }
 
 func TestDecodeOneParameter2(t *testing.T) {
@@ -206,7 +356,7 @@ func TestDecodeOneParameter2(t *testing.T) {
 	out := test{}
 	err := decodeOneParameter(in, &out)
 	if err != nil {
-		t.Fatal("Error decode on parameter:", err)
+		t.Fatal("Error decode one parameter:", err)
 	}
 	fmt.Println(out)
 }
@@ -224,7 +374,7 @@ func TestDecodeOneParameter3(t *testing.T) {
 	out := test{}
 	err := decodeOneParameter(in, &out)
 	if err != nil {
-		t.Fatal("Error decode on parameter:", err)
+		t.Fatal("Error decode one parameter:", err)
 	}
 	fmt.Println(out)
 }
@@ -258,13 +408,113 @@ func TestDecodeOneParameter4(t *testing.T) {
 	in := []byte("test,1,[{sub_1,2,[{subs,apple,3},{subs,lemon,5},{subs,banana,1}]},{sub_3,2,1,{subs,peach,7}},{sub_2,asteroid}]")
 	out := test{}
 	fmt.Println(out)
-	ParsesErl = make(map[string]interface{})
-	ParsesErl["sub_1"] = subtest1{}
-	ParsesErl["sub_2"] = subtest2{}
-	ParsesErl["sub_3"] = subtest3{}
+	MParsesErl = make(map[string]interface{})
+	MParsesErl["sub_1"] = subtest1{}
+	MParsesErl["sub_2"] = subtest2{}
+	MParsesErl["sub_3"] = subtest3{}
 	err := decodeOneParameter(in, &out)
 	if err != nil {
-		t.Fatal("Error decode on parameter:", err)
+		t.Fatal("Error decode one parameter:", err)
+	}
+	fmt.Println(out)
+}
+
+func TestDecode(t *testing.T) {
+	type subsub struct {
+		Name    string `erl:"string" json:"name"`
+		Content string `erl:"string" json:"content"`
+		Value   int    `erl:"int" json:"value"`
+	}
+	type subtest1 struct {
+		Name  string   `erl:"string" json:"name"`
+		Index int      `erl:"int" json:"index"`
+		Sub   []subsub `erl:"list" json:"sub"`
+	}
+	type subtest2 struct {
+		Name    string `erl:"string" json:"name"`
+		SubName string `erl:"string" json:"subname"`
+	}
+	type subtest3 struct {
+		Name string `erl:"string" json:"name"`
+		Up   int    `erl:"int" json:"up"`
+		Down int    `erl:"int" json:"down"`
+		Sub  subsub `erl:"tuple" json:"subsub"`
+	}
+	type test struct {
+		Name    string        `erl:"string" json:"name"`
+		Index   int           `erl:"int" json:"index"`
+		Options []interface{} `erl:"list" json:"options"`
+	}
+	type other struct {
+		Use   bool    `erl:"bool" json:"use"`
+		Speed float64 `erl:"float64" json:"speed"`
+	}
+	type testlist struct {
+		Tests  []test  `erl:"list" json:"tests"`
+		Others []other `erl:"list" json:"others"`
+	}
+	in := []byte("test,1,[{sub_1,2,[{subs,apple,3},{subs,lemon,5},{subs,banana,1}]},{sub_3,2,1,{subs,peach,7}},{sub_2,asteroid}]")
+	out := testlist{}
+	fmt.Println(out)
+	MParsesErl = make(map[string]interface{})
+	MParsesErl["test"] = test{}
+	MParsesErl["sub_1"] = subtest1{}
+	MParsesErl["sub_2"] = subtest2{}
+	MParsesErl["sub_3"] = subtest3{}
+	err := decode(in, &out)
+	if err != nil {
+		t.Fatal("Error decode:", err)
+	}
+	fmt.Println(out)
+}
+
+func TestUnmarshal(t *testing.T) {
+	type subsub struct {
+		Name    string `erl:"string" json:"name"`
+		Content string `erl:"string" json:"content"`
+		Value   int    `erl:"int" json:"value"`
+	}
+	type subtest1 struct {
+		Name  string   `erl:"string" json:"name"`
+		Index int      `erl:"int" json:"index"`
+		Sub   []subsub `erl:"list" json:"sub"`
+	}
+	type subtest2 struct {
+		Name    string `erl:"string" json:"name"`
+		SubName string `erl:"string" json:"subname"`
+	}
+	type subtest3 struct {
+		Name string `erl:"string" json:"name"`
+		Up   int    `erl:"int" json:"up"`
+		Down int    `erl:"int" json:"down"`
+		Sub  subsub `erl:"tuple" json:"subsub"`
+	}
+	type test struct {
+		Name    string        `erl:"string" json:"name"`
+		Index   int           `erl:"int" json:"index"`
+		Options []interface{} `erl:"list" json:"options"`
+	}
+	type other struct {
+		Name  string  `erl:"string" json:"name"`
+		Use   bool    `erl:"bool" json:"use"`
+		Speed float64 `erl:"float64" json:"speed"`
+	}
+	type testlist struct {
+		Tests  []test  `erl:"list" json:"tests"`
+		Others []other `erl:"list" json:"others"`
+	}
+	in := []byte("{test,1,[{sub_1,2,[{subs,apple,3},{subs,lemon,5},{subs,banana,1}]},{sub_3,2,1,{subs,peach,7}},{sub_2,asteroid}]}.\r\n{other,true,3.66}.\r\n{test,2,[{sub_1,2,[{subs,apple,3},{subs,lemon,5},{subs,banana,1}]},{sub_3,2,1,{subs,peach,7}},{sub_2,asteroid}]}.\r\n{other,false,12.96}.\r\n{test,3,[{sub_1,2,[{subs,apple,3},{subs,lemon,5},{subs,banana,1}]},{sub_3,2,1,{subs,peach,7}},{sub_2,asteroid}]}.")
+	out := testlist{}
+	fmt.Println(out)
+	MParsesErl = make(map[string]interface{})
+	MParsesErl["test"] = test{}
+	MParsesErl["other"] = other{}
+	MParsesErl["sub_1"] = subtest1{}
+	MParsesErl["sub_2"] = subtest2{}
+	MParsesErl["sub_3"] = subtest3{}
+	err := unmarshal(in, &out)
+	if err != nil {
+		t.Fatal("Error unmarshal:", err)
 	}
 	fmt.Println(out)
 }
