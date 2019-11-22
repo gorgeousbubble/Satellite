@@ -277,7 +277,7 @@ func decodeOneParameter(in []byte, out interface{}) (err error) {
 				rem = sub
 				f.Set(reflect.ValueOf(r))
 			case "bool":
-				r, sub, err := extractOneFloat64(rem)
+				r, sub, err := extractOneBool(rem)
 				if err != nil {
 					return err
 				}
@@ -573,6 +573,51 @@ func decode(in []byte, out interface{}) (err error) {
 }
 
 func unmarshal(in []byte, out interface{}) (err error) {
+	var s [][]byte
+	// split the stream by symbol '\n' in order to delete comments
+	s1 := bytes.Split(in, []byte("\n"))
+	for _, v := range s1 {
+		// delete comments
+		if bytes.Contains(v, []byte("%")) {
+			index := bytes.Index(v, []byte("%"))
+			v = append(v[:index], v[len(v):]...)
+		}
+		// delete C/C++ comments?
+		if bytes.Contains(v, []byte("//")) {
+			index := bytes.Index(v, []byte("//"))
+			v = append(v[:index], v[len(v):]...)
+		}
+		// delete all space
+		v = bytes.ReplaceAll(v, []byte(" "), []byte(""))
+		// delete all return
+		v = bytes.ReplaceAll(v, []byte("\r"), []byte(""))
+		// delete all blank lines, packet to s slice
+		if !bytes.Equal(v, []byte("")) {
+			s = append(s, v)
+		}
+		fmt.Println(string(v))
+	}
+	data := bytes.Join(s, []byte(""))
+	fmt.Println(string(data))
+	// split the data by symbol '{' and '}.', according to syntax
+	s = bytes.Split(data, []byte("}."))
+	for _, v := range s {
+		// valid line
+		if !bytes.Contains(v, []byte("{")) {
+			continue
+		}
+		// delete '{'
+		index := bytes.Index(v, []byte("{"))
+		v = append(v[:index], v[index+1:]...)
+		fmt.Println(string(v))
+		// repair with ','
+		v = repairTrim(v)
+		// decode
+		err = decode(v, out)
+		if err != nil {
+			return err
+		}
+	}
 	return err
 }
 
