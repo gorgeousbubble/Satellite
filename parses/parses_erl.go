@@ -9,6 +9,15 @@ import (
 	"strings"
 )
 
+// MParsesErl global mapping struct search by type 'interface{}'
+// put all struct which will be push into 'interface{}' before call function 'Marshal' or 'Unmarshal'(recommend initialized in function 'init()')
+// ...
+// example:
+// MParsesErl = make(map[string]interface{})
+// MParsesErl["sub_1"] = subtest1{}
+// MParsesErl["sub_2"] = subtest2{}
+// MParsesErl["sub_3"] = subtest3{}
+// ...
 var MParsesErl map[string]interface{}
 
 func extractOneElement(s []byte) (r []byte, sub []byte, err error) {
@@ -69,10 +78,28 @@ func extractOneFloat64(s []byte) (r float64, sub []byte, err error) {
 	if err != nil {
 		return r, sub, err
 	}
-	// convert []byte -> int
+	// convert []byte -> float64
 	r, err = strconv.ParseFloat(string(sr), 64)
 	if err != nil {
 		err = errors.New("parameter may not float64")
+		return r, sub, err
+	}
+	return r, sub, err
+}
+
+func extractOneBool(s []byte) (r bool, sub []byte, err error) {
+	// first, call function extract one element
+	sr, sub, err := extractOneElement(s)
+	if err != nil {
+		return r, sub, err
+	}
+	// convert []byte -> bool
+	if string(sr) == "false" {
+		r = false
+	} else if string(sr) == "true" {
+		r = true
+	} else {
+		err = errors.New("parameter may not bool")
 		return r, sub, err
 	}
 	return r, sub, err

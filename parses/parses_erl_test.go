@@ -38,6 +38,70 @@ func BenchmarkExtractOneElement(b *testing.B) {
 	}
 }
 
+func TestExtractOneString(t *testing.T) {
+	s := []byte("hello,1,[1,2,3],{simple,12}")
+	r, sub, err := extractOneString(s)
+	if err != nil {
+		t.Fatal("Error extract one string:", err)
+	}
+	fmt.Println("extract return:", r)
+	fmt.Println("extract substring:", string(sub))
+	if r != "hello" {
+		t.Fatal("Error extract return")
+	}
+	if !bytes.Equal(sub, []byte("1,[1,2,3],{simple,12}")) {
+		t.Fatal("Error extract substring")
+	}
+}
+
+func BenchmarkExtractOneString(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		s := []byte("hello,1,[1,2,3],{simple,12}")
+		r, sub, err := extractOneString(s)
+		if err != nil {
+			b.Fatal("Error extract one string:", err)
+		}
+		if r != "hello" {
+			b.Fatal("Error extract return")
+		}
+		if !bytes.Equal(sub, []byte("1,[1,2,3],{simple,12}")) {
+			b.Fatal("Error extract substring")
+		}
+	}
+}
+
+func TestExtractOneInt(t *testing.T) {
+	s := []byte("15,atomsphere,[1,2,3],{simple,12}")
+	r, sub, err := extractOneInt(s)
+	if err != nil {
+		t.Fatal("Error extract one int:", err)
+	}
+	fmt.Println("extract return:", r)
+	fmt.Println("extract substring:", string(sub))
+	if r != 15 {
+		t.Fatal("Error extract return")
+	}
+	if !bytes.Equal(sub, []byte("atomsphere,[1,2,3],{simple,12}")) {
+		t.Fatal("Error extract substring")
+	}
+}
+
+func BenchmarkExtractOneInt(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		s := []byte("15,atomsphere,[1,2,3],{simple,12}")
+		r, sub, err := extractOneInt(s)
+		if err != nil {
+			b.Fatal("Error extract one int:", err)
+		}
+		if r != 15 {
+			b.Fatal("Error extract return")
+		}
+		if !bytes.Equal(sub, []byte("atomsphere,[1,2,3],{simple,12}")) {
+			b.Fatal("Error extract substring")
+		}
+	}
+}
+
 func TestExtractOneList(t *testing.T) {
 	s := []byte("[apple,orange],1,[1,2,3],{simple,12}")
 	r, sub, err := extractOneList(s)
