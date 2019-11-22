@@ -102,6 +102,38 @@ func BenchmarkExtractOneInt(b *testing.B) {
 	}
 }
 
+func TestExtractOneFloat64(t *testing.T) {
+	s := []byte("3.14,atomsphere,[1,2,3],{simple,12}")
+	r, sub, err := extractOneFloat64(s)
+	if err != nil {
+		t.Fatal("Error extract one float64:", err)
+	}
+	fmt.Println("extract return:", r)
+	fmt.Println("extract substring:", string(sub))
+	if r != 3.14 {
+		t.Fatal("Error extract return")
+	}
+	if !bytes.Equal(sub, []byte("atomsphere,[1,2,3],{simple,12}")) {
+		t.Fatal("Error extract substring")
+	}
+}
+
+func BenchmarkExtractOneFloat64(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		s := []byte("3.14,atomsphere,[1,2,3],{simple,12}")
+		r, sub, err := extractOneFloat64(s)
+		if err != nil {
+			b.Fatal("Error extract one float64:", err)
+		}
+		if r != 3.14 {
+			b.Fatal("Error extract return")
+		}
+		if !bytes.Equal(sub, []byte("atomsphere,[1,2,3],{simple,12}")) {
+			b.Fatal("Error extract substring")
+		}
+	}
+}
+
 func TestExtractOneList(t *testing.T) {
 	s := []byte("[apple,orange],1,[1,2,3],{simple,12}")
 	r, sub, err := extractOneList(s)
