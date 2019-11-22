@@ -134,6 +134,38 @@ func BenchmarkExtractOneFloat64(b *testing.B) {
 	}
 }
 
+func TestExtractOneBool(t *testing.T) {
+	s := []byte("true,atomsphere,[1,2,3],{simple,12}")
+	r, sub, err := extractOneBool(s)
+	if err != nil {
+		t.Fatal("Error extract one bool:", err)
+	}
+	fmt.Println("extract return:", r)
+	fmt.Println("extract substring:", string(sub))
+	if r != true {
+		t.Fatal("Error extract return")
+	}
+	if !bytes.Equal(sub, []byte("atomsphere,[1,2,3],{simple,12}")) {
+		t.Fatal("Error extract substring")
+	}
+}
+
+func BenchmarkExtractOneBool(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		s := []byte("true,atomsphere,[1,2,3],{simple,12}")
+		r, sub, err := extractOneBool(s)
+		if err != nil {
+			b.Fatal("Error extract one bool:", err)
+		}
+		if r != true {
+			b.Fatal("Error extract return")
+		}
+		if !bytes.Equal(sub, []byte("atomsphere,[1,2,3],{simple,12}")) {
+			b.Fatal("Error extract substring")
+		}
+	}
+}
+
 func TestExtractOneList(t *testing.T) {
 	s := []byte("[apple,orange],1,[1,2,3],{simple,12}")
 	r, sub, err := extractOneList(s)
