@@ -361,6 +361,27 @@ func TestDecodeOneParameter2(t *testing.T) {
 	fmt.Println(out)
 }
 
+func BenchmarkDecodeOneParameter2(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		type subtest struct {
+			Name   string `erl:"string"`
+			Number int    `erl:"int"`
+		}
+		type test struct {
+			Name    string    `erl:"string"`
+			Content string    `erl:"string"`
+			Number  int       `erl:"int"`
+			List    []subtest `erl:"list"`
+		}
+		in := []byte("asteroid,earth,9,[{apple,1},{orange,2},{lemon,5}]")
+		out := test{}
+		err := decodeOneParameter(in, &out)
+		if err != nil {
+			b.Fatal("Error decode one parameter:", err)
+		}
+	}
+}
+
 func TestDecodeOneParameter3(t *testing.T) {
 	type subtest struct {
 		Name   string `erl:"string"`
@@ -377,6 +398,25 @@ func TestDecodeOneParameter3(t *testing.T) {
 		t.Fatal("Error decode one parameter:", err)
 	}
 	fmt.Println(out)
+}
+
+func BenchmarkDecodeOneParameter3(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		type subtest struct {
+			Name   string `erl:"string"`
+			Number int    `erl:"int"`
+			List   []int  `erl:"list"`
+		}
+		type test struct {
+			List []subtest `erl:"list"`
+		}
+		in := []byte("[{apple,1,[2,3]},{orange,2,[1,5,4]},{lemon,5,[]}]")
+		out := test{}
+		err := decodeOneParameter(in, &out)
+		if err != nil {
+			b.Fatal("Error decode one parameter:", err)
+		}
+	}
 }
 
 func TestDecodeOneParameter4(t *testing.T) {
@@ -417,6 +457,46 @@ func TestDecodeOneParameter4(t *testing.T) {
 		t.Fatal("Error decode one parameter:", err)
 	}
 	fmt.Println(out)
+}
+
+func BenchmarkDecodeOneParameter4(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		type subsub struct {
+			Name    string `erl:"string"`
+			Content string `erl:"string"`
+			Value   int    `erl:"int"`
+		}
+		type subtest1 struct {
+			Name  string   `erl:"string"`
+			Index int      `erl:"int"`
+			Sub   []subsub `erl:"list"`
+		}
+		type subtest2 struct {
+			Name    string `erl:"string"`
+			SubName string `erl:"string"`
+		}
+		type subtest3 struct {
+			Name string `erl:"string"`
+			Up   int    `erl:"int"`
+			Down int    `erl:"int"`
+			Sub  subsub `erl:"tuple"`
+		}
+		type test struct {
+			Name    string        `erl:"string"`
+			Index   int           `erl:"int"`
+			Options []interface{} `erl:"list"`
+		}
+		in := []byte("test,1,[{sub_1,2,[{subs,apple,3},{subs,lemon,5},{subs,banana,1}]},{sub_3,2,1,{subs,peach,7}},{sub_2,asteroid}]")
+		out := test{}
+		MParsesErl = make(map[string]interface{})
+		MParsesErl["sub_1"] = subtest1{}
+		MParsesErl["sub_2"] = subtest2{}
+		MParsesErl["sub_3"] = subtest3{}
+		err := decodeOneParameter(in, &out)
+		if err != nil {
+			b.Fatal("Error decode one parameter:", err)
+		}
+	}
 }
 
 func TestDecode(t *testing.T) {
@@ -468,6 +548,55 @@ func TestDecode(t *testing.T) {
 	fmt.Println(out)
 }
 
+func BenchmarkDecode(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		type subsub struct {
+			Name    string `erl:"string" json:"name"`
+			Content string `erl:"string" json:"content"`
+			Value   int    `erl:"int" json:"value"`
+		}
+		type subtest1 struct {
+			Name  string   `erl:"string" json:"name"`
+			Index int      `erl:"int" json:"index"`
+			Sub   []subsub `erl:"list" json:"sub"`
+		}
+		type subtest2 struct {
+			Name    string `erl:"string" json:"name"`
+			SubName string `erl:"string" json:"subname"`
+		}
+		type subtest3 struct {
+			Name string `erl:"string" json:"name"`
+			Up   int    `erl:"int" json:"up"`
+			Down int    `erl:"int" json:"down"`
+			Sub  subsub `erl:"tuple" json:"subsub"`
+		}
+		type test struct {
+			Name    string        `erl:"string" json:"name"`
+			Index   int           `erl:"int" json:"index"`
+			Options []interface{} `erl:"list" json:"options"`
+		}
+		type other struct {
+			Use   bool    `erl:"bool" json:"use"`
+			Speed float64 `erl:"float64" json:"speed"`
+		}
+		type testlist struct {
+			Tests  []test  `erl:"list" json:"tests"`
+			Others []other `erl:"list" json:"others"`
+		}
+		in := []byte("test,1,[{sub_1,2,[{subs,apple,3},{subs,lemon,5},{subs,banana,1}]},{sub_3,2,1,{subs,peach,7}},{sub_2,asteroid}]")
+		out := testlist{}
+		MParsesErl = make(map[string]interface{})
+		MParsesErl["test"] = test{}
+		MParsesErl["sub_1"] = subtest1{}
+		MParsesErl["sub_2"] = subtest2{}
+		MParsesErl["sub_3"] = subtest3{}
+		err := decode(in, &out)
+		if err != nil {
+			b.Fatal("Error decode:", err)
+		}
+	}
+}
+
 func TestUnmarshal(t *testing.T) {
 	type subsub struct {
 		Name    string `erl:"string" json:"name"`
@@ -517,4 +646,55 @@ func TestUnmarshal(t *testing.T) {
 		t.Fatal("Error unmarshal:", err)
 	}
 	fmt.Println(out)
+}
+
+func BenchmarkUnmarshal(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		type subsub struct {
+			Name    string `erl:"string" json:"name"`
+			Content string `erl:"string" json:"content"`
+			Value   int    `erl:"int" json:"value"`
+		}
+		type subtest1 struct {
+			Name  string   `erl:"string" json:"name"`
+			Index int      `erl:"int" json:"index"`
+			Sub   []subsub `erl:"list" json:"sub"`
+		}
+		type subtest2 struct {
+			Name    string `erl:"string" json:"name"`
+			SubName string `erl:"string" json:"subname"`
+		}
+		type subtest3 struct {
+			Name string `erl:"string" json:"name"`
+			Up   int    `erl:"int" json:"up"`
+			Down int    `erl:"int" json:"down"`
+			Sub  subsub `erl:"tuple" json:"subsub"`
+		}
+		type test struct {
+			Name    string        `erl:"string" json:"name"`
+			Index   int           `erl:"int" json:"index"`
+			Options []interface{} `erl:"list" json:"options"`
+		}
+		type other struct {
+			Name  string  `erl:"string" json:"name"`
+			Use   bool    `erl:"bool" json:"use"`
+			Speed float64 `erl:"float64" json:"speed"`
+		}
+		type testlist struct {
+			Tests  []test  `erl:"list" json:"tests"`
+			Others []other `erl:"list" json:"others"`
+		}
+		in := []byte("{test,1,[{sub_1,2,[{subs,apple,3},{subs,lemon,5},{subs,banana,1}]},{sub_3,2,1,{subs,peach,7}},{sub_2,asteroid}]}.\r\n{other,true,3.66}.\r\n{test,2,[{sub_1,2,[{subs,apple,3},{subs,lemon,5},{subs,banana,1}]},{sub_3,2,1,{subs,peach,7}},{sub_2,asteroid}]}.\r\n{other,false,12.96}.\r\n{test,3,[{sub_1,2,[{subs,apple,3},{subs,lemon,5},{subs,banana,1}]},{sub_3,2,1,{subs,peach,7}},{sub_2,asteroid}]}.")
+		out := testlist{}
+		MParsesErl = make(map[string]interface{})
+		MParsesErl["test"] = test{}
+		MParsesErl["other"] = other{}
+		MParsesErl["sub_1"] = subtest1{}
+		MParsesErl["sub_2"] = subtest2{}
+		MParsesErl["sub_3"] = subtest3{}
+		err := unmarshal(in, &out)
+		if err != nil {
+			b.Fatal("Error unmarshal:", err)
+		}
+	}
 }
