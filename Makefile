@@ -9,24 +9,25 @@ GOTEST 	= $(GO) test
 GOGET 	= $(GO) get
 
 # Binary Parameters
-BIN 	= satellite
+GOBASE  = $(shell pwd)
+GOBIN   = $(GOBASE)/bin
 
 # Build
 all: test build
 
 build: 
-	$(GOBUILD) -o $(BIN) -v
+	$(GOBUILD) -o $(GOBIN)
 
 test:
-	$(GOTEST) -v ./...
+	$(GOTEST) -v -cover -benchmem -bench .
 
 clean:
 	$(GOCLEAN)
-	rm -rf $(BIN)
+	rm -rf $(GOBIN)
 
 run:
-	$(GOBUILD) -o $(BIN) -v ./...
-	./$(BIN)
+	$(GOBUILD) -o $(GOBIN)
+	./$(GOBIN)
 
 deps:
 
