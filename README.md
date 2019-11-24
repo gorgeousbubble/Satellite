@@ -1,2 +1,2 @@
-# Satellite
-The Satellite Project.
+# Satellite 🌠
+The Satellite Golang Project.
