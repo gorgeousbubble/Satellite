@@ -698,3 +698,48 @@ func BenchmarkUnmarshal(b *testing.B) {
 		}
 	}
 }
+
+func TestWrapOneElement(t *testing.T) {
+	var s = "hello"
+	r, err := wrapOneElement(s)
+	if err != nil {
+		t.Fatal("Error wrap one element:", err)
+	}
+	fmt.Println(string(r))
+}
+
+func TestWrapOneElementString(t *testing.T) {
+	var s = "apple"
+	r, err := wrapOneElement(s)
+	if err != nil {
+		t.Fatal("Error wrap one element:", err)
+	}
+	fmt.Println(string(r))
+}
+
+func TestWrapOneElementInt(t *testing.T) {
+	var s = 2
+	r, err := wrapOneElement(s)
+	if err != nil {
+		t.Fatal("Error wrap one element:", err)
+	}
+	fmt.Println(string(r))
+}
+
+func TestWrapOneElementBool(t *testing.T) {
+	var s = false
+	r, err := wrapOneElement(s)
+	if err != nil {
+		t.Fatal("Error wrap one element:", err)
+	}
+	fmt.Println(string(r))
+}
+
+func TestWrapOneElementFloat64(t *testing.T) {
+	var s = 3.1415926
+	r, err := wrapOneElement(s)
+	if err != nil {
+		t.Fatal("Error wrap one element:", err)
+	}
+	fmt.Println(string(r))
+}

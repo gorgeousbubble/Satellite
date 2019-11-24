@@ -622,6 +622,38 @@ func unmarshal(in []byte, out interface{}) (err error) {
 }
 
 // encode
+func wrapOneElement(s interface{}) (r []byte, err error) {
+	var rType = reflect.TypeOf(s)
+	var rValue = reflect.ValueOf(s)
+	fmt.Println("type of s interface:", rType)
+	fmt.Println("value of s interface:", rValue)
+	fmt.Println(rType.Kind())
+	// switch the s type kind
+	switch rType.Kind() {
+	case reflect.String:
+		r = []byte(rValue.Interface().(string))
+		r = append(r, ',')
+	case reflect.Bool:
+		f := rValue.Interface().(bool)
+		if f == true {
+			r = []byte("true")
+		} else {
+			r = []byte("false")
+		}
+		r = append(r, ',')
+	case reflect.Int:
+		r = []byte(strconv.Itoa(rValue.Interface().(int)))
+		r = append(r, ',')
+	case reflect.Float64:
+		r = []byte(strconv.FormatFloat(rValue.Interface().(float64), 'f', -1, 64))
+		r = append(r, ',')
+	default:
+		err = errors.New("unrecognized element type")
+		return r, err
+	}
+	return r, err
+}
+
 func marshal(in interface{}) (out []byte, err error) {
 	return out, err
 }
