@@ -675,6 +675,8 @@ func wrapOneElement(in interface{}) (r []byte, err error) {
 				fallthrough
 			case "tuple":
 				fallthrough
+			case "list":
+				fallthrough
 			case "element":
 				rs, err := wrapOneElement(f.Interface())
 				if err != nil {
@@ -688,12 +690,14 @@ func wrapOneElement(in interface{}) (r []byte, err error) {
 				err = errors.New("unrecognized struct field type")
 				return r, err
 			}
-			// repair tuple...
-			r = bytes.Join(s, []byte(""))
-			r = repairTuple(r)
-			r = repairTrim(r)
-			fmt.Println(string(r))
 		}
+		// repair tuple...
+		r = bytes.Join(s, []byte(""))
+		r = repairTuple(r)
+		r = repairTrim(r)
+		fmt.Println(string(r))
+	case reflect.Slice:
+		// switch the kind of sub type...
 	default:
 		err = errors.New("unrecognized element type")
 		return r, err
