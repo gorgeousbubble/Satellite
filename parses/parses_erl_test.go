@@ -708,6 +708,16 @@ func TestWrapOneElement(t *testing.T) {
 	fmt.Println(string(r))
 }
 
+func BenchmarkWrapOneElement(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		var s = "hello"
+		_, err := wrapOneElement(s)
+		if err != nil {
+			b.Fatal("Error wrap one element:", err)
+		}
+	}
+}
+
 func TestWrapOneElementString(t *testing.T) {
 	var s = "apple"
 	r, err := wrapOneElement(s)
