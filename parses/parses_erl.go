@@ -622,11 +622,11 @@ func unmarshal(in []byte, out interface{}) (err error) {
 }
 
 // encode
-func wrapOneElement(s interface{}) (r []byte, err error) {
-	var rType = reflect.TypeOf(s)
-	var rValue = reflect.ValueOf(s)
-	fmt.Println("type of s interface:", rType)
-	fmt.Println("value of s interface:", rValue)
+func wrapOneElement(in interface{}) (r []byte, err error) {
+	var rType = reflect.TypeOf(in)
+	var rValue = reflect.ValueOf(in)
+	fmt.Println("type of in interface:", rType)
+	fmt.Println("value of in interface:", rValue)
 	fmt.Println(rType.Kind())
 	// switch the s type kind
 	switch rType.Kind() {
@@ -647,11 +647,81 @@ func wrapOneElement(s interface{}) (r []byte, err error) {
 	case reflect.Float64:
 		r = []byte(strconv.FormatFloat(rValue.Interface().(float64), 'f', -1, 64))
 		r = append(r, ',')
+	case reflect.Struct:
+		var s [][]byte
+		// traverse struct fields
+		for i := 0; i < rType.NumField(); i++ {
+			// get struct field value...
+			t := rType.Field(i)
+			f := rValue.Field(i)
+			fmt.Printf("struct field[%v]\n", i)
+			fmt.Printf("type of field[%v]:%v\n", i, t)
+			fmt.Printf("value of field[%v]:%v\n", i, f)
+			// parse tag
+			tag := t.Tag.Get("erl")
+			fields := strings.Split(tag, ",")
+			if len(fields) > 1 {
+				tag = fields[0]
+			}
+			// swich the tag & parse element...
+			switch tag {
+			case "string":
+				fallthrough
+			case "int":
+				fallthrough
+			case "float64":
+				fallthrough
+			case "bool":
+				fallthrough
+			case "tuple":
+				fallthrough
+			case "element":
+				rs, err := wrapOneElement(f.Interface())
+				if err != nil {
+					return r, err
+				}
+				if i == rType.NumField()-1 {
+					rs = trimElement(rs)
+				}
+				s = append(s, rs)
+			default:
+				err = errors.New("unrecognized struct field type")
+				return r, err
+			}
+			// repair tuple...
+			r = bytes.Join(s, []byte(""))
+			r = repairTuple(r)
+			r = repairTrim(r)
+			fmt.Println(string(r))
+		}
 	default:
 		err = errors.New("unrecognized element type")
 		return r, err
 	}
 	return r, err
+}
+
+func trimElement(s []byte) (r []byte) {
+	r = bytes.TrimSuffix(s, []byte(","))
+	return r
+}
+
+func repairList(s []byte) (r []byte) {
+	ss := make([][]byte, 3)
+	ss[0] = []byte("[")
+	ss[1] = s
+	ss[2] = []byte("]")
+	r = bytes.Join(ss, []byte(""))
+	return r
+}
+
+func repairTuple(s []byte) (r []byte) {
+	ss := make([][]byte, 3)
+	ss[0] = []byte("{")
+	ss[1] = s
+	ss[2] = []byte("}")
+	r = bytes.Join(ss, []byte(""))
+	return r
 }
 
 func marshal(in interface{}) (out []byte, err error) {
