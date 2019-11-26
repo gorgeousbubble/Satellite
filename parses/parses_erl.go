@@ -26,8 +26,8 @@ func Unmarshal(in []byte, out interface{}) (err error) {
 }
 
 // Marshal erlang stream
-func Marshal(in interface{}) (out []byte, err error) {
-	return marshal(in)
+func Marshal(in []byte, t interface{}) (out []byte, err error) {
+	return marshal(in, t)
 }
 
 // decode
@@ -756,7 +756,7 @@ func encode(in interface{}) (out []byte, err error) {
 		}
 		// check tag type(should be list only)
 		if tag != "list" {
-			err = errors.New("encode field tag should be list only")
+			err = errors.New("struct field tag should be list only")
 			return out, err
 		}
 		// check list elements whether struct
@@ -781,8 +781,52 @@ func encode(in interface{}) (out []byte, err error) {
 	return out, err
 }
 
-func marshal(in interface{}) (out []byte, err error) {
-	/*var s [][]byte
+func needClear(name []byte, in interface{}) (b bool, err error) {
+	var rType = reflect.TypeOf(in)
+	var rValue = reflect.ValueOf(in)
+	// check the in type kind
+	if rType.Kind() != reflect.Struct {
+		err = errors.New("in interface should be struct")
+		return b, err
+	}
+	// traverse struct fields
+	for i := 0; i < rType.NumField(); i++ {
+		// get struct field value...
+		t := rType.Field(i)
+		f := rValue.Field(i)
+		// parse tag
+		tag := t.Tag.Get("erl")
+		fields := strings.Split(tag, ",")
+		if len(fields) > 1 {
+			tag = fields[0]
+		}
+		// check field whether empty?
+		if f.IsNil() {
+			return b, nil
+		}
+		// check tag type(should be list only)
+		if tag != "list" {
+			err = errors.New("struct field tag should be list only")
+			return b, err
+		}
+		// check list elements whether struct
+		if f.Type().Elem().Kind() != reflect.Struct {
+			err = errors.New("list element should be struct only")
+			return b, err
+		}
+		// check list elements type
+		for k, v := range MParsesErl {
+			if k == string(name) && reflect.TypeOf(v).Name() == f.Type().Elem().Name() {
+				b = true
+				return b, err
+			}
+		}
+	}
+	return b, err
+}
+
+func marshal(in []byte, t interface{}) (out []byte, err error) {
+	var s [][]byte
 	// split the stream by symbol '\n' in order to delete comments
 	s1 := bytes.Split(in, []byte("\n"))
 	for _, v := range s1 {
@@ -804,28 +848,48 @@ func marshal(in interface{}) (out []byte, err error) {
 		if !bytes.Equal(v, []byte("")) {
 			s = append(s, v)
 		}
-		fmt.Println(string(v))
 	}
 	data := bytes.Join(s, []byte(""))
-	fmt.Println(string(data))
 	// split the data by symbol '{' and '}.', according to syntax
 	s = bytes.Split(data, []byte("}."))
-	for _, v := range s {
+	for i := 0; i < len(s); i++ {
+		// valid line
+		if !bytes.Contains(s[i], []byte("{")) {
+			s = append(s[:i], s[i+1:]...)
+			i--
+			continue
+		}
+		// append all '}.'
+		s[i] = append(s[i], '}')
+		s[i] = append(s[i], '.')
+		// find first syntax
+		start := bytes.Index(s[i], []byte("{"))
+		index := bytes.Index(s[i], []byte(","))
+		name := append(s[i][start+1:index], s[i][len(s[i]):]...)
+		// check parameter whether need clear?
+		b, err := needClear(name, t)
+		if err != nil {
+			return out, err
+		}
+		if b {
+			s = append(s[:i], s[i+1:]...)
+			i--
+		}
+	}
+	// encode parameters
+	r1, err := encode(t)
+	if err != nil {
+		return out, err
+	}
+	r := bytes.Split(r1, []byte("\n"))
+	for _, v := range r {
 		// valid line
 		if !bytes.Contains(v, []byte("{")) {
 			continue
 		}
-		// delete '{'
-		index := bytes.Index(v, []byte("{"))
-		v = append(v[:index], v[index+1:]...)
-		fmt.Println(string(v))
-		// repair with ','
-		v = repairTrim(v)
-		// decode
-		err = decode(v, out)
-		if err != nil {
-			return err
-		}
-	}*/
+		s = append(s, v)
+	}
+	// combine
+	out = bytes.Join(s, []byte("\n"))
 	return out, err
 }

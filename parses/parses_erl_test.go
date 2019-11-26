@@ -1211,3 +1211,165 @@ func TestEncode(t *testing.T) {
 	}
 	fmt.Println(string(out))
 }
+
+func TestMarshal(t *testing.T) {
+	type subsub struct {
+		Name    string `erl:"string" json:"name"`
+		Content string `erl:"string" json:"content"`
+		Value   int    `erl:"int" json:"value"`
+	}
+	type subtest1 struct {
+		Name  string   `erl:"string" json:"name"`
+		Index int      `erl:"int" json:"index"`
+		Sub   []subsub `erl:"list" json:"sub"`
+	}
+	type subtest2 struct {
+		Name    string `erl:"string" json:"name"`
+		SubName string `erl:"string" json:"subname"`
+	}
+	type subtest3 struct {
+		Name string `erl:"string" json:"name"`
+		Up   int    `erl:"int" json:"up"`
+		Down int    `erl:"int" json:"down"`
+		Sub  subsub `erl:"tuple" json:"subsub"`
+	}
+	type test struct {
+		Name    string        `erl:"string" json:"name"`
+		Index   int           `erl:"int" json:"index"`
+		Options []interface{} `erl:"list" json:"options"`
+	}
+	type other struct {
+		Name  string  `erl:"string" json:"name"`
+		Use   bool    `erl:"bool" json:"use"`
+		Speed float64 `erl:"float64" json:"speed"`
+	}
+	type testlist struct {
+		Tests  []test  `erl:"list" json:"tests"`
+		Others []other `erl:"list" json:"others"`
+	}
+	s := testlist{
+		Tests: []test{
+			{
+				Name:  "test",
+				Index: 1,
+				Options: []interface{}{
+					subtest1{
+						Name:  "sub_1",
+						Index: 1,
+						Sub: []subsub{
+							{
+								Name:    "subsub_1",
+								Content: "speak",
+								Value:   7,
+							},
+							{
+								Name:    "subsub_2",
+								Content: "apple",
+								Value:   12,
+							},
+							{
+								Name:    "subsub_3",
+								Content: "orange",
+								Value:   2,
+							},
+						},
+					},
+					subtest2{
+						Name:    "sub_2",
+						SubName: "remote",
+					},
+					subtest3{
+						Name: "sub_3",
+						Up:   2,
+						Down: 4,
+						Sub: subsub{
+							Name:    "subsub_4",
+							Content: "ack",
+							Value:   24,
+						},
+					},
+				},
+			},
+			{
+				Name:  "test",
+				Index: 2,
+				Options: []interface{}{
+					subtest1{
+						Name:  "sub_1",
+						Index: 1,
+						Sub: []subsub{
+							{
+								Name:    "subsub_5",
+								Content: "create",
+								Value:   8,
+							},
+							{
+								Name:    "subsub_6",
+								Content: "apple",
+								Value:   12,
+							},
+							{
+								Name:    "subsub_7",
+								Content: "orange",
+								Value:   2,
+							},
+						},
+					},
+					subtest2{
+						Name:    "sub_2",
+						SubName: "remote",
+					},
+					subtest3{
+						Name: "sub_3",
+						Up:   2,
+						Down: 4,
+						Sub: subsub{
+							Name:    "subsub_8",
+							Content: "ack",
+							Value:   7,
+						},
+					},
+				},
+			},
+		},
+		Others: []other{
+			{
+				Name:  "other",
+				Use:   false,
+				Speed: 3.125,
+			},
+			{
+				Name:  "other",
+				Use:   true,
+				Speed: 1.717,
+			},
+			{
+				Name:  "other",
+				Use:   true,
+				Speed: 1.414,
+			},
+			{
+				Name:  "other",
+				Use:   false,
+				Speed: 400,
+			},
+			{
+				Name:  "other",
+				Use:   false,
+				Speed: 12.59,
+			},
+		},
+	}
+	in := []byte("{hello,1}.\r\n{test,1,[{sub_1,2,[{subs,apple,3},{subs,lemon,5},{subs,banana,1}]},{sub_3,2,1,{subs,peach,7}},{sub_2,asteroid}]}.\r\n{hello,2}.\r\n{hello,3}.\r\n{other,true,3.66}.\r\n{test,2,[{sub_1,2,[{subs,apple,3},{subs,lemon,5},{subs,banana,1}]},{sub_3,2,1,{subs,peach,7}},{sub_2,asteroid}]}.\r\n{other,false,12.96}.\r\n{test,3,[{sub_1,2,[{subs,apple,3},{subs,lemon,5},{subs,banana,1}]},{sub_3,2,1,{subs,peach,7}},{sub_2,asteroid}]}.")
+	MParsesErl = make(map[string]interface{})
+	MParsesErl["test"] = test{}
+	MParsesErl["other"] = other{}
+	MParsesErl["sub_1"] = subtest1{}
+	MParsesErl["sub_2"] = subtest2{}
+	MParsesErl["sub_3"] = subtest3{}
+	out, err := marshal(in, s)
+	if err != nil {
+		t.Fatal("Error marshal:", err)
+	}
+	fmt.Println(string(out))
+}
