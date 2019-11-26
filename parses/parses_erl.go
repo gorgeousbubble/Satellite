@@ -3,7 +3,6 @@ package parses
 import (
 	"bytes"
 	"errors"
-	"fmt"
 	"reflect"
 	"strconv"
 	"strings"
@@ -220,21 +219,14 @@ func decodeOneParameter(in []byte, out interface{}) (err error) {
 	// get pointer's value...
 	var rType = reflect.TypeOf(out)
 	var rValue = reflect.ValueOf(out)
-	fmt.Println("type of out interface:", rType)
-	fmt.Println("value of out interface:", rValue)
-	fmt.Println(rType.Kind())
 	// check the out type kind
 	if rType.Kind() != reflect.Ptr {
 		err = errors.New("out interface should be struct pointer")
-		fmt.Println(err)
 		return err
 	}
 	// get real variable value...
 	rType = rType.Elem()
 	rValue = rValue.Elem()
-	fmt.Println("type of point:", rType)
-	fmt.Println("value of point:", rValue)
-	fmt.Println(rType.Kind())
 	// switch the kind of type...
 	switch rType.Kind() {
 	case reflect.Struct:
@@ -244,9 +236,6 @@ func decodeOneParameter(in []byte, out interface{}) (err error) {
 			// get struct field value...
 			t := rType.Field(i)
 			f := rValue.Field(i)
-			fmt.Printf("struct field[%v]\n", i)
-			fmt.Printf("type of field[%v]:%v\n", i, t)
-			fmt.Printf("value of field[%v]:%v\n", i, f)
 			// parse tag
 			tag := t.Tag.Get("erl")
 			fields := strings.Split(tag, ",")
@@ -321,7 +310,6 @@ func decodeOneParameter(in []byte, out interface{}) (err error) {
 	case reflect.Slice:
 		var rem = in
 		// switch the kind of sub type...
-		fmt.Println(rValue.Type().Elem().Kind())
 		switch rValue.Type().Elem().Kind() {
 		case reflect.String:
 			// traverse slice elements(string)
@@ -332,14 +320,11 @@ func decodeOneParameter(in []byte, out interface{}) (err error) {
 					break
 				}
 				rValue = reflect.Append(rValue, reflect.ValueOf(r))
-				fmt.Println("rValue:", rValue)
 				rem = sub
-				fmt.Println("rem:", string(rem))
 			}
 			// parse error leave
 			if len(rem) != 0 {
 				err = e
-				fmt.Println(err)
 				return err
 			}
 			reflect.ValueOf(out).Elem().Set(rValue)
@@ -352,14 +337,11 @@ func decodeOneParameter(in []byte, out interface{}) (err error) {
 					break
 				}
 				rValue = reflect.Append(rValue, reflect.ValueOf(r))
-				fmt.Println("rValue:", rValue)
 				rem = sub
-				fmt.Println("rem:", string(rem))
 			}
 			// parse error leave
 			if len(rem) != 0 {
 				err = e
-				fmt.Println(err)
 				return err
 			}
 			reflect.ValueOf(out).Elem().Set(rValue)
@@ -372,14 +354,11 @@ func decodeOneParameter(in []byte, out interface{}) (err error) {
 					break
 				}
 				rValue = reflect.Append(rValue, reflect.ValueOf(r))
-				fmt.Println("rValue:", rValue)
 				rem = sub
-				fmt.Println("rem:", string(rem))
 			}
 			// parse error leave
 			if len(rem) != 0 {
 				err = e
-				fmt.Println(err)
 				return err
 			}
 			reflect.ValueOf(out).Elem().Set(rValue)
@@ -392,14 +371,11 @@ func decodeOneParameter(in []byte, out interface{}) (err error) {
 					break
 				}
 				rValue = reflect.Append(rValue, reflect.ValueOf(r))
-				fmt.Println("rValue:", rValue)
 				rem = sub
-				fmt.Println("rem:", string(rem))
 			}
 			// parse error leave
 			if len(rem) != 0 {
 				err = e
-				fmt.Println(err)
 				return err
 			}
 			reflect.ValueOf(out).Elem().Set(rValue)
@@ -412,29 +388,22 @@ func decodeOneParameter(in []byte, out interface{}) (err error) {
 					break
 				}
 				rem = sub
-				fmt.Println("rem:", string(rem))
 				r, err = trimTuple(r)
 				if err != nil {
 					return err
 				}
 				r = repairTrim(r)
-				fmt.Println(string(r))
 				// new struct value
 				o := reflect.New(rValue.Type().Elem())
-				fmt.Printf("type:%v,value:%v\n", reflect.TypeOf(o), reflect.ValueOf(o))
-				fmt.Println(o.CanAddr())
 				err = decodeOneParameter(r, o.Interface())
 				if err != nil {
 					return err
 				}
-				fmt.Printf("o:%v,elem:%v\n", o, o.Elem())
 				rValue = reflect.Append(rValue, reflect.ValueOf(o.Elem().Interface()))
-				fmt.Println("rValue:", rValue)
 			}
 			// parse error leave
 			if len(rem) != 0 {
 				err = e
-				fmt.Println(err)
 				return err
 			}
 			reflect.ValueOf(out).Elem().Set(rValue)
@@ -447,34 +416,26 @@ func decodeOneParameter(in []byte, out interface{}) (err error) {
 					break
 				}
 				rem = sub
-				fmt.Println("r:", string(r))
-				fmt.Println("rem:", string(rem))
 				r, err = trimTuple(r)
 				if err != nil {
 					return err
 				}
 				r = repairTrim(r)
-				fmt.Println(string(r))
 				// check type by name of interface(extract type name)
 				name, _, err := extractOneString(r)
 				if err != nil {
 					return err
 				}
-				fmt.Println("name of type:", string(name))
 				// traverse map elements
 				for k, v := range MParsesErl {
 					if k == string(name) {
 						// new struct value
 						o := reflect.New(reflect.TypeOf(v))
-						fmt.Printf("type:%v,value:%v\n", reflect.TypeOf(o), reflect.ValueOf(o))
-						fmt.Println(o.CanAddr())
 						err = decodeOneParameter(r, o.Interface())
 						if err != nil {
 							return err
 						}
-						fmt.Printf("o:%v,elem:%v\n", o, o.Elem())
 						rValue = reflect.Append(rValue, reflect.ValueOf(o.Elem().Interface()))
-						fmt.Println("rValue:", rValue)
 						break
 					}
 				}
@@ -482,7 +443,6 @@ func decodeOneParameter(in []byte, out interface{}) (err error) {
 			// parse error leave
 			if len(rem) != 0 {
 				err = e
-				fmt.Println(err)
 				return err
 			}
 			reflect.ValueOf(out).Elem().Set(rValue)
@@ -491,17 +451,13 @@ func decodeOneParameter(in []byte, out interface{}) (err error) {
 			return err
 		}
 	/*case reflect.Interface:
-	fmt.Println("hello reflect interface...")
 	var rem = in
 	// first, extract one parameter as string...
 	r, sub, err := extractOneString(rem)
 	if err != nil {
 		return err
 	}
-	rem = sub
-	fmt.Println("r:", string(r))
-	fmt.Println("rem:", string(rem))
-	fmt.Println("breakout...")*/
+	rem = sub*/
 	default:
 		err = errors.New("unrecognized reflect type")
 		return err
@@ -513,25 +469,17 @@ func decode(in []byte, out interface{}) (err error) {
 	// get pointer's value...
 	var rType = reflect.TypeOf(out)
 	var rValue = reflect.ValueOf(out)
-	fmt.Println("type of out interface:", rType)
-	fmt.Println("value of out interface:", rValue)
-	fmt.Println(rType.Kind())
 	// check the out type kind
 	if rType.Kind() != reflect.Ptr {
 		err = errors.New("out interface should be struct pointer")
-		fmt.Println(err)
 		return err
 	}
 	// get real variable value...
 	rType = rType.Elem()
 	rValue = rValue.Elem()
-	fmt.Println("type of point:", rType)
-	fmt.Println("value of point:", rValue)
-	fmt.Println(rType.Kind())
 	// type should be struct
 	if rType.Kind() != reflect.Struct {
 		err = errors.New("real variable should be struct")
-		fmt.Println(err)
 		return err
 	}
 	// extract type name
@@ -540,30 +488,21 @@ func decode(in []byte, out interface{}) (err error) {
 	if err != nil {
 		return err
 	}
-	fmt.Println("name of type:", string(name))
-	fmt.Println("global mapping:", MParsesErl)
 	// traverse struct fields
 	for i := 0; i < rType.NumField(); i++ {
 		// get struct field value...
-		t := rType.Field(i)
+		//t := rType.Field(i)
 		f := rValue.Field(i)
-		fmt.Printf("struct field[%v]\n", i)
-		fmt.Printf("type of field[%v]:%v\n", i, t)
-		fmt.Printf("value of field[%v]:%v\n", i, f)
 		// check list elements type
 		for k, v := range MParsesErl {
 			if k == string(name) && reflect.TypeOf(v).Name() == f.Type().Elem().Name() {
 				// new struct value
 				o := reflect.New(reflect.TypeOf(v))
-				fmt.Printf("type:%v,value:%v\n", reflect.TypeOf(o), reflect.ValueOf(o))
-				fmt.Println(o.CanAddr())
 				err = decodeOneParameter(r, o.Interface())
 				if err != nil {
 					return err
 				}
-				fmt.Printf("o:%v,elem:%v\n", o, o.Elem())
 				f = reflect.Append(f, reflect.ValueOf(o.Elem().Interface()))
-				fmt.Println("rValue:", f)
 				break
 			}
 		}
@@ -595,10 +534,8 @@ func unmarshal(in []byte, out interface{}) (err error) {
 		if !bytes.Equal(v, []byte("")) {
 			s = append(s, v)
 		}
-		fmt.Println(string(v))
 	}
 	data := bytes.Join(s, []byte(""))
-	fmt.Println(string(data))
 	// split the data by symbol '{' and '}.', according to syntax
 	s = bytes.Split(data, []byte("}."))
 	for _, v := range s {
@@ -609,7 +546,6 @@ func unmarshal(in []byte, out interface{}) (err error) {
 		// delete '{'
 		index := bytes.Index(v, []byte("{"))
 		v = append(v[:index], v[index+1:]...)
-		fmt.Println(string(v))
 		// repair with ','
 		v = repairTrim(v)
 		// decode
