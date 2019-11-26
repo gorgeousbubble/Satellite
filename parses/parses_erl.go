@@ -622,6 +622,29 @@ func unmarshal(in []byte, out interface{}) (err error) {
 }
 
 // encode
+func trimElement(s []byte) (r []byte) {
+	r = bytes.TrimSuffix(s, []byte(","))
+	return r
+}
+
+func repairList(s []byte) (r []byte) {
+	ss := make([][]byte, 3)
+	ss[0] = []byte("[")
+	ss[1] = s
+	ss[2] = []byte("]")
+	r = bytes.Join(ss, []byte(""))
+	return r
+}
+
+func repairTuple(s []byte) (r []byte) {
+	ss := make([][]byte, 3)
+	ss[0] = []byte("{")
+	ss[1] = s
+	ss[2] = []byte("}")
+	r = bytes.Join(ss, []byte(""))
+	return r
+}
+
 func wrapOneElement(in interface{}) (r []byte, err error) {
 	var rType = reflect.TypeOf(in)
 	var rValue = reflect.ValueOf(in)
@@ -676,8 +699,6 @@ func wrapOneElement(in interface{}) (r []byte, err error) {
 			case "tuple":
 				fallthrough
 			case "list":
-				fallthrough
-			case "element":
 				rs, err := wrapOneElement(f.Interface())
 				if err != nil {
 					return r, err
@@ -722,27 +743,28 @@ func wrapOneElement(in interface{}) (r []byte, err error) {
 	return r, err
 }
 
-func trimElement(s []byte) (r []byte) {
-	r = bytes.TrimSuffix(s, []byte(","))
-	return r
-}
-
-func repairList(s []byte) (r []byte) {
-	ss := make([][]byte, 3)
-	ss[0] = []byte("[")
-	ss[1] = s
-	ss[2] = []byte("]")
-	r = bytes.Join(ss, []byte(""))
-	return r
-}
-
-func repairTuple(s []byte) (r []byte) {
-	ss := make([][]byte, 3)
-	ss[0] = []byte("{")
-	ss[1] = s
-	ss[2] = []byte("}")
-	r = bytes.Join(ss, []byte(""))
-	return r
+func encode(in interface{}) (out []byte, err error) {
+	var rType = reflect.TypeOf(in)
+	var rValue = reflect.ValueOf(in)
+	fmt.Println("type of in interface:", rType)
+	fmt.Println("value of in interface:", rValue)
+	fmt.Println(rType.Kind())
+	// check the in type kind
+	if rType.Kind() != reflect.Struct {
+		err = errors.New("in interface should be struct")
+		fmt.Println(err)
+		return nil, err
+	}
+	// wrap the struct
+	r, err := wrapOneElement(in)
+	if err != nil {
+		return out, err
+	}
+	// repair tuple...
+	out = bytes.TrimSuffix(r, []byte(","))
+	out = append(out, '.')
+	fmt.Println("out:", out)
+	return out, err
 }
 
 func marshal(in interface{}) (out []byte, err error) {
