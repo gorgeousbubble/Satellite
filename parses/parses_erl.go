@@ -697,7 +697,24 @@ func wrapOneElement(in interface{}) (r []byte, err error) {
 		r = repairTrim(r)
 		fmt.Println(string(r))
 	case reflect.Slice:
-		// switch the kind of sub type...
+		// traverse slice elements
+		fmt.Println(rValue.Type().Elem().Kind())
+		var s [][]byte
+		for i := 0; i < rValue.Len(); i++ {
+			rs, err := wrapOneElement(rValue.Index(i).Interface())
+			if err != nil {
+				return r, err
+			}
+			if i == rValue.Len()-1 {
+				rs = trimElement(rs)
+			}
+			s = append(s, rs)
+		}
+		// repair list...
+		r = bytes.Join(s, []byte(""))
+		r = repairList(r)
+		r = repairTrim(r)
+		fmt.Println(string(r))
 	default:
 		err = errors.New("unrecognized element type")
 		return r, err

@@ -868,3 +868,191 @@ func TestWrapOneElementStruct3(t *testing.T) {
 	}
 	fmt.Println(string(r))
 }
+
+func TestWrapOneElementSlice(t *testing.T) {
+	type subtest struct {
+		Name   string `erl:"string"`
+		Number int    `erl:"int"`
+	}
+	type test struct {
+		Name    string    `erl:"string"`
+		Content string    `erl:"string"`
+		Number  int       `erl:"int"`
+		List    []subtest `erl:"list"`
+	}
+	in := test{
+		Name:    "test",
+		Content: "'dream'",
+		Number:  2,
+		List: []subtest{
+			{
+				Name:   "sub1",
+				Number: 1,
+			},
+			{
+				Name:   "sub2",
+				Number: 5,
+			},
+		},
+	}
+	r, err := wrapOneElement(in)
+	if err != nil {
+		t.Fatal("Error wrap one element:", err)
+	}
+	fmt.Println(string(r))
+}
+
+func TestWrapOneElementSlice2(t *testing.T) {
+	type subsub struct {
+		Name string `erl:"string"`
+		Sub  []int  `erl:"list"`
+	}
+	type subtest struct {
+		Name   string `erl:"string"`
+		Number int    `erl:"int"`
+		Sub    subsub `erl:"tuple"`
+	}
+	type test struct {
+		Name    string    `erl:"string"`
+		Content string    `erl:"string"`
+		Number  int       `erl:"int"`
+		List    []subtest `erl:"list"`
+	}
+	in := test{
+		Name:    "test",
+		Content: "'dream'",
+		Number:  2,
+		List: []subtest{
+			{
+				Name:   "sub1",
+				Number: 1,
+				Sub: subsub{
+					Name: "subsub_1",
+					Sub:  []int{1, 2, 3, 4, 5},
+				},
+			},
+			{
+				Name:   "sub2",
+				Number: 5,
+				Sub: subsub{
+					Name: "subsub_2",
+					Sub:  []int{1, 3, 5, 7, 9},
+				},
+			},
+		},
+	}
+	r, err := wrapOneElement(in)
+	if err != nil {
+		t.Fatal("Error wrap one element:", err)
+	}
+	fmt.Println(string(r))
+}
+
+func TestWrapOneElementSlice3(t *testing.T) {
+	type subtest struct {
+		Name  string `erl:"string"`
+		Index int    `erl:"int"`
+		List  []int  `erl:"list"`
+	}
+	type test struct {
+		List []subtest `erl:"list"`
+	}
+	in := test{
+		List: []subtest{
+			{
+				Name:  "sub_1",
+				Index: 1,
+				List:  []int{1, 2, 3, 4, 5},
+			},
+			{
+				Name:  "sub_2",
+				Index: 2,
+				List:  []int{1, 2, 3},
+			},
+			{
+				Name:  "sub_3",
+				Index: 3,
+				List:  []int{1, 1, 2, 3, 5, 8},
+			},
+		},
+	}
+	r, err := wrapOneElement(in)
+	if err != nil {
+		t.Fatal("Error wrap one element:", err)
+	}
+	fmt.Println(string(r))
+}
+
+func TestWrapOneElementInterface(t *testing.T) {
+	type subsub struct {
+		Name    string `erl:"string"`
+		Content string `erl:"string"`
+		Value   int    `erl:"int"`
+	}
+	type subtest1 struct {
+		Name  string   `erl:"string"`
+		Index int      `erl:"int"`
+		Sub   []subsub `erl:"list"`
+	}
+	type subtest2 struct {
+		Name    string `erl:"string"`
+		SubName string `erl:"string"`
+	}
+	type subtest3 struct {
+		Name string `erl:"string"`
+		Up   int    `erl:"int"`
+		Down int    `erl:"int"`
+		Sub  subsub `erl:"tuple"`
+	}
+	type test struct {
+		Name    string        `erl:"string"`
+		Index   int           `erl:"int"`
+		Options []interface{} `erl:"list"`
+	}
+	in := test{
+		Name:  "test",
+		Index: 1,
+		Options: []interface{}{
+			subtest1{
+				Name:  "sub_1",
+				Index: 1,
+				Sub: []subsub{
+					{
+						Name:    "subsub_1",
+						Content: "speak",
+						Value:   7,
+					},
+					{
+						Name:    "subsub_2",
+						Content: "apple",
+						Value:   12,
+					},
+					{
+						Name:    "subsub_3",
+						Content: "orange",
+						Value:   2,
+					},
+				},
+			},
+			subtest2{
+				Name:    "sub_2",
+				SubName: "remote",
+			},
+			subtest3{
+				Name: "sub_3",
+				Up:   2,
+				Down: 4,
+				Sub: subsub{
+					Name:    "subsub_4",
+					Content: "ack",
+					Value:   24,
+				},
+			},
+		},
+	}
+	r, err := wrapOneElement(in)
+	if err != nil {
+		t.Fatal("Error wrap one element:", err)
+	}
+	fmt.Println(string(r))
+}
