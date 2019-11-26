@@ -3,7 +3,6 @@ package parses
 import (
 	"bytes"
 	"errors"
-	"fmt"
 	"reflect"
 	"strconv"
 	"strings"
@@ -26,8 +25,8 @@ func Unmarshal(in []byte, out interface{}) (err error) {
 }
 
 // Marshal erlang stream
-func Marshal(in interface{}) (out []byte, err error) {
-	return marshal(in)
+func Marshal(in []byte, t interface{}) (out []byte, err error) {
+	return marshal(in, t)
 }
 
 // decode
@@ -220,21 +219,14 @@ func decodeOneParameter(in []byte, out interface{}) (err error) {
 	// get pointer's value...
 	var rType = reflect.TypeOf(out)
 	var rValue = reflect.ValueOf(out)
-	fmt.Println("type of out interface:", rType)
-	fmt.Println("value of out interface:", rValue)
-	fmt.Println(rType.Kind())
 	// check the out type kind
 	if rType.Kind() != reflect.Ptr {
 		err = errors.New("out interface should be struct pointer")
-		fmt.Println(err)
 		return err
 	}
 	// get real variable value...
 	rType = rType.Elem()
 	rValue = rValue.Elem()
-	fmt.Println("type of point:", rType)
-	fmt.Println("value of point:", rValue)
-	fmt.Println(rType.Kind())
 	// switch the kind of type...
 	switch rType.Kind() {
 	case reflect.Struct:
@@ -244,9 +236,6 @@ func decodeOneParameter(in []byte, out interface{}) (err error) {
 			// get struct field value...
 			t := rType.Field(i)
 			f := rValue.Field(i)
-			fmt.Printf("struct field[%v]\n", i)
-			fmt.Printf("type of field[%v]:%v\n", i, t)
-			fmt.Printf("value of field[%v]:%v\n", i, f)
 			// parse tag
 			tag := t.Tag.Get("erl")
 			fields := strings.Split(tag, ",")
@@ -321,7 +310,6 @@ func decodeOneParameter(in []byte, out interface{}) (err error) {
 	case reflect.Slice:
 		var rem = in
 		// switch the kind of sub type...
-		fmt.Println(rValue.Type().Elem().Kind())
 		switch rValue.Type().Elem().Kind() {
 		case reflect.String:
 			// traverse slice elements(string)
@@ -332,14 +320,11 @@ func decodeOneParameter(in []byte, out interface{}) (err error) {
 					break
 				}
 				rValue = reflect.Append(rValue, reflect.ValueOf(r))
-				fmt.Println("rValue:", rValue)
 				rem = sub
-				fmt.Println("rem:", string(rem))
 			}
 			// parse error leave
 			if len(rem) != 0 {
 				err = e
-				fmt.Println(err)
 				return err
 			}
 			reflect.ValueOf(out).Elem().Set(rValue)
@@ -352,14 +337,11 @@ func decodeOneParameter(in []byte, out interface{}) (err error) {
 					break
 				}
 				rValue = reflect.Append(rValue, reflect.ValueOf(r))
-				fmt.Println("rValue:", rValue)
 				rem = sub
-				fmt.Println("rem:", string(rem))
 			}
 			// parse error leave
 			if len(rem) != 0 {
 				err = e
-				fmt.Println(err)
 				return err
 			}
 			reflect.ValueOf(out).Elem().Set(rValue)
@@ -372,14 +354,11 @@ func decodeOneParameter(in []byte, out interface{}) (err error) {
 					break
 				}
 				rValue = reflect.Append(rValue, reflect.ValueOf(r))
-				fmt.Println("rValue:", rValue)
 				rem = sub
-				fmt.Println("rem:", string(rem))
 			}
 			// parse error leave
 			if len(rem) != 0 {
 				err = e
-				fmt.Println(err)
 				return err
 			}
 			reflect.ValueOf(out).Elem().Set(rValue)
@@ -392,14 +371,11 @@ func decodeOneParameter(in []byte, out interface{}) (err error) {
 					break
 				}
 				rValue = reflect.Append(rValue, reflect.ValueOf(r))
-				fmt.Println("rValue:", rValue)
 				rem = sub
-				fmt.Println("rem:", string(rem))
 			}
 			// parse error leave
 			if len(rem) != 0 {
 				err = e
-				fmt.Println(err)
 				return err
 			}
 			reflect.ValueOf(out).Elem().Set(rValue)
@@ -412,29 +388,22 @@ func decodeOneParameter(in []byte, out interface{}) (err error) {
 					break
 				}
 				rem = sub
-				fmt.Println("rem:", string(rem))
 				r, err = trimTuple(r)
 				if err != nil {
 					return err
 				}
 				r = repairTrim(r)
-				fmt.Println(string(r))
 				// new struct value
 				o := reflect.New(rValue.Type().Elem())
-				fmt.Printf("type:%v,value:%v\n", reflect.TypeOf(o), reflect.ValueOf(o))
-				fmt.Println(o.CanAddr())
 				err = decodeOneParameter(r, o.Interface())
 				if err != nil {
 					return err
 				}
-				fmt.Printf("o:%v,elem:%v\n", o, o.Elem())
 				rValue = reflect.Append(rValue, reflect.ValueOf(o.Elem().Interface()))
-				fmt.Println("rValue:", rValue)
 			}
 			// parse error leave
 			if len(rem) != 0 {
 				err = e
-				fmt.Println(err)
 				return err
 			}
 			reflect.ValueOf(out).Elem().Set(rValue)
@@ -447,34 +416,26 @@ func decodeOneParameter(in []byte, out interface{}) (err error) {
 					break
 				}
 				rem = sub
-				fmt.Println("r:", string(r))
-				fmt.Println("rem:", string(rem))
 				r, err = trimTuple(r)
 				if err != nil {
 					return err
 				}
 				r = repairTrim(r)
-				fmt.Println(string(r))
 				// check type by name of interface(extract type name)
 				name, _, err := extractOneString(r)
 				if err != nil {
 					return err
 				}
-				fmt.Println("name of type:", string(name))
 				// traverse map elements
 				for k, v := range MParsesErl {
 					if k == string(name) {
 						// new struct value
 						o := reflect.New(reflect.TypeOf(v))
-						fmt.Printf("type:%v,value:%v\n", reflect.TypeOf(o), reflect.ValueOf(o))
-						fmt.Println(o.CanAddr())
 						err = decodeOneParameter(r, o.Interface())
 						if err != nil {
 							return err
 						}
-						fmt.Printf("o:%v,elem:%v\n", o, o.Elem())
 						rValue = reflect.Append(rValue, reflect.ValueOf(o.Elem().Interface()))
-						fmt.Println("rValue:", rValue)
 						break
 					}
 				}
@@ -482,7 +443,6 @@ func decodeOneParameter(in []byte, out interface{}) (err error) {
 			// parse error leave
 			if len(rem) != 0 {
 				err = e
-				fmt.Println(err)
 				return err
 			}
 			reflect.ValueOf(out).Elem().Set(rValue)
@@ -491,17 +451,13 @@ func decodeOneParameter(in []byte, out interface{}) (err error) {
 			return err
 		}
 	/*case reflect.Interface:
-	fmt.Println("hello reflect interface...")
 	var rem = in
 	// first, extract one parameter as string...
 	r, sub, err := extractOneString(rem)
 	if err != nil {
 		return err
 	}
-	rem = sub
-	fmt.Println("r:", string(r))
-	fmt.Println("rem:", string(rem))
-	fmt.Println("breakout...")*/
+	rem = sub*/
 	default:
 		err = errors.New("unrecognized reflect type")
 		return err
@@ -513,25 +469,17 @@ func decode(in []byte, out interface{}) (err error) {
 	// get pointer's value...
 	var rType = reflect.TypeOf(out)
 	var rValue = reflect.ValueOf(out)
-	fmt.Println("type of out interface:", rType)
-	fmt.Println("value of out interface:", rValue)
-	fmt.Println(rType.Kind())
 	// check the out type kind
 	if rType.Kind() != reflect.Ptr {
 		err = errors.New("out interface should be struct pointer")
-		fmt.Println(err)
 		return err
 	}
 	// get real variable value...
 	rType = rType.Elem()
 	rValue = rValue.Elem()
-	fmt.Println("type of point:", rType)
-	fmt.Println("value of point:", rValue)
-	fmt.Println(rType.Kind())
 	// type should be struct
 	if rType.Kind() != reflect.Struct {
 		err = errors.New("real variable should be struct")
-		fmt.Println(err)
 		return err
 	}
 	// extract type name
@@ -540,30 +488,21 @@ func decode(in []byte, out interface{}) (err error) {
 	if err != nil {
 		return err
 	}
-	fmt.Println("name of type:", string(name))
-	fmt.Println("global mapping:", MParsesErl)
 	// traverse struct fields
 	for i := 0; i < rType.NumField(); i++ {
 		// get struct field value...
-		t := rType.Field(i)
+		//t := rType.Field(i)
 		f := rValue.Field(i)
-		fmt.Printf("struct field[%v]\n", i)
-		fmt.Printf("type of field[%v]:%v\n", i, t)
-		fmt.Printf("value of field[%v]:%v\n", i, f)
 		// check list elements type
 		for k, v := range MParsesErl {
 			if k == string(name) && reflect.TypeOf(v).Name() == f.Type().Elem().Name() {
 				// new struct value
 				o := reflect.New(reflect.TypeOf(v))
-				fmt.Printf("type:%v,value:%v\n", reflect.TypeOf(o), reflect.ValueOf(o))
-				fmt.Println(o.CanAddr())
 				err = decodeOneParameter(r, o.Interface())
 				if err != nil {
 					return err
 				}
-				fmt.Printf("o:%v,elem:%v\n", o, o.Elem())
 				f = reflect.Append(f, reflect.ValueOf(o.Elem().Interface()))
-				fmt.Println("rValue:", f)
 				break
 			}
 		}
@@ -595,10 +534,8 @@ func unmarshal(in []byte, out interface{}) (err error) {
 		if !bytes.Equal(v, []byte("")) {
 			s = append(s, v)
 		}
-		fmt.Println(string(v))
 	}
 	data := bytes.Join(s, []byte(""))
-	fmt.Println(string(data))
 	// split the data by symbol '{' and '}.', according to syntax
 	s = bytes.Split(data, []byte("}."))
 	for _, v := range s {
@@ -609,7 +546,6 @@ func unmarshal(in []byte, out interface{}) (err error) {
 		// delete '{'
 		index := bytes.Index(v, []byte("{"))
 		v = append(v[:index], v[index+1:]...)
-		fmt.Println(string(v))
 		// repair with ','
 		v = repairTrim(v)
 		// decode
@@ -622,12 +558,32 @@ func unmarshal(in []byte, out interface{}) (err error) {
 }
 
 // encode
+func trimElement(s []byte) (r []byte) {
+	r = bytes.TrimSuffix(s, []byte(","))
+	return r
+}
+
+func repairList(s []byte) (r []byte) {
+	ss := make([][]byte, 3)
+	ss[0] = []byte("[")
+	ss[1] = s
+	ss[2] = []byte("]")
+	r = bytes.Join(ss, []byte(""))
+	return r
+}
+
+func repairTuple(s []byte) (r []byte) {
+	ss := make([][]byte, 3)
+	ss[0] = []byte("{")
+	ss[1] = s
+	ss[2] = []byte("}")
+	r = bytes.Join(ss, []byte(""))
+	return r
+}
+
 func wrapOneElement(in interface{}) (r []byte, err error) {
 	var rType = reflect.TypeOf(in)
 	var rValue = reflect.ValueOf(in)
-	fmt.Println("type of in interface:", rType)
-	fmt.Println("value of in interface:", rValue)
-	fmt.Println(rType.Kind())
 	// switch the s type kind
 	switch rType.Kind() {
 	case reflect.String:
@@ -654,9 +610,6 @@ func wrapOneElement(in interface{}) (r []byte, err error) {
 			// get struct field value...
 			t := rType.Field(i)
 			f := rValue.Field(i)
-			fmt.Printf("struct field[%v]\n", i)
-			fmt.Printf("type of field[%v]:%v\n", i, t)
-			fmt.Printf("value of field[%v]:%v\n", i, f)
 			// parse tag
 			tag := t.Tag.Get("erl")
 			fields := strings.Split(tag, ",")
@@ -676,8 +629,6 @@ func wrapOneElement(in interface{}) (r []byte, err error) {
 			case "tuple":
 				fallthrough
 			case "list":
-				fallthrough
-			case "element":
 				rs, err := wrapOneElement(f.Interface())
 				if err != nil {
 					return r, err
@@ -695,9 +646,23 @@ func wrapOneElement(in interface{}) (r []byte, err error) {
 		r = bytes.Join(s, []byte(""))
 		r = repairTuple(r)
 		r = repairTrim(r)
-		fmt.Println(string(r))
 	case reflect.Slice:
-		// switch the kind of sub type...
+		// traverse slice elements
+		var s [][]byte
+		for i := 0; i < rValue.Len(); i++ {
+			rs, err := wrapOneElement(rValue.Index(i).Interface())
+			if err != nil {
+				return r, err
+			}
+			if i == rValue.Len()-1 {
+				rs = trimElement(rs)
+			}
+			s = append(s, rs)
+		}
+		// repair list...
+		r = bytes.Join(s, []byte(""))
+		r = repairList(r)
+		r = repairTrim(r)
 	default:
 		err = errors.New("unrecognized element type")
 		return r, err
@@ -705,29 +670,162 @@ func wrapOneElement(in interface{}) (r []byte, err error) {
 	return r, err
 }
 
-func trimElement(s []byte) (r []byte) {
-	r = bytes.TrimSuffix(s, []byte(","))
-	return r
+func encode(in interface{}) (out []byte, err error) {
+	var rType = reflect.TypeOf(in)
+	var rValue = reflect.ValueOf(in)
+	// check the in type kind
+	if rType.Kind() != reflect.Struct {
+		err = errors.New("in interface should be struct")
+		return nil, err
+	}
+	// traverse struct fields
+	var s [][]byte
+	for i := 0; i < rType.NumField(); i++ {
+		// get struct field value...
+		t := rType.Field(i)
+		f := rValue.Field(i)
+		// parse tag
+		tag := t.Tag.Get("erl")
+		fields := strings.Split(tag, ",")
+		if len(fields) > 1 {
+			tag = fields[0]
+		}
+		// check tag type(should be list only)
+		if tag != "list" {
+			err = errors.New("struct field tag should be list only")
+			return out, err
+		}
+		// check list elements whether struct
+		if f.Type().Elem().Kind() != reflect.Struct {
+			err = errors.New("list element should be struct only")
+			return out, err
+		}
+		// traverse list elements
+		for j := 0; j < f.Len(); j++ {
+			r, err := wrapOneElement(f.Index(j).Interface())
+			if err != nil {
+				return out, err
+			}
+			// repair tuple...
+			r = bytes.TrimSuffix(r, []byte(","))
+			r = append(r, '.')
+			r = append(r, '\n')
+			s = append(s, r)
+		}
+	}
+	out = bytes.Join(s, []byte(""))
+	return out, err
 }
 
-func repairList(s []byte) (r []byte) {
-	ss := make([][]byte, 3)
-	ss[0] = []byte("[")
-	ss[1] = s
-	ss[2] = []byte("]")
-	r = bytes.Join(ss, []byte(""))
-	return r
+func needClear(name []byte, in interface{}) (b bool, err error) {
+	var rType = reflect.TypeOf(in)
+	var rValue = reflect.ValueOf(in)
+	// check the in type kind
+	if rType.Kind() != reflect.Struct {
+		err = errors.New("in interface should be struct")
+		return b, err
+	}
+	// traverse struct fields
+	for i := 0; i < rType.NumField(); i++ {
+		// get struct field value...
+		t := rType.Field(i)
+		f := rValue.Field(i)
+		// parse tag
+		tag := t.Tag.Get("erl")
+		fields := strings.Split(tag, ",")
+		if len(fields) > 1 {
+			tag = fields[0]
+		}
+		// check field whether empty?
+		if f.IsNil() {
+			return b, nil
+		}
+		// check tag type(should be list only)
+		if tag != "list" {
+			err = errors.New("struct field tag should be list only")
+			return b, err
+		}
+		// check list elements whether struct
+		if f.Type().Elem().Kind() != reflect.Struct {
+			err = errors.New("list element should be struct only")
+			return b, err
+		}
+		// check list elements type
+		for k, v := range MParsesErl {
+			if k == string(name) && reflect.TypeOf(v).Name() == f.Type().Elem().Name() {
+				b = true
+				return b, err
+			}
+		}
+	}
+	return b, err
 }
 
-func repairTuple(s []byte) (r []byte) {
-	ss := make([][]byte, 3)
-	ss[0] = []byte("{")
-	ss[1] = s
-	ss[2] = []byte("}")
-	r = bytes.Join(ss, []byte(""))
-	return r
-}
-
-func marshal(in interface{}) (out []byte, err error) {
+func marshal(in []byte, t interface{}) (out []byte, err error) {
+	var s [][]byte
+	// split the stream by symbol '\n' in order to delete comments
+	s1 := bytes.Split(in, []byte("\n"))
+	for _, v := range s1 {
+		// delete comments
+		if bytes.Contains(v, []byte("%")) {
+			index := bytes.Index(v, []byte("%"))
+			v = append(v[:index], v[len(v):]...)
+		}
+		// delete C/C++ comments?
+		if bytes.Contains(v, []byte("//")) {
+			index := bytes.Index(v, []byte("//"))
+			v = append(v[:index], v[len(v):]...)
+		}
+		// delete all space
+		v = bytes.ReplaceAll(v, []byte(" "), []byte(""))
+		// delete all return
+		v = bytes.ReplaceAll(v, []byte("\r"), []byte(""))
+		// delete all blank lines, packet to s slice
+		if !bytes.Equal(v, []byte("")) {
+			s = append(s, v)
+		}
+	}
+	data := bytes.Join(s, []byte(""))
+	// split the data by symbol '{' and '}.', according to syntax
+	s = bytes.Split(data, []byte("}."))
+	for i := 0; i < len(s); i++ {
+		// valid line
+		if !bytes.Contains(s[i], []byte("{")) {
+			s = append(s[:i], s[i+1:]...)
+			i--
+			continue
+		}
+		// append all '}.'
+		s[i] = append(s[i], '}')
+		s[i] = append(s[i], '.')
+		// find first syntax
+		start := bytes.Index(s[i], []byte("{"))
+		index := bytes.Index(s[i], []byte(","))
+		name := append(s[i][start+1:index], s[i][len(s[i]):]...)
+		// check parameter whether need clear?
+		b, err := needClear(name, t)
+		if err != nil {
+			return out, err
+		}
+		if b {
+			s = append(s[:i], s[i+1:]...)
+			i--
+		}
+	}
+	// encode parameters
+	r1, err := encode(t)
+	if err != nil {
+		return out, err
+	}
+	r := bytes.Split(r1, []byte("\n"))
+	for _, v := range r {
+		// valid line
+		if !bytes.Contains(v, []byte("{")) {
+			continue
+		}
+		s = append(s, v)
+	}
+	// combine
+	out = bytes.Join(s, []byte("\n"))
 	return out, err
 }
