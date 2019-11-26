@@ -648,9 +648,6 @@ func repairTuple(s []byte) (r []byte) {
 func wrapOneElement(in interface{}) (r []byte, err error) {
 	var rType = reflect.TypeOf(in)
 	var rValue = reflect.ValueOf(in)
-	fmt.Println("type of in interface:", rType)
-	fmt.Println("value of in interface:", rValue)
-	fmt.Println(rType.Kind())
 	// switch the s type kind
 	switch rType.Kind() {
 	case reflect.String:
@@ -677,9 +674,6 @@ func wrapOneElement(in interface{}) (r []byte, err error) {
 			// get struct field value...
 			t := rType.Field(i)
 			f := rValue.Field(i)
-			fmt.Printf("struct field[%v]\n", i)
-			fmt.Printf("type of field[%v]:%v\n", i, t)
-			fmt.Printf("value of field[%v]:%v\n", i, f)
 			// parse tag
 			tag := t.Tag.Get("erl")
 			fields := strings.Split(tag, ",")
@@ -716,10 +710,8 @@ func wrapOneElement(in interface{}) (r []byte, err error) {
 		r = bytes.Join(s, []byte(""))
 		r = repairTuple(r)
 		r = repairTrim(r)
-		fmt.Println(string(r))
 	case reflect.Slice:
 		// traverse slice elements
-		fmt.Println(rValue.Type().Elem().Kind())
 		var s [][]byte
 		for i := 0; i < rValue.Len(); i++ {
 			rs, err := wrapOneElement(rValue.Index(i).Interface())
@@ -735,7 +727,6 @@ func wrapOneElement(in interface{}) (r []byte, err error) {
 		r = bytes.Join(s, []byte(""))
 		r = repairList(r)
 		r = repairTrim(r)
-		fmt.Println(string(r))
 	default:
 		err = errors.New("unrecognized element type")
 		return r, err
@@ -746,27 +737,95 @@ func wrapOneElement(in interface{}) (r []byte, err error) {
 func encode(in interface{}) (out []byte, err error) {
 	var rType = reflect.TypeOf(in)
 	var rValue = reflect.ValueOf(in)
-	fmt.Println("type of in interface:", rType)
-	fmt.Println("value of in interface:", rValue)
-	fmt.Println(rType.Kind())
 	// check the in type kind
 	if rType.Kind() != reflect.Struct {
 		err = errors.New("in interface should be struct")
-		fmt.Println(err)
 		return nil, err
 	}
-	// wrap the struct
-	r, err := wrapOneElement(in)
-	if err != nil {
-		return out, err
+	// traverse struct fields
+	var s [][]byte
+	for i := 0; i < rType.NumField(); i++ {
+		// get struct field value...
+		t := rType.Field(i)
+		f := rValue.Field(i)
+		// parse tag
+		tag := t.Tag.Get("erl")
+		fields := strings.Split(tag, ",")
+		if len(fields) > 1 {
+			tag = fields[0]
+		}
+		// check tag type(should be list only)
+		if tag != "list" {
+			err = errors.New("encode field tag should be list only")
+			return out, err
+		}
+		// check list elements whether struct
+		if f.Type().Elem().Kind() != reflect.Struct {
+			err = errors.New("list element should be struct only")
+			return out, err
+		}
+		// traverse list elements
+		for j := 0; j < f.Len(); j++ {
+			r, err := wrapOneElement(f.Index(j).Interface())
+			if err != nil {
+				return out, err
+			}
+			// repair tuple...
+			r = bytes.TrimSuffix(r, []byte(","))
+			r = append(r, '.')
+			r = append(r, '\n')
+			s = append(s, r)
+		}
 	}
-	// repair tuple...
-	out = bytes.TrimSuffix(r, []byte(","))
-	out = append(out, '.')
-	fmt.Println("out:", out)
+	out = bytes.Join(s, []byte(""))
 	return out, err
 }
 
 func marshal(in interface{}) (out []byte, err error) {
+	/*var s [][]byte
+	// split the stream by symbol '\n' in order to delete comments
+	s1 := bytes.Split(in, []byte("\n"))
+	for _, v := range s1 {
+		// delete comments
+		if bytes.Contains(v, []byte("%")) {
+			index := bytes.Index(v, []byte("%"))
+			v = append(v[:index], v[len(v):]...)
+		}
+		// delete C/C++ comments?
+		if bytes.Contains(v, []byte("//")) {
+			index := bytes.Index(v, []byte("//"))
+			v = append(v[:index], v[len(v):]...)
+		}
+		// delete all space
+		v = bytes.ReplaceAll(v, []byte(" "), []byte(""))
+		// delete all return
+		v = bytes.ReplaceAll(v, []byte("\r"), []byte(""))
+		// delete all blank lines, packet to s slice
+		if !bytes.Equal(v, []byte("")) {
+			s = append(s, v)
+		}
+		fmt.Println(string(v))
+	}
+	data := bytes.Join(s, []byte(""))
+	fmt.Println(string(data))
+	// split the data by symbol '{' and '}.', according to syntax
+	s = bytes.Split(data, []byte("}."))
+	for _, v := range s {
+		// valid line
+		if !bytes.Contains(v, []byte("{")) {
+			continue
+		}
+		// delete '{'
+		index := bytes.Index(v, []byte("{"))
+		v = append(v[:index], v[index+1:]...)
+		fmt.Println(string(v))
+		// repair with ','
+		v = repairTrim(v)
+		// decode
+		err = decode(v, out)
+		if err != nil {
+			return err
+		}
+	}*/
 	return out, err
 }
