@@ -746,6 +746,16 @@ func TestWrapOneElementInt(t *testing.T) {
 	fmt.Println(string(r))
 }
 
+func BenchmarkWrapOneElementInt(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		var in = 2
+		_, err := wrapOneElement(in)
+		if err != nil {
+			b.Fatal("Error wrap one element:", err)
+		}
+	}
+}
+
 func TestWrapOneElementBool(t *testing.T) {
 	var in = false
 	r, err := wrapOneElement(in)
@@ -753,6 +763,16 @@ func TestWrapOneElementBool(t *testing.T) {
 		t.Fatal("Error wrap one element:", err)
 	}
 	fmt.Println(string(r))
+}
+
+func BenchmarkWrapOneElementBool(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		var in = false
+		_, err := wrapOneElement(in)
+		if err != nil {
+			b.Fatal("Error wrap one element:", err)
+		}
+	}
 }
 
 func TestWrapOneElementFloat64(t *testing.T) {
