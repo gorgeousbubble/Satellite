@@ -82,7 +82,8 @@ func PackAESConfine(src []string, dest string) (err error) {
 	for k, v := range src {
 		wg.Add(1)
 		ch <- struct{}{}
-		go PackAESOneGo(v, &r[k+4], wg)
+		go PackAESOneConfineGo(v, &r[k+4], wg, ch)
+		//go PackAESOneGo(v, &r[k+4], wg)
 	}
 	wg.Wait()
 	// second, check goroutine whether success or not

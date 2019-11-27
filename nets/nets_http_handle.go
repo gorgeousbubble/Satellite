@@ -32,6 +32,20 @@ func handleRoot(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func handleIndex(w http.ResponseWriter, r *http.Request) {
+	var err error
+	switch r.Method {
+	case "GET":
+		log.Printf("GET %s", r.RequestURI)
+		err = handleGetIndex(w, r)
+	}
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		log.Printf("%d Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+}
+
 func handleNetsPack(w http.ResponseWriter, r *http.Request) {
 	var err error
 	switch r.Method {
@@ -201,6 +215,12 @@ func handleNetsImagesQRCodeToMemory(w http.ResponseWriter, r *http.Request) {
 func handleGetRoot(w http.ResponseWriter, r *http.Request) (err error) {
 	w.Header().Set("Content-Type", "text/plain")
 	w.Write([]byte("Hello,World!"))
+	return err
+}
+
+func handleGetIndex(w http.ResponseWriter, r *http.Request) (err error) {
+	w.Header().Set("Content-Type", "text/plain")
+	w.Write([]byte("Satellite Project"))
 	return err
 }
 
