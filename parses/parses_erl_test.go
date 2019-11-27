@@ -784,6 +784,16 @@ func TestWrapOneElementFloat64(t *testing.T) {
 	fmt.Println(string(r))
 }
 
+func BenchmarkWrapOneElementFloat64(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		var in = 3.1415926
+		_, err := wrapOneElement(in)
+		if err != nil {
+			b.Fatal("Error wrap one element:", err)
+		}
+	}
+}
+
 func TestWrapOneElementStruct(t *testing.T) {
 	type test struct {
 		Name    string  `erl:"string"`
@@ -804,6 +814,29 @@ func TestWrapOneElementStruct(t *testing.T) {
 		t.Fatal("Error wrap one element:", err)
 	}
 	fmt.Println(string(r))
+}
+
+func BenchmarkWrapOneElementStruct(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		type test struct {
+			Name    string  `erl:"string"`
+			Content string  `erl:"string"`
+			Index   int     `erl:"int"`
+			Useful  bool    `erl:"bool"`
+			Rate    float64 `erl:"float64"`
+		}
+		in := test{
+			Name:    "test",
+			Content: "speak",
+			Index:   1,
+			Useful:  true,
+			Rate:    1.7132,
+		}
+		_, err := wrapOneElement(in)
+		if err != nil {
+			b.Fatal("Error wrap one element:", err)
+		}
+	}
 }
 
 func TestWrapOneElementStruct2(t *testing.T) {
@@ -835,6 +868,38 @@ func TestWrapOneElementStruct2(t *testing.T) {
 		t.Fatal("Error wrap one element:", err)
 	}
 	fmt.Println(string(r))
+}
+
+func BenchmarkWrapOneElementStruct2(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		type subtest struct {
+			Name   string `erl:"string"`
+			Number int    `erl:"int"`
+		}
+		type test struct {
+			Name    string  `erl:"string"`
+			Content string  `erl:"string"`
+			Index   int     `erl:"int"`
+			Useful  bool    `erl:"bool"`
+			Rate    float64 `erl:"float64"`
+			Sub     subtest `erl:"tuple"`
+		}
+		in := test{
+			Name:    "test",
+			Content: "'speak'",
+			Index:   1,
+			Useful:  true,
+			Rate:    1.7132,
+			Sub: subtest{
+				Name:   "subtest",
+				Number: 5,
+			},
+		}
+		_, err := wrapOneElement(in)
+		if err != nil {
+			b.Fatal("Error wrap one element:", err)
+		}
+	}
 }
 
 func TestWrapOneElementStruct3(t *testing.T) {
@@ -887,6 +952,59 @@ func TestWrapOneElementStruct3(t *testing.T) {
 		t.Fatal("Error wrap one element:", err)
 	}
 	fmt.Println(string(r))
+}
+
+func BenchmarkWrapOneElementStruct3(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		type subsub struct {
+			Name   string  `erl:"string"`
+			Useful bool    `erl:"bool"`
+			Rate   float64 `erl:"float64"`
+		}
+		type subtest struct {
+			Name   string `erl:"string"`
+			Number int    `erl:"int"`
+			Sub    subsub `erl:"tuple"`
+		}
+		type test struct {
+			Name    string  `erl:"string"`
+			Content string  `erl:"string"`
+			Index   int     `erl:"int"`
+			Useful  bool    `erl:"bool"`
+			SS      subtest `erl:"tuple"`
+			Rate    float64 `erl:"float64"`
+			Sub     subtest `erl:"tuple"`
+		}
+		in := test{
+			Name:    "test",
+			Content: "'speak'",
+			Index:   1,
+			Useful:  true,
+			SS: subtest{
+				Name:   "subtest",
+				Number: 5,
+				Sub: subsub{
+					Name:   "subtest",
+					Useful: true,
+					Rate:   1.7132,
+				},
+			},
+			Rate: 1.7132,
+			Sub: subtest{
+				Name:   "subtest",
+				Number: 5,
+				Sub: subsub{
+					Name:   "subtest",
+					Useful: true,
+					Rate:   1.7132,
+				},
+			},
+		}
+		_, err := wrapOneElement(in)
+		if err != nil {
+			b.Fatal("Error wrap one element:", err)
+		}
+	}
 }
 
 func TestWrapOneElementSlice(t *testing.T) {
