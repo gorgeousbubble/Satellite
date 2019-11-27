@@ -1040,6 +1040,40 @@ func TestWrapOneElementSlice(t *testing.T) {
 	fmt.Println(string(r))
 }
 
+func BenchmarkWrapOneElementSlice(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		type subtest struct {
+			Name   string `erl:"string"`
+			Number int    `erl:"int"`
+		}
+		type test struct {
+			Name    string    `erl:"string"`
+			Content string    `erl:"string"`
+			Number  int       `erl:"int"`
+			List    []subtest `erl:"list"`
+		}
+		in := test{
+			Name:    "test",
+			Content: "'dream'",
+			Number:  2,
+			List: []subtest{
+				{
+					Name:   "sub1",
+					Number: 1,
+				},
+				{
+					Name:   "sub2",
+					Number: 5,
+				},
+			},
+		}
+		_, err := wrapOneElement(in)
+		if err != nil {
+			b.Fatal("Error wrap one element:", err)
+		}
+	}
+}
+
 func TestWrapOneElementSlice2(t *testing.T) {
 	type subsub struct {
 		Name string `erl:"string"`
@@ -1086,6 +1120,53 @@ func TestWrapOneElementSlice2(t *testing.T) {
 	fmt.Println(string(r))
 }
 
+func BenchmarkWrapOneElementSlice2(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		type subsub struct {
+			Name string `erl:"string"`
+			Sub  []int  `erl:"list"`
+		}
+		type subtest struct {
+			Name   string `erl:"string"`
+			Number int    `erl:"int"`
+			Sub    subsub `erl:"tuple"`
+		}
+		type test struct {
+			Name    string    `erl:"string"`
+			Content string    `erl:"string"`
+			Number  int       `erl:"int"`
+			List    []subtest `erl:"list"`
+		}
+		in := test{
+			Name:    "test",
+			Content: "'dream'",
+			Number:  2,
+			List: []subtest{
+				{
+					Name:   "sub1",
+					Number: 1,
+					Sub: subsub{
+						Name: "subsub_1",
+						Sub:  []int{1, 2, 3, 4, 5},
+					},
+				},
+				{
+					Name:   "sub2",
+					Number: 5,
+					Sub: subsub{
+						Name: "subsub_2",
+						Sub:  []int{1, 3, 5, 7, 9},
+					},
+				},
+			},
+		}
+		_, err := wrapOneElement(in)
+		if err != nil {
+			b.Fatal("Error wrap one element:", err)
+		}
+	}
+}
+
 func TestWrapOneElementSlice3(t *testing.T) {
 	type subtest struct {
 		Name  string `erl:"string"`
@@ -1119,6 +1200,42 @@ func TestWrapOneElementSlice3(t *testing.T) {
 		t.Fatal("Error wrap one element:", err)
 	}
 	fmt.Println(string(r))
+}
+
+func BenchmarkWrapOneElementSlice3(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		type subtest struct {
+			Name  string `erl:"string"`
+			Index int    `erl:"int"`
+			List  []int  `erl:"list"`
+		}
+		type test struct {
+			List []subtest `erl:"list"`
+		}
+		in := test{
+			List: []subtest{
+				{
+					Name:  "sub_1",
+					Index: 1,
+					List:  []int{1, 2, 3, 4, 5},
+				},
+				{
+					Name:  "sub_2",
+					Index: 2,
+					List:  []int{1, 2, 3},
+				},
+				{
+					Name:  "sub_3",
+					Index: 3,
+					List:  []int{1, 1, 2, 3, 5, 8},
+				},
+			},
+		}
+		_, err := wrapOneElement(in)
+		if err != nil {
+			b.Fatal("Error wrap one element:", err)
+		}
+	}
 }
 
 func TestWrapOneElementInterface(t *testing.T) {
