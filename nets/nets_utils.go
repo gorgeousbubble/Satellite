@@ -142,6 +142,7 @@ func connUdpRecvHandler(c *net.UDPConn) {
 func createHttpRouter() (r *mux.Router) {
 	r = mux.NewRouter()
 	r.HandleFunc(HttpURLRoot, handleRoot).Methods("GET")
+	r.HandleFunc(HttpURLSatellite, handleIndex).Methods("GET")
 	r.HandleFunc(HttpURLPack, handleNetsPack).Methods("POST")
 	r.HandleFunc(HttpURLUnpack, handleNetsUnpack).Methods("POST")
 	r.HandleFunc(HttpURLPackProcess, handleNetsPackProcess).Methods("GET", "POST")
