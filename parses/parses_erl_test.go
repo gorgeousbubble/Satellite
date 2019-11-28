@@ -1312,6 +1312,81 @@ func TestWrapOneElementInterface(t *testing.T) {
 	fmt.Println(string(r))
 }
 
+func BenchmarkWrapOneElementInterface(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		type subsub struct {
+			Name    string `erl:"string"`
+			Content string `erl:"string"`
+			Value   int    `erl:"int"`
+		}
+		type subtest1 struct {
+			Name  string   `erl:"string"`
+			Index int      `erl:"int"`
+			Sub   []subsub `erl:"list"`
+		}
+		type subtest2 struct {
+			Name    string `erl:"string"`
+			SubName string `erl:"string"`
+		}
+		type subtest3 struct {
+			Name string `erl:"string"`
+			Up   int    `erl:"int"`
+			Down int    `erl:"int"`
+			Sub  subsub `erl:"tuple"`
+		}
+		type test struct {
+			Name    string        `erl:"string"`
+			Index   int           `erl:"int"`
+			Options []interface{} `erl:"list"`
+		}
+		in := test{
+			Name:  "test",
+			Index: 1,
+			Options: []interface{}{
+				subtest1{
+					Name:  "sub_1",
+					Index: 1,
+					Sub: []subsub{
+						{
+							Name:    "subsub_1",
+							Content: "speak",
+							Value:   7,
+						},
+						{
+							Name:    "subsub_2",
+							Content: "apple",
+							Value:   12,
+						},
+						{
+							Name:    "subsub_3",
+							Content: "orange",
+							Value:   2,
+						},
+					},
+				},
+				subtest2{
+					Name:    "sub_2",
+					SubName: "remote",
+				},
+				subtest3{
+					Name: "sub_3",
+					Up:   2,
+					Down: 4,
+					Sub: subsub{
+						Name:    "subsub_4",
+						Content: "ack",
+						Value:   24,
+					},
+				},
+			},
+		}
+		_, err := wrapOneElement(in)
+		if err != nil {
+			b.Fatal("Error wrap one element:", err)
+		}
+	}
+}
+
 func TestEncode(t *testing.T) {
 	type subsub struct {
 		Name    string `erl:"string" json:"name"`
