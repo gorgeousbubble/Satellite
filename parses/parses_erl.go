@@ -3,6 +3,8 @@ package parses
 import (
 	"bytes"
 	"errors"
+	"io/ioutil"
+	"os"
 	"reflect"
 	"strconv"
 	"strings"
@@ -19,14 +21,24 @@ import (
 // ...
 var MParsesErl map[string]interface{}
 
-// Unmarshal erlang stream
+// Unmarshal stream
 func Unmarshal(in []byte, out interface{}) (err error) {
 	return unmarshal(in, out)
 }
 
-// Marshal erlang stream
+// Unmarshal from file
+func UnmarshalFrom(file string, out interface{}) (err error) {
+	return unmarshalFrom(file, out)
+}
+
+// Marshal stream
 func Marshal(in []byte, t interface{}) (out []byte, err error) {
 	return marshal(in, t)
+}
+
+// Marshal to file
+func MarshalTo(file string, t interface{}) (err error) {
+	return marshalTo(file, t)
 }
 
 // decode
@@ -557,6 +569,26 @@ func unmarshal(in []byte, out interface{}) (err error) {
 	return err
 }
 
+func unmarshalFrom(in string, out interface{}) (err error) {
+	// try to open file...
+	file, err := os.Open(in)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+	// read the file...
+	data, err := ioutil.ReadAll(file)
+	if err != nil {
+		return err
+	}
+	// unmarshal
+	err = unmarshal(data, out)
+	if err != nil {
+		return err
+	}
+	return err
+}
+
 // encode
 func trimElement(s []byte) (r []byte) {
 	r = bytes.TrimSuffix(s, []byte(","))
@@ -828,4 +860,29 @@ func marshal(in []byte, t interface{}) (out []byte, err error) {
 	// combine
 	out = bytes.Join(s, []byte("\n"))
 	return out, err
+}
+
+func marshalTo(in string, t interface{}) (err error) {
+	// try to open file...
+	file, err := os.Open(in)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+	// read the file...
+	data, err := ioutil.ReadAll(file)
+	if err != nil {
+		return err
+	}
+	// marshal
+	out, err := marshal(data, t)
+	if err != nil {
+		return err
+	}
+	// write to the file...
+	err = ioutil.WriteFile(in, out, 0644)
+	if err != nil {
+		return err
+	}
+	return err
 }
