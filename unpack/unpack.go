@@ -81,13 +81,13 @@ func UnpackConfine(src string, dest string) (err error) {
 	case "AES", "aes":
 		err = UnpackAESConfine(src, dest)
 	case "DES", "des":
-		//err = UnpackDES(src, dest)
+		err = UnpackDESConfine(src, dest)
 	case "3DES", "3des":
-		//err = Unpack3DES(src, dest)
+		err = Unpack3DESConfine(src, dest)
 	case "RSA", "rsa":
-		//err = UnpackRSA(src, dest)
+		err = UnpackRSAConfine(src, dest)
 	case "BASE64", "base64":
-		//err = UnpackBase64(src, dest)
+		err = UnpackBase64Confine(src, dest)
 	default:
 		s := fmt.Sprint("Undefined unpack algorithm.")
 		err = errors.New(s)
