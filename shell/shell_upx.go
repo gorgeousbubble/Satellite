@@ -2,6 +2,8 @@ package shell
 
 import (
 	"log"
+	"os"
+	"path/filepath"
 	"runtime"
 	"satellite/exec"
 	"satellite/utils"
@@ -21,7 +23,15 @@ func shellUpx(src string, dest string) (err error) {
 	}
 	// according different system
 	if runtime.GOOS == "windows" {
-		cmd := "../tools/upx -9 -o " + dest + " " + src
+		// get executable dir
+		exe, err := os.Executable()
+		if err != nil {
+			log.Println("Error get executable path:", err)
+			return err
+		}
+		dir := filepath.Dir(exe)
+		// get upx path
+		cmd := dir + "\\tools\\upx.exe -9 -o " + dest + " " + src
 		log.Println("Exec command:", cmd)
 		// exec command
 		r, err := exec.ExecCmd(cmd)
