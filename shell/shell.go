@@ -13,4 +13,5 @@ func Shell(src string, dest string, algorithm string) (err error) {
 		s := fmt.Sprint("Undefined shell algorithm.")
 		err = errors.New(s)
 	}
+	return err
 }

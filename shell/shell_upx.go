@@ -31,7 +31,7 @@ func shellUpx(src string, dest string) (err error) {
 		}
 		dir := filepath.Dir(exe)
 		// get upx path
-		cmd := dir + "\\tools\upx.exe -9 -o " + dest + " " + src
+		cmd := dir + "\\tools\\upx.exe -9 -o " + dest + " " + src
 		log.Println("Exec command:", cmd)
 		// exec command
 		r, err := exec.ExecCmd(cmd)
