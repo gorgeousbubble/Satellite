@@ -125,6 +125,20 @@ func handleNetsUnpackProcess(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func handleNetsUnpackConfine(w http.ResponseWriter, r *http.Request) {
+	var err error
+	switch r.Method {
+	case "POST":
+		log.Printf("POST %s", r.RequestURI)
+		err = handlePostNetsUnpackConfine(w, r)
+	}
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		log.Printf("%d Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+}
+
 func handleNetsUnpackToFile(w http.ResponseWriter, r *http.Request) {
 	var err error
 	switch r.Method {
@@ -645,6 +659,77 @@ func handleGetNetsUnpackProcess(w http.ResponseWriter, r *http.Request) (err err
 
 func handlePostNetsUnpackProcess(w http.ResponseWriter, r *http.Request) (err error) {
 	return handleGetNetsUnpackProcess(w, r)
+}
+
+func handlePostNetsUnpackConfine(w http.ResponseWriter, r *http.Request) (err error) {
+	defer r.Body.Close()
+	// read request body
+	len := r.ContentLength
+	body := make([]byte, len)
+	body, err = ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Println("Error read request body:", err)
+		return err
+	}
+	// unmarshal json body
+	var t TNetsUnpack
+	err = json.Unmarshal(body, &t)
+	if err != nil {
+		http.Error(w, "Incorrect request body!", http.StatusBadRequest)
+		log.Println("Error unmarshal json body:", err)
+		log.Printf("%d Bad Request", http.StatusBadRequest)
+		return nil
+	}
+	// check request parameters
+	b, err := checkNetsUnpackParameters(t)
+	if err != nil {
+		log.Println("Error check unpack parameters:", err)
+		return err
+	}
+	if !b {
+		http.Error(w, "Illegal parameters!", http.StatusUnprocessableEntity)
+		log.Println("Illegal parameters")
+		log.Printf("%d Unprocessable Entity", http.StatusUnprocessableEntity)
+		return nil
+	}
+	// start unpack files
+	ch := make(chan bool)
+	count := 0
+	finish := false
+	go func() {
+		err = unpack.UnpackConfine(t.Src, t.Dest)
+		if err != nil {
+			ch <- false
+			return
+		}
+		ch <- true
+		return
+	}()
+	for {
+		select {
+		case r := <-ch:
+			if r == false {
+				log.Println("Unpack confine failure:", err)
+				return err
+			}
+			log.Println("Unpack confine success.")
+			finish = true
+			break
+		default:
+			count++
+			time.Sleep(100 * time.Millisecond)
+		}
+		if finish {
+			break
+		}
+		if count >= 100 {
+			err = errors.New("timeout")
+			return err
+		}
+	}
+	w.Header().Set("Content-Type", "text/plain")
+	log.Printf("%d Ok", http.StatusOK)
+	return err
 }
 
 func handlePostNetsUnpackToFile(w http.ResponseWriter, r *http.Request) (err error) {
