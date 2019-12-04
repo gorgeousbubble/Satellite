@@ -8,6 +8,34 @@ import (
 	"testing"
 )
 
+func TestHandleGetRoot(t *testing.T) {
+	mux := http.NewServeMux()
+	mux.HandleFunc(HttpURLRoot, handleRoot)
+
+	writer := httptest.NewRecorder()
+	request, _ := http.NewRequest("GET", HttpURLRoot, nil)
+	mux.ServeHTTP(writer, request)
+
+	if writer.Code != http.StatusOK {
+		t.Errorf("Response code is %v", writer.Code)
+	}
+}
+
+func BenchmarkHandleGetRoot(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		mux := http.NewServeMux()
+		mux.HandleFunc(HttpURLRoot, handleRoot)
+
+		writer := httptest.NewRecorder()
+		request, _ := http.NewRequest("GET", HttpURLRoot, nil)
+		mux.ServeHTTP(writer, request)
+
+		if writer.Code != http.StatusOK {
+			b.Errorf("Response code is %v", writer.Code)
+		}
+	}
+}
+
 func TestHandlePostNetsPack(t *testing.T) {
 	mux := http.NewServeMux()
 	mux.HandleFunc(HttpURLPack, handleNetsPack)
