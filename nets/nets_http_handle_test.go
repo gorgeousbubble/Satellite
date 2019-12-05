@@ -36,6 +36,34 @@ func BenchmarkHandleGetRoot(b *testing.B) {
 	}
 }
 
+func TestHandleGetIndex(t *testing.T) {
+	mux := http.NewServeMux()
+	mux.HandleFunc(HttpURLSatellite, handleIndex)
+
+	writer := httptest.NewRecorder()
+	request, _ := http.NewRequest("GET", HttpURLSatellite, nil)
+	mux.ServeHTTP(writer, request)
+
+	if writer.Code != http.StatusOK {
+		t.Errorf("Response code is %v", writer.Code)
+	}
+}
+
+func BenchmarkHandleGetIndex(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		mux := http.NewServeMux()
+		mux.HandleFunc(HttpURLSatellite, handleIndex)
+
+		writer := httptest.NewRecorder()
+		request, _ := http.NewRequest("GET", HttpURLSatellite, nil)
+		mux.ServeHTTP(writer, request)
+
+		if writer.Code != http.StatusOK {
+			b.Errorf("Response code is %v", writer.Code)
+		}
+	}
+}
+
 func TestHandlePostNetsPack(t *testing.T) {
 	mux := http.NewServeMux()
 	mux.HandleFunc(HttpURLPack, handleNetsPack)
