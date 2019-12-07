@@ -2,7 +2,6 @@ package parses
 
 import (
 	"bytes"
-	"fmt"
 )
 
 func getValue(in []byte, section string, key string) (r []byte) {
@@ -10,7 +9,6 @@ func getValue(in []byte, section string, key string) (r []byte) {
 	var s [][]byte
 	s1 := bytes.Split(in, []byte("\n"))
 	for _, v := range s1 {
-		fmt.Println(string(v))
 		// delete comments
 		if bytes.Contains(v, []byte(";")) {
 			index := bytes.Index(v, []byte(";"))
@@ -28,7 +26,6 @@ func getValue(in []byte, section string, key string) (r []byte) {
 	// seek for section
 	var name []byte
 	for _, v := range s {
-		fmt.Println(string(v))
 		// section start with '[' and end with ']'
 		if v[0] == '[' && v[len(v)-1] == ']' {
 			name = v[1 : len(v)-1]
