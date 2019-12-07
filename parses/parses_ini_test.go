@@ -165,3 +165,21 @@ func BenchmarkGetValueFrom(b *testing.B) {
 		}
 	}
 }
+
+func TestSetValueTo(t *testing.T) {
+	src := "../test/data/parses/test.ini"
+	err := setValueTo(src, "LIVECOREPLAYMODE", "LiveCore_Play_Mode", "0")
+	if err != nil {
+		t.Fatal("Error parses ini:", err)
+	}
+}
+
+func BenchmarkSetValueTo(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		src := "../test/data/parses/test.ini"
+		err := setValueTo(src, "LIVECOREPLAYMODE", "LiveCore_Play_Mode", "0")
+		if err != nil {
+			b.Fatal("Error parses ini:", err)
+		}
+	}
+}
