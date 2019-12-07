@@ -8,6 +8,14 @@ import (
 	"os"
 )
 
+func GetValueFrom(filename string, section string, key string) (r string, err error) {
+	return getValueFrom(filename, section, key)
+}
+
+func SetValueTo(filename string, section string, key string, value string) (err error) {
+	return setValueTo(filename, section, key, value)
+}
+
 func getValue(in []byte, section string, key string) (r []byte) {
 	// split data by '\n'
 	var s [][]byte
