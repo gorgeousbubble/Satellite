@@ -125,3 +125,37 @@ func getValueFrom(src string, section string, key string) (r string, err error) 
 	r = string(out)
 	return r, err
 }
+
+func setValueTo(src string, section string, key string, value string) (err error) {
+	// open ini file...
+	file, err := os.Open(src)
+	if err != nil {
+		log.Println("Error open ini:", err)
+		return err
+	}
+	// read ini file...
+	data, err := ioutil.ReadAll(file)
+	if err != nil {
+		log.Println("Error read ini:", err)
+		return err
+	}
+	// close ini file...
+	err = file.Close()
+	if err != nil {
+		log.Println("Error close ini:", err)
+		return err
+	}
+	// set key-value to stream
+	out, err := setValue(data, section, key, value)
+	if err != nil {
+		log.Println("Error set value to ini:", err)
+		return err
+	}
+	// write ini file...
+	err = ioutil.WriteFile(src, out, 0644)
+	if err != nil {
+		log.Println("Error write ini:", err)
+		return err
+	}
+	return err
+}
