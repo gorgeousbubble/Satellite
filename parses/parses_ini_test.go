@@ -69,3 +69,27 @@ LiveCore_Video_Address=C:\Users\10295\Videos\29156949_22_0.flv
 		}
 	}
 }
+
+func TestGetValueFrom(t *testing.T) {
+	src := "../test/data/parses/test.ini"
+	r, err := getValueFrom(src, "LIVECOREVIDEOADDRESS", "LiveCore_Video_Name")
+	if err != nil {
+		t.Fatal("Error parses ini:", err)
+	}
+	if r != "Wallpaper1.pak" {
+		t.Fatal("Error parses ini content")
+	}
+}
+
+func BenchmarkGetValueFrom(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		src := "../test/data/parses/test.ini"
+		r, err := getValueFrom(src, "LIVECOREVIDEOADDRESS", "LiveCore_Video_Name")
+		if err != nil {
+			b.Fatal("Error parses ini:", err)
+		}
+		if r != "Wallpaper1.pak" {
+			b.Fatal("Error parses ini content")
+		}
+	}
+}
