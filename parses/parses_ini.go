@@ -2,6 +2,10 @@ package parses
 
 import (
 	"bytes"
+	"github.com/pkg/errors"
+	"io/ioutil"
+	"log"
+	"os"
 )
 
 func getValue(in []byte, section string, key string) (r []byte) {
@@ -44,4 +48,29 @@ func getValue(in []byte, section string, key string) (r []byte) {
 	}
 	r = []byte("")
 	return r
+}
+
+func getValueFrom(src string, section string, key string) (r string, err error) {
+	// open ini file...
+	file, err := os.Open(src)
+	if err != nil {
+		log.Println("Error open ini:", err)
+		return r, err
+	}
+	defer file.Close()
+	// read ini file...
+	data, err := ioutil.ReadAll(file)
+	if err != nil {
+		log.Println("Error read ini:", err)
+		return r, err
+	}
+	// get key-value from stream
+	out := getValue(data, section, key)
+	if bytes.Equal(out, []byte("")) {
+		err = errors.New("section or key may not exist")
+		log.Println("Error get value:", err)
+		return r, err
+	}
+	r = string(out)
+	return r, err
 }
