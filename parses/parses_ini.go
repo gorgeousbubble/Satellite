@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"strconv"
 )
 
 func GetValueFrom(filename string, section string, key string) (r string, err error) {
@@ -131,6 +132,60 @@ func getValueFrom(src string, section string, key string) (r string, err error) 
 		return r, err
 	}
 	r = string(out)
+	return r, err
+}
+
+func getValueStringFrom(src string, section string, key string) (r string, err error) {
+	// open ini file...
+	file, err := os.Open(src)
+	if err != nil {
+		log.Println("Error open ini:", err)
+		return r, err
+	}
+	defer file.Close()
+	// read ini file...
+	data, err := ioutil.ReadAll(file)
+	if err != nil {
+		log.Println("Error read ini:", err)
+		return r, err
+	}
+	// get key-value from stream
+	out := getValue(data, section, key)
+	if bytes.Equal(out, []byte("")) {
+		err = errors.New("section or key may not exist")
+		log.Println("Error get value:", err)
+		return r, err
+	}
+	r = string(out)
+	return r, err
+}
+
+func getValueIntFrom(src string, section string, key string) (r int, err error) {
+	// open ini file...
+	file, err := os.Open(src)
+	if err != nil {
+		log.Println("Error open ini:", err)
+		return r, err
+	}
+	defer file.Close()
+	// read ini file...
+	data, err := ioutil.ReadAll(file)
+	if err != nil {
+		log.Println("Error read ini:", err)
+		return r, err
+	}
+	// get key-value from stream
+	out := getValue(data, section, key)
+	if bytes.Equal(out, []byte("")) {
+		err = errors.New("section or key may not exist")
+		log.Println("Error get value:", err)
+		return r, err
+	}
+	r, err = strconv.Atoi(string(out))
+	if err != nil {
+		log.Println("Error convert string to int:", err)
+		return r, err
+	}
 	return r, err
 }
 

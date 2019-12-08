@@ -142,9 +142,9 @@ LiveCore_Video_Address=C:\Users\10295\Videos\29156949_22_0.flv
 	}
 }
 
-func TestGetValueFrom(t *testing.T) {
+func TestGetValueStringFrom(t *testing.T) {
 	src := "../test/data/parses/test.ini"
-	r, err := getValueFrom(src, "LIVECOREVIDEOADDRESS", "LiveCore_Video_Name")
+	r, err := getValueStringFrom(src, "LIVECOREVIDEOADDRESS", "LiveCore_Video_Name")
 	if err != nil {
 		t.Fatal("Error parses ini:", err)
 	}
@@ -153,14 +153,38 @@ func TestGetValueFrom(t *testing.T) {
 	}
 }
 
-func BenchmarkGetValueFrom(b *testing.B) {
+func BenchmarkGetValueStringFrom(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/parses/test.ini"
-		r, err := getValueFrom(src, "LIVECOREVIDEOADDRESS", "LiveCore_Video_Name")
+		r, err := getValueStringFrom(src, "LIVECOREVIDEOADDRESS", "LiveCore_Video_Name")
 		if err != nil {
 			b.Fatal("Error parses ini:", err)
 		}
 		if r != "Wallpaper1.pak" {
+			b.Fatal("Error parses ini content")
+		}
+	}
+}
+
+func TestGetValueIntFrom(t *testing.T) {
+	src := "../test/data/parses/test.ini"
+	r, err := getValueIntFrom(src, "LIVECOREVIDEOADDRESS", "LiveCore_Video_Mode")
+	if err != nil {
+		t.Fatal("Error parses ini:", err)
+	}
+	if r != 1 {
+		t.Fatal("Error parses ini content")
+	}
+}
+
+func BenchmarkGetValueIntFrom(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		src := "../test/data/parses/test.ini"
+		r, err := getValueIntFrom(src, "LIVECOREVIDEOADDRESS", "LiveCore_Video_Mode")
+		if err != nil {
+			b.Fatal("Error parses ini:", err)
+		}
+		if r != 1 {
 			b.Fatal("Error parses ini content")
 		}
 	}
