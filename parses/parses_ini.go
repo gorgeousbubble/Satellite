@@ -21,7 +21,7 @@ func GetValueFrom(filename string, section string, key string, value interface{}
 	// get real variable value...
 	rType = rType.Elem()
 	rValue = rValue.Elem()
-	// switch type of struct
+	// switch type of value
 	switch rType.Kind() {
 	case reflect.String:
 		r, err := getValueStringFrom(filename, section, key)
@@ -42,7 +42,24 @@ func GetValueFrom(filename string, section string, key string, value interface{}
 	return err
 }
 
-func SetValueTo(filename string, section string, key string, value string) (err error) {
+func SetValueTo(filename string, section string, key string, value interface{}) (err error) {
+	var rType = reflect.TypeOf(value)
+	var rValue = reflect.ValueOf(value)
+	// switch type of value
+	switch rType.Kind() {
+	case reflect.String:
+		err = setValueStringTo(filename, section, key, rValue.Interface().(string))
+		if err != nil {
+			return err
+		}
+	case reflect.Int:
+		err = setValueIntTo(filename, section, key, rValue.Interface().(int))
+		if err != nil {
+			return err
+		}
+	default:
+		err = errors.New("unrecognized value type")
+	}
 	return err
 }
 
