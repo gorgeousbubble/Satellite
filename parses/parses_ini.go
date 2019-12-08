@@ -6,11 +6,40 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"reflect"
 	"strconv"
 )
 
-func GetValueFrom(filename string, section string, key string) (r string, err error) {
-	return getValueFrom(filename, section, key)
+func GetValueFrom(filename string, section string, key string, value interface{}) (err error) {
+	var rType = reflect.TypeOf(value)
+	var rValue = reflect.ValueOf(value)
+	// check the out type kind
+	if rType.Kind() != reflect.Ptr {
+		err = errors.New("value interface should be pointer")
+		return err
+	}
+	// get real variable value...
+	rType = rType.Elem()
+	rValue = rValue.Elem()
+	// switch type of struct
+	switch rType.Kind() {
+	case reflect.String:
+		r, err := getValueStringFrom(filename, section, key)
+		if err != nil {
+			return err
+		}
+		rValue.Set(reflect.ValueOf(r))
+	case reflect.Int:
+		r, err := getValueIntFrom(filename, section, key)
+		if err != nil {
+			return err
+		}
+		rValue.Set(reflect.ValueOf(r))
+	default:
+		err = errors.New("unrecognized value type")
+		return err
+	}
+	return err
 }
 
 func SetValueTo(filename string, section string, key string, value string) (err error) {
