@@ -43,7 +43,7 @@ func GetValueFrom(filename string, section string, key string, value interface{}
 }
 
 func SetValueTo(filename string, section string, key string, value string) (err error) {
-	return setValueTo(filename, section, key, value)
+	return err
 }
 
 func getValue(in []byte, section string, key string) (r []byte) {
