@@ -6,14 +6,61 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"reflect"
+	"strconv"
 )
 
-func GetValueFrom(filename string, section string, key string) (r string, err error) {
-	return getValueFrom(filename, section, key)
+func GetValueFrom(filename string, section string, key string, value interface{}) (err error) {
+	var rType = reflect.TypeOf(value)
+	var rValue = reflect.ValueOf(value)
+	// check the out type kind
+	if rType.Kind() != reflect.Ptr {
+		err = errors.New("value interface should be pointer")
+		return err
+	}
+	// get real variable value...
+	rType = rType.Elem()
+	rValue = rValue.Elem()
+	// switch type of value
+	switch rType.Kind() {
+	case reflect.String:
+		r, err := getValueStringFrom(filename, section, key)
+		if err != nil {
+			return err
+		}
+		rValue.Set(reflect.ValueOf(r))
+	case reflect.Int:
+		r, err := getValueIntFrom(filename, section, key)
+		if err != nil {
+			return err
+		}
+		rValue.Set(reflect.ValueOf(r))
+	default:
+		err = errors.New("unrecognized value type")
+		return err
+	}
+	return err
 }
 
-func SetValueTo(filename string, section string, key string, value string) (err error) {
-	return setValueTo(filename, section, key, value)
+func SetValueTo(filename string, section string, key string, value interface{}) (err error) {
+	var rType = reflect.TypeOf(value)
+	var rValue = reflect.ValueOf(value)
+	// switch type of value
+	switch rType.Kind() {
+	case reflect.String:
+		err = setValueStringTo(filename, section, key, rValue.Interface().(string))
+		if err != nil {
+			return err
+		}
+	case reflect.Int:
+		err = setValueIntTo(filename, section, key, rValue.Interface().(int))
+		if err != nil {
+			return err
+		}
+	default:
+		err = errors.New("unrecognized value type")
+	}
+	return err
 }
 
 func getValue(in []byte, section string, key string) (r []byte) {
@@ -109,7 +156,7 @@ func setValue(in []byte, section string, key string, value string) (r []byte, er
 	return r, err
 }
 
-func getValueFrom(src string, section string, key string) (r string, err error) {
+func getValueStringFrom(src string, section string, key string) (r string, err error) {
 	// open ini file...
 	file, err := os.Open(src)
 	if err != nil {
@@ -134,7 +181,36 @@ func getValueFrom(src string, section string, key string) (r string, err error) 
 	return r, err
 }
 
-func setValueTo(src string, section string, key string, value string) (err error) {
+func getValueIntFrom(src string, section string, key string) (r int, err error) {
+	// open ini file...
+	file, err := os.Open(src)
+	if err != nil {
+		log.Println("Error open ini:", err)
+		return r, err
+	}
+	defer file.Close()
+	// read ini file...
+	data, err := ioutil.ReadAll(file)
+	if err != nil {
+		log.Println("Error read ini:", err)
+		return r, err
+	}
+	// get key-value from stream
+	out := getValue(data, section, key)
+	if bytes.Equal(out, []byte("")) {
+		err = errors.New("section or key may not exist")
+		log.Println("Error get value:", err)
+		return r, err
+	}
+	r, err = strconv.Atoi(string(out))
+	if err != nil {
+		log.Println("Error convert string to int:", err)
+		return r, err
+	}
+	return r, err
+}
+
+func setValueStringTo(src string, section string, key string, value string) (err error) {
 	// open ini file...
 	file, err := os.Open(src)
 	if err != nil {
@@ -155,6 +231,40 @@ func setValueTo(src string, section string, key string, value string) (err error
 	}
 	// set key-value to stream
 	out, err := setValue(data, section, key, value)
+	if err != nil {
+		log.Println("Error set value to ini:", err)
+		return err
+	}
+	// write ini file...
+	err = ioutil.WriteFile(src, out, 0644)
+	if err != nil {
+		log.Println("Error write ini:", err)
+		return err
+	}
+	return err
+}
+
+func setValueIntTo(src string, section string, key string, value int) (err error) {
+	// open ini file...
+	file, err := os.Open(src)
+	if err != nil {
+		log.Println("Error open ini:", err)
+		return err
+	}
+	// read ini file...
+	data, err := ioutil.ReadAll(file)
+	if err != nil {
+		log.Println("Error read ini:", err)
+		return err
+	}
+	// close ini file...
+	err = file.Close()
+	if err != nil {
+		log.Println("Error close ini:", err)
+		return err
+	}
+	// set key-value to stream
+	out, err := setValue(data, section, key, strconv.Itoa(value))
 	if err != nil {
 		log.Println("Error set value to ini:", err)
 		return err

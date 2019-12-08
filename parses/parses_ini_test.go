@@ -142,9 +142,9 @@ LiveCore_Video_Address=C:\Users\10295\Videos\29156949_22_0.flv
 	}
 }
 
-func TestGetValueFrom(t *testing.T) {
+func TestGetValueStringFrom(t *testing.T) {
 	src := "../test/data/parses/test.ini"
-	r, err := getValueFrom(src, "LIVECOREVIDEOADDRESS", "LiveCore_Video_Name")
+	r, err := getValueStringFrom(src, "LIVECOREVIDEOADDRESS", "LiveCore_Video_Name")
 	if err != nil {
 		t.Fatal("Error parses ini:", err)
 	}
@@ -153,10 +153,10 @@ func TestGetValueFrom(t *testing.T) {
 	}
 }
 
-func BenchmarkGetValueFrom(b *testing.B) {
+func BenchmarkGetValueStringFrom(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/parses/test.ini"
-		r, err := getValueFrom(src, "LIVECOREVIDEOADDRESS", "LiveCore_Video_Name")
+		r, err := getValueStringFrom(src, "LIVECOREVIDEOADDRESS", "LiveCore_Video_Name")
 		if err != nil {
 			b.Fatal("Error parses ini:", err)
 		}
@@ -166,20 +166,102 @@ func BenchmarkGetValueFrom(b *testing.B) {
 	}
 }
 
-func TestSetValueTo(t *testing.T) {
+func TestGetValueIntFrom(t *testing.T) {
 	src := "../test/data/parses/test.ini"
-	err := setValueTo(src, "LIVECOREPLAYMODE", "LiveCore_Play_Mode", "0")
+	r, err := getValueIntFrom(src, "LIVECOREVIDEOADDRESS", "LiveCore_Video_Mode")
+	if err != nil {
+		t.Fatal("Error parses ini:", err)
+	}
+	if r != 1 {
+		t.Fatal("Error parses ini content")
+	}
+}
+
+func BenchmarkGetValueIntFrom(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		src := "../test/data/parses/test.ini"
+		r, err := getValueIntFrom(src, "LIVECOREVIDEOADDRESS", "LiveCore_Video_Mode")
+		if err != nil {
+			b.Fatal("Error parses ini:", err)
+		}
+		if r != 1 {
+			b.Fatal("Error parses ini content")
+		}
+	}
+}
+
+func TestGetValueFrom(t *testing.T) {
+	var value string
+	src := "../test/data/parses/test.ini"
+	err := GetValueFrom(src, "LIVECOREVIDEOADDRESS", "LiveCore_Video_Name", &value)
+	if err != nil {
+		t.Fatal("Error parses ini:", err)
+	}
+	if value != "Wallpaper1.pak" {
+		t.Fatal("Error parses ini content")
+	}
+}
+
+func TestGetValueFrom2(t *testing.T) {
+	var value int
+	src := "../test/data/parses/test.ini"
+	err := GetValueFrom(src, "LIVECOREVIDEOADDRESS", "LiveCore_Video_Mode", &value)
+	if err != nil {
+		t.Fatal("Error parses ini:", err)
+	}
+	if value != 1 {
+		t.Fatal("Error parses ini content")
+	}
+}
+
+func TestSetValueStringTo(t *testing.T) {
+	src := "../test/data/parses/test.ini"
+	err := setValueStringTo(src, "LIVECOREVIDEOADDRESS", "LiveCore_Video_Name", "Wallpaper1.pak")
 	if err != nil {
 		t.Fatal("Error parses ini:", err)
 	}
 }
 
-func BenchmarkSetValueTo(b *testing.B) {
+func BenchmarkSetValueStringTo(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/parses/test.ini"
-		err := setValueTo(src, "LIVECOREPLAYMODE", "LiveCore_Play_Mode", "0")
+		err := setValueStringTo(src, "LIVECOREVIDEOADDRESS", "LiveCore_Video_Name", "Wallpaper1.pak")
 		if err != nil {
 			b.Fatal("Error parses ini:", err)
 		}
+	}
+}
+
+func TestSetValueIntTo(t *testing.T) {
+	src := "../test/data/parses/test.ini"
+	err := setValueIntTo(src, "LIVECOREVIDEOADDRESS", "LiveCore_Video_Mode", 1)
+	if err != nil {
+		t.Fatal("Error parses ini:", err)
+	}
+}
+
+func BenchmarkSetValueIntTo(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		src := "../test/data/parses/test.ini"
+		err := setValueIntTo(src, "LIVECOREVIDEOADDRESS", "LiveCore_Video_Mode", 1)
+		if err != nil {
+			b.Fatal("Error parses ini:", err)
+		}
+	}
+}
+
+func TestSetValueTo(t *testing.T) {
+	src := "../test/data/parses/test.ini"
+	err := SetValueTo(src, "LIVECOREVIDEOADDRESS", "LiveCore_Video_Name", "Wallpaper1.pak")
+	if err != nil {
+		t.Fatal("Error parses ini:", err)
+	}
+}
+
+func TestSetValueTo2(t *testing.T) {
+	src := "../test/data/parses/test.ini"
+	err := SetValueTo(src, "LIVECOREVIDEOADDRESS", "LiveCore_Video_Mode", 1)
+	if err != nil {
+		t.Fatal("Error parses ini:", err)
 	}
 }
