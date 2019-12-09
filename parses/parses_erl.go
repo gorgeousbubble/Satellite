@@ -613,7 +613,7 @@ func repairTuple(s []byte) (r []byte) {
 	return r
 }
 
-func wrapOneElement(in interface{}) (r []byte, err error) {
+func encodeOneParameter(in interface{}) (r []byte, err error) {
 	var rType = reflect.TypeOf(in)
 	var rValue = reflect.ValueOf(in)
 	// switch the s type kind
@@ -661,7 +661,7 @@ func wrapOneElement(in interface{}) (r []byte, err error) {
 			case "tuple":
 				fallthrough
 			case "list":
-				rs, err := wrapOneElement(f.Interface())
+				rs, err := encodeOneParameter(f.Interface())
 				if err != nil {
 					return r, err
 				}
@@ -682,7 +682,7 @@ func wrapOneElement(in interface{}) (r []byte, err error) {
 		// traverse slice elements
 		var s [][]byte
 		for i := 0; i < rValue.Len(); i++ {
-			rs, err := wrapOneElement(rValue.Index(i).Interface())
+			rs, err := encodeOneParameter(rValue.Index(i).Interface())
 			if err != nil {
 				return r, err
 			}
@@ -734,7 +734,7 @@ func encode(in interface{}) (out []byte, err error) {
 		}
 		// traverse list elements
 		for j := 0; j < f.Len(); j++ {
-			r, err := wrapOneElement(f.Index(j).Interface())
+			r, err := encodeOneParameter(f.Index(j).Interface())
 			if err != nil {
 				return out, err
 			}
