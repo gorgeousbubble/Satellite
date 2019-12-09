@@ -801,102 +801,102 @@ func BenchmarkUnmarshalFrom(b *testing.B) {
 	}
 }
 
-func TestWrapOneElement(t *testing.T) {
+func TestencodeOneParameter(t *testing.T) {
 	var in = "hello"
-	r, err := wrapOneElement(in)
+	r, err := encodeOneParameter(in)
 	if err != nil {
 		t.Fatal("Error wrap one element:", err)
 	}
 	fmt.Println(string(r))
 }
 
-func BenchmarkWrapOneElement(b *testing.B) {
+func BenchmarkencodeOneParameter(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var in = "hello"
-		_, err := wrapOneElement(in)
+		_, err := encodeOneParameter(in)
 		if err != nil {
 			b.Fatal("Error wrap one element:", err)
 		}
 	}
 }
 
-func TestWrapOneElementString(t *testing.T) {
+func TestencodeOneParameterString(t *testing.T) {
 	var in = "apple"
-	r, err := wrapOneElement(in)
+	r, err := encodeOneParameter(in)
 	if err != nil {
 		t.Fatal("Error wrap one element:", err)
 	}
 	fmt.Println(string(r))
 }
 
-func BenchmarkWrapOneElementString(b *testing.B) {
+func BenchmarkencodeOneParameterString(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var in = "apple"
-		_, err := wrapOneElement(in)
+		_, err := encodeOneParameter(in)
 		if err != nil {
 			b.Fatal("Error wrap one element:", err)
 		}
 	}
 }
 
-func TestWrapOneElementInt(t *testing.T) {
+func TestencodeOneParameterInt(t *testing.T) {
 	var in = 2
-	r, err := wrapOneElement(in)
+	r, err := encodeOneParameter(in)
 	if err != nil {
 		t.Fatal("Error wrap one element:", err)
 	}
 	fmt.Println(string(r))
 }
 
-func BenchmarkWrapOneElementInt(b *testing.B) {
+func BenchmarkencodeOneParameterInt(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var in = 2
-		_, err := wrapOneElement(in)
+		_, err := encodeOneParameter(in)
 		if err != nil {
 			b.Fatal("Error wrap one element:", err)
 		}
 	}
 }
 
-func TestWrapOneElementBool(t *testing.T) {
+func TestencodeOneParameterBool(t *testing.T) {
 	var in = false
-	r, err := wrapOneElement(in)
+	r, err := encodeOneParameter(in)
 	if err != nil {
 		t.Fatal("Error wrap one element:", err)
 	}
 	fmt.Println(string(r))
 }
 
-func BenchmarkWrapOneElementBool(b *testing.B) {
+func BenchmarkencodeOneParameterBool(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var in = false
-		_, err := wrapOneElement(in)
+		_, err := encodeOneParameter(in)
 		if err != nil {
 			b.Fatal("Error wrap one element:", err)
 		}
 	}
 }
 
-func TestWrapOneElementFloat64(t *testing.T) {
+func TestencodeOneParameterFloat64(t *testing.T) {
 	var in = 3.1415926
-	r, err := wrapOneElement(in)
+	r, err := encodeOneParameter(in)
 	if err != nil {
 		t.Fatal("Error wrap one element:", err)
 	}
 	fmt.Println(string(r))
 }
 
-func BenchmarkWrapOneElementFloat64(b *testing.B) {
+func BenchmarkencodeOneParameterFloat64(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var in = 3.1415926
-		_, err := wrapOneElement(in)
+		_, err := encodeOneParameter(in)
 		if err != nil {
 			b.Fatal("Error wrap one element:", err)
 		}
 	}
 }
 
-func TestWrapOneElementStruct(t *testing.T) {
+func TestencodeOneParameterStruct(t *testing.T) {
 	type test struct {
 		Name    string  `erl:"string"`
 		Content string  `erl:"string"`
@@ -911,14 +911,14 @@ func TestWrapOneElementStruct(t *testing.T) {
 		Useful:  true,
 		Rate:    1.7132,
 	}
-	r, err := wrapOneElement(in)
+	r, err := encodeOneParameter(in)
 	if err != nil {
 		t.Fatal("Error wrap one element:", err)
 	}
 	fmt.Println(string(r))
 }
 
-func BenchmarkWrapOneElementStruct(b *testing.B) {
+func BenchmarkencodeOneParameterStruct(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		type test struct {
 			Name    string  `erl:"string"`
@@ -934,14 +934,14 @@ func BenchmarkWrapOneElementStruct(b *testing.B) {
 			Useful:  true,
 			Rate:    1.7132,
 		}
-		_, err := wrapOneElement(in)
+		_, err := encodeOneParameter(in)
 		if err != nil {
 			b.Fatal("Error wrap one element:", err)
 		}
 	}
 }
 
-func TestWrapOneElementStruct2(t *testing.T) {
+func TestencodeOneParameterStruct2(t *testing.T) {
 	type subtest struct {
 		Name   string `erl:"string"`
 		Number int    `erl:"int"`
@@ -965,14 +965,14 @@ func TestWrapOneElementStruct2(t *testing.T) {
 			Number: 5,
 		},
 	}
-	r, err := wrapOneElement(in)
+	r, err := encodeOneParameter(in)
 	if err != nil {
 		t.Fatal("Error wrap one element:", err)
 	}
 	fmt.Println(string(r))
 }
 
-func BenchmarkWrapOneElementStruct2(b *testing.B) {
+func BenchmarkencodeOneParameterStruct2(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		type subtest struct {
 			Name   string `erl:"string"`
@@ -997,14 +997,14 @@ func BenchmarkWrapOneElementStruct2(b *testing.B) {
 				Number: 5,
 			},
 		}
-		_, err := wrapOneElement(in)
+		_, err := encodeOneParameter(in)
 		if err != nil {
 			b.Fatal("Error wrap one element:", err)
 		}
 	}
 }
 
-func TestWrapOneElementStruct3(t *testing.T) {
+func TestencodeOneParameterStruct3(t *testing.T) {
 	type subsub struct {
 		Name   string  `erl:"string"`
 		Useful bool    `erl:"bool"`
@@ -1049,14 +1049,14 @@ func TestWrapOneElementStruct3(t *testing.T) {
 			},
 		},
 	}
-	r, err := wrapOneElement(in)
+	r, err := encodeOneParameter(in)
 	if err != nil {
 		t.Fatal("Error wrap one element:", err)
 	}
 	fmt.Println(string(r))
 }
 
-func BenchmarkWrapOneElementStruct3(b *testing.B) {
+func BenchmarkencodeOneParameterStruct3(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		type subsub struct {
 			Name   string  `erl:"string"`
@@ -1102,14 +1102,14 @@ func BenchmarkWrapOneElementStruct3(b *testing.B) {
 				},
 			},
 		}
-		_, err := wrapOneElement(in)
+		_, err := encodeOneParameter(in)
 		if err != nil {
 			b.Fatal("Error wrap one element:", err)
 		}
 	}
 }
 
-func TestWrapOneElementSlice(t *testing.T) {
+func TestencodeOneParameterSlice(t *testing.T) {
 	type subtest struct {
 		Name   string `erl:"string"`
 		Number int    `erl:"int"`
@@ -1135,14 +1135,14 @@ func TestWrapOneElementSlice(t *testing.T) {
 			},
 		},
 	}
-	r, err := wrapOneElement(in)
+	r, err := encodeOneParameter(in)
 	if err != nil {
 		t.Fatal("Error wrap one element:", err)
 	}
 	fmt.Println(string(r))
 }
 
-func BenchmarkWrapOneElementSlice(b *testing.B) {
+func BenchmarkencodeOneParameterSlice(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		type subtest struct {
 			Name   string `erl:"string"`
@@ -1169,14 +1169,14 @@ func BenchmarkWrapOneElementSlice(b *testing.B) {
 				},
 			},
 		}
-		_, err := wrapOneElement(in)
+		_, err := encodeOneParameter(in)
 		if err != nil {
 			b.Fatal("Error wrap one element:", err)
 		}
 	}
 }
 
-func TestWrapOneElementSlice2(t *testing.T) {
+func TestencodeOneParameterSlice2(t *testing.T) {
 	type subsub struct {
 		Name string `erl:"string"`
 		Sub  []int  `erl:"list"`
@@ -1215,14 +1215,14 @@ func TestWrapOneElementSlice2(t *testing.T) {
 			},
 		},
 	}
-	r, err := wrapOneElement(in)
+	r, err := encodeOneParameter(in)
 	if err != nil {
 		t.Fatal("Error wrap one element:", err)
 	}
 	fmt.Println(string(r))
 }
 
-func BenchmarkWrapOneElementSlice2(b *testing.B) {
+func BenchmarkencodeOneParameterSlice2(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		type subsub struct {
 			Name string `erl:"string"`
@@ -1262,14 +1262,14 @@ func BenchmarkWrapOneElementSlice2(b *testing.B) {
 				},
 			},
 		}
-		_, err := wrapOneElement(in)
+		_, err := encodeOneParameter(in)
 		if err != nil {
 			b.Fatal("Error wrap one element:", err)
 		}
 	}
 }
 
-func TestWrapOneElementSlice3(t *testing.T) {
+func TestencodeOneParameterSlice3(t *testing.T) {
 	type subtest struct {
 		Name  string `erl:"string"`
 		Index int    `erl:"int"`
@@ -1297,14 +1297,14 @@ func TestWrapOneElementSlice3(t *testing.T) {
 			},
 		},
 	}
-	r, err := wrapOneElement(in)
+	r, err := encodeOneParameter(in)
 	if err != nil {
 		t.Fatal("Error wrap one element:", err)
 	}
 	fmt.Println(string(r))
 }
 
-func BenchmarkWrapOneElementSlice3(b *testing.B) {
+func BenchmarkencodeOneParameterSlice3(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		type subtest struct {
 			Name  string `erl:"string"`
@@ -1333,14 +1333,14 @@ func BenchmarkWrapOneElementSlice3(b *testing.B) {
 				},
 			},
 		}
-		_, err := wrapOneElement(in)
+		_, err := encodeOneParameter(in)
 		if err != nil {
 			b.Fatal("Error wrap one element:", err)
 		}
 	}
 }
 
-func TestWrapOneElementInterface(t *testing.T) {
+func TestencodeOneParameterInterface(t *testing.T) {
 	type subsub struct {
 		Name    string `erl:"string"`
 		Content string `erl:"string"`
@@ -1407,14 +1407,14 @@ func TestWrapOneElementInterface(t *testing.T) {
 			},
 		},
 	}
-	r, err := wrapOneElement(in)
+	r, err := encodeOneParameter(in)
 	if err != nil {
 		t.Fatal("Error wrap one element:", err)
 	}
 	fmt.Println(string(r))
 }
 
-func BenchmarkWrapOneElementInterface(b *testing.B) {
+func BenchmarkencodeOneParameterInterface(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		type subsub struct {
 			Name    string `erl:"string"`
@@ -1482,7 +1482,7 @@ func BenchmarkWrapOneElementInterface(b *testing.B) {
 				},
 			},
 		}
-		_, err := wrapOneElement(in)
+		_, err := encodeOneParameter(in)
 		if err != nil {
 			b.Fatal("Error wrap one element:", err)
 		}
