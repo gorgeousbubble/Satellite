@@ -202,6 +202,20 @@ func TestGetValueFrom(t *testing.T) {
 	}
 }
 
+func BenchmarkGetValueFrom(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		var value string
+		src := "../test/data/parses/test.ini"
+		err := GetValueFrom(src, "LIVECOREVIDEOADDRESS", "LiveCore_Video_Name", &value)
+		if err != nil {
+			b.Fatal("Error parses ini:", err)
+		}
+		if value != "Wallpaper1.pak" {
+			b.Fatal("Error parses ini content")
+		}
+	}
+}
+
 func TestGetValueFrom2(t *testing.T) {
 	var value int
 	src := "../test/data/parses/test.ini"
@@ -211,6 +225,20 @@ func TestGetValueFrom2(t *testing.T) {
 	}
 	if value != 1 {
 		t.Fatal("Error parses ini content")
+	}
+}
+
+func BenchmarkGetValueFrom2(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		var value int
+		src := "../test/data/parses/test.ini"
+		err := GetValueFrom(src, "LIVECOREVIDEOADDRESS", "LiveCore_Video_Mode", &value)
+		if err != nil {
+			b.Fatal("Error parses ini:", err)
+		}
+		if value != 1 {
+			b.Fatal("Error parses ini content")
+		}
 	}
 }
 
