@@ -286,10 +286,30 @@ func TestSetValueTo(t *testing.T) {
 	}
 }
 
+func BenchmarkSetValueTo(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		src := "../test/data/parses/test.ini"
+		err := SetValueTo(src, "LIVECOREVIDEOADDRESS", "LiveCore_Video_Name", "Wallpaper1.pak")
+		if err != nil {
+			b.Fatal("Error parses ini:", err)
+		}
+	}
+}
+
 func TestSetValueTo2(t *testing.T) {
 	src := "../test/data/parses/test.ini"
 	err := SetValueTo(src, "LIVECOREVIDEOADDRESS", "LiveCore_Video_Mode", 1)
 	if err != nil {
 		t.Fatal("Error parses ini:", err)
+	}
+}
+
+func BenchmarkSetValueTo2(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		src := "../test/data/parses/test.ini"
+		err := SetValueTo(src, "LIVECOREVIDEOADDRESS", "LiveCore_Video_Mode", 1)
+		if err != nil {
+			b.Fatal("Error parses ini:", err)
+		}
 	}
 }
