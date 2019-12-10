@@ -3,7 +3,7 @@
 @echo off
 
 :: Build Golang Mode(Debug/Release)
-set "buildMode=Release"
+set "build_target=Release"
 
 :: Get the module dir name
 set dirName = 
@@ -43,7 +43,7 @@ goto build_go_app
     echo.
 
     :: Build Mode
-    if "%buildMode%"=="Debug" ( goto build_debug ) else ( goto build_release )
+    if "%build_target%"=="Debug" ( goto build_debug ) else ( goto build_release )
 
 :build_debug
     :: Build Golang(With debug information)
