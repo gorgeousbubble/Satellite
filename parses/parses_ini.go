@@ -35,6 +35,12 @@ func GetValueFrom(filename string, section string, key string, value interface{}
 			return err
 		}
 		rValue.Set(reflect.ValueOf(r))
+	case reflect.Bool:
+		r, err := getValueBoolFrom(filename, section, key)
+		if err != nil {
+			return err
+		}
+		rValue.Set(reflect.ValueOf(r))
 	default:
 		err = errors.New("unrecognized value type")
 		return err
@@ -203,6 +209,35 @@ func getValueIntFrom(src string, section string, key string) (r int, err error) 
 		return r, err
 	}
 	r, err = strconv.Atoi(string(out))
+	if err != nil {
+		log.Println("Error convert string to int:", err)
+		return r, err
+	}
+	return r, err
+}
+
+func getValueBoolFrom(src string, section string, key string) (r bool, err error) {
+	// open ini file...
+	file, err := os.Open(src)
+	if err != nil {
+		log.Println("Error open ini:", err)
+		return r, err
+	}
+	defer file.Close()
+	// read ini file...
+	data, err := ioutil.ReadAll(file)
+	if err != nil {
+		log.Println("Error read ini:", err)
+		return r, err
+	}
+	// get key-value from stream
+	out := getValue(data, section, key)
+	if bytes.Equal(out, []byte("")) {
+		err = errors.New("section or key may not exist")
+		log.Println("Error get value:", err)
+		return r, err
+	}
+	r, err = strconv.ParseBool(string(out))
 	if err != nil {
 		log.Println("Error convert string to int:", err)
 		return r, err
