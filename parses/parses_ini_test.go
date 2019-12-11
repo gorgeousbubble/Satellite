@@ -190,6 +190,28 @@ func BenchmarkGetValueIntFrom(b *testing.B) {
 	}
 }
 
+func TestGetValueBoolFrom(t *testing.T) {
+	src := "../test/data/parses/test_simple.ini"
+	r, err := getValueBoolFrom(src, "BOOL", "Switch_On")
+	if err != nil {
+		t.Fatal("Error parses ini:", err)
+	}
+	if r != true {
+		t.Fatal("Error parses ini content")
+	}
+}
+
+func TestGetValueFloat64From(t *testing.T) {
+	src := "../test/data/parses/test_simple.ini"
+	r, err := getValueFloat64From(src, "FLOAT", "Pi")
+	if err != nil {
+		t.Fatal("Error parses ini:", err)
+	}
+	if r != 3.1415926 {
+		t.Fatal("Error parses ini content")
+	}
+}
+
 func TestGetValueFrom(t *testing.T) {
 	var value string
 	src := "../test/data/parses/test.ini"
