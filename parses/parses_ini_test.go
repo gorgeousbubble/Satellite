@@ -300,6 +300,22 @@ func BenchmarkSetValueIntTo(b *testing.B) {
 	}
 }
 
+func TestSetValueBoolTo(t *testing.T) {
+	src := "../test/data/parses/test_simple.ini"
+	err := setValueBoolTo(src, "BOOL", "Switch_On", true)
+	if err != nil {
+		t.Fatal("Error parses ini:", err)
+	}
+}
+
+func TestSetValueFloat64To(t *testing.T) {
+	src := "../test/data/parses/test_simple.ini"
+	err := setValueFloat64To(src, "FLOAT", "Pi", 3.1415926)
+	if err != nil {
+		t.Fatal("Error parses ini:", err)
+	}
+}
+
 func TestSetValueTo(t *testing.T) {
 	src := "../test/data/parses/test.ini"
 	err := SetValueTo(src, "LIVECOREVIDEOADDRESS", "LiveCore_Video_Name", "Wallpaper1.pak")
