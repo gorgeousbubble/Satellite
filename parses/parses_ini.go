@@ -69,6 +69,16 @@ func SetValueTo(filename string, section string, key string, value interface{}) 
 		if err != nil {
 			return err
 		}
+	case reflect.Bool:
+		err = setValueBoolTo(filename, section, key, rValue.Interface().(bool))
+		if err != nil {
+			return err
+		}
+	case reflect.Float64:
+		err = setValueFloat64To(filename, section, key, rValue.Interface().(float64))
+		if err != nil {
+			return err
+		}
 	default:
 		err = errors.New("unrecognized value type")
 	}
@@ -335,6 +345,76 @@ func setValueIntTo(src string, section string, key string, value int) (err error
 	}
 	// set key-value to stream
 	out, err := setValue(data, section, key, strconv.Itoa(value))
+	if err != nil {
+		log.Println("Error set value to ini:", err)
+		return err
+	}
+	// write ini file...
+	err = ioutil.WriteFile(src, out, 0644)
+	if err != nil {
+		log.Println("Error write ini:", err)
+		return err
+	}
+	return err
+}
+
+func setValueBoolTo(src string, section string, key string, value bool) (err error) {
+	// open ini file...
+	file, err := os.Open(src)
+	if err != nil {
+		log.Println("Error open ini:", err)
+		return err
+	}
+	// read ini file...
+	data, err := ioutil.ReadAll(file)
+	if err != nil {
+		log.Println("Error read ini:", err)
+		return err
+	}
+	// close ini file...
+	err = file.Close()
+	if err != nil {
+		log.Println("Error close ini:", err)
+		return err
+	}
+	// set key-value to stream
+	str := strconv.FormatBool(value)
+	out, err := setValue(data, section, key, str)
+	if err != nil {
+		log.Println("Error set value to ini:", err)
+		return err
+	}
+	// write ini file...
+	err = ioutil.WriteFile(src, out, 0644)
+	if err != nil {
+		log.Println("Error write ini:", err)
+		return err
+	}
+	return err
+}
+
+func setValueFloat64To(src string, section string, key string, value float64) (err error) {
+	// open ini file...
+	file, err := os.Open(src)
+	if err != nil {
+		log.Println("Error open ini:", err)
+		return err
+	}
+	// read ini file...
+	data, err := ioutil.ReadAll(file)
+	if err != nil {
+		log.Println("Error read ini:", err)
+		return err
+	}
+	// close ini file...
+	err = file.Close()
+	if err != nil {
+		log.Println("Error close ini:", err)
+		return err
+	}
+	// set key-value to stream
+	str := strconv.FormatFloat(value, 'f', -1, 64)
+	out, err := setValue(data, section, key, str)
 	if err != nil {
 		log.Println("Error set value to ini:", err)
 		return err
