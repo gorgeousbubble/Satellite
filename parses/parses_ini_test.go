@@ -201,6 +201,19 @@ func TestGetValueBoolFrom(t *testing.T) {
 	}
 }
 
+func BenchmarkGetValueBoolFrom(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		src := "../test/data/parses/test_simple.ini"
+		r, err := getValueBoolFrom(src, "BOOL", "Switch_On")
+		if err != nil {
+			b.Fatal("Error parses ini:", err)
+		}
+		if r != true {
+			b.Fatal("Error parses ini content")
+		}
+	}
+}
+
 func TestGetValueFloat64From(t *testing.T) {
 	src := "../test/data/parses/test_simple.ini"
 	r, err := getValueFloat64From(src, "FLOAT", "Pi")
@@ -209,6 +222,19 @@ func TestGetValueFloat64From(t *testing.T) {
 	}
 	if r != 3.1415926 {
 		t.Fatal("Error parses ini content")
+	}
+}
+
+func BenchmarkGetValueFloat64From(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		src := "../test/data/parses/test_simple.ini"
+		r, err := getValueFloat64From(src, "FLOAT", "Pi")
+		if err != nil {
+			b.Fatal("Error parses ini:", err)
+		}
+		if r != 3.1415926 {
+			b.Fatal("Error parses ini content")
+		}
 	}
 }
 
@@ -276,6 +302,20 @@ func TestGetValueFrom3(t *testing.T) {
 	}
 }
 
+func BenchmarkGetValueFrom3(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		var value bool
+		src := "../test/data/parses/test_simple.ini"
+		err := GetValueFrom(src, "BOOL", "Switch_On", &value)
+		if err != nil {
+			b.Fatal("Error parses ini:", err)
+		}
+		if value != true {
+			b.Fatal("Error parses ini content")
+		}
+	}
+}
+
 func TestGetValueFrom4(t *testing.T) {
 	var value float64
 	src := "../test/data/parses/test_simple.ini"
@@ -285,6 +325,20 @@ func TestGetValueFrom4(t *testing.T) {
 	}
 	if value != 3.1415926 {
 		t.Fatal("Error parses ini content")
+	}
+}
+
+func BenchmarkGetValueFrom4(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		var value float64
+		src := "../test/data/parses/test_simple.ini"
+		err := GetValueFrom(src, "FLOAT", "Pi", &value)
+		if err != nil {
+			b.Fatal("Error parses ini:", err)
+		}
+		if value != 3.1415926 {
+			b.Fatal("Error parses ini content")
+		}
 	}
 }
 
@@ -332,11 +386,31 @@ func TestSetValueBoolTo(t *testing.T) {
 	}
 }
 
+func BenchmarkSetValueBoolTo(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		src := "../test/data/parses/test_simple.ini"
+		err := setValueBoolTo(src, "BOOL", "Switch_On", true)
+		if err != nil {
+			b.Fatal("Error parses ini:", err)
+		}
+	}
+}
+
 func TestSetValueFloat64To(t *testing.T) {
 	src := "../test/data/parses/test_simple.ini"
 	err := setValueFloat64To(src, "FLOAT", "Pi", 3.1415926)
 	if err != nil {
 		t.Fatal("Error parses ini:", err)
+	}
+}
+
+func BenchmarkSetValueFloat64To(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		src := "../test/data/parses/test_simple.ini"
+		err := setValueFloat64To(src, "FLOAT", "Pi", 3.1415926)
+		if err != nil {
+			b.Fatal("Error parses ini:", err)
+		}
 	}
 }
 
@@ -384,10 +458,30 @@ func TestSetValueTo3(t *testing.T) {
 	}
 }
 
+func BenchmarkSetValueTo3(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		src := "../test/data/parses/test_simple.ini"
+		err := SetValueTo(src, "BOOL", "Switch_On", true)
+		if err != nil {
+			b.Fatal("Error parses ini:", err)
+		}
+	}
+}
+
 func TestSetValueTo4(t *testing.T) {
 	src := "../test/data/parses/test_simple.ini"
 	err := SetValueTo(src, "FLOAT", "Pi", 3.1415926)
 	if err != nil {
 		t.Fatal("Error parses ini:", err)
+	}
+}
+
+func BenchmarkSetValueTo4(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		src := "../test/data/parses/test_simple.ini"
+		err := SetValueTo(src, "FLOAT", "Pi", 3.1415926)
+		if err != nil {
+			b.Fatal("Error parses ini:", err)
+		}
 	}
 }
