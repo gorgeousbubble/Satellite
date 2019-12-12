@@ -302,6 +302,20 @@ func TestGetValueFrom3(t *testing.T) {
 	}
 }
 
+func BenchmarkGetValueFrom3(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		var value bool
+		src := "../test/data/parses/test_simple.ini"
+		err := GetValueFrom(src, "BOOL", "Switch_On", &value)
+		if err != nil {
+			b.Fatal("Error parses ini:", err)
+		}
+		if value != true {
+			b.Fatal("Error parses ini content")
+		}
+	}
+}
+
 func TestGetValueFrom4(t *testing.T) {
 	var value float64
 	src := "../test/data/parses/test_simple.ini"
@@ -311,6 +325,20 @@ func TestGetValueFrom4(t *testing.T) {
 	}
 	if value != 3.1415926 {
 		t.Fatal("Error parses ini content")
+	}
+}
+
+func BenchmarkGetValueFrom4(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		var value float64
+		src := "../test/data/parses/test_simple.ini"
+		err := GetValueFrom(src, "FLOAT", "Pi", &value)
+		if err != nil {
+			b.Fatal("Error parses ini:", err)
+		}
+		if value != 3.1415926 {
+			b.Fatal("Error parses ini content")
+		}
 	}
 }
 
