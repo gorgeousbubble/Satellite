@@ -54,6 +54,8 @@ func main() {
 		cmd.ParseCmdQRCode()
 	case CmdShell:
 		cmd.ParseCmdShell()
+	case CmdParses:
+		cmd.ParseCmdParses()
 	default:
 		fmt.Println("Invalid command~")
 		os.Exit(1)

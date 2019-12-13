@@ -15,10 +15,6 @@ import (
 	"sync"
 )
 
-func init() {
-	TILESDB = tilesDB()
-}
-
 type DB struct {
 	mutex *sync.Mutex
 	store map[string][3]float64
@@ -69,6 +65,10 @@ func averageColor(img image.Image) [3]float64 {
 }
 
 var TILESDB map[string][3]float64
+
+func InitTilesDB() {
+	TILESDB = tilesDB()
+}
 
 func CloneTilesDB() DB {
 	db := make(map[string][3]float64)
