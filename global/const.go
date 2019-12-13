@@ -18,6 +18,7 @@ const (
 	CmdFtp        = "ftp"
 	CmdQRCode     = "qrcode"
 	CmdShell      = "shell"
+	CmdParses     = "parses"
 )
 
 const (
