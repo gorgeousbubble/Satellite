@@ -42,6 +42,8 @@ const (
 	HttpURLImagesQRCode         = HttpURLImages + "/qrcode"
 	HttpURLImagesQRCodeToFile   = HttpURLImagesQRCode + "/f"
 	HttpURLImagesQRCodeToMemory = HttpURLImagesQRCode + "/m"
+	HttpURLParses               = HttpURLSatellite + "/parses"
+	HttpURLParsesIni            = HttpURLParses + "/ini"
 )
 
 const (
