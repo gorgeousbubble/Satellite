@@ -77,3 +77,11 @@ type TNetsImagesQRCodeToFile struct {
 	Size    int    `json:"size"`
 	Dest    string `json:"dest"`
 }
+
+type TNetsParsesIni struct {
+	Src     string `json:"src"`
+	Section string `json:"section"`
+	Name    string `json:"name"`
+	Type    string `json:"type"`
+	Value   string `json:"value"`
+}
