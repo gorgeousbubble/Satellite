@@ -32,6 +32,8 @@ func main() {
 
 	// switch command execute
 	switch os.Args[1] {
+	case CmdHelp:
+		flag.Usage()
 	case CmdPacket:
 		cmd.ParseCmdPack()
 	case CmdUnpack:
@@ -57,7 +59,7 @@ func main() {
 	case CmdParses:
 		cmd.ParseCmdParses()
 	default:
-		fmt.Println("Invalid command~")
+		fmt.Println("Unrecognized command~")
 		os.Exit(1)
 	}
 }
