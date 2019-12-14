@@ -7,6 +7,7 @@ const (
 )
 
 const (
+	CmdHelp       = "help"
 	CmdPacket     = "pack"
 	CmdUnpack     = "unpack"
 	CmdCompress   = "comp"
