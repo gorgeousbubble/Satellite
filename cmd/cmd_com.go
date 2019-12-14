@@ -34,7 +34,7 @@ Satellite Project - We share beautiful dreams together.
 Version: v1.00a
 Author: alopex
 
-Usage: satellite [pack/unpack] [comp/decomp] [tcp/udp] [http/https/ftp] [qrcode] [shell]
+Usage: satellite [pack/unpack] [comp/decomp] [tcp/udp] [http/https/ftp] [qrcode] [shell] [parses]
 
 Options:
 	pack 	- packet files to user customize type.
@@ -43,11 +43,12 @@ Options:
 	decomp	- decompress packet to origin files.
 	tcp     - tcp simple server/client.
 	udp     - udp simple server/client.
-	http 	- http restful server
-	https 	- https restful server
+	http 	- http restful server.
+	https 	- https restful server.
 	ftp     - ftp server/client.
 	qrcode  - generate qrcode save as images.
 	shell   - shell executable file.
+	parses	- multiple file parser.
 `)
 	if err != nil {
 		log.Println("Error print information:", err)
