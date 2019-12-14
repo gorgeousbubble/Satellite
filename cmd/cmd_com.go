@@ -33,6 +33,7 @@ func Usage() {
 Satellite Project - We share beautiful dreams together.
 Version: v1.00a
 Author: alopex
+Brief: Satellite is a tool for both multiple command and web service develop by Go-lang.
 
 Usage: satellite [pack/unpack] [comp/decomp] [tcp/udp] [http/https/ftp] [qrcode] [shell] [parses]
 
