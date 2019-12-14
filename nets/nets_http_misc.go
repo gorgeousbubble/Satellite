@@ -294,7 +294,7 @@ func checkNetsParsesIniValueParameters(t TNetsParsesIni) (b bool, err error) {
 		log.Println("Type should be one of 'string', 'int', 'float64' or 'bool'.")
 	}
 	// check parses value
-	if t.Mode != "set" && t.Value == "" {
+	if t.Mode != "get" && t.Value == "" {
 		b = false
 		log.Println("Value should not be empty in set mode.")
 	}
