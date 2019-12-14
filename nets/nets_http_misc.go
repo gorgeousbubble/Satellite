@@ -266,6 +266,41 @@ func checkNetsImagesQRCodeToFileParameters(t TNetsImagesQRCodeToFile) (b bool, e
 	return b, err
 }
 
+func checkNetsParsesIniValueParameters(t TNetsParsesIni) (b bool, err error) {
+	b = true
+	// check src files
+	if t.Src == "" {
+		b = false
+		log.Println("Source file can't be empty.")
+		return b, err
+	}
+	b, err = PathExist(t.Src)
+	if err != nil {
+		log.Println("Error check path exist:", err)
+		return b, err
+	}
+	if !b {
+		log.Println("Source file path not exist.")
+		return b, err
+	}
+	// check parses mode
+	if t.Mode != "get" && t.Mode != "set" {
+		b = false
+		log.Println("Mode should be one of 'get' or 'set'.")
+	}
+	// check parses type
+	if t.Type != "string" && t.Type != "int" && t.Type != "float64" && t.Type != "bool" {
+		b = false
+		log.Println("Type should be one of 'string', 'int', 'float64' or 'bool'.")
+	}
+	// check parses value
+	if t.Mode != "get" && t.Value == "" {
+		b = false
+		log.Println("Value should not be empty in set mode.")
+	}
+	return b, err
+}
+
 func refactorNetsPackSource(src []string) (dest []string, err error) {
 	for i := 0; i < len(src); {
 		is, err := IsDir(src[i])

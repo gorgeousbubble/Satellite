@@ -11,7 +11,9 @@ import (
 	"satellite/decomp"
 	"satellite/images"
 	"satellite/pack"
+	"satellite/parses"
 	"satellite/unpack"
+	"strconv"
 	"sync/atomic"
 	"time"
 
@@ -218,6 +220,23 @@ func handleNetsImagesQRCodeToMemory(w http.ResponseWriter, r *http.Request) {
 	case "POST":
 		log.Printf("POST %s", r.RequestURI)
 		err = handlePostNetsImagesQRCodeToMemory(w, r)
+	}
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		log.Printf("%d Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+}
+
+func handleNetsParsesIniValue(w http.ResponseWriter, r *http.Request) {
+	var err error
+	switch r.Method {
+	case "GET":
+		log.Printf("GET %s", r.RequestURI)
+		err = handleGetNetsParsesIniValue(w, r)
+	case "PUT":
+		log.Printf("PUT %s", r.RequestURI)
+		err = handlePutNetsParsesIniValue(w, r)
 	}
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -1113,6 +1132,175 @@ func handlePostNetsImagesQRCodeToMemory(w http.ResponseWriter, r *http.Request) 
 	// response
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(qr)
+	log.Printf("%d Ok", http.StatusOK)
+	return err
+}
+
+func handleGetNetsParsesIniValue(w http.ResponseWriter, r *http.Request) (err error) {
+	defer r.Body.Close()
+	// read request body
+	len := r.ContentLength
+	body := make([]byte, len)
+	body, err = ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Println("Error read request body:", err)
+		return err
+	}
+	// unmarshal json body
+	var t TNetsParsesIni
+	err = json.Unmarshal(body, &t)
+	if err != nil {
+		http.Error(w, "Incorrect request body!", http.StatusBadRequest)
+		log.Println("Error unmarshal json body:", err)
+		log.Printf("%d Bad Request", http.StatusBadRequest)
+		return nil
+	}
+	// check request parameters
+	b, err := checkNetsParsesIniValueParameters(t)
+	if err != nil {
+		log.Println("Error check parses ini value parameters:", err)
+		return err
+	}
+	if !b {
+		http.Error(w, "Illegal parameters!", http.StatusUnprocessableEntity)
+		log.Println("Illegal parameters")
+		log.Printf("%d Unprocessable Entity", http.StatusUnprocessableEntity)
+		return nil
+	}
+	// parses ini get value
+	switch t.Mode {
+	case "get":
+		switch t.Type {
+		case "string":
+			var value string
+			err = parses.GetValueFrom(t.Src, t.Section, t.Name, &value)
+			if err != nil {
+				return err
+			}
+			t.Value = value
+		case "int":
+			var value int
+			err = parses.GetValueFrom(t.Src, t.Section, t.Name, &value)
+			if err != nil {
+				return err
+			}
+			t.Value = strconv.Itoa(value)
+		case "float64":
+			var value float64
+			err = parses.GetValueFrom(t.Src, t.Section, t.Name, &value)
+			if err != nil {
+				return err
+			}
+			t.Value = strconv.FormatFloat(value, 'f', -1, 64)
+		case "bool":
+			var value bool
+			err = parses.GetValueFrom(t.Src, t.Section, t.Name, &value)
+			if err != nil {
+				return err
+			}
+			t.Value = strconv.FormatBool(value)
+		default:
+			err = errors.New("unrecognized type name")
+			return err
+		}
+	default:
+		err = errors.New("unrecognized type name")
+		return err
+	}
+	// marshal json
+	js, err := json.MarshalIndent(&t, "", "\t\t")
+	if err != nil {
+		log.Println("Error marshal to json:", err)
+		return err
+	}
+	// response
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(js)
+	log.Printf("%d Ok", http.StatusOK)
+	return err
+}
+
+func handlePutNetsParsesIniValue(w http.ResponseWriter, r *http.Request) (err error) {
+	defer r.Body.Close()
+	// read request body
+	len := r.ContentLength
+	body := make([]byte, len)
+	body, err = ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Println("Error read request body:", err)
+		return err
+	}
+	// unmarshal json body
+	var t TNetsParsesIni
+	err = json.Unmarshal(body, &t)
+	if err != nil {
+		http.Error(w, "Incorrect request body!", http.StatusBadRequest)
+		log.Println("Error unmarshal json body:", err)
+		log.Printf("%d Bad Request", http.StatusBadRequest)
+		return nil
+	}
+	// check request parameters
+	b, err := checkNetsParsesIniValueParameters(t)
+	if err != nil {
+		log.Println("Error check parses ini value parameters:", err)
+		return err
+	}
+	if !b {
+		http.Error(w, "Illegal parameters!", http.StatusUnprocessableEntity)
+		log.Println("Illegal parameters")
+		log.Printf("%d Unprocessable Entity", http.StatusUnprocessableEntity)
+		return nil
+	}
+	// parses ini get value
+	switch t.Mode {
+	case "set":
+		switch t.Type {
+		case "string":
+			var value string
+			value = t.Value
+			err = parses.SetValueTo(t.Src, t.Section, t.Name, value)
+			if err != nil {
+				return err
+			}
+		case "int":
+			var value int
+			value, err = strconv.Atoi(t.Value)
+			if err != nil {
+				return err
+			}
+			err = parses.SetValueTo(t.Src, t.Section, t.Name, value)
+			if err != nil {
+				return err
+			}
+		case "float64":
+			var value float64
+			value, err = strconv.ParseFloat(t.Value, 64)
+			if err != nil {
+				return err
+			}
+			err = parses.SetValueTo(t.Src, t.Section, t.Name, value)
+			if err != nil {
+				return err
+			}
+		case "bool":
+			var value bool
+			value, err = strconv.ParseBool(t.Value)
+			if err != nil {
+				return err
+			}
+			err = parses.SetValueTo(t.Src, t.Section, t.Name, value)
+			if err != nil {
+				return err
+			}
+		default:
+			err = errors.New("unrecognized type name")
+		}
+	default:
+		err = errors.New("unrecognized type name")
+		return err
+	}
+	// response
+	w.Header().Set("Content-Type", "application/json")
 	log.Printf("%d Ok", http.StatusOK)
 	return err
 }
