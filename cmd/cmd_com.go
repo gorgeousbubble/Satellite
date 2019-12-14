@@ -35,7 +35,7 @@ Brief: Satellite is a tool for both multiple command and web service develop by 
 Version: v1.00a
 Author: alopex
 
-Usage: satellite [help] r[pack/unpack] [comp/decomp] [tcp/udp] [http/https/ftp] [qrcode] [shell] [parses]
+Usage: satellite [help] [pack/unpack] [comp/decomp] [tcp/udp] [http/https/ftp] [qrcode] [shell] [parses]
 
 Options:
 	help	- help information about satellite application.
