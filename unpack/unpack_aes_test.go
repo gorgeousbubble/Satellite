@@ -36,6 +36,16 @@ func TestUnpackAESToFile(t *testing.T) {
 	}
 }
 
+func TestUnpackAESToFileConfine(t *testing.T) {
+	src := "../test/data/unpack/file_aes.txt"
+	dest := "../test/data/unpack/"
+	target := "file_1.txt"
+	err := UnpackAESToFileConfine(src, target, dest)
+	if err != nil {
+		t.Fatal("Error Unpack AES To File:", err)
+	}
+}
+
 func TestUnpackAESToMemory(t *testing.T) {
 	var dest []byte
 	src := "../test/data/unpack/file_aes.txt"
@@ -321,6 +331,18 @@ func BenchmarkUnpackAESToFile(b *testing.B) {
 		dest := "../test/data/unpack/"
 		target := "file_1.txt"
 		err := UnpackAESToFile(src, target, dest)
+		if err != nil {
+			b.Fatal("Error Unpack AES To File:", err)
+		}
+	}
+}
+
+func BenchmarkUnpackAESToFileConfine(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		src := "../test/data/unpack/file_aes.txt"
+		dest := "../test/data/unpack/"
+		target := "file_1.txt"
+		err := UnpackAESToFileConfine(src, target, dest)
 		if err != nil {
 			b.Fatal("Error Unpack AES To File:", err)
 		}
