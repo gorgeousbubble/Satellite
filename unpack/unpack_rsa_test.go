@@ -36,6 +36,16 @@ func TestUnpackRSAToFile(t *testing.T) {
 	}
 }
 
+func TestUnpackRSAToFileConfine(t *testing.T) {
+	src := "../test/data/unpack/file_rsa.txt"
+	dest := "../test/data/unpack/"
+	target := "file_1.txt"
+	err := UnpackRSAToFileConfine(src, target, dest)
+	if err != nil {
+		t.Fatal("Error Unpack RSA To File:", err)
+	}
+}
+
 func TestUnpackRSAToMemory(t *testing.T) {
 	var dest []byte
 	src := "../test/data/unpack/file_rsa.txt"
@@ -593,6 +603,18 @@ func BenchmarkUnpackRSAToFile(b *testing.B) {
 		dest := "../test/data/unpack/"
 		target := "file_1.txt"
 		err := UnpackRSAToFile(src, target, dest)
+		if err != nil {
+			b.Fatal("Error Unpack RSA To File:", err)
+		}
+	}
+}
+
+func BenchmarkUnpackRSAToFileConfine(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		src := "../test/data/unpack/file_rsa.txt"
+		dest := "../test/data/unpack/"
+		target := "file_1.txt"
+		err := UnpackRSAToFileConfine(src, target, dest)
 		if err != nil {
 			b.Fatal("Error Unpack RSA To File:", err)
 		}
