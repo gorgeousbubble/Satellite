@@ -38,6 +38,7 @@ const (
 	HttpURLUnpackConfine        = HttpURLUnpack + "/c"
 	HttpURLUnpackToFile         = HttpURLUnpack + "/f"
 	HttpURLUnpackToMemory       = HttpURLUnpack + "/m"
+	HttpURLUnpackToFileConfine  = HttpURLUnpack + "/cf"
 	HttpURLComp                 = HttpURLSatellite + "/comp"
 	HttpURLDecomp               = HttpURLSatellite + "/decomp"
 	HttpURLImages               = HttpURLSatellite + "/images"

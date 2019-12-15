@@ -130,7 +130,11 @@ func handleCmdUnpack(src string, dest string, target string, verbose bool, confi
 
 func execUnpack(src string, dest string, target string, confine bool, err *error, ch chan bool) {
 	if target != "" {
-		*err = unpack.UnpackToFile(src, target, dest)
+		if confine {
+			*err = unpack.UnpackToFileConfine(src, target, dest)
+		} else {
+			*err = unpack.UnpackToFile(src, target, dest)
+		}
 	} else {
 		if confine {
 			*err = unpack.UnpackConfine(src, dest)
