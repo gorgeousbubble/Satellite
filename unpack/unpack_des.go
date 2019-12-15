@@ -576,6 +576,119 @@ func Unpack3DESToFile(src string, target string, dest string) (err error) {
 	return err
 }
 
+func Unpack3DESToFileConfine(src string, target string, dest string) (err error) {
+	// start multi-cpu
+	core := runtime.NumCPU()
+	runtime.GOMAXPROCS(core)
+	// first, open the file
+	file, err := os.Open(src)
+	if err != nil {
+		log.Println("Error open file:", err)
+		return err
+	}
+	defer file.Close()
+	// second, read file data
+	data, err := ioutil.ReadAll(file)
+	if err != nil {
+		log.Println("Error read file:", err)
+		return err
+	}
+	_, name := filepath.Split(src)
+	// third, new one header
+	h := TUnpackDES{}
+	h.Name = make([]byte, 32)
+	h.Author = make([]byte, 16)
+	h.Type = make([]byte, 8)
+	h.Number = make([]byte, 4)
+	// fourth, read the header
+	rd := bytes.NewReader(data)
+	_, err = rd.Read(h.Name)
+	if err != nil {
+		log.Println("Error read header name:", err)
+		return err
+	}
+	s := make([]byte, 32)
+	BytesCopy(&s, []byte(name))
+	if !bytes.Equal(h.Name, s) {
+		log.Println("Error read header name:", err)
+		return err
+	}
+	_, err = rd.Read(h.Author)
+	if err != nil {
+		log.Println("Error read header author:", err)
+		return err
+	}
+	s = make([]byte, 16)
+	BytesCopy(&s, []byte("Alopex6414"))
+	if !bytes.Equal(h.Author, s) {
+		log.Println("Error read header author:", err)
+		return err
+	}
+	_, err = rd.Read(h.Type)
+	if err != nil {
+		log.Println("Error read header type:", err)
+		return err
+	}
+	s = make([]byte, 8)
+	BytesCopy(&s, []byte("3DES"))
+	if !bytes.Equal(h.Type, s) {
+		log.Println("Error read header type:", err)
+		return err
+	}
+	_, err = rd.Read(h.Number)
+	if err != nil {
+		log.Println("Error read header number:", err)
+		return err
+	}
+	size := BytesToInt(h.Number)
+	// fifth, read every one file in packet
+	for i := 0; i < size; i++ {
+		// six, read the header
+		hh := TUnpack3DESOne{}
+		hh.Name = make([]byte, 32)
+		hh.Key = make([]byte, 24)
+		hh.OriginSize = make([]byte, 4)
+		hh.CryptSize = make([]byte, 4)
+		_, err = rd.Read(hh.Name)
+		if err != nil {
+			log.Println("Error read header name:", err)
+			return err
+		}
+		_, err = rd.Read(hh.Key)
+		if err != nil {
+			log.Println("Error read header key:", err)
+			return err
+		}
+		_, err = rd.Read(hh.OriginSize)
+		if err != nil {
+			log.Println("Error read header origin size:", err)
+			return err
+		}
+		_, err = rd.Read(hh.CryptSize)
+		if err != nil {
+			log.Println("Error read header crypt size:", err)
+			return err
+		}
+		// seven, read the body
+		s := make([]byte, BytesToInt(hh.CryptSize))
+		n, err := rd.Read(s)
+		if n <= 0 {
+			log.Println("Error read body:", err)
+			return err
+		}
+		// eight, when it is target file, then run unpack one file
+		if target == string(bytes.Trim(hh.Name, "\x00")) {
+			err = Unpack3DESOneConfine(s, hh, dest)
+			if err != nil {
+				log.Println("Error unpack 3des one to file:", err)
+				return err
+			}
+			return nil
+		}
+	}
+	return err
+}
+
 func Unpack3DESToMemory(src string, target string, dest *[]byte) (err error) {
 	// start multi-cpu
 	core := runtime.NumCPU()
@@ -792,6 +905,119 @@ func UnpackDESToFile(src string, target string, dest string) (err error) {
 		// eight, when it is target file, then run unpack one file
 		if target == string(bytes.Trim(hh.Name, "\x00")) {
 			err = UnpackDESOne(s, hh, dest)
+			if err != nil {
+				log.Println("Error unpack des one to file:", err)
+				return err
+			}
+			return nil
+		}
+	}
+	return err
+}
+
+func UnpackDESToFileConfine(src string, target string, dest string) (err error) {
+	// start multi-cpu
+	core := runtime.NumCPU()
+	runtime.GOMAXPROCS(core)
+	// first, open the file
+	file, err := os.Open(src)
+	if err != nil {
+		log.Println("Error open file:", err)
+		return err
+	}
+	defer file.Close()
+	// second, read file data
+	data, err := ioutil.ReadAll(file)
+	if err != nil {
+		log.Println("Error read file:", err)
+		return err
+	}
+	_, name := filepath.Split(src)
+	// third, new one header
+	h := TUnpackDES{}
+	h.Name = make([]byte, 32)
+	h.Author = make([]byte, 16)
+	h.Type = make([]byte, 8)
+	h.Number = make([]byte, 4)
+	// fourth, read the header
+	rd := bytes.NewReader(data)
+	_, err = rd.Read(h.Name)
+	if err != nil {
+		log.Println("Error read header name:", err)
+		return err
+	}
+	s := make([]byte, 32)
+	BytesCopy(&s, []byte(name))
+	if !bytes.Equal(h.Name, s) {
+		log.Println("Error read header name:", err)
+		return err
+	}
+	_, err = rd.Read(h.Author)
+	if err != nil {
+		log.Println("Error read header author:", err)
+		return err
+	}
+	s = make([]byte, 16)
+	BytesCopy(&s, []byte("Alopex6414"))
+	if !bytes.Equal(h.Author, s) {
+		log.Println("Error read header author:", err)
+		return err
+	}
+	_, err = rd.Read(h.Type)
+	if err != nil {
+		log.Println("Error read header type:", err)
+		return err
+	}
+	s = make([]byte, 8)
+	BytesCopy(&s, []byte("DES"))
+	if !bytes.Equal(h.Type, s) {
+		log.Println("Error read header type:", err)
+		return err
+	}
+	_, err = rd.Read(h.Number)
+	if err != nil {
+		log.Println("Error read header number:", err)
+		return err
+	}
+	size := BytesToInt(h.Number)
+	// fifth, read every one file in packet
+	for i := 0; i < size; i++ {
+		// six, read the header
+		hh := TUnpackDESOne{}
+		hh.Name = make([]byte, 32)
+		hh.Key = make([]byte, 8)
+		hh.OriginSize = make([]byte, 4)
+		hh.CryptSize = make([]byte, 4)
+		_, err = rd.Read(hh.Name)
+		if err != nil {
+			log.Println("Error read header name:", err)
+			return err
+		}
+		_, err = rd.Read(hh.Key)
+		if err != nil {
+			log.Println("Error read header key:", err)
+			return err
+		}
+		_, err = rd.Read(hh.OriginSize)
+		if err != nil {
+			log.Println("Error read header origin size:", err)
+			return err
+		}
+		_, err = rd.Read(hh.CryptSize)
+		if err != nil {
+			log.Println("Error read header crypt size:", err)
+			return err
+		}
+		// seven, read the body
+		s := make([]byte, BytesToInt(hh.CryptSize))
+		n, err := rd.Read(s)
+		if n <= 0 {
+			log.Println("Error read body:", err)
+			return err
+		}
+		// eight, when it is target file, then run unpack one file
+		if target == string(bytes.Trim(hh.Name, "\x00")) {
+			err = UnpackDESOneConfine(s, hh, dest)
 			if err != nil {
 				log.Println("Error unpack des one to file:", err)
 				return err
