@@ -116,7 +116,7 @@ func UnpackBase64(src string, dest string) (err error) {
 
 func UnpackBase64Confine(src string, dest string) (err error) {
 	wg := &sync.WaitGroup{}
-	ch := make(chan interface{}, 5)
+	ch := make(chan interface{}, ConfineFiles)
 	// start multi-cpu
 	core := runtime.NumCPU()
 	runtime.GOMAXPROCS(core)
@@ -712,7 +712,7 @@ func UnpackBase64OneConfine(data []byte, head TUnpackBase64One, path string) (er
 	}
 	// second, we can call Base64Decrypt function
 	wg := &sync.WaitGroup{}
-	ch := make(chan interface{}, 8192)
+	ch := make(chan interface{}, ConfineBuffers)
 	rr := make([]string, len(ss))
 	for k, v := range ss {
 		wg.Add(1)

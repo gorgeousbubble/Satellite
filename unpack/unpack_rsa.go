@@ -131,7 +131,7 @@ func UnpackRSA(src string, dest string) (err error) {
 
 func UnpackRSAConfine(src string, dest string) (err error) {
 	wg := &sync.WaitGroup{}
-	ch := make(chan interface{}, 5)
+	ch := make(chan interface{}, ConfineFiles)
 	// start multi-cpu
 	core := runtime.NumCPU()
 	runtime.GOMAXPROCS(core)
@@ -780,7 +780,7 @@ func UnpackRSAOneConfine(data []byte, head TUnpackRSAOne, path string) (err erro
 	}
 	// second, we can call RSADecrypt function
 	wg := &sync.WaitGroup{}
-	ch := make(chan interface{}, 8192)
+	ch := make(chan interface{}, ConfineBuffers)
 	rr := make([][]byte, len(ss))
 	for k, v := range ss {
 		wg.Add(1)

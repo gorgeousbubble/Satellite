@@ -128,7 +128,7 @@ func UnpackAES(src string, dest string) (err error) {
 
 func UnpackAESConfine(src string, dest string) (err error) {
 	wg := &sync.WaitGroup{}
-	ch := make(chan interface{}, 5)
+	ch := make(chan interface{}, ConfineFiles)
 	// start multi-cpu
 	core := runtime.NumCPU()
 	runtime.GOMAXPROCS(core)
@@ -776,7 +776,7 @@ func UnpackAESOneConfine(data []byte, head TUnpackAESOne, path string) (err erro
 	}
 	// second, we can call AESDecrypt function
 	wg := &sync.WaitGroup{}
-	ch := make(chan interface{}, 8192)
+	ch := make(chan interface{}, ConfineBuffers)
 	rr := make([][]byte, len(ss))
 	for k, v := range ss {
 		wg.Add(1)

@@ -239,7 +239,7 @@ func UnpackDES(src string, dest string) (err error) {
 
 func Unpack3DESConfine(src string, dest string) (err error) {
 	wg := &sync.WaitGroup{}
-	ch := make(chan interface{}, 5)
+	ch := make(chan interface{}, ConfineFiles)
 	// start multi-cpu
 	core := runtime.NumCPU()
 	runtime.GOMAXPROCS(core)
@@ -352,7 +352,7 @@ func Unpack3DESConfine(src string, dest string) (err error) {
 
 func UnpackDESConfine(src string, dest string) (err error) {
 	wg := &sync.WaitGroup{}
-	ch := make(chan interface{}, 5)
+	ch := make(chan interface{}, ConfineFiles)
 	// start multi-cpu
 	core := runtime.NumCPU()
 	runtime.GOMAXPROCS(core)
@@ -1436,7 +1436,7 @@ func Unpack3DESOneConfine(data []byte, head TUnpack3DESOne, path string) (err er
 	}
 	// second, we can call DESDecrypt function
 	wg := &sync.WaitGroup{}
-	ch := make(chan interface{}, 8192)
+	ch := make(chan interface{}, ConfineBuffers)
 	rr := make([][]byte, len(ss))
 	for k, v := range ss {
 		wg.Add(1)
@@ -1560,7 +1560,7 @@ func UnpackDESOneConfine(data []byte, head TUnpackDESOne, path string) (err erro
 	}
 	// second, we can call DESDecrypt function
 	wg := &sync.WaitGroup{}
-	ch := make(chan interface{}, 8192)
+	ch := make(chan interface{}, ConfineBuffers)
 	rr := make([][]byte, len(ss))
 	for k, v := range ss {
 		wg.Add(1)
