@@ -88,6 +88,8 @@ namespace package
             textBox_unpack_src.ReadOnly = true;
             textBox_unpack_dest.ReadOnly = true;
 
+            checkBox_unpack_confine.Checked = true;
+
             UpdateListViewCallback = new UPDATELISTVIEWCALLBACK(Update_unpack_listView);
         }
 
@@ -360,11 +362,25 @@ namespace package
                 string url = "";
                 if (m_bChoose == true)
                 {
-                    url = "http://localhost:8080/satellite/unpack/f";
+                    if (checkBox_unpack_confine.Checked == true)
+                    {
+                        url = "http://localhost:8080/satellite/unpack/cf";
+                    }
+                    else
+                    {
+                        url = "http://localhost:8080/satellite/unpack/f";
+                    }
                 }
                 else
                 {
-                    url = "http://localhost:8080/satellite/unpack";
+                    if (checkBox_unpack_confine.Checked == true)
+                    {
+                        url = "http://localhost:8080/satellite/unpack/c";
+                    }
+                    else
+                    {
+                        url = "http://localhost:8080/satellite/unpack";
+                    }
                 }
 
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
