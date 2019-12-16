@@ -558,6 +558,22 @@ func TestHandleGetNetsParsesIniValue(t *testing.T) {
 	}
 }
 
+func BenchmarkHandleGetNetsParsesIniValue(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		mux := http.NewServeMux()
+		mux.HandleFunc(HttpURLParsesIni, handleNetsParsesIniValue)
+
+		writer := httptest.NewRecorder()
+		body := strings.NewReader(`{"src": "../test/data/parses/test_simple.ini", "mode": "get", "section": "BOOL", "name": "Switch_On", "type": "bool", "value": ""}`)
+		request, _ := http.NewRequest("GET", HttpURLParsesIni, body)
+		mux.ServeHTTP(writer, request)
+
+		if writer.Code != http.StatusOK {
+			b.Errorf("Response code is %v", writer.Code)
+		}
+	}
+}
+
 func TestHandlePutNetsParsesIniValue(t *testing.T) {
 	mux := http.NewServeMux()
 	mux.HandleFunc(HttpURLParsesIni, handleNetsParsesIniValue)
@@ -569,5 +585,21 @@ func TestHandlePutNetsParsesIniValue(t *testing.T) {
 
 	if writer.Code != http.StatusOK {
 		t.Errorf("Response code is %v", writer.Code)
+	}
+}
+
+func BenchmarkHandlePutNetsParsesIniValue(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		mux := http.NewServeMux()
+		mux.HandleFunc(HttpURLParsesIni, handleNetsParsesIniValue)
+
+		writer := httptest.NewRecorder()
+		body := strings.NewReader(`{"src": "../test/data/parses/test_simple.ini", "mode": "set", "section": "BOOL", "name": "Switch_On", "type": "bool", "value": "true"}`)
+		request, _ := http.NewRequest("PUT", HttpURLParsesIni, body)
+		mux.ServeHTTP(writer, request)
+
+		if writer.Code != http.StatusOK {
+			b.Errorf("Response code is %v", writer.Code)
+		}
 	}
 }
