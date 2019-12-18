@@ -389,6 +389,17 @@ func BenchmarkUnpackConfine2(b *testing.B) {
 	}
 }
 
+func BenchmarkUnpackConfine3(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		src := "../test/data/unpack/file_3des.txt"
+		dest := "../test/data/unpack/"
+		err := UnpackConfine(src, dest)
+		if err != nil {
+			b.Fatal("Error Unpack:", err)
+		}
+	}
+}
+
 func BenchmarkUnpackToFile(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_aes.txt"
