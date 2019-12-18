@@ -25,7 +25,7 @@ func TestMailSmtpSend(t *testing.T) {
 			withFile:    false,
 		},
 	}
-	err := mail.Send(message)
+	err := mail.SendTLS(message)
 	if err != nil {
 		t.Errorf("Error send stmp mail:%v", err)
 	}
