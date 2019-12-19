@@ -142,6 +142,16 @@ func TestUnpackToFile5(t *testing.T) {
 	}
 }
 
+func TestUnpackToFileConfine(t *testing.T) {
+	src := "../test/data/unpack/file_aes.txt"
+	dest := "../test/data/unpack/"
+	target := "file_1.txt"
+	err := UnpackToFileConfine(src, target, dest)
+	if err != nil {
+		t.Fatal("Error Unpack To File:", err)
+	}
+}
+
 func TestUnpackToMemory(t *testing.T) {
 	var dest []byte
 	src := "../test/data/unpack/file_aes.txt"
