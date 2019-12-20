@@ -556,6 +556,18 @@ func BenchmarkUnpackToFileConfine2(b *testing.B) {
 	}
 }
 
+func BenchmarkUnpackToFileConfine3(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		src := "../test/data/unpack/file_3des.txt"
+		dest := "../test/data/unpack/"
+		target := "file_1.txt"
+		err := UnpackToFileConfine(src, target, dest)
+		if err != nil {
+			b.Fatal("Error Unpack To File:", err)
+		}
+	}
+}
+
 func BenchmarkUnpackToMemory(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var dest []byte
