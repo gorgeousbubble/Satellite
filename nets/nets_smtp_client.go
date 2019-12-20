@@ -122,7 +122,7 @@ func (mail *MailSmtp) SendTLS(message Message) error {
 	buffer.WriteString("\r\n--" + boundary + "--")
 
 	// send mail as tls...
-	c, err := Dial(mail.host + ":" + mail.port)
+	c, err := SmtpDial(mail.host + ":" + mail.port)
 	if err != nil {
 		log.Println("Error create client dial with server:", err)
 		return err
@@ -196,7 +196,7 @@ func (mail *MailSmtp) writeFile(buffer *bytes.Buffer, fileName string) {
 	}
 }
 
-func Dial(addr string) (c *smtp.Client, err error) {
+func SmtpDial(addr string) (c *smtp.Client, err error) {
 	conn, err := tls.Dial("tcp", addr, nil)
 	if err != nil {
 		log.Println("Error dial:", err)
