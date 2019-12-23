@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-func GobEncodeStream(buf *bytes.Buffer, in interface{}) (err error) {
+func GobEncode(buf *bytes.Buffer, in interface{}) (err error) {
 	enc := gob.NewEncoder(buf)
 	err = enc.Encode(in)
 	if err != nil {
@@ -17,8 +17,8 @@ func GobEncodeStream(buf *bytes.Buffer, in interface{}) (err error) {
 	return err
 }
 
-func GobEncodeFile(src string, in interface{}) (err error) {
-	file, err := os.Open(src)
+func GobEncodeTo(src string, in interface{}) (err error) {
+	file, err := os.OpenFile(src, os.O_CREATE|os.O_WRONLY, 0)
 	if err != nil {
 		log.Println("Error open gob file:", err)
 		return err
