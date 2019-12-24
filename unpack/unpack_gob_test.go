@@ -9,7 +9,7 @@ func TestGobDecodeFrom(t *testing.T) {
 		Name  string
 		Value int
 	}
-	src := "../test/data/pack/file_gob.gob"
+	src := "../test/data/unpack/file_gob.gob"
 	out := test{}
 	err := GobDecodeFrom(src, &out)
 	if err != nil {
