@@ -19,6 +19,7 @@ func CompressTar(src []string, dest string) (err error) {
 	defer file.Close()
 	// apply one tar writer to write file
 	tw := tar.NewWriter(file)
+	defer tw.Close()
 	// loop compress src list files
 	for _, v := range src {
 		err = filepath.Walk(v, func(path string, info os.FileInfo, err error) error {
