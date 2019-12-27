@@ -2,6 +2,7 @@ package decomp
 
 import (
 	"archive/tar"
+	"compress/bzip2"
 	"compress/gzip"
 	"io"
 	"log"
@@ -63,6 +64,46 @@ func DeCompressTarGz(src string, dest string) (err error) {
 	}
 	defer gr.Close()
 	tr := tar.NewReader(gr)
+	// loop decompress src list files
+	for {
+		header, err := tr.Next()
+		if err != nil {
+			if err == io.EOF {
+				break
+			} else {
+				return err
+			}
+		}
+		name := dest + header.Name
+		err = os.MkdirAll(string([]rune(name)[0:strings.LastIndex(name, "/")]), 0755)
+		if err != nil {
+			log.Println("Error make dir all:", err)
+			return err
+		}
+		f, err := os.Create(name)
+		if err != nil {
+			log.Println("Error create name:", err)
+			return err
+		}
+		_, err = io.Copy(f, tr)
+		if err != nil {
+			log.Println("Error write decompress date:", err)
+			return err
+		}
+	}
+	return err
+}
+
+func DeCompressTarBz2(src string, dest string) (err error) {
+	// open the src tar ball file...
+	file, err := os.Open(src)
+	if err != nil {
+		log.Println("Error open tar bz2 file:", err)
+		return err
+	}
+	defer file.Close()
+	br := bzip2.NewReader(file)
+	tr := tar.NewReader(br)
 	// loop decompress src list files
 	for {
 		header, err := tr.Next()

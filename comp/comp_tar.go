@@ -63,7 +63,7 @@ func CompressTar(src []string, dest string) (err error) {
 }
 
 func CompressTarGz(src []string, dest string) (err error) {
-	// create the dest zip file...
+	// create the dest tar.gz file...
 	file, err := os.Create(dest)
 	if err != nil {
 		log.Println("Error create file:", err)
