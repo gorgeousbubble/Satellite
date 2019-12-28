@@ -7,8 +7,8 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"satellite/routes"
 	"satellite/utils"
-	"strings"
 	"time"
 )
 
@@ -31,7 +31,7 @@ func CompressGzip(src []string, dest string) (err error) {
 				log.Println("Error compress file:", err)
 				return err
 			}
-			target := trimSuffixSlash(dest) + "/" + trimSuffixPoint(info.Name()) + ".gz"
+			target := routes.TrimSuffixSlash(dest) + "/" + routes.TrimSuffixPoint(info.Name()) + ".gz"
 			//...
 			// create the dest tar file...
 			file, err := os.Create(target)
@@ -60,6 +60,7 @@ func CompressGzip(src []string, dest string) (err error) {
 			gw.Name = info.Name()
 			gw.Comment = "gzip compress by satellite"
 			gw.ModTime = time.Date(time.Now().Year(), time.Now().Month(), time.Now().Day(), time.Now().Hour(), time.Now().Minute(), time.Now().Second(), time.Now().Nanosecond(), time.UTC)
+			gw.Extra = []byte(routes.GetSuffixPoint(info.Name()))
 			// write compress data into file
 			_, err = gw.Write(buf)
 			if err != nil {
@@ -87,22 +88,4 @@ func CompressGzip(src []string, dest string) (err error) {
 		}
 	}
 	return err
-}
-
-func trimSuffixPoint(name string) string {
-	n := strings.Index(name, ".")
-	if n == -1 {
-		return name
-	}
-	short := name[0:n]
-	return short
-}
-
-func trimSuffixSlash(name string) string {
-	if name[len(name)-1] == '/' {
-		return name[0 : len(name)-1]
-	} else if name[len(name)-1] == '\\' {
-		return name[0 : len(name)-2]
-	}
-	return name
 }
