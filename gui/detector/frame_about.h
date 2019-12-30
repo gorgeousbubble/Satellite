@@ -3,7 +3,7 @@
 *     Copyright(c) 2017~2019, Team Gorgeous Bubble
 *     All rights reserved.
 *
-* @file		frame_home.h
+* @file		frame_about.h
 * @brief	The Detector Project
 * @author	Alopex/Aurora
 * @version	v1.00a
@@ -11,17 +11,17 @@
 */
 #pragma once
 
-#ifndef __FRAME_HOME_H_
-#define __FRAME_HOME_H_
+#ifndef __FRAME_ABOUT_H_
+#define __FRAME_ABOUT_H_
 
 // Include common header files
 #include "common.h"
 
 // Class definition
-class CFrameHomeUI : public CContainerUI {
+class CFrameAboutUI : public CContainerUI {
 public:
-	CFrameHomeUI(CPaintManagerUI* pManager);
+	CFrameAboutUI(CPaintManagerUI* pManager);
 
 };
 
-#endif // !__FRAME_HOME_H_
+#endif // !__FRAME_ABOUT_H_

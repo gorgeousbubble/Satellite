@@ -38,11 +38,14 @@
 #include "common_wnd.h"
 #include "frame_callback_extra.h"
 #include "frame_main.h"
-#include "frame_home.h"
 #include "frame_pack.h"
 #include "frame_unpack.h"
 #include "frame_comp.h"
 #include "frame_decomp.h"
+#include "frame_base.h"
+#include "frame_app.h"
+#include "frame_more.h"
+#include "frame_about.h"
 
 // Include resource header files
 #include "resource.h"

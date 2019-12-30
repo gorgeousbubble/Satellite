@@ -19,10 +19,6 @@ CDialogBuilderCallbackEx::CDialogBuilderCallbackEx(CPaintManagerUI* pManager) {
 
 CControlUI* CDialogBuilderCallbackEx::CreateControl(LPCTSTR pstrClass)
 {
-	if (_tcscmp(pstrClass, _T("frameHome")) == 0) {
-		return new CFrameHomeUI(m_pManager);
-	}
-
 	if (_tcscmp(pstrClass, _T("framePack")) == 0) {
 		return new CFramePackUI(m_pManager);
 	}
@@ -37,6 +33,22 @@ CControlUI* CDialogBuilderCallbackEx::CreateControl(LPCTSTR pstrClass)
 
 	if (_tcscmp(pstrClass, _T("frameDecomp")) == 0) {
 		return new CFrameDecompUI(m_pManager);
+	}
+
+	if (_tcscmp(pstrClass, _T("frameBase")) == 0) {
+		return new CFrameBaseUI(m_pManager);
+	}
+
+	if (_tcscmp(pstrClass, _T("frameApp")) == 0) {
+		return new CFrameAppUI(m_pManager);
+	}
+
+	if (_tcscmp(pstrClass, _T("frameMore")) == 0) {
+		return new CFrameMoreUI(m_pManager);
+	}
+
+	if (_tcscmp(pstrClass, _T("frameAbout")) == 0) {
+		return new CFrameAboutUI(m_pManager);
 	}
 
 	return nullptr;

@@ -47,6 +47,16 @@ public:
 	CButtonUI* m_pMaxBtn;
 	CButtonUI* m_pMinBtn;
 
+	CTabLayoutUI* m_pMainTab;
+	COptionUI* m_pPackOpt;
+	COptionUI* m_pUnpackOpt;
+	COptionUI* m_pCompOpt;
+	COptionUI* m_pDecompOpt;	
+	COptionUI* m_pBaseOpt;
+	COptionUI* m_pAppOpt;
+	COptionUI* m_pMoreOpt;
+	COptionUI* m_pAboutOpt;
+
 public:
 	CPaintManagerUI& GetPaintManager();
 

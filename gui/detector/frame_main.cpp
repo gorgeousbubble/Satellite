@@ -53,7 +53,23 @@ void CFrameMain::Notify(TNotifyUI& msg) {
 			OnLButtonClickedMinBtn();
 		}
 	} else if (msg.sType == _T("selectchanged")) {
-
+		if (msg.pSender == m_pPackOpt) {
+			m_pMainTab->SelectItem(1);
+		} else if (msg.pSender == m_pUnpackOpt) {
+			m_pMainTab->SelectItem(2);
+		} else if (msg.pSender == m_pCompOpt) {
+			m_pMainTab->SelectItem(3);
+		} else if (msg.pSender == m_pDecompOpt) {
+			m_pMainTab->SelectItem(4);
+		} else if (msg.pSender == m_pBaseOpt) {
+			m_pMainTab->SelectItem(5);
+		} else if (msg.pSender == m_pAppOpt) {
+			m_pMainTab->SelectItem(6);
+		} else if (msg.pSender == m_pMoreOpt) {
+			m_pMainTab->SelectItem(7);
+		} else if (msg.pSender == m_pAboutOpt) {
+			m_pMainTab->SelectItem(8);
+		}
 	} else if (msg.sType == _T("textchanged")) {
 
 	}
@@ -403,6 +419,17 @@ void CFrameMain::InitControls() {
 	m_pRestoreBtn = static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("restorebtn")));
 	m_pMaxBtn = static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("maxbtn")));
 	m_pMinBtn = static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("minbtn")));
+	
+	// menu buttons
+	m_pMainTab = static_cast<CTabLayoutUI*>(m_PaintManager.FindControl(_T("maintab")));
+	m_pPackOpt = static_cast<COptionUI*>(m_PaintManager.FindControl(_T("packopt")));
+	m_pUnpackOpt = static_cast<COptionUI*>(m_PaintManager.FindControl(_T("unpackopt")));
+	m_pCompOpt = static_cast<COptionUI*>(m_PaintManager.FindControl(_T("compopt")));
+	m_pDecompOpt = static_cast<COptionUI*>(m_PaintManager.FindControl(_T("decompopt")));
+	m_pBaseOpt = static_cast<COptionUI*>(m_PaintManager.FindControl(_T("baseopt")));
+	m_pAppOpt = static_cast<COptionUI*>(m_PaintManager.FindControl(_T("appopt")));
+	m_pMoreOpt = static_cast<COptionUI*>(m_PaintManager.FindControl(_T("moreopt")));
+	m_pAboutOpt = static_cast<COptionUI*>(m_PaintManager.FindControl(_T("aboutopt")));
 }
 
 //----------------------------------------------
