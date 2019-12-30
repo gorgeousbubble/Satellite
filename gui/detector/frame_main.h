@@ -41,6 +41,15 @@ public:
 	LRESULT OnGetMinMaxInfo(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	LRESULT OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
+public:
+	CButtonUI* m_pCloseBtn;
+	CButtonUI* m_pRestoreBtn;
+	CButtonUI* m_pMaxBtn;
+	CButtonUI* m_pMinBtn;
+
+public:
+	CPaintManagerUI& GetPaintManager();
+
 private:
 	HMENU m_hMenu;
 	NOTIFYICONDATA m_nid;
@@ -48,10 +57,17 @@ private:
 public:
 	void ConstructExtra();
 	void InitMenuShow();
+	void InitWindowSharp();
+	void InitControls();
 
 public:
-	CPaintManagerUI& GetPaintManager();
+	LRESULT OnUserMessageMenu(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
+public:
+	void OnLButtonClickedMinBtn();
+	void OnLButtonClickedMaxBtn();
+	void OnLButtonClickedRestoreBtn();
+	void OnLButtonClickedCloseBtn();
 };
 
 #endif // !__FRAME_MAIN_H_

@@ -42,6 +42,21 @@ UINT CFrameMain::GetClassStyle() const {
 // @Return: None
 //----------------------------------------------
 void CFrameMain::Notify(TNotifyUI& msg) {
+	if (msg.sType == _T("click")) {
+		if (msg.pSender == m_pCloseBtn) {
+			OnLButtonClickedCloseBtn();
+		} else if (msg.pSender == m_pRestoreBtn) {
+			OnLButtonClickedRestoreBtn();
+		} else if (msg.pSender == m_pMaxBtn) {
+			OnLButtonClickedMaxBtn();
+		} else if (msg.pSender == m_pMinBtn) {
+			OnLButtonClickedMinBtn();
+		}
+	} else if (msg.sType == _T("selectchanged")) {
+
+	} else if (msg.sType == _T("textchanged")) {
+
+	}
 }
 
 //----------------------------------------------
@@ -89,6 +104,9 @@ LRESULT CFrameMain::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	case WM_SYSCOMMAND:
 		lRes = OnSysCommand(uMsg, wParam, lParam, bHandled);
 		break;
+	case WM_USER_MESSAGE_MENU:
+		lRes = OnUserMessageMenu(uMsg, wParam, lParam, bHandled);
+		break;
 	default:
 		bHandled = FALSE;
 		break;
@@ -125,6 +143,8 @@ LRESULT CFrameMain::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHan
 
 	ConstructExtra();
 	InitMenuShow();
+	InitWindowSharp();
+	InitControls();
 
 	return 0;
 }
@@ -351,11 +371,72 @@ void CFrameMain::InitMenuShow() {
 	m_nid.hIcon = ::LoadIcon(CPaintManagerUI::GetInstance(), MAKEINTRESOURCE(IDI_ICON));
 	m_nid.uCallbackMessage = WM_USER_MESSAGE_MENU;
 	m_nid.uFlags = NIF_ICON | NIF_MESSAGE | NIF_TIP | NIF_INFO;
-	_tcscpy(m_nid.szTip, _T("LiveProject"));
+	_tcscpy(m_nid.szTip, _T("detector"));
 	Shell_NotifyIcon(NIM_ADD, &m_nid);
 
 	m_hMenu = ::CreatePopupMenu();
-	AppendMenu(m_hMenu, MF_STRING, ID_MAIN_EXIT, _T("Exit"));
+	AppendMenu(m_hMenu, MF_STRING, ID_MAIN_EXIT, _T("Exit(Q)"));
+}
+
+//----------------------------------------------
+// @Function:	InitWindowSharp()
+// @Purpose: CFrameMain initialize window sharp
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+void CFrameMain::InitWindowSharp() {
+	// change windows style ~ Areo
+	::SetClassLongA(this->GetHWND(), GCL_STYLE, ::GetClassLongA(this->GetHWND(), GCL_STYLE) | CS_DROPSHADOW);
+}
+
+//----------------------------------------------
+// @Function:	InitControls()
+// @Purpose: CFrameMain initialize controls
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+void CFrameMain::InitControls() {
+	// title buttons
+	m_pCloseBtn = static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("closebtn")));
+	m_pRestoreBtn = static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("restorebtn")));
+	m_pMaxBtn = static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("maxbtn")));
+	m_pMinBtn = static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("minbtn")));
+}
+
+//----------------------------------------------
+// @Function:	OnUserMessageMenu()
+// @Purpose: CFrameMain menu user message
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+LRESULT CFrameMain::OnUserMessageMenu(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) {
+	switch (lParam) {
+	case WM_RBUTTONDOWN: {
+		POINT pt;
+		int nRet;
+
+		GetCursorPos(&pt);
+		::SetForegroundWindow(this->GetHWND());
+
+		nRet = TrackPopupMenu(m_hMenu, TPM_RETURNCMD, pt.x, pt.y, NULL, this->GetHWND(), NULL);
+		if (nRet == ID_MAIN_EXIT) {
+			::PostMessageA(this->GetHWND(), WM_CLOSE, (WPARAM)0, (LPARAM)0);
+		}
+	}
+	break;
+	case WM_LBUTTONDOWN:
+	case WM_LBUTTONDBLCLK: {
+		::ShowWindow(this->GetHWND(), SW_SHOW);
+	}
+	break;
+	default:
+		break;
+	}
+
+	return 0;
 }
 
 //----------------------------------------------
@@ -367,4 +448,48 @@ void CFrameMain::InitMenuShow() {
 //----------------------------------------------
 CPaintManagerUI& CFrameMain::GetPaintManager() {
 	return m_PaintManager;
+}
+
+//----------------------------------------------
+// @Function:	OnLButtonClickedMinBtn()
+// @Purpose: CFrameMain click min button
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+void CFrameMain::OnLButtonClickedMinBtn() {
+	SendMessage(WM_SYSCOMMAND, SC_MINIMIZE, 0);
+}
+
+//----------------------------------------------
+// @Function:	OnLButtonClickedMaxBtn()
+// @Purpose: CFrameMain click max button
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+void CFrameMain::OnLButtonClickedMaxBtn() {
+	SendMessage(WM_SYSCOMMAND, SC_MAXIMIZE, 0);
+}
+
+//----------------------------------------------
+// @Function:	OnLButtonClickedRestoreBtn()
+// @Purpose: CFrameMain click restore button
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+void CFrameMain::OnLButtonClickedRestoreBtn() {
+	SendMessage(WM_SYSCOMMAND, SC_RESTORE, 0);
+}
+
+//----------------------------------------------
+// @Function:	OnLButtonClickedCloseBtn()
+// @Purpose: CFrameMain click close button
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+void CFrameMain::OnLButtonClickedCloseBtn() {
+	::ShowWindow(this->GetHWND(), SW_HIDE);
 }
