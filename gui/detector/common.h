@@ -52,5 +52,6 @@
 
 // Include Statics libraries
 #pragma comment(lib, "Shlwapi.lib")
+#pragma comment(lib, "libcurl.lib")
 
 #endif // !__COMMON_H_

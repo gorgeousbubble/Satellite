@@ -370,6 +370,9 @@ LRESULT CFrameMain::OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 void CFrameMain::ConstructExtra() {
 	m_hMenu = NULL;
 	memset(&m_nid, 0, sizeof(m_nid));
+
+	m_vecPacket.clear();
+
 	::srand((unsigned int)time(NULL));
 }
 
@@ -430,6 +433,16 @@ void CFrameMain::InitControls() {
 	m_pAppOpt = static_cast<COptionUI*>(m_PaintManager.FindControl(_T("appopt")));
 	m_pMoreOpt = static_cast<COptionUI*>(m_PaintManager.FindControl(_T("moreopt")));
 	m_pAboutOpt = static_cast<COptionUI*>(m_PaintManager.FindControl(_T("aboutopt")));
+
+	// packet page
+	m_pPackAddBtn = static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("packaddbtn")));
+	m_pPackDelBtn = static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("packdelbtn")));
+	m_pPackList = static_cast<CListUI*>(m_PaintManager.FindControl(_T("packlist")));
+	m_pPackTypeEdt = static_cast<CEditUI*>(m_PaintManager.FindControl(_T("packtypeedt")));
+	m_pPackPathEdt = static_cast<CEditUI*>(m_PaintManager.FindControl(_T("packpathedt")));
+	m_pPackExportBtn = static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("packexportbtn")));
+	m_pPackProgress = static_cast<CProgressUI*>(m_PaintManager.FindControl(_T("packprogressbar")));
+	m_pPackStartBtn = static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("packstartbtn")));
 }
 
 //----------------------------------------------

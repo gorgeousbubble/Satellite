@@ -16,6 +16,7 @@
 
 // Include DUI frame header files
 #include "common_wnd.h"
+#include "types.h"
 
 // Class definition
 class CFrameMain : public CWindowWnd, public INotifyUI {
@@ -57,12 +58,25 @@ public:
 	COptionUI* m_pMoreOpt;
 	COptionUI* m_pAboutOpt;
 
+	// Packet...
+	CButtonUI* m_pPackAddBtn;
+	CButtonUI* m_pPackDelBtn;
+	CListUI* m_pPackList;
+	CEditUI* m_pPackTypeEdt;
+	CEditUI* m_pPackPathEdt;
+	CButtonUI* m_pPackExportBtn;
+	CProgressUI* m_pPackProgress;
+	CButtonUI* m_pPackStartBtn;
+
 public:
 	CPaintManagerUI& GetPaintManager();
 
 private:
 	HMENU m_hMenu;
 	NOTIFYICONDATA m_nid;
+
+public:
+	vector<TPacketInfo> m_vecPacket;
 
 public:
 	void ConstructExtra();
