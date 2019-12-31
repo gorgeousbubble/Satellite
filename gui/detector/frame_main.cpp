@@ -54,21 +54,21 @@ void CFrameMain::Notify(TNotifyUI& msg) {
 		}
 	} else if (msg.sType == _T("selectchanged")) {
 		if (msg.pSender == m_pPackOpt) {
-			m_pMainTab->SelectItem(1);
+			m_pMainTab->SelectItem(0);
 		} else if (msg.pSender == m_pUnpackOpt) {
-			m_pMainTab->SelectItem(2);
+			m_pMainTab->SelectItem(1);
 		} else if (msg.pSender == m_pCompOpt) {
-			m_pMainTab->SelectItem(3);
+			m_pMainTab->SelectItem(2);
 		} else if (msg.pSender == m_pDecompOpt) {
-			m_pMainTab->SelectItem(4);
+			m_pMainTab->SelectItem(3);
 		} else if (msg.pSender == m_pBaseOpt) {
-			m_pMainTab->SelectItem(5);
+			m_pMainTab->SelectItem(4);
 		} else if (msg.pSender == m_pAppOpt) {
-			m_pMainTab->SelectItem(6);
+			m_pMainTab->SelectItem(5);
 		} else if (msg.pSender == m_pMoreOpt) {
-			m_pMainTab->SelectItem(7);
+			m_pMainTab->SelectItem(6);
 		} else if (msg.pSender == m_pAboutOpt) {
-			m_pMainTab->SelectItem(8);
+			m_pMainTab->SelectItem(7);
 		}
 	} else if (msg.sType == _T("textchanged")) {
 
