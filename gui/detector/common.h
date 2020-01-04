@@ -34,6 +34,12 @@
 #include <iostream>
 #include <vector>
 
+// Inclue ATL Header File
+#include <atlconv.h>
+
+// Include Assert Header File
+#include <assert.h>
+
 // Include DUI header files
 #include "common_wnd.h"
 #include "frame_callback_extra.h"

@@ -20,4 +20,7 @@
 // Messages
 #define WM_USER_MESSAGE_MENU					(WM_USER + 1)
 
+#define WM_USER_MESSAGE_PACKET_SEARCH			(WM_USER + 10)
+#define WM_USER_MESSAGE_PACKET_ADDITEM			(WM_USER + 11)
+
 #endif // !__DEFINE_H_

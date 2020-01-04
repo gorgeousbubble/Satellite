@@ -15,12 +15,13 @@
 #define __FRAME_CALLBACK_EXTRA_H_
 
 // Include DUI frame header files
-#include "common.h"
+#include "common_wnd.h"
 
 // Class definition
 class CDialogBuilderCallbackEx : public IDialogBuilderCallback {
 protected:
 	CPaintManagerUI* m_pManager;
+
 public:
 	CDialogBuilderCallbackEx(CPaintManagerUI* pManager);
 	CControlUI* CreateControl(LPCTSTR pstrClass);

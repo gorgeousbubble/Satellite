@@ -15,7 +15,7 @@
 #define __FRAME_MORE_H_
 
 // Include common header files
-#include "common.h"
+#include "common_wnd.h"
 
 // Class definition
 class CFrameMoreUI : public CContainerUI {

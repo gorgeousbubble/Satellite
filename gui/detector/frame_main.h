@@ -43,11 +43,17 @@ public:
 	LRESULT OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
 public:
+	LRESULT OnUserMessagePacketSearch(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+	LRESULT OnUserMessagePacketAddItem(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+
+public:
+	// Main Layout...
 	CButtonUI* m_pCloseBtn;
 	CButtonUI* m_pRestoreBtn;
 	CButtonUI* m_pMaxBtn;
 	CButtonUI* m_pMinBtn;
 
+	// Tab Layout...
 	CTabLayoutUI* m_pMainTab;
 	COptionUI* m_pPackOpt;
 	COptionUI* m_pUnpackOpt;
@@ -80,9 +86,12 @@ public:
 
 public:
 	void ConstructExtra();
+	void DestructExtra();
 	void InitMenuShow();
 	void InitWindowSharp();
 	void InitControls();
+
+	static DWORD CALLBACK OnSearchPacketItemsProcess(LPVOID lpParameter);
 
 public:
 	LRESULT OnUserMessageMenu(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
@@ -92,7 +101,15 @@ public:
 	void OnLButtonClickedMaxBtn();
 	void OnLButtonClickedRestoreBtn();
 	void OnLButtonClickedCloseBtn();
+
+	void OnLButtonClickedPacketAddBtn();
+	void OnLButtonClickedPacketDelBtn();
+	void OnLButtonClickedPacketExportBtn();
+	void OnLButtonClickedPacketStartBtn();
 };
+
+// External
+extern CFrameMain* g_pFrameMain;
 
 #endif // !__FRAME_MAIN_H_
 

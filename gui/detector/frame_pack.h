@@ -15,7 +15,7 @@
 #define __FRAME_PACK_H_
 
 // Include common header files
-#include "common.h"
+#include "common_wnd.h"
 
 // Class definition
 class CFramePackUI : public CContainerUI {
@@ -23,5 +23,13 @@ public:
 	CFramePackUI(CPaintManagerUI* pManager);
 
 };
+
+class CFramePackListUI : public IListCallbackUI {
+public:
+	LPCTSTR GetItemText(CControlUI* pControl, int iIndex, int iSubItem);
+};
+
+// External
+extern CFramePackListUI g_cFramePackListUI;
 
 #endif // !__FRAME_PACK_H_

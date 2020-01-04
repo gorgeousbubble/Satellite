@@ -10,6 +10,14 @@
 * @date		2019-12-29
 */
 #include "frame_callback_extra.h"
+#include "frame_pack.h"
+#include "frame_unpack.h"
+#include "frame_comp.h"
+#include "frame_decomp.h"
+#include "frame_base.h"
+#include "frame_app.h"
+#include "frame_more.h"
+#include "frame_about.h"
 
 // Dialog Builder Callback Extra Class
 

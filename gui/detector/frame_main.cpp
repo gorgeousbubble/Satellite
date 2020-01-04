@@ -12,6 +12,8 @@
 #include "common.h"
 #include "define.h"
 
+CFrameMain* g_pFrameMain;
+
 //----------------------------------------------
 // @Function:	GetWindowClassName()
 // @Purpose: CFrameMain get window class name
@@ -51,6 +53,13 @@ void CFrameMain::Notify(TNotifyUI& msg) {
 			OnLButtonClickedMaxBtn();
 		} else if (msg.pSender == m_pMinBtn) {
 			OnLButtonClickedMinBtn();
+		} else if (msg.pSender == m_pPackAddBtn) {
+			OnLButtonClickedPacketAddBtn();
+		} else if (msg.pSender == m_pPackDelBtn) {
+			OnLButtonClickedPacketDelBtn();
+		}
+		else if (msg.pSender == m_pPackExportBtn) {
+			OnLButtonClickedPacketExportBtn();
 		}
 	} else if (msg.sType == _T("selectchanged")) {
 		if (msg.pSender == m_pPackOpt) {
@@ -123,6 +132,11 @@ LRESULT CFrameMain::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	case WM_USER_MESSAGE_MENU:
 		lRes = OnUserMessageMenu(uMsg, wParam, lParam, bHandled);
 		break;
+	case WM_USER_MESSAGE_PACKET_SEARCH:
+		lRes = OnUserMessagePacketSearch(uMsg, wParam, lParam, bHandled);
+		break;
+	case WM_USER_MESSAGE_PACKET_ADDITEM:
+		lRes = OnUserMessagePacketAddItem(uMsg, wParam, lParam, bHandled);
 	default:
 		bHandled = FALSE;
 		break;
@@ -186,6 +200,8 @@ LRESULT CFrameMain::OnLButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
 //----------------------------------------------
 LRESULT CFrameMain::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) {
 	Shell_NotifyIcon(NIM_DELETE, &m_nid);
+
+	DestructExtra();
 
 	bHandled = FALSE;
 	return 0;
@@ -361,6 +377,45 @@ LRESULT CFrameMain::OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 }
 
 //----------------------------------------------
+// @Function:	OnUserMessagePacketSearch()
+// @Purpose: CFrameMain packet search
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+LRESULT CFrameMain::OnUserMessagePacketSearch(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) {
+	HANDLE hThread = NULL;
+	DWORD dwThreadID = 0;
+
+	// clear content...
+	m_pPackList->RemoveAll();
+	m_pPackList->SetTextCallback(&g_cFramePackListUI);
+
+	// create thread...
+	hThread = ::CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)(&CFrameMain::OnSearchPacketItemsProcess), NULL, 0, &dwThreadID);
+	::CloseHandle(hThread);
+
+	return 0;
+}
+
+//----------------------------------------------
+// @Function:	OnUserMessagePacketAddItem()
+// @Purpose: CFrameMain packet add items
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+LRESULT CFrameMain::OnUserMessagePacketAddItem(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) {
+	CListTextElementUI* pListElement = reinterpret_cast<CListTextElementUI*>(lParam);
+
+	if (m_pPackList) {
+		m_pPackList->Add(pListElement);
+	}
+
+	return 0;
+}
+
+//----------------------------------------------
 // @Function:	ConstructExtra()
 // @Purpose: CFrameMain construct function extra
 // @Since: v1.00a
@@ -371,9 +426,20 @@ void CFrameMain::ConstructExtra() {
 	m_hMenu = NULL;
 	memset(&m_nid, 0, sizeof(m_nid));
 
+	g_pFrameMain = this;
 	m_vecPacket.clear();
 
 	::srand((unsigned int)time(NULL));
+}
+
+//----------------------------------------------
+// @Function:	DestructExtra()
+// @Purpose: CFrameMain destruct function extra
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+void CFrameMain::DestructExtra() {
 }
 
 //----------------------------------------------
@@ -443,6 +509,30 @@ void CFrameMain::InitControls() {
 	m_pPackExportBtn = static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("packexportbtn")));
 	m_pPackProgress = static_cast<CProgressUI*>(m_PaintManager.FindControl(_T("packprogressbar")));
 	m_pPackStartBtn = static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("packstartbtn")));
+}
+
+//----------------------------------------------
+// @Function:	OnSearchPacketItemsProcess()
+// @Purpose: CFrameMain search packet items
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+DWORD CFrameMain::OnSearchPacketItemsProcess(LPVOID lpParameter) {
+	CListUI* pList = g_pFrameMain->m_pPackList;
+
+	for (int i = 0; i < g_pFrameMain->m_vecPacket.size(); ++i) {
+		CListTextElementUI* pListElement = new CListTextElementUI();
+
+		pListElement->SetTag(i);
+		if (pListElement != NULL) {
+			::PostMessageA(g_pFrameMain->GetHWND(), WM_USER_MESSAGE_PACKET_ADDITEM, 0L, (LPARAM)pListElement);
+		}
+
+		Sleep(1);
+	}
+
+	return 0;
 }
 
 //----------------------------------------------
@@ -532,4 +622,131 @@ void CFrameMain::OnLButtonClickedRestoreBtn() {
 //----------------------------------------------
 void CFrameMain::OnLButtonClickedCloseBtn() {
 	::ShowWindow(this->GetHWND(), SW_HIDE);
+}
+
+//----------------------------------------------
+// @Function:	OnLButtonClickedCloseBtn()
+// @Purpose: CFrameMain click packet add button
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+void CFrameMain::OnLButtonClickedPacketAddBtn() {
+	OPENFILENAME file;
+	WCHAR strfile[100 * MAX_PATH] = { 0 };
+	WCHAR strpath[MAX_PATH] = { 0 };
+	WCHAR strname[MAX_PATH] = { 0 };
+	TCHAR* p = NULL;
+	int nLen = 0;
+
+	USES_CONVERSION;
+	ZeroMemory(&file, sizeof(OPENFILENAME));
+	file.lStructSize = sizeof(OPENFILENAME);
+	file.lpstrFilter = _T("所有文件\0*.*\0\0");
+	file.nFilterIndex = 1;
+	file.lpstrFile = strfile;
+	file.nMaxFile = sizeof(strfile);
+	file.Flags = OFN_EXPLORER | OFN_ALLOWMULTISELECT;
+
+	if (GetOpenFileName(&file)) {
+		lstrcpyn(strpath, strfile, file.nFileOffset);
+		strpath[file.nFileOffset] = '\0';
+		nLen = lstrlen(strpath);
+
+		if (strpath[nLen - 1] != '\\') {
+			lstrcat(strpath, _T("\\"));
+		}
+
+		p = strfile + file.nFileOffset;
+		while (*p) {
+			ZeroMemory(strname, sizeof(strname));
+			lstrcat(strname, strpath);
+			lstrcat(strname, p);
+
+			char chOriginFile[MAX_PATH] = { 0 };
+			char chOriginName[MAX_PATH] = { 0 };
+			char* pTemp = NULL;
+
+			strcpy_s(chOriginFile, T2A(strname));
+			pTemp = strrchr(chOriginFile, '\\');
+			strcpy_s(chOriginName, ++pTemp);
+
+			bool bRepeat = false;
+			for (auto iter = m_vecPacket.begin(); iter != m_vecPacket.end(); ++iter) {
+				if (!strcmp(iter->chPath, T2A(strname))) {
+					bRepeat = true;
+					break;
+				}
+			}
+
+			if (!bRepeat) {
+				TPacketInfo sPacketInfo = { 0 };
+				sPacketInfo.nSerial = m_vecPacket.size() + 1;
+				strcpy_s(sPacketInfo.chName, chOriginName);
+				strcpy_s(sPacketInfo.chPath, T2A(strname));
+				m_vecPacket.push_back(sPacketInfo);
+			}
+			p += lstrlen(p) + 1;
+		}
+
+		::PostMessageA(this->GetHWND(), WM_USER_MESSAGE_PACKET_SEARCH, (WPARAM)0, (LPARAM)0);
+	}
+}
+
+//----------------------------------------------
+// @Function:	OnLButtonClickedCloseBtn()
+// @Purpose: CFrameMain click packet add button
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+void CFrameMain::OnLButtonClickedPacketDelBtn() {
+	int nItem = m_pPackList->GetCurSel();
+	if (nItem < 0) {
+		MessageBoxW(this->GetHWND(), _T("请选中一条文件信息!"), _T("提示"), MB_OK | MB_ICONASTERISK);
+		return;
+	}
+
+	m_vecPacket.erase(m_vecPacket.begin() + nItem);
+	for (auto iter = m_vecPacket.begin(); iter != m_vecPacket.end(); ++iter) {
+		iter->nSerial = iter - m_vecPacket.begin() + 1;
+	}
+
+	::PostMessageA(this->GetHWND(), WM_USER_MESSAGE_PACKET_SEARCH, (WPARAM)0, (LPARAM)0);
+}
+
+//----------------------------------------------
+// @Function:	OnLButtonClickedPacketExportBtn()
+// @Purpose: CFrameMain click packet export button
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+void CFrameMain::OnLButtonClickedPacketExportBtn() {
+	OPENFILENAME file;
+	WCHAR strfile[MAX_PATH] = { 0 };
+
+	USES_CONVERSION;
+
+	ZeroMemory(&file, sizeof(OPENFILENAME));
+	file.lStructSize = sizeof(OPENFILENAME);
+	file.lpstrFilter = _T("所有文件\0*.*\0\0");
+	file.nFilterIndex = 1;
+	file.lpstrFile = strfile;
+	file.nMaxFile = sizeof(strfile);
+	file.Flags = OFN_PATHMUSTEXIST | OFN_OVERWRITEPROMPT;
+
+	if (GetSaveFileName(&file)) {
+		m_pPackPathEdt->SetText(strfile);
+	}
+}
+
+//----------------------------------------------
+// @Function:	OnLButtonClickedPacketStartBtn()
+// @Purpose: CFrameMain click packet start button
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+void CFrameMain::OnLButtonClickedPacketStartBtn() {
 }
