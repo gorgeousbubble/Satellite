@@ -429,7 +429,7 @@ func TestHandlePostNetsComp(t *testing.T) {
 	mux.HandleFunc(HttpURLComp, handleNetsComp)
 
 	writer := httptest.NewRecorder()
-	body := strings.NewReader(`{"src": ["../test/data/comp/file_1.txt", "../test/data/comp/file_2.txt", "../test/data/comp/file_3.txt", "../test/data/comp/file_4.txt", "../test/data/pack/file_5.txt"], "dest": "../test/data/comp/file.tar.gz", "type": "tar"}`)
+	body := strings.NewReader(`{"src": ["../test/data/comp/file_1.txt", "../test/data/comp/file_2.txt", "../test/data/comp/file_3.txt", "../test/data/comp/file_4.txt", "../test/data/pack/file_5.txt"], "dest": "../test/data/comp/file.tar.gz", "type": "tar.gz"}`)
 	request, _ := http.NewRequest("POST", HttpURLComp, body)
 	mux.ServeHTTP(writer, request)
 
@@ -444,7 +444,7 @@ func BenchmarkHandlePostNetsComp(b *testing.B) {
 		mux.HandleFunc(HttpURLComp, handleNetsComp)
 
 		writer := httptest.NewRecorder()
-		body := strings.NewReader(`{"src": ["../test/data/comp/file_1.txt", "../test/data/comp/file_2.txt", "../test/data/comp/file_3.txt", "../test/data/comp/file_4.txt", "../test/data/pack/file_5.txt"], "dest": "../test/data/comp/file.tar.gz", "type": "tar"}`)
+		body := strings.NewReader(`{"src": ["../test/data/comp/file_1.txt", "../test/data/comp/file_2.txt", "../test/data/comp/file_3.txt", "../test/data/comp/file_4.txt", "../test/data/pack/file_5.txt"], "dest": "../test/data/comp/file.tar.gz", "type": "tar.gz"}`)
 		request, _ := http.NewRequest("POST", HttpURLComp, body)
 		mux.ServeHTTP(writer, request)
 
@@ -459,7 +459,7 @@ func TestHandlePostNetsDecomp(t *testing.T) {
 	mux.HandleFunc(HttpURLDecomp, handleNetsDecomp)
 
 	writer := httptest.NewRecorder()
-	body := strings.NewReader(`{"src": "../test/data/decomp/file.tar.gz", "dest": "../test/data/decomp/", "type": "tar"}`)
+	body := strings.NewReader(`{"src": "../test/data/decomp/file.tar.gz", "dest": "../test/data/decomp/", "type": "tar.gz"}`)
 	request, _ := http.NewRequest("POST", HttpURLDecomp, body)
 	mux.ServeHTTP(writer, request)
 
@@ -474,7 +474,7 @@ func BenchmarkHandlePostNetsDecomp(b *testing.B) {
 		mux.HandleFunc(HttpURLDecomp, handleNetsDecomp)
 
 		writer := httptest.NewRecorder()
-		body := strings.NewReader(`{"src": "../test/data/decomp/file.tar.gz", "dest": "../test/data/decomp/", "type": "tar"}`)
+		body := strings.NewReader(`{"src": "../test/data/decomp/file.tar.gz", "dest": "../test/data/decomp/", "type": "tar.gz"}`)
 		request, _ := http.NewRequest("POST", HttpURLDecomp, body)
 		mux.ServeHTTP(writer, request)
 
