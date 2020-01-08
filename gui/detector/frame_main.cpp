@@ -57,9 +57,10 @@ void CFrameMain::Notify(TNotifyUI& msg) {
 			OnLButtonClickedPacketAddBtn();
 		} else if (msg.pSender == m_pPackDelBtn) {
 			OnLButtonClickedPacketDelBtn();
-		}
-		else if (msg.pSender == m_pPackExportBtn) {
+		} else if (msg.pSender == m_pPackExportBtn) {
 			OnLButtonClickedPacketExportBtn();
+		} else if (msg.pSender == m_pPackStartBtn) {
+			OnLButtonClickedPacketStartBtn();
 		}
 	} else if (msg.sType == _T("selectchanged")) {
 		if (msg.pSender == m_pPackOpt) {
@@ -175,6 +176,7 @@ LRESULT CFrameMain::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHan
 	InitMenuShow();
 	InitWindowSharp();
 	InitControls();
+	InitCurl();
 
 	return 0;
 }
@@ -512,6 +514,108 @@ void CFrameMain::InitControls() {
 }
 
 //----------------------------------------------
+// @Function:	InitCurl()
+// @Purpose: CFrameMain initialize libcurl
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+void CFrameMain::InitCurl() {
+	CURLcode res = curl_global_init(CURL_GLOBAL_ALL);
+	if (res != CURLE_OK) {
+		MessageBoxA(this->GetHWND(), "初始化libcurl失败!", "错误", MB_OK | MB_ICONERROR);
+		return;
+	}
+}
+
+//----------------------------------------------
+// @Function:	SplicePackRequestJson()
+// @Purpose: CFrameMain splice packet json
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+CDuiString CFrameMain::SplicePackRequestJson(CDuiString strPacketType, CDuiString strPacketPath) {
+	CDuiString strPacketJson;
+	CDuiString strPacketSrc;
+	CDuiString strPacketDest;
+	CDuiString strPacketKind;
+
+	USES_CONVERSION;
+
+	// splice src files...
+	strPacketSrc = L"\"src\":[";
+	for (auto iter = m_vecPacket.begin(); iter != m_vecPacket.end(); ++iter) {
+		char chFile[MAX_PATH] = { 0 };
+		if (iter == m_vecPacket.end() - 1) {
+			sprintf_s(chFile, "\"%s\"", iter->chPath);
+		} else {
+			sprintf_s(chFile, "\"%s\",", iter->chPath);
+		}
+		strPacketSrc += A2T(chFile);
+	}
+	strPacketSrc += L"],";
+	//strPacketSrc.Replace(L"\\", L"/");
+
+	// splice dest file...
+	strPacketDest = L"\"dest\":\"";
+	strPacketDest += strPacketPath;
+	strPacketDest += L"\",";
+
+	// splice encrypt type...
+	strPacketKind = L"\"type\":\"";
+	strPacketKind += strPacketType;
+	strPacketKind += L"\"";
+
+	// splice all...
+	strPacketJson = L"{";
+	strPacketJson += strPacketSrc;
+	strPacketJson += strPacketDest;
+	strPacketJson += strPacketKind;
+	strPacketJson += L"}";
+	strPacketJson.Replace(L"\\", L"/");
+
+	return strPacketJson;
+}
+
+//----------------------------------------------
+// @Function:	SendHttpPackRequest()
+// @Purpose: CFrameMain send http request
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+void CFrameMain::SendHttpPackRequest(CDuiString strPacketJson) {
+	// initialize curl handle
+	CURL* pCurl = curl_easy_init();
+	if (NULL == pCurl)
+	{
+		MessageBoxA(this->GetHWND(), "初始化curl句柄失败!", "错误", MB_OK | MB_ICONERROR);
+		return;
+	}
+
+	USES_CONVERSION;
+
+	// configure send options
+	curl_slist* pList = NULL;
+	pList = curl_slist_append(pList, "Content-Type:application/x-www-form-urlencoded; charset=UTF-8");
+	pList = curl_slist_append(pList, "Accept:application/json, text/javascript, */*; q=0.01");
+	pList = curl_slist_append(pList, "Accept-Language:zh-CN,zh;q=0.8");
+	curl_easy_setopt(pCurl, CURLOPT_HTTPHEADER, pList);
+
+	string url = "http://localhost:8080/satellite/pack";
+	curl_easy_setopt(pCurl, CURLOPT_URL, url.c_str());
+
+	curl_easy_setopt(pCurl, CURLOPT_HEADER, 0L);
+	curl_easy_setopt(pCurl, CURLOPT_FOLLOWLOCATION, 1L);
+	curl_easy_setopt(pCurl, CURLOPT_NOSIGNAL, 1L);
+
+	curl_easy_setopt(pCurl, CURLOPT_POST, 1L);
+	curl_easy_setopt(pCurl, CURLOPT_POSTFIELDS, T2A(strPacketJson.GetData()));
+	curl_easy_setopt(pCurl, CURLOPT_POSTFIELDSIZE, sizeof(T2A(strPacketJson.GetData())));
+}
+
+//----------------------------------------------
 // @Function:	OnSearchPacketItemsProcess()
 // @Purpose: CFrameMain search packet items
 // @Since: v1.00a
@@ -727,6 +831,7 @@ void CFrameMain::OnLButtonClickedPacketExportBtn() {
 	WCHAR strfile[MAX_PATH] = { 0 };
 
 	USES_CONVERSION;
+	wcscpy_s(strfile, A2T("undefine.pak"));
 
 	ZeroMemory(&file, sizeof(OPENFILENAME));
 	file.lStructSize = sizeof(OPENFILENAME);
@@ -749,4 +854,46 @@ void CFrameMain::OnLButtonClickedPacketExportBtn() {
 // @Return: None
 //----------------------------------------------
 void CFrameMain::OnLButtonClickedPacketStartBtn() {
+	// check import files...
+	if (m_vecPacket.empty()) {
+		MessageBoxA(this->GetHWND(), "请添加至少一个封包文件!", "提示", MB_OK | MB_ICONASTERISK);
+		return;
+	}
+
+	USES_CONVERSION;
+
+	// chekc encrypt type...
+	CDuiString strPacketType = m_pPackTypeEdt->GetText();
+	string strTypes[] = { "AES", "DES", "3DES", "RSA", "BASE64" };
+	vector<string> vecPacketTypes(strTypes, strTypes + 5);
+	bool bType = false;
+
+	for (auto iter = vecPacketTypes.begin(); iter != vecPacketTypes.end(); ++iter) {
+		if (!strcmp(iter->c_str(), T2A(strPacketType.GetData()))) {
+			bType = true;
+			break;
+		}
+	}
+
+	if (bType == false) {
+		MessageBoxA(this->GetHWND(), "请填入支持的加密类型(AES, DES, 3DES, RSA, BASE64)!", "提示", MB_OK | MB_ICONASTERISK);
+		return;
+	}
+
+	// check export package...
+	CDuiString strPacketPath = m_pPackPathEdt->GetText();
+	if (!strcmp("", T2A(strPacketPath.GetData()))) {
+		MessageBoxA(this->GetHWND(), "导出文件路径不能为空!", "警告", MB_OK | MB_ICONWARNING);
+		return;
+	}
+
+	// set progress...
+	m_pPackProgress->SetMinValue(0);
+	m_pPackProgress->SetMaxValue(m_vecPacket.size());
+	m_pPackProgress->SetValue(0);
+
+	// organize http request...
+	CDuiString strPacketJson;
+	strPacketJson = SplicePackRequestJson(strPacketType, strPacketPath);
+
 }

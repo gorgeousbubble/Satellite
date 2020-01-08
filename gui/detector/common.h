@@ -40,6 +40,10 @@
 // Include Assert Header File
 #include <assert.h>
 
+// Include Curl Header File
+#include "curl/curl.h"
+#include "curl/easy.h"
+
 // Include DUI header files
 #include "common_wnd.h"
 #include "frame_callback_extra.h"

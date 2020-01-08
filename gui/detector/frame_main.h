@@ -90,6 +90,11 @@ public:
 	void InitMenuShow();
 	void InitWindowSharp();
 	void InitControls();
+	void InitCurl();
+
+	CDuiString SplicePackRequestJson(CDuiString strPacketType, CDuiString strPacketPath);
+	void SendHttpPackRequest(CDuiString strPacketJson);
+
 
 	static DWORD CALLBACK OnSearchPacketItemsProcess(LPVOID lpParameter);
 
