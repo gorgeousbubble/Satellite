@@ -15,6 +15,87 @@
 CFrameMain* g_pFrameMain;
 
 //----------------------------------------------
+// @Function:	CurlRequestReply()
+// @Purpose: CFrameMain curl request reply
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+size_t CurlRequestReply(void* ptr, size_t size, size_t nmemb, void* stream) {
+	cout << "----->reply" << endl;
+	string* str = (string*)stream;
+	cout << *str << endl;
+	(*str).append((char*)ptr, size * nmemb);
+	return size * nmemb;
+}
+
+//----------------------------------------------
+// @Function:	CurlGetRequest()
+// @Purpose: CFrameMain curl get request
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+CURLcode CurlGetRequest(const string& url, string& response) {
+	CURL* curl = curl_easy_init();
+	CURLcode res;
+
+	if (curl)
+	{
+		curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, false);
+		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, false);
+		curl_easy_setopt(curl, CURLOPT_VERBOSE, 1);
+		curl_easy_setopt(curl, CURLOPT_READFUNCTION, NULL);
+		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, CurlRequestReply);
+		curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void*)&response);
+		curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1);
+		curl_easy_setopt(curl, CURLOPT_HEADER, 1);
+		curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 3);
+		curl_easy_setopt(curl, CURLOPT_TIMEOUT, 3);
+
+		res = curl_easy_perform(curl);
+	}
+
+	curl_easy_cleanup(curl);
+	return res;
+}
+
+//----------------------------------------------
+// @Function:	CurlPostRequest()
+// @Purpose: CFrameMain curl post request
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+CURLcode CurlPostRequest(const string& url, const string& data, string& response) {
+	CURL* curl = curl_easy_init();
+	CURLcode res;
+
+	if (curl)
+	{
+		curl_easy_setopt(curl, CURLOPT_POST, 1);
+		curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, data.c_str());
+		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, false);
+		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, false);
+		curl_easy_setopt(curl, CURLOPT_VERBOSE, 1);
+		curl_easy_setopt(curl, CURLOPT_READFUNCTION, NULL);
+		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, CurlRequestReply);
+		curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void*)&response);
+		curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1);
+		curl_easy_setopt(curl, CURLOPT_HEADER, 1);
+		curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 3);
+		curl_easy_setopt(curl, CURLOPT_TIMEOUT, 3);
+
+		res = curl_easy_perform(curl);
+	}
+
+	curl_easy_cleanup(curl);
+	return res;
+}
+
+//----------------------------------------------
 // @Function:	GetWindowClassName()
 // @Purpose: CFrameMain get window class name
 // @Since: v1.00a
@@ -579,40 +660,23 @@ CDuiString CFrameMain::SplicePackRequestJson(CDuiString strPacketType, CDuiStrin
 }
 
 //----------------------------------------------
-// @Function:	SendHttpPackRequest()
-// @Purpose: CFrameMain send http request
+// @Function:	PostPackRequest()
+// @Purpose: CFrameMain post pack request
 // @Since: v1.00a
 // @Para: None
 // @Return: None
 //----------------------------------------------
-void CFrameMain::SendHttpPackRequest(CDuiString strPacketJson) {
-	// initialize curl handle
-	CURL* pCurl = curl_easy_init();
-	if (NULL == pCurl)
-	{
-		MessageBoxA(this->GetHWND(), "≥ı ºªØcurlæ‰±˙ ß∞‹!", "¥ÌŒÛ", MB_OK | MB_ICONERROR);
+void CFrameMain::PostPackRequest(const string& data) {
+	string url = "http://localhost:8080/satellite/pack";
+	string response;
+	CURLcode res;
+
+	res = CurlPostRequest(url, data, response);
+	if (res != CURLE_OK) {
+		MessageBoxA(this->GetHWND(), "∑¢ÀÕPOST«Î«Û ß∞‹!", "æØ∏Ê", MB_OK | MB_ICONWARNING);
 		return;
 	}
 
-	USES_CONVERSION;
-
-	// configure send options
-	curl_slist* pList = NULL;
-	pList = curl_slist_append(pList, "Content-Type:application/x-www-form-urlencoded; charset=UTF-8");
-	pList = curl_slist_append(pList, "Accept:application/json, text/javascript, */*; q=0.01");
-	pList = curl_slist_append(pList, "Accept-Language:zh-CN,zh;q=0.8");
-	curl_easy_setopt(pCurl, CURLOPT_HTTPHEADER, pList);
-
-	string url = "http://localhost:8080/satellite/pack";
-	curl_easy_setopt(pCurl, CURLOPT_URL, url.c_str());
-
-	curl_easy_setopt(pCurl, CURLOPT_HEADER, 0L);
-	curl_easy_setopt(pCurl, CURLOPT_FOLLOWLOCATION, 1L);
-	curl_easy_setopt(pCurl, CURLOPT_NOSIGNAL, 1L);
-
-	curl_easy_setopt(pCurl, CURLOPT_POST, 1L);
-	curl_easy_setopt(pCurl, CURLOPT_POSTFIELDS, T2A(strPacketJson.GetData()));
-	curl_easy_setopt(pCurl, CURLOPT_POSTFIELDSIZE, sizeof(T2A(strPacketJson.GetData())));
 }
 
 //----------------------------------------------
@@ -895,5 +959,6 @@ void CFrameMain::OnLButtonClickedPacketStartBtn() {
 	// organize http request...
 	CDuiString strPacketJson;
 	strPacketJson = SplicePackRequestJson(strPacketType, strPacketPath);
+	PostPackRequest(string(T2A(strPacketJson.GetData())));
 
 }

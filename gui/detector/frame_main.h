@@ -14,6 +14,9 @@
 #ifndef __FRAME_MAIN_H_
 #define __FRAME_MAIN_H_
 
+// Include C/C++ header files
+#include <iostream>
+
 // Include DUI frame header files
 #include "common_wnd.h"
 #include "types.h"
@@ -93,8 +96,7 @@ public:
 	void InitCurl();
 
 	CDuiString SplicePackRequestJson(CDuiString strPacketType, CDuiString strPacketPath);
-	void SendHttpPackRequest(CDuiString strPacketJson);
-
+	void PostPackRequest(const std::string& data);
 
 	static DWORD CALLBACK OnSearchPacketItemsProcess(LPVOID lpParameter);
 
