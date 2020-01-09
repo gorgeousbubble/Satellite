@@ -20,6 +20,15 @@ func TestDeCompress2(t *testing.T) {
 	}
 }
 
+func TestDeCompress3(t *testing.T) {
+	src := "../test/data/decomp/file.tar"
+	dest := "../test/data/decomp/"
+	err := DeCompress(src, dest, "tar")
+	if err != nil {
+		t.Fatal("Error DeCompress:", err)
+	}
+}
+
 func BenchmarkDeCompress(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/decomp/file.tar.gz"
