@@ -4,7 +4,7 @@ type GoApi struct {
 
 }
 
-func (api *GoApi) MD5Encode(request interface{}, response interface{}) (err error) {
+func (api *GoApi) MD5Encode(request TNetsRpcPackMD5EncodeReq, response *TNetsRpcPackMD5EncodeResp) (err error) {
 	return err
 }
 
