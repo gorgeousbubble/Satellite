@@ -50,3 +50,14 @@ func BenchmarkDeCompress2(b *testing.B) {
 		}
 	}
 }
+
+func BenchmarkDeCompress3(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		src := "../test/data/decomp/file.tar"
+		dest := "../test/data/decomp/"
+		err := DeCompress(src, dest, "tar")
+		if err != nil {
+			b.Fatal("Error DeCompress:", err)
+		}
+	}
+}

@@ -1,13 +1,9 @@
 package nets
 
-type GoApi struct {
-
+type TNetsRpcPackMD5EncodeReq struct {
+	Content string `json:"content"`
 }
 
-func (api *GoApi) MD5Encode(request interface{}, response interface{}) (err error) {
-	return err
-}
-
-func (api *GoApi) MD5Equal(request interface{}, response interface{}) (err error) {
-	return err
+type TNetsRpcPackMD5EncodeResp struct {
+	Content string `json:"content"`
 }
