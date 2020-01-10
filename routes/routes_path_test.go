@@ -47,3 +47,13 @@ func TestTrimSuffixSlash(t *testing.T) {
 		t.Fatal("Error trim suffix slash")
 	}
 }
+
+func BenchmarkTrimSuffixSlash(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		path := "../test/data/"
+		path = TrimSuffixSlash(path)
+		if path != "../test/data" {
+			b.Fatal("Error trim suffix slash")
+		}
+	}
+}
