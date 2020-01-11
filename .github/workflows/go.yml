@@ -67,14 +67,19 @@ jobs:
         go test -v -cover -bench .
         cd ..
 
-        cd nets
-        echo "test nets..."
-        go test -v -cover -bench .
-        cd ..
+        # cd nets
+        # echo "test nets..."
+        # go test -v -cover -bench .
+        # cd ..
 
         cd parses
         echo "test parses..."
         go test -v -cover -bench .
+        cd ..
+
+        cd routes
+        echo "test routes..."
+        go test -v cover -bench .
         cd ..
 
         cd searches
