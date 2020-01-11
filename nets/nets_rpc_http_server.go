@@ -18,7 +18,7 @@ func StartRpcHttpServer(ip string, port string) (err error) {
 	// rpc handle http
 	rpc.HandleHTTP()
 	// rpc start http service...
-	l, err := net.Listen("tcp", ip + ":" + port)
+	l, err := net.Listen("tcp", ip+":"+port)
 	if err != nil {
 		log.Println("Error listen tcp:", err)
 		return err

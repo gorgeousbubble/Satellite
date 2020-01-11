@@ -9,7 +9,7 @@ type TNetsRpcPackMD5EncodeResp struct {
 }
 
 type TNetsRpcPackMD5EqualReq struct {
-	Src string `json:"src"`
+	Src  string `json:"src"`
 	Dest string `json:"dest"`
 }
 

@@ -6,7 +6,6 @@ import (
 )
 
 type GoApi struct {
-
 }
 
 func (api *GoApi) MD5Encode(request TNetsRpcPackMD5EncodeReq, response *TNetsRpcPackMD5EncodeResp) (err error) {
