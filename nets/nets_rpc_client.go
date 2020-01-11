@@ -59,7 +59,7 @@ func RpcTcpClientCall(ip string, port string, method string, request interface{}
 		return err
 	}
 	// dial rpc tcp server...
-	conn, err := jsonrpc.Dial("tcp", ip + ":" + port)
+	conn, err := jsonrpc.Dial("tcp", ip+":"+port)
 	if err != nil {
 		log.Println("Error dial rpc tcp server:", err)
 		return err
