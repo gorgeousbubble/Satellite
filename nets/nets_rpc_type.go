@@ -1,9 +1,18 @@
 package nets
 
 type TNetsRpcPackMD5EncodeReq struct {
-	Content string `json:"content"`
+	Src string `json:"src"`
 }
 
 type TNetsRpcPackMD5EncodeResp struct {
-	Content string `json:"content"`
+	Dest string `json:"dest"`
+}
+
+type TNetsRpcPackMD5EqualReq struct {
+	Src  string `json:"src"`
+	Dest string `json:"dest"`
+}
+
+type TNetsRpcPackMD5EqualResp struct {
+	Equal bool `json:"equal"`
 }
