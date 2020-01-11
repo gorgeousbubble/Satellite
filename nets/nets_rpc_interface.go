@@ -1,8 +1,8 @@
 package nets
 
 import (
-	"Satellite/pack"
 	"errors"
+	"satellite/pack"
 )
 
 type GoApi struct {
