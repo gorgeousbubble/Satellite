@@ -196,6 +196,7 @@ func checkNetsCompParameters(t TNetsComp) (b bool, err error) {
 	// check algorithm
 	switch t.Type {
 	case "TAR", "tar":
+	case "TAR.GZ", "tar.gz":
 	case "ZIP", "zip":
 	default:
 		b = false
@@ -224,6 +225,7 @@ func checkNetsDecompParameters(t TNetsDecomp) (b bool, err error) {
 	// check algorithm
 	switch t.Type {
 	case "TAR", "tar":
+	case "TAR.GZ", "tar.gz":
 	case "ZIP", "zip":
 	default:
 		b = false
