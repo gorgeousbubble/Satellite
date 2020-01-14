@@ -52,6 +52,8 @@ func main() {
 		cmd.ParseCmdHttps()
 	case CmdFtp:
 		cmd.ParseCmdFtp()
+	case CmdRpc:
+		cmd.ParseCmdRpc()
 	case CmdQRCode:
 		cmd.ParseCmdQRCode()
 	case CmdShell:
