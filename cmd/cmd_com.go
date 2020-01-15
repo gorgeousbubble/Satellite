@@ -35,7 +35,7 @@ Brief: Satellite is a tool for both multiple command and web service develop by 
 Version: v1.00a
 Author: alopex
 
-Usage: satellite [help] [pack/unpack] [comp/decomp] [tcp/udp] [http/https/ftp] [qrcode] [shell] [parses]
+Usage: satellite [help] [pack/unpack] [comp/decomp] [tcp/udp] [http/https/ftp/rpc] [qrcode] [shell] [parses]
 
 Options:
 	help	- help information about satellite application.
@@ -48,6 +48,7 @@ Options:
 	http 	- http restful server.
 	https 	- https restful server.
 	ftp     - ftp server/client.
+	rpc     - rpc server for GoApi support tcp and http.
 	qrcode  - generate qrcode save as images.
 	shell   - shell executable file.
 	parses	- multiple file parser.

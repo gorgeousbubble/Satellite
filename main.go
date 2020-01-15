@@ -19,7 +19,7 @@ func init() {
 	runtime.GOMAXPROCS(core)
 	// start debug pprof
 	go func() {
-		http.ListenAndServe(":6060", nil)
+		_ = http.ListenAndServe(":10514", nil)
 	}()
 }
 
@@ -52,6 +52,8 @@ func main() {
 		cmd.ParseCmdHttps()
 	case CmdFtp:
 		cmd.ParseCmdFtp()
+	case CmdRpc:
+		cmd.ParseCmdRpc()
 	case CmdQRCode:
 		cmd.ParseCmdQRCode()
 	case CmdShell:
