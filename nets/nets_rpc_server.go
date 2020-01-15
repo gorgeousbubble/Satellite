@@ -7,61 +7,62 @@ import (
 	"net/http"
 	"net/rpc"
 	"net/rpc/jsonrpc"
+	"os"
 )
 
-func StartRpcHttpServer(ip string, port string) (err error) {
+func StartRpcHttpServer(ip string, port string) {
 	// rpc register interface...
-	err = rpc.Register(new(GoApi))
+	err := rpc.Register(new(GoApi))
 	if err != nil {
+		fmt.Println("Error RPC register interface:", err)
 		log.Println("Error RPC register interface:", err)
-		return err
+		os.Exit(1)
 	}
 	// rpc handle http
 	rpc.HandleHTTP()
 	// rpc start http service...
 	l, err := net.Listen("tcp", ip+":"+port)
 	if err != nil {
+		fmt.Println("Error listen tcp:", err)
 		log.Println("Error listen tcp:", err)
-		return err
+		os.Exit(1)
 	}
 	fmt.Println("Start Listen And Server on ", ip+":"+port)
 	// start http service...
 	err = http.Serve(l, nil)
 	if err != nil {
+		fmt.Println("Error serve http:", err)
 		log.Println("Error serve http:", err)
-		return err
+		os.Exit(1)
 	}
-	return err
 }
 
-func StartRpcTcpServer(ip string, port string) (err error) {
+func StartRpcTcpServer(ip string, port string) {
 	// rpc register interface...
-	err = rpc.Register(new(GoApi))
+	err := rpc.Register(new(GoApi))
 	if err != nil {
+		fmt.Println("Error RPC register interface:", err)
 		log.Println("Error RPC register interface:", err)
-		return err
+		os.Exit(1)
 	}
 	// rpc start tcp service...
 	l, err := net.Listen("tcp", ip+":"+port)
 	if err != nil {
+		fmt.Println("Error listen tcp:", err)
 		log.Println("Error listen tcp:", err)
-		return err
+		os.Exit(1)
 	}
 	fmt.Println("Start Listen And Server on ", ip+":"+port)
-	// rpc loop wait for connect...
-	go func(l net.Listener) {
-		for {
-			// client connect to server
-			conn, err := l.Accept()
-			if err != nil {
-				continue
-			}
-			// handle json transfer
-			go func(conn net.Conn) {
-				jsonrpc.ServeConn(conn)
-				fmt.Println("RPC client connect to server:", conn.RemoteAddr())
-			}(conn)
+	for {
+		// client connect to server...
+		conn, err := l.Accept()
+		if err != nil {
+			continue
 		}
-	}(l)
-	return err
+		// handle json transfer
+		go func(conn net.Conn) {
+			jsonrpc.ServeConn(conn)
+			fmt.Println("RPC client connect to server:", conn.RemoteAddr())
+		}(conn)
+	}
 }

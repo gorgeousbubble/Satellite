@@ -39,19 +39,9 @@ func ParseCmdRpc() {
 func handleCmdRpc(ip string, port string, protocol string) {
 	switch protocol {
 	case "tcp":
-		err := nets.StartRpcTcpServer(ip, port)
-		if err != nil {
-			fmt.Println("Error start rpc tcp server:", err)
-			log.Println("Error start rpc tcp server:", err)
-			os.Exit(1)
-		}
+		nets.StartRpcTcpServer(ip, port)
 	case "http":
-		err := nets.StartRpcHttpServer(ip, port)
-		if err != nil {
-			fmt.Println("Error start rpc http server:", err)
-			log.Println("Error start rpc http server:", err)
-			os.Exit(1)
-		}
+		nets.StartRpcHttpServer(ip, port)
 	default:
 		fmt.Println("Invalid Rpc protocol. You can choose one from ['tcp','http']")
 	}
