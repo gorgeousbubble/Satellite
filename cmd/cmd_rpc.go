@@ -16,7 +16,7 @@ var rpcProtocol string
 
 func init() {
 	rpcCmd.StringVar(&rpcIp, "ip", "127.0.0.1", "ip address: ipv4 address witch rpc server listen, such as \"127.0.0.1\"")
-	rpcCmd.StringVar(&rpcPort, "port", "2514", "port: port number witch rpc server listen, such as \"2514\"")
+	rpcCmd.StringVar(&rpcPort, "port", "13514", "port: port number witch rpc server listen, such as \"13514\"")
 	rpcCmd.StringVar(&rpcProtocol, "protocol", "tcp", "protocol: rpc realize protocol, you can choose one from ['tcp','http']")
 }
 
