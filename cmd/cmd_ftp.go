@@ -14,7 +14,7 @@ var ftpPort string
 
 func init() {
 	ftpCmd.StringVar(&ftpIp, "ip", "127.0.0.1", "ip address: ipv4 address witch http server listen, such as \"127.0.0.1\"")
-	ftpCmd.StringVar(&ftpPort, "port", "10021", "port: port number witch http server listen, such as \"10021\"")
+	ftpCmd.StringVar(&ftpPort, "port", "16514", "port: port number witch http server listen, such as \"16514\"")
 }
 
 func ParseCmdFtp() {
