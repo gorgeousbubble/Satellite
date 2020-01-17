@@ -30,5 +30,6 @@ run:
 	./$(GOBIN)
 
 deps:
+	$(GOGET) -v -t -d ./...
 
 # Cross-Compile
