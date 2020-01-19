@@ -1,14 +1,10 @@
 package nets
 
-import (
-	"net/http"
-	"testing"
-)
+import "testing"
 
 func TestStartFtpServer(t *testing.T) {
-	ip := "127.0.0.1"
+	/*ip := "127.0.0.1"
 	port := "10021"
-	t.Skip("Skip start ftp server...")
 	go StartFtpServer(ip, port)
 	r, err := http.Get("http://" + ip + ":" + port)
 	if err != nil {
@@ -16,5 +12,5 @@ func TestStartFtpServer(t *testing.T) {
 	}
 	if r.StatusCode != http.StatusOK {
 		t.Errorf("Error GET ftp server response")
-	}
+	}*/
 }

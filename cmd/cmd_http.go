@@ -14,7 +14,7 @@ var httpPort string
 
 func init() {
 	httpCmd.StringVar(&httpIp, "ip", "127.0.0.1", "ip address: ipv4 address witch http server listen, such as \"127.0.0.1\"")
-	httpCmd.StringVar(&httpPort, "port", "8000", "port: port number witch http server listen, such as \"8000\"")
+	httpCmd.StringVar(&httpPort, "port", "14514", "port: port number witch http server listen, such as \"14514\"")
 }
 
 func ParseCmdHttp() {

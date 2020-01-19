@@ -168,7 +168,7 @@ func GenerateCA(ip string) (err error) {
 	}
 	subject := pkix.Name{
 		Organization: []string{"Team Gorgeous Bubble"},
-		CommonName:   "Https Service",
+		CommonName:   "Satellite Https Service",
 	}
 	template := x509.Certificate{
 		SerialNumber: serialNumber,
