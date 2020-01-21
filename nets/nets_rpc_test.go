@@ -1,10 +1,17 @@
 package nets
 
-/*func TestHttpCallRpcApiMD5Encode(t *testing.T) {
+import (
+	"fmt"
+	"testing"
+)
+
+func TestHttpCallRpcApiMD5Encode(t *testing.T) {
 	ip := "127.0.0.1"
 	port := "12000"
 	request := TNetsRpcPackMD5EncodeReq{Src: "Satellite"}
 	response := TNetsRpcPackMD5EncodeResp{}
+	// skip this test case
+	t.Skip("IGNORE: TestHttpCallRpcApiMD5Encode")
 	// start rpc http server...
 	go StartRpcHttpServer(ip, port)
 	// start rpc http client call function
@@ -21,6 +28,8 @@ func TestHttpCallRpcApiMD5Equal(t *testing.T) {
 	port := "12000"
 	request := TNetsRpcPackMD5EqualReq{Src: "Satellite", Dest: "c2b5e73361a4bf9d26a73413d0abee5e"}
 	response := TNetsRpcPackMD5EqualResp{}
+	// skip this test case
+	t.Skip("IGNORE: TestHttpCallRpcApiMD5Equal")
 	// start rpc http server...
 	go StartRpcHttpServer(ip, port)
 	// start rpc http client call function
@@ -37,6 +46,8 @@ func TestTcpCallRpcApiMD5Encode(t *testing.T) {
 	port := "12000"
 	request := TNetsRpcPackMD5EncodeReq{Src: "Satellite"}
 	response := TNetsRpcPackMD5EncodeResp{}
+	// skip this test case
+	t.Skip("IGNORE: TestTcpCallRpcApiMD5Encode")
 	// start rpc tcp server...
 	go StartRpcTcpServer(ip, port)
 	// start rpc tcp client call function
@@ -53,6 +64,8 @@ func TestTcpCallRpcApiMD5Equal(t *testing.T) {
 	port := "12000"
 	request := TNetsRpcPackMD5EqualReq{Src: "Satellite", Dest: "c2b5e73361a4bf9d26a73413d0abee5e"}
 	response := TNetsRpcPackMD5EqualResp{}
+	// skip this test case
+	t.Skip("IGNORE: TestTcpCallRpcApiMD5Equal")
 	// start rpc tcp server...
 	go StartRpcTcpServer(ip, port)
 	// start rpc tcp client call function
@@ -62,4 +75,4 @@ func TestTcpCallRpcApiMD5Equal(t *testing.T) {
 	}
 	fmt.Println("Rpc request:", request)
 	fmt.Println("Rpc response:", response)
-}*/
+}
