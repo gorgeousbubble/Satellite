@@ -11,11 +11,13 @@ GOGET 	= $(GO) get
 # Binary Parameters
 GOBASE  = $(shell pwd)
 GOBIN   = $(GOBASE)/bin
+MKBIN   = $(shell mkdir -p $(GOBIN))
 
 # Build
 all: test build
 
-build: 
+build:
+	$(MKBIN)
 	$(GOBUILD) -o $(GOBIN)
 
 test:
