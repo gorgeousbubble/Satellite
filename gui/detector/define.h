@@ -17,6 +17,13 @@
 // Disable warning
 #pragma warning (disable:4996)
 
+// Timer
+#define TIM_PROGRESS_REFRESH_PACKET				0
+#define TIM_PROGRESS_REFRESH_UNPACK				1
+
+// Constants
+#define CONST_PROGRESS_REFRESH_TIME				200
+
 // Messages
 #define WM_USER_MESSAGE_MENU					(WM_USER + 1)
 

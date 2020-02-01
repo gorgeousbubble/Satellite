@@ -298,7 +298,60 @@ LRESULT CFrameMain::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHand
 // @Return: None
 //----------------------------------------------
 LRESULT CFrameMain::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) {
-	return LRESULT();
+	DWORD nID = wParam;
+
+	USES_CONVERSION;
+	
+	// switch timer id...
+	switch (nID) {
+	case TIM_PROGRESS_REFRESH_PACKET: {
+		CDuiString strPacketType = m_pPackTypeEdt->GetText();
+		CDuiString strPacketJson;
+		string result;
+		strPacketJson = SplicePackProcessRequestJson(strPacketType);
+		result = PostPackProcessRequest(string(T2A(strPacketJson.GetData())));
+
+		// find number done & work...
+		string done;
+		string work;
+		int res;
+
+		// get done value...
+		res = GetValueFromResponse(result, "\"done\": ", ",", done);
+		if (res != 0) {
+			::KillTimer(this->GetHWND(), TIM_PROGRESS_REFRESH_PACKET);
+			MessageBoxA(this->GetHWND(), "获取打包进度失败!", "警告", MB_OK | MB_ICONWARNING);
+			return 0;
+		}
+		// get work value...
+		res = GetValueFromResponse(result, "\"work\": ", "\n", work);
+		if (res != 0) {
+			::KillTimer(this->GetHWND(), TIM_PROGRESS_REFRESH_PACKET);
+			MessageBoxA(this->GetHWND(), "获取打包进度失败!", "警告", MB_OK | MB_ICONWARNING);
+			return 0;
+		}
+
+		DWORD dwDone = StringToDword(done);
+		DWORD dwWork = StringToDword(work) / 128;
+
+		// update process information...
+		int value = (int)((float)dwDone * 100 / (float)dwWork);
+		if (value >= 100) {
+			value = 100;
+		}
+		m_pPackProgress->SetValue(value);
+		if (value >= 100) {
+			::KillTimer(this->GetHWND(), TIM_PROGRESS_REFRESH_PACKET);
+			MessageBoxA(this->GetHWND(), "打包成功!", "提示", MB_OK | MB_ICONASTERISK);
+		}
+
+		break;
+	}
+	default:
+		break;
+	}
+
+	return 0;
 }
 
 //----------------------------------------------
@@ -660,6 +713,51 @@ CDuiString CFrameMain::SplicePackRequestJson(CDuiString strPacketType, CDuiStrin
 }
 
 //----------------------------------------------
+// @Function:	SplicePackProcessRequestJson()
+// @Purpose: CFrameMain splice packet process json
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+CDuiString CFrameMain::SplicePackProcessRequestJson(CDuiString strPacketType) {
+	CDuiString strPacketJson;
+	CDuiString strPacketSrc;
+	CDuiString strPacketDest;
+	CDuiString strPacketKind;
+
+	USES_CONVERSION;
+
+	// splice src files...
+	strPacketSrc = L"\"src\":[";
+	for (auto iter = m_vecPacket.begin(); iter != m_vecPacket.end(); ++iter) {
+		char chFile[MAX_PATH] = { 0 };
+		if (iter == m_vecPacket.end() - 1) {
+			sprintf_s(chFile, "\"%s\"", iter->chPath);
+		}
+		else {
+			sprintf_s(chFile, "\"%s\",", iter->chPath);
+		}
+		strPacketSrc += A2T(chFile);
+	}
+	strPacketSrc += L"],";
+	//strPacketSrc.Replace(L"\\", L"/");
+
+	// splice encrypt type...
+	strPacketKind = L"\"type\":\"";
+	strPacketKind += strPacketType;
+	strPacketKind += L"\"";
+
+	// splice all...
+	strPacketJson = L"{";
+	strPacketJson += strPacketSrc;
+	strPacketJson += strPacketKind;
+	strPacketJson += L"}";
+	strPacketJson.Replace(L"\\", L"/");
+
+	return strPacketJson;
+}
+
+//----------------------------------------------
 // @Function:	PostPackRequest()
 // @Purpose: CFrameMain post pack request
 // @Since: v1.00a
@@ -676,7 +774,53 @@ void CFrameMain::PostPackRequest(const string& data) {
 		MessageBoxA(this->GetHWND(), "发送POST请求失败!", "警告", MB_OK | MB_ICONWARNING);
 		return;
 	}
+}
 
+//----------------------------------------------
+// @Function:	PostPackProcessRequest()
+// @Purpose: CFrameMain post pack process request
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+string CFrameMain::PostPackProcessRequest(const std::string& data) {
+	string url = "http://localhost:8080/satellite/pack/p";
+	string response;
+	CURLcode res;
+
+	res = CurlPostRequest(url, data, response);
+	if (res != CURLE_OK) {
+		MessageBoxA(this->GetHWND(), "发送POST请求失败!", "警告", MB_OK | MB_ICONWARNING);
+		return response;
+	}
+
+	return response;
+}
+
+//----------------------------------------------
+// @Function:	GetValueFromResponse()
+// @Purpose: CFrameMain get value from response
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+int CFrameMain::GetValueFromResponse(string result, string label_first, string label_last, string& value) {
+	int size;
+	int pos;
+	int end;
+	int count;
+	size = label_first.length();
+	pos = result.find(label_first);
+	if (pos == result.npos) {
+		return -1;
+	}
+	end = result.find_first_of(label_last, pos);
+	if (pos == result.npos) {
+		return -1;
+	}
+	count = end - pos - size;
+	value = result.substr(pos + size, count);
+	return 0;
 }
 
 //----------------------------------------------
@@ -701,6 +845,19 @@ DWORD CFrameMain::OnSearchPacketItemsProcess(LPVOID lpParameter) {
 	}
 
 	return 0;
+}
+
+//----------------------------------------------
+// @Function:	StringToDword()
+// @Purpose: CFrameMain convert between string & dword
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+DWORD CFrameMain::StringToDword(string value) {
+	DWORD dword;
+	sscanf(value.c_str(), "%ul", &dword);
+	return dword;
 }
 
 //----------------------------------------------
@@ -953,8 +1110,12 @@ void CFrameMain::OnLButtonClickedPacketStartBtn() {
 
 	// set progress...
 	m_pPackProgress->SetMinValue(0);
-	m_pPackProgress->SetMaxValue(m_vecPacket.size());
+	m_pPackProgress->SetMaxValue(100);
 	m_pPackProgress->SetValue(0);
+
+	// reset timer...
+	::KillTimer(this->GetHWND(), TIM_PROGRESS_REFRESH_PACKET);
+	::SetTimer(this->GetHWND(), TIM_PROGRESS_REFRESH_PACKET, CONST_PROGRESS_REFRESH_TIME, NULL);
 
 	// organize http request...
 	CDuiString strPacketJson;
