@@ -22,7 +22,7 @@
 #define TIM_PROGRESS_REFRESH_UNPACK				1
 
 // Constants
-#define CONST_PROGRESS_REFRESH_TIME				200
+#define CONST_PROGRESS_REFRESH_TIME				100
 
 // Messages
 #define WM_USER_MESSAGE_MENU					(WM_USER + 1)

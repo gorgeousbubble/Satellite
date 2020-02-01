@@ -310,6 +310,11 @@ LRESULT CFrameMain::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHand
 		string result;
 		strPacketJson = SplicePackProcessRequestJson(strPacketType);
 		result = PostPackProcessRequest(string(T2A(strPacketJson.GetData())));
+		if (result.empty()) {
+			::KillTimer(this->GetHWND(), TIM_PROGRESS_REFRESH_PACKET);
+			MessageBoxA(this->GetHWND(), "请求打包进度失败!", "警告", MB_OK | MB_ICONWARNING);
+			return 0;
+		}
 
 		// find number done & work...
 		string done;
@@ -789,10 +794,6 @@ string CFrameMain::PostPackProcessRequest(const std::string& data) {
 	CURLcode res;
 
 	res = CurlPostRequest(url, data, response);
-	if (res != CURLE_OK) {
-		MessageBoxA(this->GetHWND(), "发送POST请求失败!", "警告", MB_OK | MB_ICONWARNING);
-		return response;
-	}
 
 	return response;
 }
