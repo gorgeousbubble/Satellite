@@ -71,6 +71,7 @@ public:
 	// Packet...
 	CButtonUI* m_pPackAddBtn;
 	CButtonUI* m_pPackDelBtn;
+	CButtonUI* m_pPackClrBtn;
 	CListUI* m_pPackList;
 	CEditUI* m_pPackTypeEdt;
 	CEditUI* m_pPackPathEdt;
@@ -118,6 +119,7 @@ public:
 
 	void OnLButtonClickedPacketAddBtn();
 	void OnLButtonClickedPacketDelBtn();
+	void OnLButtonClickedPacketClrBtn();
 	void OnLButtonClickedPacketExportBtn();
 	void OnLButtonClickedPacketStartBtn();
 };

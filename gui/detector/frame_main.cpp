@@ -138,6 +138,8 @@ void CFrameMain::Notify(TNotifyUI& msg) {
 			OnLButtonClickedPacketAddBtn();
 		} else if (msg.pSender == m_pPackDelBtn) {
 			OnLButtonClickedPacketDelBtn();
+		} else if (msg.pSender == m_pPackClrBtn) {
+			OnLButtonClickedPacketClrBtn();
 		} else if (msg.pSender == m_pPackExportBtn) {
 			OnLButtonClickedPacketExportBtn();
 		} else if (msg.pSender == m_pPackStartBtn) {
@@ -675,6 +677,7 @@ void CFrameMain::InitControls() {
 	// packet page
 	m_pPackAddBtn = static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("packaddbtn")));
 	m_pPackDelBtn = static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("packdelbtn")));
+	m_pPackClrBtn = static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("packclrbtn")));
 	m_pPackList = static_cast<CListUI*>(m_PaintManager.FindControl(_T("packlist")));
 	m_pPackTypeEdt = static_cast<CEditUI*>(m_PaintManager.FindControl(_T("packtypeedt")));
 	m_pPackPathEdt = static_cast<CEditUI*>(m_PaintManager.FindControl(_T("packpathedt")));
@@ -1039,7 +1042,7 @@ void CFrameMain::OnLButtonClickedPacketAddBtn() {
 
 //----------------------------------------------
 // @Function:	OnLButtonClickedCloseBtn()
-// @Purpose: CFrameMain click packet add button
+// @Purpose: CFrameMain click packet delete button
 // @Since: v1.00a
 // @Para: None
 // @Return: None
@@ -1055,6 +1058,19 @@ void CFrameMain::OnLButtonClickedPacketDelBtn() {
 	for (auto iter = m_vecPacket.begin(); iter != m_vecPacket.end(); ++iter) {
 		iter->nSerial = iter - m_vecPacket.begin() + 1;
 	}
+
+	::PostMessageA(this->GetHWND(), WM_USER_MESSAGE_PACKET_SEARCH, (WPARAM)0, (LPARAM)0);
+}
+
+//----------------------------------------------
+// @Function:	OnLButtonClickedPacketClrBtn()
+// @Purpose: CFrameMain click packet clear button
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+void CFrameMain::OnLButtonClickedPacketClrBtn() {
+	m_vecPacket.clear();
 
 	::PostMessageA(this->GetHWND(), WM_USER_MESSAGE_PACKET_SEARCH, (WPARAM)0, (LPARAM)0);
 }
