@@ -52,7 +52,7 @@ CURLcode CurlGetRequest(const string& url, string& response) {
 		curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1);
 		curl_easy_setopt(curl, CURLOPT_HEADER, 1);
 		curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 3);
-		curl_easy_setopt(curl, CURLOPT_TIMEOUT, 3);
+		curl_easy_setopt(curl, CURLOPT_TIMEOUT, 120);
 
 		res = curl_easy_perform(curl);
 	}
@@ -86,7 +86,7 @@ CURLcode CurlPostRequest(const string& url, const string& data, string& response
 		curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1);
 		curl_easy_setopt(curl, CURLOPT_HEADER, 1);
 		curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 3);
-		curl_easy_setopt(curl, CURLOPT_TIMEOUT, 3);
+		curl_easy_setopt(curl, CURLOPT_TIMEOUT, 120);
 
 		res = curl_easy_perform(curl);
 	}
@@ -219,6 +219,10 @@ LRESULT CFrameMain::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) {
 		break;
 	case WM_USER_MESSAGE_PACKET_ADDITEM:
 		lRes = OnUserMessagePacketAddItem(uMsg, wParam, lParam, bHandled);
+		break;
+	case WM_USER_MESSAGE_PACKET_RESULT:
+		lRes = OnUserMessagePacketResult(uMsg, wParam, lParam, bHandled);
+		break;
 	default:
 		bHandled = FALSE;
 		break;
@@ -307,9 +311,20 @@ LRESULT CFrameMain::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHand
 	case TIM_PROGRESS_REFRESH_PACKET: {
 		CDuiString strPacketType = m_pPackTypeEdt->GetText();
 		CDuiString strPacketJson;
-		string result;
 		strPacketJson = SplicePackProcessRequestJson(strPacketType);
-		result = PostPackProcessRequest(string(T2A(strPacketJson.GetData())));
+
+		// send post pack request...
+		string url;
+		string result;
+		CURLcode resp;
+
+		url = "http://localhost:8080/satellite/pack/p";
+		resp = CurlPostRequest(url, string(T2A(strPacketJson.GetData())), result);
+		if (resp != CURLE_OK) {
+			::KillTimer(this->GetHWND(), TIM_PROGRESS_REFRESH_PACKET);
+			MessageBoxA(this->GetHWND(), "请求打包进度失败!", "警告", MB_OK | MB_ICONWARNING);
+		}
+
 		if (result.empty()) {
 			::KillTimer(this->GetHWND(), TIM_PROGRESS_REFRESH_PACKET);
 			MessageBoxA(this->GetHWND(), "请求打包进度失败!", "警告", MB_OK | MB_ICONWARNING);
@@ -343,12 +358,9 @@ LRESULT CFrameMain::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHand
 		int value = (int)((float)dwDone * 100 / (float)dwWork);
 		if (value >= 100) {
 			value = 100;
+			::KillTimer(this->GetHWND(), TIM_PROGRESS_REFRESH_PACKET);
 		}
 		m_pPackProgress->SetValue(value);
-		if (value >= 100) {
-			::KillTimer(this->GetHWND(), TIM_PROGRESS_REFRESH_PACKET);
-			MessageBoxA(this->GetHWND(), "打包成功!", "提示", MB_OK | MB_ICONASTERISK);
-		}
 
 		break;
 	}
@@ -551,6 +563,25 @@ LRESULT CFrameMain::OnUserMessagePacketAddItem(UINT uMsg, WPARAM wParam, LPARAM 
 
 	if (m_pPackList) {
 		m_pPackList->Add(pListElement);
+	}
+
+	return 0;
+}
+
+//----------------------------------------------
+// @Function:	OnUserMessagePacketResult()
+// @Purpose: CFrameMain packet display result
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+LRESULT CFrameMain::OnUserMessagePacketResult(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) {
+	if (lParam != 0) {
+		::KillTimer(this->GetHWND(), TIM_PROGRESS_REFRESH_PACKET);
+		MessageBoxA(this->GetHWND(), "请求打包文件失败!", "警告", MB_OK | MB_ICONWARNING);
+	}
+	else {
+		MessageBoxA(this->GetHWND(), "打包文件成功!", "提示", MB_OK | MB_ICONASTERISK);
 	}
 
 	return 0;
@@ -763,42 +794,6 @@ CDuiString CFrameMain::SplicePackProcessRequestJson(CDuiString strPacketType) {
 }
 
 //----------------------------------------------
-// @Function:	PostPackRequest()
-// @Purpose: CFrameMain post pack request
-// @Since: v1.00a
-// @Para: None
-// @Return: None
-//----------------------------------------------
-void CFrameMain::PostPackRequest(const string& data) {
-	string url = "http://localhost:8080/satellite/pack";
-	string response;
-	CURLcode res;
-
-	res = CurlPostRequest(url, data, response);
-	if (res != CURLE_OK) {
-		MessageBoxA(this->GetHWND(), "发送POST请求失败!", "警告", MB_OK | MB_ICONWARNING);
-		return;
-	}
-}
-
-//----------------------------------------------
-// @Function:	PostPackProcessRequest()
-// @Purpose: CFrameMain post pack process request
-// @Since: v1.00a
-// @Para: None
-// @Return: None
-//----------------------------------------------
-string CFrameMain::PostPackProcessRequest(const std::string& data) {
-	string url = "http://localhost:8080/satellite/pack/p";
-	string response;
-	CURLcode res;
-
-	res = CurlPostRequest(url, data, response);
-
-	return response;
-}
-
-//----------------------------------------------
 // @Function:	GetValueFromResponse()
 // @Purpose: CFrameMain get value from response
 // @Since: v1.00a
@@ -845,6 +840,29 @@ DWORD CFrameMain::OnSearchPacketItemsProcess(LPVOID lpParameter) {
 		Sleep(1);
 	}
 
+	return 0;
+}
+
+//----------------------------------------------
+// @Function:	OnPostPackRequestProcess()
+// @Purpose: CFrameMain post pack request
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+DWORD CFrameMain::OnPostPackRequestProcess(LPVOID lpParameter) {
+	string data = string((char*)lpParameter);
+	string url;
+	string response;
+	CURLcode res;
+
+	url = "http://localhost:8080/satellite/pack";
+	res = CurlPostRequest(url, data, response);
+	if (res != CURLE_OK) {
+		::PostMessageA(g_pFrameMain->GetHWND(), WM_USER_MESSAGE_PACKET_RESULT, (WPARAM)0, (LPARAM)1);
+	} else {
+		::PostMessageA(g_pFrameMain->GetHWND(), WM_USER_MESSAGE_PACKET_RESULT, (WPARAM)0, (LPARAM)0);
+	}
 	return 0;
 }
 
@@ -1121,6 +1139,13 @@ void CFrameMain::OnLButtonClickedPacketStartBtn() {
 	// organize http request...
 	CDuiString strPacketJson;
 	strPacketJson = SplicePackRequestJson(strPacketType, strPacketPath);
-	PostPackRequest(string(T2A(strPacketJson.GetData())));
+
+	// create thread handle request...
+	HANDLE hThread = NULL;
+	DWORD dwThreadID = 0;
+
+	// create thread...
+	hThread = ::CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)(&CFrameMain::OnPostPackRequestProcess), (LPVOID)(T2A(strPacketJson.GetData())), 0, &dwThreadID);
+	::CloseHandle(hThread);
 
 }

@@ -48,6 +48,7 @@ public:
 public:
 	LRESULT OnUserMessagePacketSearch(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	LRESULT OnUserMessagePacketAddItem(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+	LRESULT OnUserMessagePacketResult(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
 public:
 	// Main Layout...
@@ -97,12 +98,11 @@ public:
 
 	CDuiString SplicePackRequestJson(CDuiString strPacketType, CDuiString strPacketPath);
 	CDuiString SplicePackProcessRequestJson(CDuiString strPacketType);
-	void PostPackRequest(const std::string& data);
-	string PostPackProcessRequest(const std::string& data);
 
 	int GetValueFromResponse(string result, string label_first, string label_last, string& value);
 
 	static DWORD CALLBACK OnSearchPacketItemsProcess(LPVOID lpParameter);
+	static DWORD CALLBACK OnPostPackRequestProcess(LPVOID lpParameter);
 
 private:
 	DWORD StringToDword(string value);
