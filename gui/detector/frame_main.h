@@ -51,6 +51,7 @@ public:
 	LRESULT OnUserMessagePacketResult(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	LRESULT OnUserMessageUnpackSearch(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	LRESULT OnUserMessageUnpackAddItem(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+	LRESULT OnUserMessageUnpackResult(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
 public:
 	// Main Layout...
@@ -115,6 +116,7 @@ public:
 	CDuiString SplicePackProcessRequestJson(CDuiString strPacketType);
 	CDuiString SpliceUnpackRequestJson(CDuiString strUnpackSrc, CDuiString strUnpackDest);
 	CDuiString SpliceUnpackVerboseRequestJson(CDuiString strUnpackSrc);
+	CDuiString SpliceUnpackProcessRequestJson(CDuiString strUnpackSrc);
 
 	int GetValueFromResponse(string result, string label_first, string label_last, string& value);
 	int GetValueFromResponseWithPos(string result, string label_first, string label_last, string& value, int& poi);
@@ -122,6 +124,7 @@ public:
 	static DWORD CALLBACK OnSearchPacketItemsProcess(LPVOID lpParameter);
 	static DWORD CALLBACK OnSearchUnpackItemsProcess(LPVOID lpParameter);
 	static DWORD CALLBACK OnPostPackRequestProcess(LPVOID lpParameter);
+	static DWORD CALLBACK OnPostUnpackRequestProcess(LPVOID lpParameter);
 
 private:
 	DWORD StringToDword(string value);

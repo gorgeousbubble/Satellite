@@ -241,6 +241,9 @@ LRESULT CFrameMain::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	case WM_USER_MESSAGE_UNPACK_ADDITEM:
 		lRes = OnUserMessageUnpackAddItem(uMsg, wParam, lParam, bHandled);
 		break;
+	case WM_USER_MESSAGE_UNPACK_RESULT:
+		lRes = OnUserMessageUnpackResult(uMsg, wParam, lParam, bHandled);
+		break;
 	default:
 		bHandled = FALSE;
 		break;
@@ -379,6 +382,64 @@ LRESULT CFrameMain::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHand
 			::KillTimer(this->GetHWND(), TIM_PROGRESS_REFRESH_PACKET);
 		}
 		m_pPackProgress->SetValue(value);
+
+		break;
+	}
+	case TIM_PROGRESS_REFRESH_UNPACK: {
+		CDuiString strUnpackJson;
+		CDuiString strUnpackSrc;
+		
+		strUnpackSrc = m_pUnpackSrcEdt->GetText();
+		strUnpackJson = SpliceUnpackProcessRequestJson(strUnpackSrc);
+
+		// send post pack request...
+		string url;
+		string result;
+		CURLcode resp;
+
+		url = "http://localhost:8080/satellite/unpack/p";
+		resp = CurlPostRequest(url, string(T2A(strUnpackJson.GetData())), result);
+		if (resp != CURLE_OK) {
+			::KillTimer(this->GetHWND(), TIM_PROGRESS_REFRESH_UNPACK);
+			MessageBoxA(this->GetHWND(), "请求拆包进度失败!", "警告", MB_OK | MB_ICONWARNING);
+		}
+
+		if (result.empty()) {
+			::KillTimer(this->GetHWND(), TIM_PROGRESS_REFRESH_UNPACK);
+			MessageBoxA(this->GetHWND(), "请求拆包进度失败!", "警告", MB_OK | MB_ICONWARNING);
+			return 0;
+		}
+
+		// find number done & work...
+		string done;
+		string work;
+		int res;
+
+		// get done value...
+		res = GetValueFromResponse(result, "\"done\": ", ",", done);
+		if (res != 0) {
+			::KillTimer(this->GetHWND(), TIM_PROGRESS_REFRESH_UNPACK);
+			MessageBoxA(this->GetHWND(), "请求拆包进度失败!", "警告", MB_OK | MB_ICONWARNING);
+			return 0;
+		}
+		// get work value...
+		res = GetValueFromResponse(result, "\"work\": ", "\n", work);
+		if (res != 0) {
+			::KillTimer(this->GetHWND(), TIM_PROGRESS_REFRESH_UNPACK);
+			MessageBoxA(this->GetHWND(), "请求拆包进度失败!", "警告", MB_OK | MB_ICONWARNING);
+			return 0;
+		}
+
+		DWORD dwDone = StringToDword(done);
+		DWORD dwWork = StringToDword(work) / 128;
+
+		// update process information...
+		int value = (int)((float)dwDone * 100 / (float)dwWork);
+		if (value >= 100) {
+			value = 100;
+			::KillTimer(this->GetHWND(), TIM_PROGRESS_REFRESH_UNPACK);
+		}
+		m_pUnpackProgress->SetValue(value);
 
 		break;
 	}
@@ -645,6 +706,25 @@ LRESULT CFrameMain::OnUserMessageUnpackAddItem(UINT uMsg, WPARAM wParam, LPARAM 
 }
 
 //----------------------------------------------
+// @Function:	OnUserMessageUnpackResult()
+// @Purpose: CFrameMain unpack result
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+LRESULT CFrameMain::OnUserMessageUnpackResult(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) {
+	if (lParam != 0) {
+		::KillTimer(this->GetHWND(), TIM_PROGRESS_REFRESH_UNPACK);
+		MessageBoxA(this->GetHWND(), "请求拆包文件失败!", "警告", MB_OK | MB_ICONWARNING);
+	}
+	else {
+		MessageBoxA(this->GetHWND(), "拆包文件成功!", "提示", MB_OK | MB_ICONASTERISK);
+	}
+
+	return 0;
+}
+
+//----------------------------------------------
 // @Function:	ConstructExtra()
 // @Purpose: CFrameMain construct function extra
 // @Since: v1.00a
@@ -871,7 +951,32 @@ CDuiString CFrameMain::SplicePackProcessRequestJson(CDuiString strPacketType) {
 // @Return: None
 //----------------------------------------------
 CDuiString CFrameMain::SpliceUnpackRequestJson(CDuiString strUnpackSrc, CDuiString strUnpackDest) {
-	return CDuiString();
+	CDuiString strUnpackJson;
+	CDuiString strUnpackSource;
+	CDuiString strUnpackDestination;
+
+	USES_CONVERSION;
+
+	// splice src files...
+	strUnpackSource = L"\"src\":";
+	strUnpackSource += L"\"";
+	strUnpackSource += strUnpackSrc.GetData();
+	strUnpackSource += L"\",";
+
+	// splice dest files...
+	strUnpackDestination = L"\"dest\":";
+	strUnpackDestination += L"\"";
+	strUnpackDestination += strUnpackDest.GetData();
+	strUnpackDestination += L"\"";
+
+	// splice all...
+	strUnpackJson = L"{";
+	strUnpackJson += strUnpackSource;
+	strUnpackJson += strUnpackDestination;
+	strUnpackJson += L"}";
+	strUnpackJson.Replace(L"\\", L"/");
+
+	return strUnpackJson;
 }
 
 //----------------------------------------------
@@ -882,6 +987,34 @@ CDuiString CFrameMain::SpliceUnpackRequestJson(CDuiString strUnpackSrc, CDuiStri
 // @Return: None
 //----------------------------------------------
 CDuiString CFrameMain::SpliceUnpackVerboseRequestJson(CDuiString strUnpackSrc) {
+	CDuiString strUnpackJson;
+	CDuiString strUnpackSource;
+
+	USES_CONVERSION;
+
+	// splice src files...
+	strUnpackSource = L"\"src\":";
+	strUnpackSource += L"\"";
+	strUnpackSource += strUnpackSrc.GetData();
+	strUnpackSource += L"\"";
+
+	// splice all...
+	strUnpackJson = L"{";
+	strUnpackJson += strUnpackSource;
+	strUnpackJson += L"}";
+	strUnpackJson.Replace(L"\\", L"/");
+
+	return strUnpackJson;
+}
+
+//----------------------------------------------
+// @Function:	SpliceUnpackProcessRequestJson()
+// @Purpose: CFrameMain splice unpack process process json
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+CDuiString CFrameMain::SpliceUnpackProcessRequestJson(CDuiString strUnpackSrc) {
 	CDuiString strUnpackJson;
 	CDuiString strUnpackSource;
 
@@ -1022,6 +1155,30 @@ DWORD CFrameMain::OnPostPackRequestProcess(LPVOID lpParameter) {
 		::PostMessageA(g_pFrameMain->GetHWND(), WM_USER_MESSAGE_PACKET_RESULT, (WPARAM)0, (LPARAM)1);
 	} else {
 		::PostMessageA(g_pFrameMain->GetHWND(), WM_USER_MESSAGE_PACKET_RESULT, (WPARAM)0, (LPARAM)0);
+	}
+	return 0;
+}
+
+//----------------------------------------------
+// @Function:	OnPostUnpackRequestProcess()
+// @Purpose: CFrameMain post unpack request
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+DWORD CFrameMain::OnPostUnpackRequestProcess(LPVOID lpParameter) {
+	string data = string((char*)lpParameter);
+	string url;
+	string response;
+	CURLcode res;
+
+	url = "http://localhost:8080/satellite/unpack";
+	res = CurlPostRequest(url, data, response);
+	if (res != CURLE_OK) {
+		::PostMessageA(g_pFrameMain->GetHWND(), WM_USER_MESSAGE_UNPACK_RESULT, (WPARAM)0, (LPARAM)1);
+	}
+	else {
+		::PostMessageA(g_pFrameMain->GetHWND(), WM_USER_MESSAGE_UNPACK_RESULT, (WPARAM)0, (LPARAM)0);
 	}
 	return 0;
 }
@@ -1372,7 +1529,7 @@ void CFrameMain::OnLButtonClickedUnpackDetialBtn() {
 
 	// check source file...
 	if (strUnpackSrc.IsEmpty()) {
-		MessageBoxA(this->GetHWND(), "拆包文件路径不能为空!", "警告", MB_OK | MB_ICONWARNING);
+		MessageBoxA(this->GetHWND(), "源文件路径不能为空!", "警告", MB_OK | MB_ICONWARNING);
 		return;
 	}
 
@@ -1498,4 +1655,45 @@ void CFrameMain::OnLButtonClickedUnpackExportBtn() {
 // @Return: None
 //----------------------------------------------
 void CFrameMain::OnLButtonClickedUnpackStartBtn() {
+	CDuiString strUnpackJson;
+	CDuiString strUnpackSrc;
+	CDuiString strUnpackDest;
+
+	USES_CONVERSION;
+
+	strUnpackSrc = m_pUnpackSrcEdt->GetText();
+	strUnpackDest = m_pUnpackDestEdt->GetText();
+
+	// check source file...
+	if (strUnpackSrc.IsEmpty()) {
+		MessageBoxA(this->GetHWND(), "源文件路径不能为空!", "警告", MB_OK | MB_ICONWARNING);
+		return;
+	}
+
+	// check destination file...
+	if (strUnpackDest.IsEmpty()) {
+		MessageBoxA(this->GetHWND(), "目标文件路径不能为空!", "警告", MB_OK | MB_ICONWARNING);
+		return;
+	}
+
+	// organize http request...
+	strUnpackJson = SpliceUnpackRequestJson(strUnpackSrc, strUnpackDest);
+
+	// set progress...
+	m_pUnpackProgress->SetMinValue(0);
+	m_pUnpackProgress->SetMaxValue(100);
+	m_pUnpackProgress->SetValue(0);
+
+	// reset timer...
+	::KillTimer(this->GetHWND(), TIM_PROGRESS_REFRESH_UNPACK);
+	::SetTimer(this->GetHWND(), TIM_PROGRESS_REFRESH_UNPACK, CONST_PROGRESS_REFRESH_TIME, NULL);
+
+	// create thread handle request...
+	HANDLE hThread = NULL;
+	DWORD dwThreadID = 0;
+
+	// create thread...
+	hThread = ::CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)(&CFrameMain::OnPostUnpackRequestProcess), (LPVOID)(T2A(strUnpackJson.GetData())), 0, &dwThreadID);
+	::CloseHandle(hThread);
+
 }
