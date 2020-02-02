@@ -49,6 +49,8 @@ public:
 	LRESULT OnUserMessagePacketSearch(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	LRESULT OnUserMessagePacketAddItem(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	LRESULT OnUserMessagePacketResult(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+	LRESULT OnUserMessageUnpackSearch(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+	LRESULT OnUserMessageUnpackAddItem(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
 public:
 	// Main Layout...
@@ -79,6 +81,17 @@ public:
 	CProgressUI* m_pPackProgress;
 	CButtonUI* m_pPackStartBtn;
 
+	// Unpack...
+	CButtonUI* m_pUnpackRetBtn;
+	CButtonUI* m_pUnpackDetBtn;
+	CListUI* m_pUnpackList;
+	CEditUI* m_pUnpackSrcEdt;
+	CEditUI* m_pUnpackDestEdt;
+	CButtonUI* m_pUnpackImportBtn;
+	CButtonUI* m_pUnpackExportBtn;
+	CProgressUI* m_pUnpackProgress;
+	CButtonUI* m_pUnpackStartBtn;
+
 public:
 	CPaintManagerUI& GetPaintManager();
 
@@ -88,6 +101,7 @@ private:
 
 public:
 	vector<TPacketInfo> m_vecPacket;
+	vector<TUnpackInfo> m_vecUnpack;
 
 public:
 	void ConstructExtra();
@@ -99,14 +113,19 @@ public:
 
 	CDuiString SplicePackRequestJson(CDuiString strPacketType, CDuiString strPacketPath);
 	CDuiString SplicePackProcessRequestJson(CDuiString strPacketType);
+	CDuiString SpliceUnpackRequestJson(CDuiString strUnpackSrc, CDuiString strUnpackDest);
+	CDuiString SpliceUnpackVerboseRequestJson(CDuiString strUnpackSrc);
 
 	int GetValueFromResponse(string result, string label_first, string label_last, string& value);
+	int GetValueFromResponseWithPos(string result, string label_first, string label_last, string& value, int& poi);
 
 	static DWORD CALLBACK OnSearchPacketItemsProcess(LPVOID lpParameter);
+	static DWORD CALLBACK OnSearchUnpackItemsProcess(LPVOID lpParameter);
 	static DWORD CALLBACK OnPostPackRequestProcess(LPVOID lpParameter);
 
 private:
 	DWORD StringToDword(string value);
+	void StringSplit(const std::string& s, std::vector<std::string>& v, const std::string& c);
 
 public:
 	LRESULT OnUserMessageMenu(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
@@ -122,6 +141,12 @@ public:
 	void OnLButtonClickedPacketClrBtn();
 	void OnLButtonClickedPacketExportBtn();
 	void OnLButtonClickedPacketStartBtn();
+
+	void OnLButtonClickedUnpackRestrictBtn();
+	void OnLButtonClickedUnpackDetialBtn();
+	void OnLButtonClickedUnpackImportBtn();
+	void OnLButtonClickedUnpackExportBtn();
+	void OnLButtonClickedUnpackStartBtn();
 };
 
 // External

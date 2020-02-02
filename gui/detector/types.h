@@ -23,4 +23,11 @@ typedef struct {
 	char chPath[MAX_PATH];
 } TPacketInfo, *LPTPacketInfo;
 
+// type unpack
+typedef struct {
+	int nSerial;
+	char chName[MAX_PATH];
+	char chSize[MAX_PATH];
+} TUnpackInfo, *LPTUnpackInfo;
+
 #endif // !__TYPES_H_

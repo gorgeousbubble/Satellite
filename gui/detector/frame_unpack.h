@@ -24,4 +24,12 @@ public:
 
 };
 
+class CFrameUnpackListUI : public IListCallbackUI {
+public:
+	LPCTSTR GetItemText(CControlUI* pControl, int iIndex, int iSubItem);
+};
+
+// External
+extern CFrameUnpackListUI g_cFrameUnpackListUI;
+
 #endif // !__FRAME_UNPACK_H_

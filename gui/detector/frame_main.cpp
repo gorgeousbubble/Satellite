@@ -144,6 +144,16 @@ void CFrameMain::Notify(TNotifyUI& msg) {
 			OnLButtonClickedPacketExportBtn();
 		} else if (msg.pSender == m_pPackStartBtn) {
 			OnLButtonClickedPacketStartBtn();
+		} else if (msg.pSender == m_pUnpackRetBtn) {
+			OnLButtonClickedUnpackRestrictBtn();
+		} else if (msg.pSender == m_pUnpackDetBtn) {
+			OnLButtonClickedUnpackDetialBtn();
+		} else if (msg.pSender == m_pUnpackImportBtn) {
+			OnLButtonClickedUnpackImportBtn();
+		} else if (msg.pSender == m_pUnpackExportBtn) {
+			OnLButtonClickedUnpackExportBtn();
+		} else if (msg.pSender == m_pUnpackStartBtn) {
+			OnLButtonClickedUnpackStartBtn();
 		}
 	} else if (msg.sType == _T("selectchanged")) {
 		if (msg.pSender == m_pPackOpt) {
@@ -224,6 +234,12 @@ LRESULT CFrameMain::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) {
 		break;
 	case WM_USER_MESSAGE_PACKET_RESULT:
 		lRes = OnUserMessagePacketResult(uMsg, wParam, lParam, bHandled);
+		break;
+	case WM_USER_MESSAGE_UNPACK_SEARCH:
+		lRes = OnUserMessageUnpackSearch(uMsg, wParam, lParam, bHandled);
+		break;
+	case WM_USER_MESSAGE_UNPACK_ADDITEM:
+		lRes = OnUserMessageUnpackAddItem(uMsg, wParam, lParam, bHandled);
 		break;
 	default:
 		bHandled = FALSE;
@@ -590,6 +606,45 @@ LRESULT CFrameMain::OnUserMessagePacketResult(UINT uMsg, WPARAM wParam, LPARAM l
 }
 
 //----------------------------------------------
+// @Function:	OnUserMessageUnpackSearch()
+// @Purpose: CFrameMain unpack search
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+LRESULT CFrameMain::OnUserMessageUnpackSearch(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) {
+	HANDLE hThread = NULL;
+	DWORD dwThreadID = 0;
+
+	// clear content...
+	m_pUnpackList->RemoveAll();
+	m_pUnpackList->SetTextCallback(&g_cFrameUnpackListUI);
+
+	// create thread...
+	hThread = ::CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)(&CFrameMain::OnSearchUnpackItemsProcess), NULL, 0, &dwThreadID);
+	::CloseHandle(hThread);
+
+	return 0;
+}
+
+//----------------------------------------------
+// @Function:	OnUserMessageUnpackAddItem()
+// @Purpose: CFrameMain unpack add items
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+LRESULT CFrameMain::OnUserMessageUnpackAddItem(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) {
+	CListTextElementUI* pListElement = reinterpret_cast<CListTextElementUI*>(lParam);
+
+	if (m_pUnpackList) {
+		m_pUnpackList->Add(pListElement);
+	}
+
+	return 0;
+}
+
+//----------------------------------------------
 // @Function:	ConstructExtra()
 // @Purpose: CFrameMain construct function extra
 // @Since: v1.00a
@@ -602,6 +657,7 @@ void CFrameMain::ConstructExtra() {
 
 	g_pFrameMain = this;
 	m_vecPacket.clear();
+	m_vecUnpack.clear();
 
 	::srand((unsigned int)time(NULL));
 }
@@ -684,6 +740,17 @@ void CFrameMain::InitControls() {
 	m_pPackExportBtn = static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("packexportbtn")));
 	m_pPackProgress = static_cast<CProgressUI*>(m_PaintManager.FindControl(_T("packprogressbar")));
 	m_pPackStartBtn = static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("packstartbtn")));
+
+	// unpack page
+	m_pUnpackRetBtn = static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("unpackretbtn")));
+	m_pUnpackDetBtn = static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("unpackdetbtn")));
+	m_pUnpackList = static_cast<CListUI*>(m_PaintManager.FindControl(_T("unpacklist")));
+	m_pUnpackSrcEdt = static_cast<CEditUI*>(m_PaintManager.FindControl(_T("unpacksrcedt")));
+	m_pUnpackDestEdt = static_cast<CEditUI*>(m_PaintManager.FindControl(_T("unpackdestedt")));
+	m_pUnpackImportBtn = static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("unpackimportbtn")));
+	m_pUnpackExportBtn = static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("unpackexportbtn")));
+	m_pUnpackProgress = static_cast<CProgressUI*>(m_PaintManager.FindControl(_T("unpackprogressbar")));
+	m_pUnpackStartBtn = static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("unpackstartbtn")));
 }
 
 //----------------------------------------------
@@ -797,6 +864,45 @@ CDuiString CFrameMain::SplicePackProcessRequestJson(CDuiString strPacketType) {
 }
 
 //----------------------------------------------
+// @Function:	SplicePackProcessRequestJson()
+// @Purpose: CFrameMain splice unpack process json
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+CDuiString CFrameMain::SpliceUnpackRequestJson(CDuiString strUnpackSrc, CDuiString strUnpackDest) {
+	return CDuiString();
+}
+
+//----------------------------------------------
+// @Function:	SpliceUnpackVerboseRequestJson()
+// @Purpose: CFrameMain splice unpack verbose process json
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+CDuiString CFrameMain::SpliceUnpackVerboseRequestJson(CDuiString strUnpackSrc) {
+	CDuiString strUnpackJson;
+	CDuiString strUnpackSource;
+
+	USES_CONVERSION;
+
+	// splice src files...
+	strUnpackSource = L"\"src\":";
+	strUnpackSource += L"\"";
+	strUnpackSource += strUnpackSrc.GetData();
+	strUnpackSource += L"\"";
+
+	// splice all...
+	strUnpackJson = L"{";
+	strUnpackJson += strUnpackSource;
+	strUnpackJson += L"}";
+	strUnpackJson.Replace(L"\\", L"/");
+
+	return strUnpackJson;
+}
+
+//----------------------------------------------
 // @Function:	GetValueFromResponse()
 // @Purpose: CFrameMain get value from response
 // @Since: v1.00a
@@ -823,6 +929,33 @@ int CFrameMain::GetValueFromResponse(string result, string label_first, string l
 }
 
 //----------------------------------------------
+// @Function:	GetValueFromResponseWithPos()
+// @Purpose: CFrameMain get value from response
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+int CFrameMain::GetValueFromResponseWithPos(string result, string label_first, string label_last, string& value, int& poi) {
+	int size;
+	int pos;
+	int end;
+	int count;
+	size = label_first.length();
+	pos = result.find(label_first);
+	if (pos == result.npos) {
+		return -1;
+	}
+	end = result.find_first_of(label_last, pos);
+	if (pos == result.npos) {
+		return -1;
+	}
+	count = end - pos - size;
+	value = result.substr(pos + size, count);
+	poi = end;
+	return 0;
+}
+
+//----------------------------------------------
 // @Function:	OnSearchPacketItemsProcess()
 // @Purpose: CFrameMain search packet items
 // @Since: v1.00a
@@ -838,6 +971,30 @@ DWORD CFrameMain::OnSearchPacketItemsProcess(LPVOID lpParameter) {
 		pListElement->SetTag(i);
 		if (pListElement != NULL) {
 			::PostMessageA(g_pFrameMain->GetHWND(), WM_USER_MESSAGE_PACKET_ADDITEM, 0L, (LPARAM)pListElement);
+		}
+
+		Sleep(1);
+	}
+
+	return 0;
+}
+
+//----------------------------------------------
+// @Function:	OnSearchUnpackItemsProcess()
+// @Purpose: CFrameMain search unpack items
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+DWORD CFrameMain::OnSearchUnpackItemsProcess(LPVOID lpParameter) {
+	CListUI* pList = g_pFrameMain->m_pUnpackList;
+
+	for (int i = 0; i < g_pFrameMain->m_vecUnpack.size(); ++i) {
+		CListTextElementUI* pListElement = new CListTextElementUI();
+
+		pListElement->SetTag(i);
+		if (pListElement != NULL) {
+			::PostMessageA(g_pFrameMain->GetHWND(), WM_USER_MESSAGE_UNPACK_ADDITEM, 0L, (LPARAM)pListElement);
 		}
 
 		Sleep(1);
@@ -880,6 +1037,28 @@ DWORD CFrameMain::StringToDword(string value) {
 	DWORD dword;
 	sscanf(value.c_str(), "%ul", &dword);
 	return dword;
+}
+
+//----------------------------------------------
+// @Function:	StringSplit()
+// @Purpose: CFrameMain split string
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+void CFrameMain::StringSplit(const std::string& s, std::vector<std::string>& v, const std::string& c) {
+	string::size_type pos1, pos2;
+	pos2 = s.find(c);
+	pos1 = 0;
+	while(string::npos != pos2) {
+		v.push_back(s.substr(pos1, pos2-pos1));
+
+		pos1 = pos2 + c.size();
+		pos2 = s.find(c, pos1);
+	}
+	if (pos1 != s.length()) {
+		v.push_back(s.substr(pos1));
+	}
 }
 
 //----------------------------------------------
@@ -1164,4 +1343,159 @@ void CFrameMain::OnLButtonClickedPacketStartBtn() {
 	hThread = ::CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)(&CFrameMain::OnPostPackRequestProcess), (LPVOID)(T2A(strPacketJson.GetData())), 0, &dwThreadID);
 	::CloseHandle(hThread);
 
+}
+
+//----------------------------------------------
+// @Function:	OnLButtonClickedUnpackRestrictBtn()
+// @Purpose: CFrameMain click unpack restrict button
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+void CFrameMain::OnLButtonClickedUnpackRestrictBtn() {
+}
+
+//----------------------------------------------
+// @Function:	OnLButtonClickedUnpackDetialBtn()
+// @Purpose: CFrameMain click unpack detial button
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+void CFrameMain::OnLButtonClickedUnpackDetialBtn() {
+	CDuiString strUnpackJson;
+	CDuiString strUnpackSrc;
+
+	USES_CONVERSION;
+
+	strUnpackSrc = m_pUnpackSrcEdt->GetText();
+
+	// check source file...
+	if (strUnpackSrc.IsEmpty()) {
+		MessageBoxA(this->GetHWND(), "拆包文件路径不能为空!", "警告", MB_OK | MB_ICONWARNING);
+		return;
+	}
+
+	// organize http request...
+	strUnpackJson = SpliceUnpackVerboseRequestJson(strUnpackSrc);
+
+	// post http request...
+	string url;
+	string response;
+	CURLcode res;
+
+	url = "http://localhost:8080/satellite/unpack/v";
+	res = CurlPostRequest(url, string(T2A(strUnpackJson.GetData())), response);
+	if (res != CURLE_OK) {
+		MessageBoxA(this->GetHWND(), "请求拆包文件详细信息失败!", "警告", MB_OK | MB_ICONWARNING);
+		return;
+	}
+
+	// withdraw data from response...
+	vector<string> v;
+	
+	// split strings
+	StringSplit(response, v, "},");
+	m_vecUnpack.clear();
+	for (auto iter = v.begin(); iter != v.end(); ++iter) {
+		string name;
+		string size;
+		int pos;
+		int res;
+		
+		// get file name...
+		res = GetValueFromResponseWithPos(*iter, "\"name\": \"", ",", name, pos);
+		if (res != 0) {
+			continue;
+		}
+
+		// get file size...
+		res = GetValueFromResponse(string((*iter).c_str() + pos), "\"size\": \"", ",", size);
+		if (res != 0) {
+			continue;
+		}
+
+		name.erase(name.length() - 1);
+		size.erase(size.length() - 1);
+
+		TUnpackInfo sUnpackInfo = { 0 };
+		sUnpackInfo.nSerial = m_vecUnpack.size() + 1;
+		strcpy_s(sUnpackInfo.chName, name.c_str());
+		strcpy_s(sUnpackInfo.chSize, size.c_str());
+		m_vecUnpack.push_back(sUnpackInfo);
+	}
+
+	::PostMessageA(this->GetHWND(), WM_USER_MESSAGE_UNPACK_SEARCH, (WPARAM)0, (LPARAM)0);
+}
+
+//----------------------------------------------
+// @Function:	OnLButtonClickedUnpackImportBtn()
+// @Purpose: CFrameMain click unpack import
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+void CFrameMain::OnLButtonClickedUnpackImportBtn() {
+	OPENFILENAME file;
+	WCHAR strfile[MAX_PATH] = { 0 };
+
+	ZeroMemory(&file, sizeof(OPENFILENAME));
+	file.lStructSize = sizeof(OPENFILENAME);
+	file.lpstrFilter = _T("所有文件\0*.*\0\0");
+	file.nFilterIndex = 1;
+	file.lpstrFile = strfile;
+	file.nMaxFile = sizeof(strfile);
+	file.Flags = OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST;
+
+	if (GetOpenFileName(&file)) {
+		m_pUnpackSrcEdt->SetText(strfile);
+	}
+}
+
+//----------------------------------------------
+// @Function:	OnLButtonClickedUnpackExportBtn()
+// @Purpose: CFrameMain click unpack export
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+void CFrameMain::OnLButtonClickedUnpackExportBtn() {
+	CDuiString strImport = _T("");
+	WCHAR strfile[MAX_PATH] = { 0 };
+
+	USES_CONVERSION;
+
+	wcscpy_s(strfile, A2T("undefine.pak"));
+
+	strImport = m_pUnpackSrcEdt->GetText();
+	if (!strcmp(T2A(strImport.GetData()), "")) {
+		MessageBoxA(this->GetHWND(), "请选择源文件路径!", "提示", MB_OK | MB_ICONASTERISK);
+		return;
+	}
+
+	OPENFILENAME file;
+
+	ZeroMemory(&file, sizeof(OPENFILENAME));
+	file.lStructSize = sizeof(OPENFILENAME);
+	file.lpstrFilter = _T("所有文件\0*.*\0\0");
+	file.nFilterIndex = 1;
+	file.lpstrFile = strfile;
+	file.nMaxFile = sizeof(strfile);
+	file.Flags = OFN_PATHMUSTEXIST | OFN_OVERWRITEPROMPT;
+
+	if (GetSaveFileName(&file)) {
+		CDuiString dest(strfile);
+		dest = dest.Left(dest.ReverseFind(L'\\') + 1);
+		m_pUnpackDestEdt->SetText(dest.GetData());
+	}
+}
+
+//----------------------------------------------
+// @Function:	OnLButtonClickedUnpackStartBtn()
+// @Purpose: CFrameMain click unpack start
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+void CFrameMain::OnLButtonClickedUnpackStartBtn() {
 }
