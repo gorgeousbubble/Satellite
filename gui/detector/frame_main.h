@@ -83,7 +83,10 @@ public:
 	CButtonUI* m_pPackStartBtn;
 
 	// Unpack...
+	CButtonUI* m_pUnpackSelBtn;
+	CButtonUI* m_pUnpackUnselBtn;
 	CButtonUI* m_pUnpackRetBtn;
+	CButtonUI* m_pUnpackUnretBtn;
 	CButtonUI* m_pUnpackDetBtn;
 	CListUI* m_pUnpackList;
 	CEditUI* m_pUnpackSrcEdt;
@@ -117,6 +120,7 @@ public:
 	CDuiString SpliceUnpackRequestJson(CDuiString strUnpackSrc, CDuiString strUnpackDest);
 	CDuiString SpliceUnpackVerboseRequestJson(CDuiString strUnpackSrc);
 	CDuiString SpliceUnpackProcessRequestJson(CDuiString strUnpackSrc);
+	CDuiString SpliceUnpackOneFileRequestJson(CDuiString strUnpackSrc, CDuiString strUnpackDest, CDuiString strUnpackFile);
 
 	int GetValueFromResponse(string result, string label_first, string label_last, string& value);
 	int GetValueFromResponseWithPos(string result, string label_first, string label_last, string& value, int& poi);
@@ -125,6 +129,9 @@ public:
 	static DWORD CALLBACK OnSearchUnpackItemsProcess(LPVOID lpParameter);
 	static DWORD CALLBACK OnPostPackRequestProcess(LPVOID lpParameter);
 	static DWORD CALLBACK OnPostUnpackRequestProcess(LPVOID lpParameter);
+	static DWORD CALLBACK OnPostUnpackConfineRequestProcess(LPVOID lpParameter);
+	static DWORD CALLBACK OnPostUnpackFileRequestProcess(LPVOID lpParameter);
+	static DWORD CALLBACK OnPostUnpackFileConfineRequestProcess(LPVOID lpParameter);
 
 private:
 	DWORD StringToDword(string value);
@@ -145,7 +152,10 @@ public:
 	void OnLButtonClickedPacketExportBtn();
 	void OnLButtonClickedPacketStartBtn();
 
+	void OnLButtonClickedUnpackSelectBtn();
+	void OnLButtonClickedUnpackUnselectBtn();
 	void OnLButtonClickedUnpackRestrictBtn();
+	void OnLButtonClickedUnpackUnrestrictBtn();
 	void OnLButtonClickedUnpackDetialBtn();
 	void OnLButtonClickedUnpackImportBtn();
 	void OnLButtonClickedUnpackExportBtn();

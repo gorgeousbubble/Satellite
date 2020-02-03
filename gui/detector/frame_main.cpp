@@ -144,8 +144,14 @@ void CFrameMain::Notify(TNotifyUI& msg) {
 			OnLButtonClickedPacketExportBtn();
 		} else if (msg.pSender == m_pPackStartBtn) {
 			OnLButtonClickedPacketStartBtn();
+		} else if (msg.pSender == m_pUnpackSelBtn) {
+			OnLButtonClickedUnpackSelectBtn();
+		} else if (msg.pSender == m_pUnpackUnselBtn) {
+			OnLButtonClickedUnpackUnselectBtn();
 		} else if (msg.pSender == m_pUnpackRetBtn) {
 			OnLButtonClickedUnpackRestrictBtn();
+		} else if (msg.pSender == m_pUnpackUnretBtn) {
+			OnLButtonClickedUnpackUnrestrictBtn();
 		} else if (msg.pSender == m_pUnpackDetBtn) {
 			OnLButtonClickedUnpackDetialBtn();
 		} else if (msg.pSender == m_pUnpackImportBtn) {
@@ -822,7 +828,10 @@ void CFrameMain::InitControls() {
 	m_pPackStartBtn = static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("packstartbtn")));
 
 	// unpack page
+	m_pUnpackSelBtn = static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("unpackselbtn")));
+	m_pUnpackUnselBtn = static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("unpackunselbtn")));
 	m_pUnpackRetBtn = static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("unpackretbtn")));
+	m_pUnpackUnretBtn = static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("unpackunretbtn")));
 	m_pUnpackDetBtn = static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("unpackdetbtn")));
 	m_pUnpackList = static_cast<CListUI*>(m_PaintManager.FindControl(_T("unpacklist")));
 	m_pUnpackSrcEdt = static_cast<CEditUI*>(m_PaintManager.FindControl(_T("unpacksrcedt")));
@@ -1036,6 +1045,50 @@ CDuiString CFrameMain::SpliceUnpackProcessRequestJson(CDuiString strUnpackSrc) {
 }
 
 //----------------------------------------------
+// @Function:	SpliceUnpackOneFileRequestJson()
+// @Purpose: CFrameMain splice unpack one file process json
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+CDuiString CFrameMain::SpliceUnpackOneFileRequestJson(CDuiString strUnpackSrc, CDuiString strUnpackDest, CDuiString strUnpackFile) {
+	CDuiString strUnpackJson;
+	CDuiString strUnpackSource;
+	CDuiString strUnpackDestination;
+	CDuiString strUnpackTarget;
+
+	USES_CONVERSION;
+
+	// splice src files...
+	strUnpackSource = L"\"src\":";
+	strUnpackSource += L"\"";
+	strUnpackSource += strUnpackSrc.GetData();
+	strUnpackSource += L"\",";
+
+	// splice target files...
+	strUnpackTarget = L"\"target\":";
+	strUnpackTarget += L"\"";
+	strUnpackTarget += strUnpackFile.GetData();
+	strUnpackTarget += L"\",";
+
+	// splice dest files...
+	strUnpackDestination = L"\"dest\":";
+	strUnpackDestination += L"\"";
+	strUnpackDestination += strUnpackDest.GetData();
+	strUnpackDestination += L"\"";
+
+	// splice all...
+	strUnpackJson = L"{";
+	strUnpackJson += strUnpackSource;
+	strUnpackJson += strUnpackTarget;
+	strUnpackJson += strUnpackDestination;
+	strUnpackJson += L"}";
+	strUnpackJson.Replace(L"\\", L"/");
+
+	return strUnpackJson;
+}
+
+//----------------------------------------------
 // @Function:	GetValueFromResponse()
 // @Purpose: CFrameMain get value from response
 // @Since: v1.00a
@@ -1173,6 +1226,78 @@ DWORD CFrameMain::OnPostUnpackRequestProcess(LPVOID lpParameter) {
 	CURLcode res;
 
 	url = "http://localhost:8080/satellite/unpack";
+	res = CurlPostRequest(url, data, response);
+	if (res != CURLE_OK) {
+		::PostMessageA(g_pFrameMain->GetHWND(), WM_USER_MESSAGE_UNPACK_RESULT, (WPARAM)0, (LPARAM)1);
+	}
+	else {
+		::PostMessageA(g_pFrameMain->GetHWND(), WM_USER_MESSAGE_UNPACK_RESULT, (WPARAM)0, (LPARAM)0);
+	}
+	return 0;
+}
+
+//----------------------------------------------
+// @Function:	OnPostUnpackConfineRequestProcess()
+// @Purpose: CFrameMain post unpack confine request
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+DWORD CFrameMain::OnPostUnpackConfineRequestProcess(LPVOID lpParameter) {
+	string data = string((char*)lpParameter);
+	string url;
+	string response;
+	CURLcode res;
+
+	url = "http://localhost:8080/satellite/unpack/c";
+	res = CurlPostRequest(url, data, response);
+	if (res != CURLE_OK) {
+		::PostMessageA(g_pFrameMain->GetHWND(), WM_USER_MESSAGE_UNPACK_RESULT, (WPARAM)0, (LPARAM)1);
+	}
+	else {
+		::PostMessageA(g_pFrameMain->GetHWND(), WM_USER_MESSAGE_UNPACK_RESULT, (WPARAM)0, (LPARAM)0);
+	}
+	return 0;
+}
+
+//----------------------------------------------
+// @Function:	OnPostUnpackFileRequestProcess()
+// @Purpose: CFrameMain post unpack file request
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+DWORD CFrameMain::OnPostUnpackFileRequestProcess(LPVOID lpParameter) {
+	string data = string((char*)lpParameter);
+	string url;
+	string response;
+	CURLcode res;
+
+	url = "http://localhost:8080/satellite/unpack/f";
+	res = CurlPostRequest(url, data, response);
+	if (res != CURLE_OK) {
+		::PostMessageA(g_pFrameMain->GetHWND(), WM_USER_MESSAGE_UNPACK_RESULT, (WPARAM)0, (LPARAM)1);
+	}
+	else {
+		::PostMessageA(g_pFrameMain->GetHWND(), WM_USER_MESSAGE_UNPACK_RESULT, (WPARAM)0, (LPARAM)0);
+	}
+	return 0;
+}
+
+//----------------------------------------------
+// @Function:	OnPostUnpackFileConfineRequestProcess()
+// @Purpose: CFrameMain post unpack file confine request
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+DWORD CFrameMain::OnPostUnpackFileConfineRequestProcess(LPVOID lpParameter) {
+	string data = string((char*)lpParameter);
+	string url;
+	string response;
+	CURLcode res;
+
+	url = "http://localhost:8080/satellite/unpack/cf";
 	res = CurlPostRequest(url, data, response);
 	if (res != CURLE_OK) {
 		::PostMessageA(g_pFrameMain->GetHWND(), WM_USER_MESSAGE_UNPACK_RESULT, (WPARAM)0, (LPARAM)1);
@@ -1503,6 +1628,30 @@ void CFrameMain::OnLButtonClickedPacketStartBtn() {
 }
 
 //----------------------------------------------
+// @Function:	OnLButtonClickedUnpackSelectBtn()
+// @Purpose: CFrameMain click unpack select button
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+void CFrameMain::OnLButtonClickedUnpackSelectBtn() {
+	m_pUnpackSelBtn->SetVisible(false);
+	m_pUnpackUnselBtn->SetVisible(true);
+}
+
+//----------------------------------------------
+// @Function:	OnLButtonClickedUnpackUnselectBtn()
+// @Purpose: CFrameMain click unpack unselect button
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+void CFrameMain::OnLButtonClickedUnpackUnselectBtn() {
+	m_pUnpackSelBtn->SetVisible(true);
+	m_pUnpackUnselBtn->SetVisible(false);
+}
+
+//----------------------------------------------
 // @Function:	OnLButtonClickedUnpackRestrictBtn()
 // @Purpose: CFrameMain click unpack restrict button
 // @Since: v1.00a
@@ -1510,6 +1659,20 @@ void CFrameMain::OnLButtonClickedPacketStartBtn() {
 // @Return: None
 //----------------------------------------------
 void CFrameMain::OnLButtonClickedUnpackRestrictBtn() {
+	m_pUnpackRetBtn->SetVisible(false);
+	m_pUnpackUnretBtn->SetVisible(true);
+}
+
+//----------------------------------------------
+// @Function:	OnLButtonClickedUnpackUnrestrictBtn()
+// @Purpose: CFrameMain click unpack restrict button
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+void CFrameMain::OnLButtonClickedUnpackUnrestrictBtn() {
+	m_pUnpackRetBtn->SetVisible(true);
+	m_pUnpackUnretBtn->SetVisible(false);
 }
 
 //----------------------------------------------
@@ -1658,6 +1821,7 @@ void CFrameMain::OnLButtonClickedUnpackStartBtn() {
 	CDuiString strUnpackJson;
 	CDuiString strUnpackSrc;
 	CDuiString strUnpackDest;
+	CDuiString strUnpackFile;
 
 	USES_CONVERSION;
 
@@ -1676,8 +1840,29 @@ void CFrameMain::OnLButtonClickedUnpackStartBtn() {
 		return;
 	}
 
-	// organize http request...
-	strUnpackJson = SpliceUnpackRequestJson(strUnpackSrc, strUnpackDest);
+	if (!m_pUnpackSelBtn->IsVisible()) {
+		// get select item...
+		int nItem = m_pUnpackList->GetCurSel();
+		if (nItem < 0 || nItem >= m_vecUnpack.size()) {
+			MessageBoxW(this->GetHWND(), _T("请选中一条文件信息!"), _T("提示"), MB_OK | MB_ICONASTERISK);
+			return;
+		}
+
+		// get file name...
+		strUnpackFile = A2T(m_vecUnpack.at(nItem).chName);
+
+		// check target file...
+		if (strUnpackFile.IsEmpty()) {
+			MessageBoxA(this->GetHWND(), "选中文件路径不能为空!", "警告", MB_OK | MB_ICONWARNING);
+			return;
+		}
+
+		// organize http request...
+		strUnpackJson = SpliceUnpackOneFileRequestJson(strUnpackSrc, strUnpackDest, strUnpackFile);
+	} else {
+		// organize http request...
+		strUnpackJson = SpliceUnpackRequestJson(strUnpackSrc, strUnpackDest);
+	}
 
 	// set progress...
 	m_pUnpackProgress->SetMinValue(0);
@@ -1693,7 +1878,23 @@ void CFrameMain::OnLButtonClickedUnpackStartBtn() {
 	DWORD dwThreadID = 0;
 
 	// create thread...
-	hThread = ::CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)(&CFrameMain::OnPostUnpackRequestProcess), (LPVOID)(T2A(strUnpackJson.GetData())), 0, &dwThreadID);
-	::CloseHandle(hThread);
+	if (m_pUnpackSelBtn->IsVisible()) {
+		if (m_pUnpackRetBtn->IsVisible()) {
+			hThread = ::CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)(&CFrameMain::OnPostUnpackRequestProcess), (LPVOID)(T2A(strUnpackJson.GetData())), 0, &dwThreadID);
+			::CloseHandle(hThread);
+		} else {
+			hThread = ::CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)(&CFrameMain::OnPostUnpackConfineRequestProcess), (LPVOID)(T2A(strUnpackJson.GetData())), 0, &dwThreadID);
+			::CloseHandle(hThread);
+		}
+	} else {
+		if (m_pUnpackRetBtn->IsVisible()) {
+			hThread = ::CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)(&CFrameMain::OnPostUnpackFileRequestProcess), (LPVOID)(T2A(strUnpackJson.GetData())), 0, &dwThreadID);
+			::CloseHandle(hThread);
+		} else {
+			hThread = ::CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)(&CFrameMain::OnPostUnpackFileConfineRequestProcess), (LPVOID)(T2A(strUnpackJson.GetData())), 0, &dwThreadID);
+			::CloseHandle(hThread);
+		}
+	}
+	
 
 }
