@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window> <!-- Sub Window-->
+    <Font id="0" name="Microsoft YaHei" size="12" bold="false" italic="false" default="true"/>
+	<Font id="1" name="Microsoft YaHei" size="14" bold="false" italic="false"/>
+	<Font id="2" name="Microsoft YaHei" size="16" bold="false" italic="false"/>
+	<Font id="3" name="Microsoft YaHei" size="18" bold="false" italic="false"/>
+    <Font id="4" name="Microsoft YaHei" size="9" bold="false" italic="false"/>
+    <Font id="5" name="Microsoft YaHei" size="14" bold="true" italic="false"/>
+    <VerticalLayout>
+        <HorizontalLayout height="100">
+            <VerticalLayout width="40" />
+            <VerticalLayout width="260">
+                <Container name="decomptitle" float="true" pos="0,20,0,0" width="260" height="20" bkimage="file='resources\decomp_title.png'">
+                </Container>
+                <Container name="decompsubtitle" float="true" pos="25,60,0,0" width="131" height="15" bkimage="file='resources\decomp_subtitle.png'">
+                </Container>
+            </VerticalLayout>
+            <VerticalLayout />
+            <VerticalLayout width="170">
+                <Button name="decompaddbtn" float="true" pos="0,55,0,0" tooltip="添加" width="80" height="24" normalimage="file='resources\addbuttons.png' source='0,0,80,24'" hotimage="file='resources\addbuttons.png' source='0,24,80,48'" pushedimage="file='resources\addbuttons.png' source='0,48,80,72'">
+                </Button>
+                <Button name="decompdelbtn" float="true" pos="90,55,0,0" tooltip="删除" width="80" height="24" normalimage="file='resources\deletebuttons.png' source='0,0,80,24'" hotimage="file='resources\deletebuttons.png' source='0,24,80,48'" pushedimage="file='resources\deletebuttons.png' source='0,48,80,72'">
+                </Button>
+            </VerticalLayout>
+            <VerticalLayout width="40" />
+        </HorizontalLayout>
+        <HorizontalLayout>
+            <VerticalLayout width="40" />
+            <VerticalLayout> <!-- width="700" height="300" -->
+                <List name="decomplist" float="true" pos="0,0,0,0" width="1700" height="660" bkcolor="#FF232326" vscrollbar="true" hscrollbar="false" itemalign="center" itemaltbk="true" itemtextcolor="#FFFFFFFF" itembkcolor="#FF19191C" itemhottextcolor="#FFFFFFFF" itemhotbkcolor="#FF37373A" itemselectedtextcolor="#FFFFFFFF" itemselectedbkcolor="#FF414144" itemshowhtml="true">
+                    <ListHeader height="24">
+                        <ListHeaderItem text="序号" bkcolor="#FF2D2D30" textcolor="#FFFFFFFF" font="1" width="70"/>
+                        <ListHeaderItem text="名称" bkcolor="#FF2D2D30" textcolor="#FFFFFFFF" font="1" width="630"/>
+                        <ListHeaderItem text="详细" bkcolor="#FF2D2D30" textcolor="#FFFFFFFF" font="1" width="1000"/>
+                    </ListHeader>
+                </List>
+            </VerticalLayout>
+            <VerticalLayout width="40" />
+        </HorizontalLayout>
+        <HorizontalLayout height="320">
+        </HorizontalLayout>
+    </VerticalLayout>
+</Window>
