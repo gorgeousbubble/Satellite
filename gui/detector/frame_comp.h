@@ -24,4 +24,12 @@ public:
 
 };
 
+class CFrameCompListUI : public IListCallbackUI {
+public:
+	LPCTSTR GetItemText(CControlUI* pControl, int iIndex, int iSubItem);
+};
+
+// External
+extern CFrameCompListUI g_cFrameCompListUI;
+
 #endif // !__FRAME_COMP_H_

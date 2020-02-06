@@ -160,6 +160,16 @@ void CFrameMain::Notify(TNotifyUI& msg) {
 			OnLButtonClickedUnpackExportBtn();
 		} else if (msg.pSender == m_pUnpackStartBtn) {
 			OnLButtonClickedUnpackStartBtn();
+		} else if (msg.pSender == m_pCompAddBtn) {
+			OnLButtonClickedCompAddBtn();
+		} else if (msg.pSender == m_pCompDelBtn) {
+			OnLButtonClickedCompDelBtn();
+		} else if (msg.pSender == m_pCompClrBtn) {
+			OnLButtonClickedCompClrBtn();
+		} else if (msg.pSender == m_pCompExportBtn) {
+			OnLButtonClickedCompExportBtn();
+		} else if (msg.pSender == m_pCompStartBtn) {
+			OnLButtonClickedCompStartBtn();
 		}
 	} else if (msg.sType == _T("selectchanged")) {
 		if (msg.pSender == m_pPackOpt) {
@@ -249,6 +259,15 @@ LRESULT CFrameMain::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) {
 		break;
 	case WM_USER_MESSAGE_UNPACK_RESULT:
 		lRes = OnUserMessageUnpackResult(uMsg, wParam, lParam, bHandled);
+		break;
+	case WM_USER_MESSAGE_COMP_SEARCH:
+		lRes = OnUserMessageCompSearch(uMsg, wParam, lParam, bHandled);
+		break;
+	case WM_USER_MESSAGE_COMP_ADDITEM:
+		lRes = OnUserMessageCompAddItem(uMsg, wParam, lParam, bHandled);
+		break;
+	case WM_USER_MESSAGE_COMP_RESULT:
+		lRes = OnUserMessageCompResult(uMsg, wParam, lParam, bHandled);
 		break;
 	default:
 		bHandled = FALSE;
@@ -731,6 +750,64 @@ LRESULT CFrameMain::OnUserMessageUnpackResult(UINT uMsg, WPARAM wParam, LPARAM l
 }
 
 //----------------------------------------------
+// @Function:	OnUserMessageCompSearch()
+// @Purpose: CFrameMain compress search
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+LRESULT CFrameMain::OnUserMessageCompSearch(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) {
+	HANDLE hThread = NULL;
+	DWORD dwThreadID = 0;
+
+	// clear content...
+	m_pCompList->RemoveAll();
+	m_pCompList->SetTextCallback(&g_cFrameCompListUI);
+
+	// create thread...
+	hThread = ::CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)(&CFrameMain::OnSearchCompItemsProcess), NULL, 0, &dwThreadID);
+	::CloseHandle(hThread);
+
+	return 0;
+}
+
+//----------------------------------------------
+// @Function:	OnUserMessageCompAddItem()
+// @Purpose: CFrameMain compress add item
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+LRESULT CFrameMain::OnUserMessageCompAddItem(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) {
+	CListTextElementUI* pListElement = reinterpret_cast<CListTextElementUI*>(lParam);
+
+	if (m_pCompList) {
+		m_pCompList->Add(pListElement);
+	}
+
+	return 0;
+}
+
+//----------------------------------------------
+// @Function:	OnUserMessageCompResult()
+// @Purpose: CFrameMain compress result
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+LRESULT CFrameMain::OnUserMessageCompResult(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) {
+	if (lParam != 0) {
+		::KillTimer(this->GetHWND(), TIM_PROGRESS_REFRESH_COMP);
+		MessageBoxA(this->GetHWND(), "请求压缩文件失败!", "警告", MB_OK | MB_ICONWARNING);
+	}
+	else {
+		MessageBoxA(this->GetHWND(), "打包压缩成功!", "提示", MB_OK | MB_ICONASTERISK);
+	}
+
+	return 0;
+}
+
+//----------------------------------------------
 // @Function:	ConstructExtra()
 // @Purpose: CFrameMain construct function extra
 // @Since: v1.00a
@@ -1101,6 +1178,56 @@ CDuiString CFrameMain::SpliceUnpackOneFileRequestJson(CDuiString strUnpackSrc, C
 }
 
 //----------------------------------------------
+// @Function:	SpliceCompRequestJson()
+// @Purpose: CFrameMain compress request json
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+CDuiString CFrameMain::SpliceCompRequestJson(CDuiString strCompType, CDuiString strCompPath) {
+	CDuiString strCompJson;
+	CDuiString strCompSrc;
+	CDuiString strCompDest;
+	CDuiString strCompKind;
+
+	USES_CONVERSION;
+
+	// splice src files...
+	strCompSrc = L"\"src\":[";
+	for (auto iter = m_vecComp.begin(); iter != m_vecComp.end(); ++iter) {
+		char chFile[MAX_PATH] = { 0 };
+		if (iter == m_vecComp.end() - 1) {
+			sprintf_s(chFile, "\"%s\"", iter->chPath);
+		}
+		else {
+			sprintf_s(chFile, "\"%s\",", iter->chPath);
+		}
+		strCompSrc += A2T(chFile);
+	}
+	strCompSrc += L"],";
+
+	// splice dest file...
+	strCompDest = L"\"dest\":\"";
+	strCompDest += strCompPath;
+	strCompDest += L"\",";
+
+	// splice encrypt type...
+	strCompKind = L"\"type\":\"";
+	strCompKind += strCompType;
+	strCompKind += L"\"";
+
+	// splice all...
+	strCompJson = L"{";
+	strCompJson += strCompSrc;
+	strCompJson += strCompDest;
+	strCompJson += strCompKind;
+	strCompJson += L"}";
+	strCompJson.Replace(L"\\", L"/");
+
+	return strCompJson;
+}
+
+//----------------------------------------------
 // @Function:	GetValueFromResponse()
 // @Purpose: CFrameMain get value from response
 // @Since: v1.00a
@@ -1193,6 +1320,30 @@ DWORD CFrameMain::OnSearchUnpackItemsProcess(LPVOID lpParameter) {
 		pListElement->SetTag(i);
 		if (pListElement != NULL) {
 			::PostMessageA(g_pFrameMain->GetHWND(), WM_USER_MESSAGE_UNPACK_ADDITEM, 0L, (LPARAM)pListElement);
+		}
+
+		Sleep(1);
+	}
+
+	return 0;
+}
+
+//----------------------------------------------
+// @Function:	OnSearchCompItemsProcess()
+// @Purpose: CFrameMain search compress items
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+DWORD CFrameMain::OnSearchCompItemsProcess(LPVOID lpParameter) {
+	CListUI* pList = g_pFrameMain->m_pCompList;
+
+	for (int i = 0; i < g_pFrameMain->m_vecComp.size(); ++i) {
+		CListTextElementUI* pListElement = new CListTextElementUI();
+
+		pListElement->SetTag(i);
+		if (pListElement != NULL) {
+			::PostMessageA(g_pFrameMain->GetHWND(), WM_USER_MESSAGE_COMP_ADDITEM, 0L, (LPARAM)pListElement);
 		}
 
 		Sleep(1);
@@ -1316,6 +1467,30 @@ DWORD CFrameMain::OnPostUnpackFileConfineRequestProcess(LPVOID lpParameter) {
 	}
 	else {
 		::PostMessageA(g_pFrameMain->GetHWND(), WM_USER_MESSAGE_UNPACK_RESULT, (WPARAM)0, (LPARAM)0);
+	}
+	return 0;
+}
+
+//----------------------------------------------
+// @Function:	OnPostCompRequestProcess()
+// @Purpose: CFrameMain post compress request
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+DWORD CFrameMain::OnPostCompRequestProcess(LPVOID lpParameter) {
+	string data = string((char*)lpParameter);
+	string url;
+	string response;
+	CURLcode res;
+
+	url = "http://localhost:8080/satellite/comp";
+	res = CurlPostRequest(url, data, response);
+	if (res != CURLE_OK) {
+		::PostMessageA(g_pFrameMain->GetHWND(), WM_USER_MESSAGE_COMP_RESULT, (WPARAM)0, (LPARAM)1);
+	}
+	else {
+		::PostMessageA(g_pFrameMain->GetHWND(), WM_USER_MESSAGE_COMP_RESULT, (WPARAM)0, (LPARAM)0);
 	}
 	return 0;
 }
@@ -1591,7 +1766,7 @@ void CFrameMain::OnLButtonClickedPacketStartBtn() {
 
 	USES_CONVERSION;
 
-	// chekc encrypt type...
+	// check encrypt type...
 	CDuiString strPacketType = m_pPackTypeEdt->GetText();
 	string strTypes[] = { "AES", "DES", "3DES", "RSA", "BASE64" };
 	vector<string> vecPacketTypes(strTypes, strTypes + 5);
@@ -1988,6 +2163,18 @@ void CFrameMain::OnLButtonClickedCompAddBtn() {
 // @Return: None
 //----------------------------------------------
 void CFrameMain::OnLButtonClickedCompDelBtn() {
+	int nItem = m_pCompList->GetCurSel();
+	if (nItem < 0) {
+		MessageBoxW(this->GetHWND(), _T("请选中一条文件信息!"), _T("提示"), MB_OK | MB_ICONASTERISK);
+		return;
+	}
+
+	m_vecComp.erase(m_vecComp.begin() + nItem);
+	for (auto iter = m_vecComp.begin(); iter != m_vecComp.end(); ++iter) {
+		iter->nSerial = iter - m_vecComp.begin() + 1;
+	}
+
+	::PostMessageA(this->GetHWND(), WM_USER_MESSAGE_COMP_SEARCH, (WPARAM)0, (LPARAM)0);
 }
 
 //----------------------------------------------
@@ -1998,6 +2185,9 @@ void CFrameMain::OnLButtonClickedCompDelBtn() {
 // @Return: None
 //----------------------------------------------
 void CFrameMain::OnLButtonClickedCompClrBtn() {
+	m_vecComp.clear();
+
+	::PostMessageA(this->GetHWND(), WM_USER_MESSAGE_COMP_SEARCH, (WPARAM)0, (LPARAM)0);
 }
 
 //----------------------------------------------
@@ -2008,6 +2198,50 @@ void CFrameMain::OnLButtonClickedCompClrBtn() {
 // @Return: None
 //----------------------------------------------
 void CFrameMain::OnLButtonClickedCompExportBtn() {
+	// check import files...
+	if (m_vecComp.empty()) {
+		MessageBoxA(this->GetHWND(), "请添加至少一个压缩文件!", "提示", MB_OK | MB_ICONASTERISK);
+		return;
+	}
+
+	USES_CONVERSION;
+
+	// check encrypt type...
+	CDuiString strCompType = m_pCompTypeEdt->GetText();
+	string strTypes[] = { "tar", "tar.gz", "zip" };
+	vector<string> vecCompTypes(strTypes, strTypes + 3);
+	bool bType = false;
+
+	for (auto iter = vecCompTypes.begin(); iter != vecCompTypes.end(); ++iter) {
+		if (!strcmp(iter->c_str(), T2A(strCompType.GetData()))) {
+			bType = true;
+			break;
+		}
+	}
+
+	if (bType == false) {
+		MessageBoxA(this->GetHWND(), "请填入支持的压缩类型(tar, tar.gz, zip)!", "提示", MB_OK | MB_ICONASTERISK);
+		return;
+	}
+
+	// save file name...
+	OPENFILENAME file;
+	WCHAR strfile[MAX_PATH] = { 0 };
+
+	wcscpy_s(strfile, A2T("undefine."));
+	wcscat_s(strfile, strCompType.GetData());
+
+	ZeroMemory(&file, sizeof(OPENFILENAME));
+	file.lStructSize = sizeof(OPENFILENAME);
+	file.lpstrFilter = _T("所有文件\0*.*\0\0");
+	file.nFilterIndex = 1;
+	file.lpstrFile = strfile;
+	file.nMaxFile = sizeof(strfile);
+	file.Flags = OFN_PATHMUSTEXIST | OFN_OVERWRITEPROMPT;
+
+	if (GetSaveFileName(&file)) {
+		m_pCompPathEdt->SetText(strfile);
+	}
 }
 
 //----------------------------------------------
@@ -2018,4 +2252,57 @@ void CFrameMain::OnLButtonClickedCompExportBtn() {
 // @Return: None
 //----------------------------------------------
 void CFrameMain::OnLButtonClickedCompStartBtn() {
+	// check import files...
+	if (m_vecComp.empty()) {
+		MessageBoxA(this->GetHWND(), "请添加至少一个压缩文件!", "提示", MB_OK | MB_ICONASTERISK);
+		return;
+	}
+
+	USES_CONVERSION;
+
+	// check encrypt type...
+	CDuiString strCompType = m_pCompTypeEdt->GetText();
+	string strTypes[] = { "tar", "tar.gz", "zip" };
+	vector<string> vecCompTypes(strTypes, strTypes + 3);
+	bool bType = false;
+
+	for (auto iter = vecCompTypes.begin(); iter != vecCompTypes.end(); ++iter) {
+		if (!strcmp(iter->c_str(), T2A(strCompType.GetData()))) {
+			bType = true;
+			break;
+		}
+	}
+
+	if (bType == false) {
+		MessageBoxA(this->GetHWND(), "请填入支持的压缩类型(tar, tar.gz, zip)!", "提示", MB_OK | MB_ICONASTERISK);
+		return;
+	}
+
+	// check export compress...
+	CDuiString strCompPath = m_pCompPathEdt->GetText();
+	if (!strcmp("", T2A(strCompPath.GetData()))) {
+		MessageBoxA(this->GetHWND(), "导出文件路径不能为空!", "警告", MB_OK | MB_ICONWARNING);
+		return;
+	}
+
+	// set progress...
+	m_pCompProgress->SetMinValue(0);
+	m_pCompProgress->SetMaxValue(100);
+	m_pCompProgress->SetValue(0);
+
+	// reset timer...
+	::KillTimer(this->GetHWND(), TIM_PROGRESS_REFRESH_COMP);
+	//::SetTimer(this->GetHWND(), TIM_PROGRESS_REFRESH_COMP, CONST_PROGRESS_REFRESH_TIME, NULL);
+
+	// organize http request...
+	CDuiString strCompJson;
+	strCompJson = SpliceCompRequestJson(strCompType, strCompPath);
+
+	// create thread handle request...
+	HANDLE hThread = NULL;
+	DWORD dwThreadID = 0;
+
+	// create thread...
+	hThread = ::CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)(&CFrameMain::OnPostCompRequestProcess), (LPVOID)(T2A(strCompJson.GetData())), 0, &dwThreadID);
+	::CloseHandle(hThread);
 }

@@ -52,6 +52,9 @@ public:
 	LRESULT OnUserMessageUnpackSearch(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	LRESULT OnUserMessageUnpackAddItem(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	LRESULT OnUserMessageUnpackResult(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+	LRESULT OnUserMessageCompSearch(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+	LRESULT OnUserMessageCompAddItem(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+	LRESULT OnUserMessageCompResult(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
 public:
 	// Main Layout...
@@ -133,17 +136,20 @@ public:
 	CDuiString SpliceUnpackVerboseRequestJson(CDuiString strUnpackSrc);
 	CDuiString SpliceUnpackProcessRequestJson(CDuiString strUnpackSrc);
 	CDuiString SpliceUnpackOneFileRequestJson(CDuiString strUnpackSrc, CDuiString strUnpackDest, CDuiString strUnpackFile);
+	CDuiString SpliceCompRequestJson(CDuiString strCompType, CDuiString strCompPath);
 
 	int GetValueFromResponse(string result, string label_first, string label_last, string& value);
 	int GetValueFromResponseWithPos(string result, string label_first, string label_last, string& value, int& poi);
 
 	static DWORD CALLBACK OnSearchPacketItemsProcess(LPVOID lpParameter);
 	static DWORD CALLBACK OnSearchUnpackItemsProcess(LPVOID lpParameter);
+	static DWORD CALLBACK OnSearchCompItemsProcess(LPVOID lpParameter);
 	static DWORD CALLBACK OnPostPackRequestProcess(LPVOID lpParameter);
 	static DWORD CALLBACK OnPostUnpackRequestProcess(LPVOID lpParameter);
 	static DWORD CALLBACK OnPostUnpackConfineRequestProcess(LPVOID lpParameter);
 	static DWORD CALLBACK OnPostUnpackFileRequestProcess(LPVOID lpParameter);
 	static DWORD CALLBACK OnPostUnpackFileConfineRequestProcess(LPVOID lpParameter);
+	static DWORD CALLBACK OnPostCompRequestProcess(LPVOID lpParameter);
 
 private:
 	DWORD StringToDword(string value);
