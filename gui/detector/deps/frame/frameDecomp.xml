@@ -16,10 +16,8 @@
                 </Container>
             </VerticalLayout>
             <VerticalLayout />
-            <VerticalLayout width="170">
-                <Button name="decompaddbtn" float="true" pos="0,55,0,0" tooltip="添加" width="80" height="24" normalimage="file='resources\addbuttons.png' source='0,0,80,24'" hotimage="file='resources\addbuttons.png' source='0,24,80,48'" pushedimage="file='resources\addbuttons.png' source='0,48,80,72'">
-                </Button>
-                <Button name="decompdelbtn" float="true" pos="90,55,0,0" tooltip="删除" width="80" height="24" normalimage="file='resources\deletebuttons.png' source='0,0,80,24'" hotimage="file='resources\deletebuttons.png' source='0,24,80,48'" pushedimage="file='resources\deletebuttons.png' source='0,48,80,72'">
+            <VerticalLayout width="80">
+                <Button name="decompdetbtn" float="true" pos="0,55,0,0" tooltip="详细" width="80" height="24" normalimage="file='resources\detailbuttons.png' source='0,0,80,24'" hotimage="file='resources\detailbuttons.png' source='0,24,80,48'" pushedimage="file='resources\detailbuttons.png' source='0,48,80,72'">
                 </Button>
             </VerticalLayout>
             <VerticalLayout width="40" />
@@ -38,6 +36,53 @@
             <VerticalLayout width="40" />
         </HorizontalLayout>
         <HorizontalLayout height="320">
+            <VerticalLayout width="40" />
+            <VerticalLayout>
+                <HorizontalLayout height="20" />
+                <HorizontalLayout height="80">
+                    <VerticalLayout width="25" />
+                    <VerticalLayout>
+                        <Container name="decompsrc" float="true" pos="0,0,0,0" width="90" height="15" bkimage="file='resources\comp_path.png'">
+                        </Container>
+                        <Edit name="decompsrcedt" float="true" pos="5,30,0,0" width="1700" height="24" maxchar="8" textpadding="5,1,5,1" textcolor="#FFD7D7D7" font="0" readonly="true" normalimage="file='resources\longpathedits.png' source='0,0,1700,24'" hotimage="file='resources\longpathedits.png' source='0,24,1700,48'" pushedimage="file='resources\longpathedits.png' source='0,24,1700,48'" nativebkcolor="#FF232326">
+                        </Edit>
+                    </VerticalLayout>
+                    <VerticalLayout width="20" />
+                    <VerticalLayout width="80">
+                        <Button name="decompimportbtn" float="true" pos="0,30,0,0" tooltip="导入" width="80" height="24" normalimage="file='resources\importbuttons.png' source='0,0,80,24'" hotimage="file='resources\importbuttons.png' source='0,24,80,48'" pushedimage="file='resources\importbuttons.png' source='0,48,80,72'">
+                        </Button>
+                    </VerticalLayout>
+                </HorizontalLayout>
+                <HorizontalLayout height="80">
+                    <VerticalLayout width="25" />
+                    <VerticalLayout>
+                        <Container name="decompdest" float="true" pos="0,0,0,0" width="90" height="15" bkimage="file='resources\decomp_path.png'">
+                        </Container>
+                        <Edit name="decompdestedt" float="true" pos="5,30,0,0" width="1700" height="24" maxchar="8" textpadding="5,1,5,1" textcolor="#FFD7D7D7" font="0" readonly="true" normalimage="file='resources\longpathedits.png' source='0,0,1700,24'" hotimage="file='resources\longpathedits.png' source='0,24,1700,48'" pushedimage="file='resources\longpathedits.png' source='0,24,1700,48'" nativebkcolor="#FF232326">
+                        </Edit>
+                    </VerticalLayout>
+                    <VerticalLayout width="20" />
+                    <VerticalLayout width="80">
+                        <Button name="decompexportbtn" float="true" pos="0,30,0,0" tooltip="导出" width="80" height="24" normalimage="file='resources\exportbuttons.png' source='0,0,80,24'" hotimage="file='resources\exportbuttons.png' source='0,24,80,48'" pushedimage="file='resources\exportbuttons.png' source='0,48,80,72'">
+                        </Button>
+                    </VerticalLayout>
+                </HorizontalLayout>
+                <HorizontalLayout>
+                    <VerticalLayout width="25" />
+                    <VerticalLayout>
+                        <Container name="decompstatus" float="true" pos="0,0,0,0" width="62" height="14" bkimage="file='resources\pack_status.png'">
+                        </Container>
+                        <Progress name="decompprogressbar" float="true" pos="5,30,0,0" min="0" max="100" value="100" width="1700" height="24" bkimage="file='resources\progressbars.png' source='0,0,1700,24'" foreimage="file='resources\progressbars.png' source='0,24,1700,48'">
+                        </Progress>
+                    </VerticalLayout>
+                    <VerticalLayout width="20" />
+                    <VerticalLayout width="80">
+                        <Button name="decompstartbtn" float="true" pos="0,30,0,0" tooltip="开始" width="80" height="24" normalimage="file='resources\startbuttons.png' source='0,0,80,24'" hotimage="file='resources\startbuttons.png' source='0,24,80,48'" pushedimage="file='resources\startbuttons.png' source='0,48,80,72'">
+                        </Button>
+                    </VerticalLayout>
+                </HorizontalLayout>
+            </VerticalLayout>
+            <VerticalLayout width="40" />
         </HorizontalLayout>
     </VerticalLayout>
 </Window>

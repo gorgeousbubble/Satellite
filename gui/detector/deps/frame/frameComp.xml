@@ -16,10 +16,12 @@
                 </Container>
             </VerticalLayout>
             <VerticalLayout />
-            <VerticalLayout width="170">
+            <VerticalLayout width="260">
                 <Button name="compaddbtn" float="true" pos="0,55,0,0" tooltip="添加" width="80" height="24" normalimage="file='resources\addbuttons.png' source='0,0,80,24'" hotimage="file='resources\addbuttons.png' source='0,24,80,48'" pushedimage="file='resources\addbuttons.png' source='0,48,80,72'">
                 </Button>
                 <Button name="compdelbtn" float="true" pos="90,55,0,0" tooltip="删除" width="80" height="24" normalimage="file='resources\deletebuttons.png' source='0,0,80,24'" hotimage="file='resources\deletebuttons.png' source='0,24,80,48'" pushedimage="file='resources\deletebuttons.png' source='0,48,80,72'">
+                </Button>
+                <Button name="compclrbtn" float="true" pos="180,55,0,0" tooltip="清空" width="80" height="24" normalimage="file='resources\clearbuttons.png' source='0,0,80,24'" hotimage="file='resources\clearbuttons.png' source='0,24,80,48'" pushedimage="file='resources\clearbuttons.png' source='0,48,80,72'">
                 </Button>
             </VerticalLayout>
             <VerticalLayout width="40" />
@@ -38,6 +40,49 @@
             <VerticalLayout width="40" />
         </HorizontalLayout>
         <HorizontalLayout height="320">
+            <VerticalLayout width="40" />
+            <VerticalLayout>
+                <HorizontalLayout height="20" />
+                <HorizontalLayout height="80">
+                    <VerticalLayout width="25" />
+                    <VerticalLayout>
+                        <Container name="comptype" float="true" pos="0,0,0,0" width="90" height="15" bkimage="file='resources\comp_type.png'">
+                        </Container>
+                        <Edit name="comptypeedt" float="true" pos="5,30,0,0" width="1700" height="24" maxchar="8" text="tar.gz" textpadding="5,1,5,1" textcolor="#FFD7D7D7" font="0" readonly="false" normalimage="file='resources\longpathedits.png' source='0,0,1700,24'" hotimage="file='resources\longpathedits.png' source='0,24,1700,48'" pushedimage="file='resources\longpathedits.png' source='0,24,1700,48'" nativebkcolor="#FF232326">
+                        </Edit>
+                    </VerticalLayout>
+                    <VerticalLayout width="100" />
+                </HorizontalLayout>
+                <HorizontalLayout height="80">
+                    <VerticalLayout width="25" />
+                    <VerticalLayout>
+                        <Container name="comppath" float="true" pos="0,0,0,0" width="90" height="15" bkimage="file='resources\comp_path.png'">
+                        </Container>
+                        <Edit name="comppathedt" float="true" pos="5,30,0,0" width="1700" height="24" maxchar="8" textpadding="5,1,5,1" textcolor="#FFD7D7D7" font="0" readonly="true" normalimage="file='resources\longpathedits.png' source='0,0,1700,24'" hotimage="file='resources\longpathedits.png' source='0,24,1700,48'" pushedimage="file='resources\longpathedits.png' source='0,24,1700,48'" nativebkcolor="#FF232326">
+                        </Edit>
+                    </VerticalLayout>
+                    <VerticalLayout width="20" />
+                    <VerticalLayout width="80">
+                        <Button name="compexportbtn" float="true" pos="0,30,0,0" tooltip="导出" width="80" height="24" normalimage="file='resources\exportbuttons.png' source='0,0,80,24'" hotimage="file='resources\exportbuttons.png' source='0,24,80,48'" pushedimage="file='resources\exportbuttons.png' source='0,48,80,72'">
+                        </Button>
+                    </VerticalLayout>
+                </HorizontalLayout>
+                <HorizontalLayout>
+                    <VerticalLayout width="25" />
+                    <VerticalLayout>
+                        <Container name="compstatus" float="true" pos="0,0,0,0" width="62" height="14" bkimage="file='resources\pack_status.png'">
+                        </Container>
+                        <Progress name="compprogressbar" float="true" pos="5,30,0,0" min="0" max="100" value="100" width="1700" height="24" bkimage="file='resources\progressbars.png' source='0,0,1700,24'" foreimage="file='resources\progressbars.png' source='0,24,1700,48'">
+                        </Progress>
+                    </VerticalLayout>
+                    <VerticalLayout width="20" />
+                    <VerticalLayout width="80">
+                        <Button name="compstartbtn" float="true" pos="0,30,0,0" tooltip="开始" width="80" height="24" normalimage="file='resources\startbuttons.png' source='0,0,80,24'" hotimage="file='resources\startbuttons.png' source='0,24,80,48'" pushedimage="file='resources\startbuttons.png' source='0,48,80,72'">
+                        </Button>
+                    </VerticalLayout>
+                </HorizontalLayout>
+            </VerticalLayout>
+            <VerticalLayout width="40" />
         </HorizontalLayout>
     </VerticalLayout>
 </Window>
