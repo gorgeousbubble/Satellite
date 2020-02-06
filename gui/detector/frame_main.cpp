@@ -744,6 +744,7 @@ void CFrameMain::ConstructExtra() {
 	g_pFrameMain = this;
 	m_vecPacket.clear();
 	m_vecUnpack.clear();
+	m_vecComp.clear();
 
 	::srand((unsigned int)time(NULL));
 }
@@ -840,6 +841,17 @@ void CFrameMain::InitControls() {
 	m_pUnpackExportBtn = static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("unpackexportbtn")));
 	m_pUnpackProgress = static_cast<CProgressUI*>(m_PaintManager.FindControl(_T("unpackprogressbar")));
 	m_pUnpackStartBtn = static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("unpackstartbtn")));
+
+	// compress page
+	m_pCompAddBtn = static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("compaddbtn")));
+	m_pCompDelBtn = static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("compdelbtn")));
+	m_pCompClrBtn = static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("compclrbtn")));
+	m_pCompList = static_cast<CListUI*>(m_PaintManager.FindControl(_T("complist")));
+	m_pCompTypeEdt = static_cast<CEditUI*>(m_PaintManager.FindControl(_T("comptypeedt")));
+	m_pCompPathEdt = static_cast<CEditUI*>(m_PaintManager.FindControl(_T("comppathedt")));
+	m_pCompExportBtn = static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("compexportbtn")));
+	m_pCompProgress = static_cast<CProgressUI*>(m_PaintManager.FindControl(_T("compprogressbar")));
+	m_pCompStartBtn = static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("compstartbtn")));
 }
 
 //----------------------------------------------
@@ -1897,4 +1909,113 @@ void CFrameMain::OnLButtonClickedUnpackStartBtn() {
 	}
 	
 
+}
+
+//----------------------------------------------
+// @Function:	OnLButtonClickedCompAddBtn()
+// @Purpose: CFrameMain click compress add
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+void CFrameMain::OnLButtonClickedCompAddBtn() {
+	OPENFILENAME file;
+	WCHAR strfile[100 * MAX_PATH] = { 0 };
+	WCHAR strpath[MAX_PATH] = { 0 };
+	WCHAR strname[MAX_PATH] = { 0 };
+	TCHAR* p = NULL;
+	int nLen = 0;
+
+	USES_CONVERSION;
+	ZeroMemory(&file, sizeof(OPENFILENAME));
+	file.lStructSize = sizeof(OPENFILENAME);
+	file.lpstrFilter = _T("所有文件\0*.*\0\0");
+	file.nFilterIndex = 1;
+	file.lpstrFile = strfile;
+	file.nMaxFile = sizeof(strfile);
+	file.Flags = OFN_EXPLORER | OFN_ALLOWMULTISELECT;
+
+	if (GetOpenFileName(&file)) {
+		lstrcpyn(strpath, strfile, file.nFileOffset);
+		strpath[file.nFileOffset] = '\0';
+		nLen = lstrlen(strpath);
+
+		if (strpath[nLen - 1] != '\\') {
+			lstrcat(strpath, _T("\\"));
+		}
+
+		p = strfile + file.nFileOffset;
+		while (*p) {
+			ZeroMemory(strname, sizeof(strname));
+			lstrcat(strname, strpath);
+			lstrcat(strname, p);
+
+			char chOriginFile[MAX_PATH] = { 0 };
+			char chOriginName[MAX_PATH] = { 0 };
+			char* pTemp = NULL;
+
+			strcpy_s(chOriginFile, T2A(strname));
+			pTemp = strrchr(chOriginFile, '\\');
+			strcpy_s(chOriginName, ++pTemp);
+
+			bool bRepeat = false;
+			for (auto iter = m_vecComp.begin(); iter != m_vecComp.end(); ++iter) {
+				if (!strcmp(iter->chPath, T2A(strname))) {
+					bRepeat = true;
+					break;
+				}
+			}
+
+			if (!bRepeat) {
+				TCompInfo sCompInfo = { 0 };
+				sCompInfo.nSerial = m_vecComp.size() + 1;
+				strcpy_s(sCompInfo.chName, chOriginName);
+				strcpy_s(sCompInfo.chPath, T2A(strname));
+				m_vecComp.push_back(sCompInfo);
+			}
+			p += lstrlen(p) + 1;
+		}
+
+		::PostMessageA(this->GetHWND(), WM_USER_MESSAGE_COMP_SEARCH, (WPARAM)0, (LPARAM)0);
+	}
+}
+
+//----------------------------------------------
+// @Function:	OnLButtonClickedCompDelBtn()
+// @Purpose: CFrameMain click compress delete
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+void CFrameMain::OnLButtonClickedCompDelBtn() {
+}
+
+//----------------------------------------------
+// @Function:	OnLButtonClickedCompClrBtn()
+// @Purpose: CFrameMain click compress clear
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+void CFrameMain::OnLButtonClickedCompClrBtn() {
+}
+
+//----------------------------------------------
+// @Function:	OnLButtonClickedCompExportBtn()
+// @Purpose: CFrameMain click compress export
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+void CFrameMain::OnLButtonClickedCompExportBtn() {
+}
+
+//----------------------------------------------
+// @Function:	OnLButtonClickedCompStartBtn()
+// @Purpose: CFrameMain click compress start
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+void CFrameMain::OnLButtonClickedCompStartBtn() {
 }

@@ -96,6 +96,17 @@ public:
 	CProgressUI* m_pUnpackProgress;
 	CButtonUI* m_pUnpackStartBtn;
 
+	// Compress...
+	CButtonUI* m_pCompAddBtn;
+	CButtonUI* m_pCompDelBtn;
+	CButtonUI* m_pCompClrBtn;
+	CListUI* m_pCompList;
+	CEditUI* m_pCompTypeEdt;
+	CEditUI* m_pCompPathEdt;
+	CButtonUI* m_pCompExportBtn;
+	CProgressUI* m_pCompProgress;
+	CButtonUI* m_pCompStartBtn;
+
 public:
 	CPaintManagerUI& GetPaintManager();
 
@@ -106,6 +117,7 @@ private:
 public:
 	vector<TPacketInfo> m_vecPacket;
 	vector<TUnpackInfo> m_vecUnpack;
+	vector<TCompInfo> m_vecComp;
 
 public:
 	void ConstructExtra();
@@ -160,6 +172,12 @@ public:
 	void OnLButtonClickedUnpackImportBtn();
 	void OnLButtonClickedUnpackExportBtn();
 	void OnLButtonClickedUnpackStartBtn();
+
+	void OnLButtonClickedCompAddBtn();
+	void OnLButtonClickedCompDelBtn();
+	void OnLButtonClickedCompClrBtn();
+	void OnLButtonClickedCompExportBtn();
+	void OnLButtonClickedCompStartBtn();
 };
 
 // External

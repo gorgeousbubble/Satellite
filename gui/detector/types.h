@@ -30,4 +30,11 @@ typedef struct {
 	char chSize[MAX_PATH];
 } TUnpackInfo, *LPTUnpackInfo;
 
+// type comp
+typedef struct {
+	int nSerial;
+	char chName[MAX_PATH];
+	char chPath[MAX_PATH];
+} TCompInfo, * LPTCompInfo;
+
 #endif // !__TYPES_H_
