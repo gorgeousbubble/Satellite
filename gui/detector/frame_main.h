@@ -55,6 +55,9 @@ public:
 	LRESULT OnUserMessageCompSearch(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	LRESULT OnUserMessageCompAddItem(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	LRESULT OnUserMessageCompResult(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+	LRESULT OnUserMessageDecompSearch(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+	LRESULT OnUserMessageDecompAddItem(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+	LRESULT OnUserMessageDecompResult(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
 public:
 	// Main Layout...
@@ -110,6 +113,16 @@ public:
 	CProgressUI* m_pCompProgress;
 	CButtonUI* m_pCompStartBtn;
 
+	// Decompress...
+	CButtonUI* m_pDecompDetBtn;
+	CListUI* m_pDecompList;
+	CEditUI* m_pDecompSrcEdt;
+	CEditUI* m_pDecompDestEdt;
+	CButtonUI* m_pDecompImportBtn;
+	CButtonUI* m_pDecompExportBtn;
+	CProgressUI* m_pDecompProgress;
+	CButtonUI* m_pDecompStartBtn;
+
 public:
 	CPaintManagerUI& GetPaintManager();
 
@@ -137,6 +150,7 @@ public:
 	CDuiString SpliceUnpackProcessRequestJson(CDuiString strUnpackSrc);
 	CDuiString SpliceUnpackOneFileRequestJson(CDuiString strUnpackSrc, CDuiString strUnpackDest, CDuiString strUnpackFile);
 	CDuiString SpliceCompRequestJson(CDuiString strCompType, CDuiString strCompPath);
+	CDuiString SpliceDecompRequestJson(CDuiString strDecompSrc, CDuiString strDecompDest, CDuiString strDecompType);
 
 	int GetValueFromResponse(string result, string label_first, string label_last, string& value);
 	int GetValueFromResponseWithPos(string result, string label_first, string label_last, string& value, int& poi);
@@ -150,6 +164,7 @@ public:
 	static DWORD CALLBACK OnPostUnpackFileRequestProcess(LPVOID lpParameter);
 	static DWORD CALLBACK OnPostUnpackFileConfineRequestProcess(LPVOID lpParameter);
 	static DWORD CALLBACK OnPostCompRequestProcess(LPVOID lpParameter);
+	static DWORD CALLBACK OnPostDecompRequestProcess(LPVOID lpParameter);
 
 private:
 	DWORD StringToDword(string value);
@@ -184,10 +199,14 @@ public:
 	void OnLButtonClickedCompClrBtn();
 	void OnLButtonClickedCompExportBtn();
 	void OnLButtonClickedCompStartBtn();
+
+	void OnLButtonClickedDecompDetialBtn();
+	void OnLButtonClickedDecompImportBtn();
+	void OnLButtonClickedDecompExportBtn();
+	void OnLButtonClickedDecompStartBtn();
 };
 
 // External
 extern CFrameMain* g_pFrameMain;
 
 #endif // !__FRAME_MAIN_H_
-

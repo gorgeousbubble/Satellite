@@ -170,6 +170,14 @@ void CFrameMain::Notify(TNotifyUI& msg) {
 			OnLButtonClickedCompExportBtn();
 		} else if (msg.pSender == m_pCompStartBtn) {
 			OnLButtonClickedCompStartBtn();
+		} else if (msg.pSender == m_pDecompDetBtn) {
+			OnLButtonClickedDecompDetialBtn();
+		} else if (msg.pSender == m_pDecompImportBtn) {
+			OnLButtonClickedDecompImportBtn();
+		} else if (msg.pSender == m_pDecompExportBtn) {
+			OnLButtonClickedDecompExportBtn();
+		} else if (msg.pSender == m_pDecompStartBtn) {
+			OnLButtonClickedDecompStartBtn();
 		}
 	} else if (msg.sType == _T("selectchanged")) {
 		if (msg.pSender == m_pPackOpt) {
@@ -268,6 +276,15 @@ LRESULT CFrameMain::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) {
 		break;
 	case WM_USER_MESSAGE_COMP_RESULT:
 		lRes = OnUserMessageCompResult(uMsg, wParam, lParam, bHandled);
+		break;
+	case WM_USER_MESSAGE_DECOMP_SEARCH:
+		lRes = OnUserMessageDecompSearch(uMsg, wParam, lParam, bHandled);
+		break;
+	case WM_USER_MESSAGE_DECOMP_ADDITEM:
+		lRes = OnUserMessageDecompAddItem(uMsg, wParam, lParam, bHandled);
+		break;
+	case WM_USER_MESSAGE_DECOMP_RESULT:
+		lRes = OnUserMessageDecompResult(uMsg, wParam, lParam, bHandled);
 		break;
 	default:
 		bHandled = FALSE;
@@ -808,6 +825,47 @@ LRESULT CFrameMain::OnUserMessageCompResult(UINT uMsg, WPARAM wParam, LPARAM lPa
 }
 
 //----------------------------------------------
+// @Function:	OnUserMessageDecompSearch()
+// @Purpose: CFrameMain compress search
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+LRESULT CFrameMain::OnUserMessageDecompSearch(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) {
+	return 0;
+}
+
+//----------------------------------------------
+// @Function:	OnUserMessageDecompAddItem()
+// @Purpose: CFrameMain compress add item
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+LRESULT CFrameMain::OnUserMessageDecompAddItem(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) {
+	return 0;
+}
+
+//----------------------------------------------
+// @Function:	OnUserMessageDecompResult()
+// @Purpose: CFrameMain compress result
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+LRESULT CFrameMain::OnUserMessageDecompResult(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) {
+	if (lParam != 0) {
+		::KillTimer(this->GetHWND(), TIM_PROGRESS_REFRESH_DECOMP);
+		MessageBoxA(this->GetHWND(), "请求解压文件失败!", "警告", MB_OK | MB_ICONWARNING);
+	}
+	else {
+		MessageBoxA(this->GetHWND(), "打包解压成功!", "提示", MB_OK | MB_ICONASTERISK);
+	}
+
+	return 0;
+}
+
+//----------------------------------------------
 // @Function:	ConstructExtra()
 // @Purpose: CFrameMain construct function extra
 // @Since: v1.00a
@@ -929,6 +987,16 @@ void CFrameMain::InitControls() {
 	m_pCompExportBtn = static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("compexportbtn")));
 	m_pCompProgress = static_cast<CProgressUI*>(m_PaintManager.FindControl(_T("compprogressbar")));
 	m_pCompStartBtn = static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("compstartbtn")));
+
+	// decompress page
+	m_pDecompDetBtn = static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("decompdetbtn")));
+	m_pDecompList = static_cast<CListUI*>(m_PaintManager.FindControl(_T("decomplist")));
+	m_pDecompSrcEdt = static_cast<CEditUI*>(m_PaintManager.FindControl(_T("decompsrcedt")));
+	m_pDecompDestEdt = static_cast<CEditUI*>(m_PaintManager.FindControl(_T("decompdestedt")));
+	m_pDecompImportBtn = static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("decompimportbtn")));
+	m_pDecompExportBtn = static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("decompexportbtn")));
+	m_pDecompProgress = static_cast<CProgressUI*>(m_PaintManager.FindControl(_T("decompprogressbar")));
+	m_pDecompStartBtn = static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("decompstartbtn")));
 }
 
 //----------------------------------------------
@@ -1228,6 +1296,49 @@ CDuiString CFrameMain::SpliceCompRequestJson(CDuiString strCompType, CDuiString 
 }
 
 //----------------------------------------------
+// @Function:	SpliceDecompRequestJson()
+// @Purpose: CFrameMain compress request json
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+CDuiString CFrameMain::SpliceDecompRequestJson(CDuiString strDecompSrc, CDuiString strDecompDest, CDuiString strDecompType) {
+	CDuiString strDecompJson;
+	CDuiString strDecompSource;
+	CDuiString strDecompDestination;
+	CDuiString strCompKind;
+
+	USES_CONVERSION;
+
+	// splice src files...
+	strDecompSource = L"\"src\":";
+	strDecompSource += L"\"";
+	strDecompSource += strDecompSrc.GetData();
+	strDecompSource += L"\",";
+
+	// splice dest files...
+	strDecompDestination = L"\"dest\":";
+	strDecompDestination += L"\"";
+	strDecompDestination += strDecompDest.GetData();
+	strDecompDestination += L"\",";
+
+	// splice encrypt type...
+	strCompKind = L"\"type\":\"";
+	strCompKind += strDecompType.GetData();
+	strCompKind += L"\"";
+
+	// splice all...
+	strDecompJson = L"{";
+	strDecompJson += strDecompSource;
+	strDecompJson += strDecompDestination;
+	strDecompJson += strCompKind;
+	strDecompJson += L"}";
+	strDecompJson.Replace(L"\\", L"/");
+
+	return strDecompJson;
+}
+
+//----------------------------------------------
 // @Function:	GetValueFromResponse()
 // @Purpose: CFrameMain get value from response
 // @Since: v1.00a
@@ -1491,6 +1602,30 @@ DWORD CFrameMain::OnPostCompRequestProcess(LPVOID lpParameter) {
 	}
 	else {
 		::PostMessageA(g_pFrameMain->GetHWND(), WM_USER_MESSAGE_COMP_RESULT, (WPARAM)0, (LPARAM)0);
+	}
+	return 0;
+}
+
+//----------------------------------------------
+// @Function:	OnPostDecompRequestProcess()
+// @Purpose: CFrameMain post decompress request
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+DWORD CFrameMain::OnPostDecompRequestProcess(LPVOID lpParameter) {
+	string data = string((char*)lpParameter);
+	string url;
+	string response;
+	CURLcode res;
+
+	url = "http://localhost:8080/satellite/decomp";
+	res = CurlPostRequest(url, data, response);
+	if (res != CURLE_OK) {
+		::PostMessageA(g_pFrameMain->GetHWND(), WM_USER_MESSAGE_DECOMP_RESULT, (WPARAM)0, (LPARAM)1);
+	}
+	else {
+		::PostMessageA(g_pFrameMain->GetHWND(), WM_USER_MESSAGE_DECOMP_RESULT, (WPARAM)0, (LPARAM)0);
 	}
 	return 0;
 }
@@ -2304,5 +2439,148 @@ void CFrameMain::OnLButtonClickedCompStartBtn() {
 
 	// create thread...
 	hThread = ::CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)(&CFrameMain::OnPostCompRequestProcess), (LPVOID)(T2A(strCompJson.GetData())), 0, &dwThreadID);
+	::CloseHandle(hThread);
+}
+
+//----------------------------------------------
+// @Function:	OnLButtonClickedDecompDetialBtn()
+// @Purpose: CFrameMain click decompress detial
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+void CFrameMain::OnLButtonClickedDecompDetialBtn() {
+}
+
+//----------------------------------------------
+// @Function:	OnLButtonClickedDecompImportBtn()
+// @Purpose: CFrameMain click decompress import
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+void CFrameMain::OnLButtonClickedDecompImportBtn() {
+	OPENFILENAME file;
+	WCHAR strfile[MAX_PATH] = { 0 };
+
+	ZeroMemory(&file, sizeof(OPENFILENAME));
+	file.lStructSize = sizeof(OPENFILENAME);
+	file.lpstrFilter = _T("所有文件\0*.*\0\0");
+	file.nFilterIndex = 1;
+	file.lpstrFile = strfile;
+	file.nMaxFile = sizeof(strfile);
+	file.Flags = OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST;
+
+	if (GetOpenFileName(&file)) {
+		m_pDecompSrcEdt->SetText(strfile);
+	}
+}
+
+//----------------------------------------------
+// @Function:	OnLButtonClickedDecompExportBtn()
+// @Purpose: CFrameMain click decompress export
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+void CFrameMain::OnLButtonClickedDecompExportBtn() {
+	CDuiString strImport = _T("");
+	WCHAR strfile[MAX_PATH] = { 0 };
+
+	USES_CONVERSION;
+
+	wcscpy_s(strfile, A2T("undefine.tar.gz"));
+
+	strImport = m_pDecompSrcEdt->GetText();
+	if (!strcmp(T2A(strImport.GetData()), "")) {
+		MessageBoxA(this->GetHWND(), "请选择源文件路径!", "提示", MB_OK | MB_ICONASTERISK);
+		return;
+	}
+
+	OPENFILENAME file;
+
+	ZeroMemory(&file, sizeof(OPENFILENAME));
+	file.lStructSize = sizeof(OPENFILENAME);
+	file.lpstrFilter = _T("所有文件\0*.*\0\0");
+	file.nFilterIndex = 1;
+	file.lpstrFile = strfile;
+	file.nMaxFile = sizeof(strfile);
+	file.Flags = OFN_PATHMUSTEXIST | OFN_OVERWRITEPROMPT;
+
+	if (GetSaveFileName(&file)) {
+		CDuiString dest(strfile);
+		dest = dest.Left(dest.ReverseFind(L'\\') + 1);
+		m_pDecompDestEdt->SetText(dest.GetData());
+	}
+}
+
+//----------------------------------------------
+// @Function:	OnLButtonClickedDecompStartBtn()
+// @Purpose: CFrameMain click decompress start
+// @Since: v1.00a
+// @Para: None
+// @Return: None
+//----------------------------------------------
+void CFrameMain::OnLButtonClickedDecompStartBtn() {
+	CDuiString strDecompJson;
+	CDuiString strDecompSrc;
+	CDuiString strDecompDest;
+	CDuiString strDecompType;
+
+	USES_CONVERSION;
+
+	strDecompSrc = m_pDecompSrcEdt->GetText();
+	strDecompDest = m_pDecompDestEdt->GetText();
+
+	// check source file...
+	if (strDecompSrc.IsEmpty()) {
+		MessageBoxA(this->GetHWND(), "压缩文件路径不能为空!", "警告", MB_OK | MB_ICONWARNING);
+		return;
+	}
+
+	// check destination file...
+	if (strDecompDest.IsEmpty()) {
+		MessageBoxA(this->GetHWND(), "解压文件路径不能为空!", "警告", MB_OK | MB_ICONWARNING);
+		return;
+	}
+
+	// check type...
+	int pos = 0;
+	pos = strDecompSrc.ReverseFind(L'.');
+	if (pos == -1) {
+		MessageBoxA(this->GetHWND(), "压缩文件解析错误!", "警告", MB_OK | MB_ICONWARNING);
+		return;
+	}
+
+	strDecompType = strDecompSrc.Right(strDecompSrc.GetLength() - pos);
+	if (!strDecompType.Compare(L".gz")) {
+		strDecompType = L"tar.gz";
+	} else if (!strDecompType.Compare(L".tar")) {
+		strDecompType = L"tar";
+	} else if (!strDecompType.Compare(L".zip")) {
+		strDecompType = L"zip";
+	} else {
+		MessageBoxA(this->GetHWND(), "压缩文件类型错误!", "警告", MB_OK | MB_ICONWARNING);
+		return;
+	}
+
+	// organize http request...
+	strDecompJson = SpliceDecompRequestJson(strDecompSrc, strDecompDest, strDecompType);
+
+	// set progress...
+	m_pDecompProgress->SetMinValue(0);
+	m_pDecompProgress->SetMaxValue(100);
+	m_pDecompProgress->SetValue(0);
+
+	// reset timer...
+	::KillTimer(this->GetHWND(), TIM_PROGRESS_REFRESH_DECOMP);
+	//::SetTimer(this->GetHWND(), TIM_PROGRESS_REFRESH_DECOMP, CONST_PROGRESS_REFRESH_TIME, NULL);
+
+	// create thread handle request...
+	HANDLE hThread = NULL;
+	DWORD dwThreadID = 0;
+
+	// create thread...
+	hThread = ::CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)(&CFrameMain::OnPostDecompRequestProcess), (LPVOID)(T2A(strDecompJson.GetData())), 0, &dwThreadID);
 	::CloseHandle(hThread);
 }
