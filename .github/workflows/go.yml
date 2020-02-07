@@ -82,10 +82,10 @@ jobs:
         # go test -v cover -bench .
         # cd ..
 
-        # cd searches
-        # echo "test searches..."
-        # go test -v -cover -bench .
-        # cd ..
+        cd searches
+        echo "test searches..."
+        go test -v -cover -bench .
+        cd ..
 
         # cd sorts
         # echo "test sorts..."
