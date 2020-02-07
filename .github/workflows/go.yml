@@ -77,10 +77,10 @@ jobs:
         # go test -v -cover -bench .
         # cd ..
 
-        # cd routes
-        # echo "test routes..."
-        # go test -v cover -bench .
-        # cd ..
+        cd routes
+        echo "test routes..."
+        go test -v cover -bench .
+        cd ..
 
         cd searches
         echo "test searches..."
