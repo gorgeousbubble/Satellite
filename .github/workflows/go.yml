@@ -72,10 +72,10 @@ jobs:
         # go test -v -cover -bench .
         # cd ..
 
-        cd parses
-        echo "test parses..."
-        go test -v -cover -bench .
-        cd ..
+        # cd parses
+        # echo "test parses..."
+        # go test -v -cover -bench .
+        # cd ..
 
         cd routes
         echo "test routes..."
