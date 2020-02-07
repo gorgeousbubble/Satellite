@@ -62,10 +62,10 @@ jobs:
         go test -v -cover -bench .
         cd ..
 
-        cd images
-        echo "test images..."
-        go test -v -cover -bench .
-        cd ..
+        # cd images
+        # echo "test images..."
+        # go test -v -cover -bench .
+        # cd ..
 
         # cd nets
         # echo "test nets..."
@@ -77,22 +77,22 @@ jobs:
         # go test -v -cover -bench .
         # cd ..
 
-        cd routes
-        echo "test routes..."
-        go test -v cover -bench .
-        cd ..
+        # cd routes
+        # echo "test routes..."
+        # go test -v cover -bench .
+        # cd ..
 
-        cd searches
-        echo "test searches..."
-        go test -v -cover -bench .
-        cd ..
+        # cd searches
+        # echo "test searches..."
+        # go test -v -cover -bench .
+        # cd ..
 
-        cd sorts
-        echo "test sorts..."
-        go test -v -cover -bench .
-        cd ..
+        # cd sorts
+        # echo "test sorts..."
+        # go test -v -cover -bench .
+        # cd ..
 
-        cd utils
-        echo "test utils..."
-        go test -v -cover -bench .
-        cd ..
+        # cd utils
+        # echo "test utils..."
+        # go test -v -cover -bench .
+        # cd ..
