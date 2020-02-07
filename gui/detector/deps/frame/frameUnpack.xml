@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window> <!-- Sub Window-->
+    <Font id="0" name="Microsoft YaHei" size="12" bold="false" italic="false" default="true"/>
+	<Font id="1" name="Microsoft YaHei" size="14" bold="false" italic="false"/>
+	<Font id="2" name="Microsoft YaHei" size="16" bold="false" italic="false"/>
+	<Font id="3" name="Microsoft YaHei" size="18" bold="false" italic="false"/>
+    <Font id="4" name="Microsoft YaHei" size="9" bold="false" italic="false"/>
+    <Font id="5" name="Microsoft YaHei" size="14" bold="true" italic="false"/>
+    <VerticalLayout>
+        <HorizontalLayout height="100">
+            <VerticalLayout width="40" />
+            <VerticalLayout width="240">
+                <Container name="unpacktitle" float="true" pos="0,20,0,0" width="221" height="20" bkimage="file='resources\unpack_title.png'">
+                </Container>
+                <Container name="unpacksubtitle" float="true" pos="25,60,0,0" width="164" height="14" bkimage="file='resources\unpack_subtitle.png'">
+                </Container>
+            </VerticalLayout>
+            <VerticalLayout />
+            <VerticalLayout width="260">
+                <Button name="unpackselbtn" float="true" pos="0,55,0,0" tooltip="选中单个模式" width="80" height="24" normalimage="file='resources\selectbuttons.png' source='0,0,80,24'" hotimage="file='resources\selectbuttons.png' source='0,24,80,48'" pushedimage="file='resources\selectbuttons.png' source='0,48,80,72'">
+                </Button>
+                <Button name="unpackunselbtn" float="true" pos="0,55,0,0" tooltip="取消选中模式" width="80" height="24" visible="false" normalimage="file='resources\selectbuttons.png' source='0,48,80,72'" hotimage="file='resources\selectbuttons.png' source='0,48,80,72'" pushedimage="file='resources\selectbuttons.png' source='0,48,80,72'">
+                </Button>
+                <Button name="unpackretbtn" float="true" pos="90,55,0,0" tooltip="限制性能模式" width="80" height="24" normalimage="file='resources\restrictbuttons.png' source='0,0,80,24'" hotimage="file='resources\restrictbuttons.png' source='0,24,80,48'" pushedimage="file='resources\restrictbuttons.png' source='0,48,80,72'">
+                </Button>
+                <Button name="unpackunretbtn" float="true" pos="90,55,0,0" tooltip="取消限制模式" width="80" height="24" visible="false" normalimage="file='resources\restrictbuttons.png' source='0,48,80,72'" hotimage="file='resources\restrictbuttons.png' source='0,48,80,72'" pushedimage="file='resources\restrictbuttons.png' source='0,48,80,72'">
+                </Button>
+                <Button name="unpackdetbtn" float="true" pos="180,55,0,0" tooltip="详细" width="80" height="24" normalimage="file='resources\detailbuttons.png' source='0,0,80,24'" hotimage="file='resources\detailbuttons.png' source='0,24,80,48'" pushedimage="file='resources\detailbuttons.png' source='0,48,80,72'">
+                </Button>
+            </VerticalLayout>
+            <VerticalLayout width="40" />
+        </HorizontalLayout>
+        <HorizontalLayout>
+            <VerticalLayout width="40" />
+            <VerticalLayout> <!-- width="700" height="300" -->
+                <List name="unpacklist" float="true" pos="0,0,0,0" width="1700" height="660" bkcolor="#FF232326" vscrollbar="true" hscrollbar="false" itemalign="center" itemaltbk="true" itemtextcolor="#FFFFFFFF" itembkcolor="#FF19191C" itemhottextcolor="#FFFFFFFF" itemhotbkcolor="#FF37373A" itemselectedtextcolor="#FFFFFFFF" itemselectedbkcolor="#FF414144" itemshowhtml="true">
+                    <ListHeader height="24">
+                        <ListHeaderItem text="序号" bkcolor="#FF2D2D30" textcolor="#FFFFFFFF" font="1" width="70"/>
+                        <ListHeaderItem text="名称" bkcolor="#FF2D2D30" textcolor="#FFFFFFFF" font="1" width="630"/>
+                        <ListHeaderItem text="详细" bkcolor="#FF2D2D30" textcolor="#FFFFFFFF" font="1" width="1000"/>
+                    </ListHeader>
+                </List>
+            </VerticalLayout>
+            <VerticalLayout width="40" />
+        </HorizontalLayout>
+        <HorizontalLayout height="320">
+            <VerticalLayout width="40" />
+            <VerticalLayout>
+                <HorizontalLayout height="20" />
+                <HorizontalLayout height="80">
+                    <VerticalLayout width="25" />
+                    <VerticalLayout>
+                        <Container name="unpacksrc" float="true" pos="0,0,0,0" width="73" height="15" bkimage="file='resources\unpack_src.png'">
+                        </Container>
+                        <Edit name="unpacksrcedt" float="true" pos="5,30,0,0" width="1700" height="24" maxchar="8" textpadding="5,1,5,1" textcolor="#FFD7D7D7" font="0" readonly="true" normalimage="file='resources\longpathedits.png' source='0,0,1700,24'" hotimage="file='resources\longpathedits.png' source='0,24,1700,48'" pushedimage="file='resources\longpathedits.png' source='0,24,1700,48'" nativebkcolor="#FF232326">
+                        </Edit>
+                    </VerticalLayout>
+                    <VerticalLayout width="20" />
+                    <VerticalLayout width="80">
+                        <Button name="unpackimportbtn" float="true" pos="0,30,0,0" tooltip="导入" width="80" height="24" normalimage="file='resources\importbuttons.png' source='0,0,80,24'" hotimage="file='resources\importbuttons.png' source='0,24,80,48'" pushedimage="file='resources\importbuttons.png' source='0,48,80,72'">
+                        </Button>
+                    </VerticalLayout>
+                </HorizontalLayout>
+                <HorizontalLayout height="80">
+                    <VerticalLayout width="25" />
+                    <VerticalLayout>
+                        <Container name="unpackdest" float="true" pos="0,0,0,0" width="87" height="15" bkimage="file='resources\unpack_dest.png'">
+                        </Container>
+                        <Edit name="unpackdestedt" float="true" pos="5,30,0,0" width="1700" height="24" maxchar="8" textpadding="5,1,5,1" textcolor="#FFD7D7D7" font="0" readonly="true" normalimage="file='resources\longpathedits.png' source='0,0,1700,24'" hotimage="file='resources\longpathedits.png' source='0,24,1700,48'" pushedimage="file='resources\longpathedits.png' source='0,24,1700,48'" nativebkcolor="#FF232326">
+                        </Edit>
+                    </VerticalLayout>
+                    <VerticalLayout width="20" />
+                    <VerticalLayout width="80">
+                        <Button name="unpackexportbtn" float="true" pos="0,30,0,0" tooltip="导出" width="80" height="24" normalimage="file='resources\exportbuttons.png' source='0,0,80,24'" hotimage="file='resources\exportbuttons.png' source='0,24,80,48'" pushedimage="file='resources\exportbuttons.png' source='0,48,80,72'">
+                        </Button>
+                    </VerticalLayout>
+                </HorizontalLayout>
+                <HorizontalLayout>
+                    <VerticalLayout width="25" />
+                    <VerticalLayout>
+                        <Container name="unpackstatus" float="true" pos="0,0,0,0" width="62" height="14" bkimage="file='resources\pack_status.png'">
+                        </Container>
+                        <Progress name="unpackprogressbar" float="true" pos="5,30,0,0" min="0" max="100" value="100" width="1700" height="24" bkimage="file='resources\progressbars.png' source='0,0,1700,24'" foreimage="file='resources\progressbars.png' source='0,24,1700,48'">
+                        </Progress>
+                    </VerticalLayout>
+                    <VerticalLayout width="20" />
+                    <VerticalLayout width="80">
+                        <Button name="unpackstartbtn" float="true" pos="0,30,0,0" tooltip="开始" width="80" height="24" normalimage="file='resources\startbuttons.png' source='0,0,80,24'" hotimage="file='resources\startbuttons.png' source='0,24,80,48'" pushedimage="file='resources\startbuttons.png' source='0,48,80,72'">
+                        </Button>
+                    </VerticalLayout>
+                </HorizontalLayout>
+            </VerticalLayout>
+            <VerticalLayout width="40" />
+        </HorizontalLayout>
+    </VerticalLayout>
+</Window>
