@@ -87,12 +87,12 @@ jobs:
         go test -v -cover -bench .
         cd ..
 
-        # cd sorts
-        # echo "test sorts..."
-        # go test -v -cover -bench .
-        # cd ..
+        cd sorts
+        echo "test sorts..."
+        go test -v -cover -bench .
+        cd ..
 
-        # cd utils
-        # echo "test utils..."
-        # go test -v -cover -bench .
-        # cd ..
+        cd utils
+        echo "test utils..."
+        go test -v -cover -bench .
+        cd ..
