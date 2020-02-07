@@ -62,10 +62,10 @@ jobs:
         go test -v -cover -bench .
         cd ..
 
-        # cd images
-        # echo "test images..."
-        # go test -v -cover -bench .
-        # cd ..
+        cd images
+        echo "test images..."
+        go test -v -cover -bench .
+        cd ..
 
         # cd nets
         # echo "test nets..."
