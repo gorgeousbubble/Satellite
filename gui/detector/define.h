@@ -20,8 +20,8 @@
 // Timer
 #define TIM_PROGRESS_REFRESH_PACKET				0
 #define TIM_PROGRESS_REFRESH_UNPACK				1
-#define TIM_PROGRESS_REFRESH_COMP         2
-#define TIM_PROGRESS_REFRESH_DECOMP       3
+#define TIM_PROGRESS_REFRESH_COMP               2
+#define TIM_PROGRESS_REFRESH_DECOMP             3
 
 // Constants
 #define CONST_PROGRESS_REFRESH_TIME				100
