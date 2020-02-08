@@ -1,7 +1,7 @@
 # Satellite 🌠
 The Satellite Golang Project.
 
-[![Go Report Card](https://goreportcard.com/report/github.com/gorgeousbubble/satellite?style=flat-square)](https://goreportcard.com/report/github.com/gorgeousbubble/satellite)
+[![Go Report Card](https://goreportcard.com/badge/github.com/gorgeousbubble/satellite)](https://goreportcard.com/report/github.com/gorgeousbubble/satellite)
 [![Documentation](https://img.shields.io/badge/godoc-reference-blue.svg?style=flat-square)](http://godoc.org/github.com/gorgeousbubble/satellite)
 [![Version](https://img.shields.io/github/release/gorgeousbubble/satellite.svg?style=flat-square)](https://github.com/gorgeousbubble/satellite/releases/latest)
 
