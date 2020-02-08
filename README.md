@@ -11,9 +11,9 @@ Install golang and download package from [https://golang.org](https://golang.org
   
   | OS            | Architecture  | Version  | Binary                  |
   | ------------- |:-------------:|:--------:| :---------------------: |
-  | Windows       | amd64         | 1.13.6 🔺 | go1.13.6 windows/amd64  |
-  | Linux         | adm64         | 1.13.6 🔺 | go1.13.6 linux/amd64    |
-  | Linux         | arm           | 1.13.6 🔺 | go1.13.6 linux/arm      |
+  | Windows       | amd64         | 1.13.6 ▲ | go1.13.6 windows/amd64  |
+  | Linux         | adm64         | 1.13.6 ▲ | go1.13.6 linux/amd64    |
+  | Linux         | arm           | 1.13.6 ▲ | go1.13.6 linux/arm      |
 
 #### Use Git to clone this project  
   `git clone https://github.com/gorgeousbubble/satellite.git`  
@@ -38,5 +38,20 @@ Build docker image:
     first build native application, then `cp Dockerfile_BIN bin\Dockerfile` and use command `docker build -t satellite .` build image.
     
 Run docker container:  
-  `docker run --name=satellite -p 8080:80 -d satellite` 
+  `docker run --name=satellite -p 8080:80 -d satellite`  
+
+Build Docker image need download base image 'ubuntu:latest' or 'golang:latest' from Docker Hub.
+
+#### Usage of Satellite
+Use command `./satellite --help` see how to use it. Start HTTPS service and listen on port 8080:  
+  `./satellite https -ip 127.0.0.1 -port 8080`  
+  
+#### Test the project
+Test the project:  
+  * Test the project in Windows  
+    `cd $GOPATH/src/satellite`  
+    `test.bat`  
+  * Test the project in Linux or ARM  
+    `cd $GOPATH/src/satellite`  
+    `make test`
 
