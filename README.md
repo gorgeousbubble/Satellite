@@ -23,7 +23,7 @@ Install golang and download package from [https://golang.org](https://golang.org
   `git clone https://github.com/gorgeousbubble/satellite.git`  
 
 #### Install dependencies  
-  You can use `go get -u ...` to install dependencies one by one. In Linux, you can enter `$GOPATH/src` and use `make deps` to install all package.
+  You can use `go get -u ...` to install dependencies one by one. In Linux, you can enter `$GOPATH/src` and use `make deps` to install all package. In Windows you can use `dependencies.bat` to install dependencies.
   
 #### Build native or container
 Build the project:  
