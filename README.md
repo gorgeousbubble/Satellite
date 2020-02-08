@@ -8,4 +8,4 @@ The project name is Satellite. 2019 is the 50th anniversary of the Apollo 11 moo
 
 ## Installation and usage
 Use Git to clone this project:  
-    `git clone https://github.com/gorgeousbubble/satellite.git`
+    git clone https://github.com/gorgeousbubble/satellite.git
