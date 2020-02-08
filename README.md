@@ -55,3 +55,20 @@ Test the project:
     `cd $GOPATH/src/satellite`  
     `make test`
 
+#### Format the code
+Format the project:  
+  * Format the project in Windows  
+    `cd $GOPATH/src/satellite`  
+    `fmt.bat`  
+  * Format the project in Linux or ARM  
+    `cd $GOPATH/src/satellite`  
+    `make fmt`
+    
+##### Clean environment
+Clean environment:  
+  * Clean the project in Windows  
+    `cd $GOPATH/src/satellite`  
+    `clean.bat`  
+  * Clean the project in Linux or ARM  
+    `cd $GOPATH/src/satellite`  
+    `make clean`
