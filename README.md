@@ -7,5 +7,9 @@ Satellite is a tool for both multiple command and web service develop by Golang.
 The project name is Satellite. 2019 is the 50th anniversary of the Apollo 11 moon landing. So it represents the love of human beings and the fearless exploration spirit of that era. And encourage us to keep going and never give up.
 
 ## Installation and usage
+Install golang and download package from golang.org  
+    * [https://golang.org](https://golang.org)
+
 Use Git to clone this project:  
-    git clone https://github.com/gorgeousbubble/satellite.git
+    git clone https://github.com/gorgeousbubble/satellite.git  
+
