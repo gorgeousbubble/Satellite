@@ -15,9 +15,13 @@ Install golang and download package from [https://golang.org](https://golang.org
   | Linux         | adm64         | 1.13.6 ↑ | go1.13.6 linux/amd64    |
   | Linux         | arm           | 1.13.6 ↑ | go1.13.6 linux/arm      |
 
-Use Git to clone this project:  
+#### Use Git to clone this project  
   `git clone https://github.com/gorgeousbubble/satellite.git`  
+
+#### Install dependencies  
+  You can use `go get -u ...` to install dependencies one by one. In Linux, you can enter `$GOPATH/src` and use `make deps` to install all package.
   
+#### Build native or container
 Build the project:  
   * Build the project in Windows  
     `cd $GOPATH/src/satellite`  
@@ -25,4 +29,9 @@ Build the project:
   * Build the project in Linux or ARM  
     `cd $GOPATH/src/satellite`  
     `make build`
+    
+Build docker image:  
+  * Build All in One:
+  * `cd $GOPATH/src/satellite`  
+  * `docker build -t satellite .`
 
