@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"satellite/comp"
 	"satellite/decomp"
+	. "satellite/global"
 	"satellite/images"
 	"satellite/pack"
 	"satellite/parses"
@@ -338,7 +339,7 @@ func handlePostNetsPack(w http.ResponseWriter, r *http.Request) (err error) {
 		if finish {
 			break
 		}
-		if count >= 100 {
+		if count >= NetHttpTimeout {
 			err = errors.New("timeout")
 			return err
 		}
@@ -409,7 +410,7 @@ func handlePostNetsUnpack(w http.ResponseWriter, r *http.Request) (err error) {
 		if finish {
 			break
 		}
-		if count >= 100 {
+		if count >= NetHttpTimeout {
 			err = errors.New("timeout")
 			return err
 		}
@@ -488,7 +489,7 @@ func handleGetNetsPackProcess(w http.ResponseWriter, r *http.Request) (err error
 		if finish {
 			break
 		}
-		if count >= 100 {
+		if count >= NetHttpTimeout {
 			err = errors.New("timeout")
 			return err
 		}
@@ -582,7 +583,7 @@ func handleGetNetsUnpackVerbose(w http.ResponseWriter, r *http.Request) (err err
 		if finish {
 			break
 		}
-		if count >= 100 {
+		if count >= NetHttpTimeout {
 			err = errors.New("timeout")
 			return err
 		}
@@ -673,7 +674,7 @@ func handleGetNetsUnpackProcess(w http.ResponseWriter, r *http.Request) (err err
 		if finish {
 			break
 		}
-		if count >= 100 {
+		if count >= NetHttpTimeout {
 			err = errors.New("timeout")
 			return err
 		}
@@ -755,7 +756,7 @@ func handlePostNetsUnpackConfine(w http.ResponseWriter, r *http.Request) (err er
 		if finish {
 			break
 		}
-		if count >= 100 {
+		if count >= NetHttpTimeout {
 			err = errors.New("timeout")
 			return err
 		}
@@ -826,7 +827,7 @@ func handlePostNetsUnpackToFile(w http.ResponseWriter, r *http.Request) (err err
 		if finish {
 			break
 		}
-		if count >= 100 {
+		if count >= NetHttpTimeout {
 			err = errors.New("timeout")
 			return err
 		}
@@ -897,7 +898,7 @@ func handlePostNetsUnpackToFileConfine(w http.ResponseWriter, r *http.Request) (
 		if finish {
 			break
 		}
-		if count >= 100 {
+		if count >= NetHttpTimeout {
 			err = errors.New("timeout")
 			return err
 		}
@@ -969,7 +970,7 @@ func handleGetNetsUnpackToMemory(w http.ResponseWriter, r *http.Request) (err er
 		if finish {
 			break
 		}
-		if count >= 100 {
+		if count >= NetHttpTimeout {
 			err = errors.New("timeout")
 			return err
 		}
@@ -1051,7 +1052,7 @@ func handlePostNetsComp(w http.ResponseWriter, r *http.Request) (err error) {
 		if finish {
 			break
 		}
-		if count >= 100 {
+		if count >= NetHttpTimeout {
 			err = errors.New("timeout")
 			return err
 		}
@@ -1122,7 +1123,7 @@ func handlePostNetsDecomp(w http.ResponseWriter, r *http.Request) (err error) {
 		if finish {
 			break
 		}
-		if count >= 100 {
+		if count >= NetHttpTimeout {
 			err = errors.New("timeout")
 			return err
 		}

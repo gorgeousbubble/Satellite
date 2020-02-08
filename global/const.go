@@ -66,3 +66,7 @@ const (
 	HTTPWriteTimeout = 10000 // HTTP Write Timeout Time(Millisecond)
 	HTTPReadTimeout  = 10000 // HTTP Read Timeout Time(Millisecond)
 )
+
+const (
+	NetHttpTimeout = 100 // Net HTTP timeout(100ms)
+)
