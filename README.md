@@ -64,7 +64,7 @@ Format the project:
     `cd $GOPATH/src/satellite`  
     `make fmt`
     
-##### Clean environment
+#### Clean environment
 Clean environment:  
   * Clean the project in Windows  
     `cd $GOPATH/src/satellite`  
