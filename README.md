@@ -83,9 +83,3 @@ You can also refer to doc folder and I will add markdown file to give some descr
     
 ## License
 The Satellite project is licensed under the Apache License 2.0. Please see the LICENSE file for details.
-
-## Contributing
-Please refer to our docs at CONTRIBUTING.md
-
-## Code of Conduct
-Please refer to our docs at CODE_OF_CONDUCT.md
