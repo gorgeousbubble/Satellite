@@ -68,5 +68,5 @@ const (
 )
 
 const (
-	NetHttpTimeout = 100 // Net HTTP timeout(100ms)
+	NetHttpTimeout = 600 // Net HTTP timeout(100ms)
 )
