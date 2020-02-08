@@ -1,6 +1,8 @@
 # Satellite 🌠
 The Satellite Golang Project.
 
+[![Documentation](https://img.shields.io/badge/godoc-reference-blue.svg?style=flat-square)](http://godoc.org/github.com/gorgeousbubble/satellite)
+
 ## Introduction
 Satellite is a tool for both multiple command and web service develop by Golang. This project is my first program design by golang.So I try to use golang to written some useful tools for both Windows and Linux. Now it contains many function such as packet, unpack, compress, decompress, etc. I will continue to contribute to this project about new feature and make it more funny and useful.
 
@@ -72,3 +74,9 @@ Clean environment:
   * Clean the project in Linux or ARM  
     `cd $GOPATH/src/satellite`  
     `make clean`
+    
+## API document
+
+    
+## License
+The Satellite project is licensed under the Apache License 2.0. Please see the LICENSE file for details.
