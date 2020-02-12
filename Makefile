@@ -20,6 +20,8 @@ DOCKERRUN	= $(DOCKER) run
 
 # Application
 APPNAME	= satellite
+APPDIST = satellite.tar.gz
+APPPATH = $(GOBIN)/$(APPNAME)
 
 # Build
 all: test build
@@ -30,6 +32,11 @@ build:
 
 build_image:
 	$(DOCKERBUILD) -t $(APPNAME) .
+
+dist:
+    $(MKBIN)
+    $(GOBUILD) -o $(GOBIN)
+    tar -zcvf $(APPDIST) $(APPPATH)
 
 test:
 	$(GOTEST) -v -cover -benchmem -bench .
