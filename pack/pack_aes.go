@@ -130,6 +130,12 @@ func PackAESConfine(src []string, dest string) (err error) {
 	return err
 }
 
+// PackAESWorkCalculate function
+// it will calculate the total work value which you input files
+// it will be call in progress pack files
+// input src files same as you pack src files
+// output work value and err
+// return err indicate the success or failure function execute
 func PackAESWorkCalculate(src []string) (work int64, err error) {
 	var sum int64
 	if len(src) == 0 {
