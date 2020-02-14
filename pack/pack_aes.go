@@ -165,6 +165,13 @@ func PackAESWorkCalculate(src []string) (work int64, err error) {
 	return work, err
 }
 
+// PackAESOneGo function
+// input source file, return value pointer and wait group pointer
+// it will pack one file through goroutine
+// src file support both absolute and relative paths, like 'C:\\file.txt' or '../test/data/file.txt'
+// r should input byte slice pointer and it will fill in return value
+// wg is a flag to control different goroutine sync
+// return err indicate the success or failure function execute
 func PackAESOneGo(src string, r *[]byte, wg *sync.WaitGroup) (err error) {
 	defer wg.Done()
 	*r, err = PackAESOne(src)
@@ -175,6 +182,8 @@ func PackAESOneGo(src string, r *[]byte, wg *sync.WaitGroup) (err error) {
 	return err
 }
 
+// PackAESOneConfineGo function
+// it common with function PackAESOneGo, just restrict goroutine when running
 func PackAESOneConfineGo(src string, r *[]byte, wg *sync.WaitGroup, ch chan interface{}) (err error) {
 	defer wg.Done()
 	*r, err = PackAESOneConfine(src)
