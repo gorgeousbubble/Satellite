@@ -75,6 +75,8 @@ func PackAES(src []string, dest string) (err error) {
 	return err
 }
 
+// PackAESConfine function
+// it common with function PackAES, just restrict goroutine when running
 func PackAESConfine(src []string, dest string) (err error) {
 	wg := &sync.WaitGroup{}
 	ch := make(chan interface{}, 5)
