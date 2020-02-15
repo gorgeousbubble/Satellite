@@ -348,6 +348,14 @@ func PackAESOneConfine(src string) (r []byte, err error) {
 	return r, err
 }
 
+// AESEncryptGo function
+// input source file, encrypt key, return value pointer and wait group pointer
+// it will encrypt one file through goroutine
+// src file must be byte slice, you can open file and read it through io
+// key is a 128bit number which used by aes, here is 16 bit byte slice
+// dest should input byte slice pointer and it will fill in return value after encrypt
+// wg is a flag to control different goroutine sync
+// return err indicate the success or failure function execute
 func AESEncryptGo(src, key []byte, dest *[]byte, wg *sync.WaitGroup) (err error) {
 	defer wg.Done()
 	*dest, err = AESEncrypt(src, key)
@@ -359,6 +367,9 @@ func AESEncryptGo(src, key []byte, dest *[]byte, wg *sync.WaitGroup) (err error)
 	return err
 }
 
+// AESEncryptConfineGo function
+// it common with function AESEncryptGo, just restrict goroutine when running
+// it will called at the confine mode
 func AESEncryptConfineGo(src, key []byte, dest *[]byte, wg *sync.WaitGroup, ch chan interface{}) (err error) {
 	defer wg.Done()
 	*dest, err = AESEncrypt(src, key)
@@ -372,6 +383,8 @@ func AESEncryptConfineGo(src, key []byte, dest *[]byte, wg *sync.WaitGroup, ch c
 	return err
 }
 
+// AESEncrypt function
+// original function of encrypt
 func AESEncrypt(src, key []byte) (dest []byte, err error) {
 	// key length should be 16, 24, 32
 	block, err := aes.NewCipher(key)
@@ -392,6 +405,8 @@ func AESEncrypt(src, key []byte) (dest []byte, err error) {
 	return dest, err
 }
 
+// PKCS7Padding function
+// AESEncrypt will call this function
 func PKCS7Padding(src []byte, size int) []byte {
 	var padding int
 	if len(src)%size != 0 {
