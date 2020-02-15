@@ -196,6 +196,8 @@ func PackAESOneConfineGo(src string, r *[]byte, wg *sync.WaitGroup, ch chan inte
 	return err
 }
 
+// PackAESOne function
+// it the base function of PackAESOneGo
 func PackAESOne(src string) (r []byte, err error) {
 	rand.Seed(time.Now().UnixNano())
 	// first, open the file
@@ -269,6 +271,8 @@ func PackAESOne(src string) (r []byte, err error) {
 	return r, err
 }
 
+// PackAESOneConfineGo function
+// it the base function of PackAESOneConfineGo
 func PackAESOneConfine(src string) (r []byte, err error) {
 	rand.Seed(time.Now().UnixNano())
 	// first, open the file
