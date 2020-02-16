@@ -72,6 +72,12 @@ func PackBase64(src []string, dest string) (err error) {
 	return err
 }
 
+// PackBase64WorkCalculate function
+// it will calculate the total work value which you input files
+// it will be call in progress pack files
+// input src files same as you pack src files
+// output work value and err
+// return err indicate the success or failure function execute
 func PackBase64WorkCalculate(src []string) (work int64, err error) {
 	var sum int64
 	if len(src) == 0 {
@@ -101,6 +107,13 @@ func PackBase64WorkCalculate(src []string) (work int64, err error) {
 	return work, err
 }
 
+// PackBase64OneGo function
+// input source file, return value pointer and wait group pointer
+// it will pack one file through goroutine
+// src file support both absolute and relative paths, like 'C:\\file.txt' or '../test/data/file.txt'
+// r should input string pointer and it will fill in return value
+// wg is a flag to control different goroutine sync
+// return err indicate the success or failure function execute
 func PackBase64OneGo(src string, r *string, wg *sync.WaitGroup) (err error) {
 	defer wg.Done()
 	*r, err = PackBase64One(src)
@@ -111,6 +124,8 @@ func PackBase64OneGo(src string, r *string, wg *sync.WaitGroup) (err error) {
 	return err
 }
 
+// PackBase64One function
+// this function is the base function of PackBase64OneGo
 func PackBase64One(src string) (r string, err error) {
 	// first, open the file
 	file, err := os.Open(src)
