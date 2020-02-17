@@ -180,12 +180,21 @@ func PackBase64One(src string) (r string, err error) {
 	return r, err
 }
 
+// Base64EncryptGo function
+// input source file, return value pointer and wait group pointer
+// it will encrypt one file through goroutine
+// src file must be string, you can open file and read it through io
+// dest should input string pointer and it will fill in return value after encrypt
+// wg is a flag to control different goroutine sync
+// return err indicate the success or failure function execute
 func Base64EncryptGo(str string, r *string, wg *sync.WaitGroup) {
 	defer wg.Done()
 	*r = Base64Encrypt(str)
 	atomic.AddInt64(&Done, 1)
 }
 
+// Base64Encrypt function
+// it common with function Base64EncryptGo
 func Base64Encrypt(str string) string {
 	s := []byte(str)
 	r := base64.StdEncoding.EncodeToString(s)
