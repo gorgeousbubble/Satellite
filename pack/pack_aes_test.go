@@ -6,6 +6,7 @@ import (
 	"testing"
 )
 
+// TestPackAES function
 func TestPackAES(t *testing.T) {
 	src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
 	dest := "../test/data/pack/file_aes.txt"
@@ -15,6 +16,7 @@ func TestPackAES(t *testing.T) {
 	}
 }
 
+// TestPackAESConfine function
 func TestPackAESConfine(t *testing.T) {
 	src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
 	dest := "../test/data/pack/file_aes.txt"
@@ -24,6 +26,7 @@ func TestPackAESConfine(t *testing.T) {
 	}
 }
 
+// TestPackAESWorkCalculate function
 func TestPackAESWorkCalculate(t *testing.T) {
 	src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
 	_, err := PackAESWorkCalculate(src)
