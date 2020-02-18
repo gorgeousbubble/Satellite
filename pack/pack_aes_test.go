@@ -35,6 +35,7 @@ func TestPackAESWorkCalculate(t *testing.T) {
 	}
 }
 
+// TestPackAESOneGo function
 func TestPackAESOneGo(t *testing.T) {
 	var wg sync.WaitGroup
 	var r []byte
@@ -51,6 +52,7 @@ func TestPackAESOneGo(t *testing.T) {
 	}
 }
 
+// TestPackAESOne function
 func TestPackAESOne(t *testing.T) {
 	src := "../test/data/pack/file.txt"
 	r, err := PackAESOne(src)
@@ -63,6 +65,7 @@ func TestPackAESOne(t *testing.T) {
 	}
 }
 
+// TestPackAESOneConfine function
 func TestPackAESOneConfine(t *testing.T) {
 	src := "../test/data/pack/file.txt"
 	r, err := PackAESOneConfine(src)
@@ -75,6 +78,7 @@ func TestPackAESOneConfine(t *testing.T) {
 	}
 }
 
+// TestAESEncryptGo function
 func TestAESEncryptGo(t *testing.T) {
 	var wg sync.WaitGroup
 	var r []byte
@@ -89,6 +93,7 @@ func TestAESEncryptGo(t *testing.T) {
 	}
 }
 
+// TestAESEncrypt function
 func TestAESEncrypt(t *testing.T) {
 	src := []byte("hello,world!")
 	key := []byte("Satellite-266414")
@@ -102,6 +107,7 @@ func TestAESEncrypt(t *testing.T) {
 	}
 }
 
+// BenchmarkPackAES function
 func BenchmarkPackAES(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
@@ -113,6 +119,7 @@ func BenchmarkPackAES(b *testing.B) {
 	}
 }
 
+// BenchmarkPackAESConfine function
 func BenchmarkPackAESConfine(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
