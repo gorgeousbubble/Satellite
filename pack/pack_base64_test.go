@@ -6,6 +6,7 @@ import (
 	"testing"
 )
 
+// TestPackBase64 function
 func TestPackBase64(t *testing.T) {
 	src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
 	dest := "../test/data/pack/file_base64.txt"
@@ -15,6 +16,7 @@ func TestPackBase64(t *testing.T) {
 	}
 }
 
+// TestPackBase64WorkCalculate function
 func TestPackBase64WorkCalculate(t *testing.T) {
 	src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
 	_, err := PackBase64WorkCalculate(src)
@@ -23,6 +25,7 @@ func TestPackBase64WorkCalculate(t *testing.T) {
 	}
 }
 
+// TestPackBase64OneGo function
 func TestPackBase64OneGo(t *testing.T) {
 	var wg sync.WaitGroup
 	var r string
