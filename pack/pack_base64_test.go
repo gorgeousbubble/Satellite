@@ -39,6 +39,7 @@ func TestPackBase64OneGo(t *testing.T) {
 	}
 }
 
+// TestPackBase64One function
 func TestPackBase64One(t *testing.T) {
 	src := "../test/data/pack/file.txt"
 	r, err := PackBase64One(src)
@@ -51,6 +52,7 @@ func TestPackBase64One(t *testing.T) {
 	}
 }
 
+// TestBase64EncryptGo function
 func TestBase64EncryptGo(t *testing.T) {
 	var wg sync.WaitGroup
 	var r string
@@ -68,6 +70,7 @@ func TestBase64EncryptGo(t *testing.T) {
 	}
 }
 
+// TestBase64Encrypt function
 func TestBase64Encrypt(t *testing.T) {
 	src := "hello,world!"
 	dest := "aGVsbG8sd29ybGQh"
