@@ -84,6 +84,7 @@ func TestBase64Encrypt(t *testing.T) {
 	}
 }
 
+// BenchmarkPackBase64 function
 func BenchmarkPackBase64(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
@@ -95,6 +96,7 @@ func BenchmarkPackBase64(b *testing.B) {
 	}
 }
 
+// BenchmarkPackBase64WorkCalculate function
 func BenchmarkPackBase64WorkCalculate(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
@@ -105,6 +107,7 @@ func BenchmarkPackBase64WorkCalculate(b *testing.B) {
 	}
 }
 
+// BenchmarkPackBase64OneGo function
 func BenchmarkPackBase64OneGo(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var wg sync.WaitGroup
@@ -120,6 +123,7 @@ func BenchmarkPackBase64OneGo(b *testing.B) {
 	}
 }
 
+// BenchmarkPackBase64One function
 func BenchmarkPackBase64One(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/pack/file.txt"
@@ -134,6 +138,7 @@ func BenchmarkPackBase64One(b *testing.B) {
 	}
 }
 
+// BenchmarkBase64EncryptGo function
 func BenchmarkBase64EncryptGo(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var wg sync.WaitGroup
@@ -153,6 +158,7 @@ func BenchmarkBase64EncryptGo(b *testing.B) {
 	}
 }
 
+// BenchmarkBase64Encrypt function
 func BenchmarkBase64Encrypt(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "hello,world!"
