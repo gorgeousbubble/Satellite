@@ -31,6 +31,12 @@ func Pack(src []string, dest string, algorithm string) (err error) {
 	return err
 }
 
+// WorkCalculate function
+// input src file list, algorithm which used in pack and output work value, return error info
+// this function will called by calculate work
+// algorithm now support 'AES', 'DES', '3DES', 'RSA' and 'BASE64', you can send both up case and low case
+// work value is total work force that will be done
+// return err indicate the success or failure function execute
 func WorkCalculate(src []string, algorithm string, work *int64) (err error) {
 	switch algorithm {
 	case "AES", "aes":
