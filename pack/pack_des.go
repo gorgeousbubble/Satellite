@@ -75,6 +75,12 @@ func Pack3DES(src []string, dest string) (err error) {
 	return err
 }
 
+// PackDES function
+// input source file list and dest package path, output error information
+// src file support both absolute and relative paths, like 'C:\\file.txt' or '../test/data/file.txt'
+// dest file also support both absolute and relative paths, like 'C:\\package.pak' or '../test/data/package.pak'
+// dest file name suffix can be any type such as '.pak', '.dat', even none is ok
+// return err indicate the success or failure function execute
 func PackDES(src []string, dest string) (err error) {
 	wg := &sync.WaitGroup{}
 	// start multi-cpu
