@@ -6,6 +6,7 @@ import (
 	"testing"
 )
 
+// TestGobEncode function
 func TestGobEncode(t *testing.T) {
 	type test struct {
 		Name  string
@@ -20,6 +21,7 @@ func TestGobEncode(t *testing.T) {
 	fmt.Println(buf.String())
 }
 
+// BenchmarkGobEncode function
 func BenchmarkGobEncode(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		type test struct {
@@ -35,6 +37,7 @@ func BenchmarkGobEncode(b *testing.B) {
 	}
 }
 
+// TestGobEncodeTo function
 func TestGobEncodeTo(t *testing.T) {
 	type test struct {
 		Name  string
@@ -48,6 +51,7 @@ func TestGobEncodeTo(t *testing.T) {
 	}
 }
 
+// BenchmarkGobEncodeTo function
 func BenchmarkGobEncodeTo(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		type test struct {
