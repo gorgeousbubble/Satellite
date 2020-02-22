@@ -6,6 +6,7 @@ import (
 	"testing"
 )
 
+// TestPack3DES function
 func TestPack3DES(t *testing.T) {
 	src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
 	dest := "../test/data/pack/file_3des.txt"
