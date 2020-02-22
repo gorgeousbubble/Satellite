@@ -16,6 +16,7 @@ func TestPack3DES(t *testing.T) {
 	}
 }
 
+// TestPackDES function
 func TestPackDES(t *testing.T) {
 	src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
 	dest := "../test/data/pack/file_des.txt"
@@ -25,6 +26,7 @@ func TestPackDES(t *testing.T) {
 	}
 }
 
+// TestPackDESWorkCalculate function
 func TestPackDESWorkCalculate(t *testing.T) {
 	src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
 	_, err := PackDESWorkCalculate(src)
@@ -33,6 +35,7 @@ func TestPackDESWorkCalculate(t *testing.T) {
 	}
 }
 
+// TestPack3DESOneGo function
 func TestPack3DESOneGo(t *testing.T) {
 	var wg sync.WaitGroup
 	var r []byte
@@ -49,6 +52,7 @@ func TestPack3DESOneGo(t *testing.T) {
 	}
 }
 
+// TestPack3DESOne function
 func TestPack3DESOne(t *testing.T) {
 	src := "../test/data/pack/file.txt"
 	r, err := Pack3DESOne(src)
@@ -61,6 +65,7 @@ func TestPack3DESOne(t *testing.T) {
 	}
 }
 
+// TestPackDESOneGo function
 func TestPackDESOneGo(t *testing.T) {
 	var wg sync.WaitGroup
 	var r []byte
@@ -77,6 +82,7 @@ func TestPackDESOneGo(t *testing.T) {
 	}
 }
 
+// TestPackDESOne function
 func TestPackDESOne(t *testing.T) {
 	src := "../test/data/pack/file.txt"
 	r, err := PackDESOne(src)
@@ -89,6 +95,7 @@ func TestPackDESOne(t *testing.T) {
 	}
 }
 
+// TestTripleDESEncryptGo function
 func TestTripleDESEncryptGo(t *testing.T) {
 	var wg sync.WaitGroup
 	var r []byte
@@ -103,6 +110,7 @@ func TestTripleDESEncryptGo(t *testing.T) {
 	}
 }
 
+// TestTripleDESEncrypt function
 func TestTripleDESEncrypt(t *testing.T) {
 	src := []byte("hello,world!")
 	key := []byte("HyacinthRaindropRomantic")
@@ -116,6 +124,7 @@ func TestTripleDESEncrypt(t *testing.T) {
 	}
 }
 
+// TestDESEncryptGo function
 func TestDESEncryptGo(t *testing.T) {
 	var wg sync.WaitGroup
 	var r []byte
@@ -130,6 +139,7 @@ func TestDESEncryptGo(t *testing.T) {
 	}
 }
 
+// TestDESEncrypt function
 func TestDESEncrypt(t *testing.T) {
 	src := []byte("hello,world!")
 	key := []byte("hyacinth")
