@@ -7,6 +7,7 @@ import (
 	"testing"
 )
 
+// TestMD5Check function
 func TestMD5Check(t *testing.T) {
 	src := "hello,world!"
 	dest := "c0e84e870874dd37ed0d164c7986f03a"
@@ -16,6 +17,7 @@ func TestMD5Check(t *testing.T) {
 	}
 }
 
+// TestMD5Check2 function
 func TestMD5Check2(t *testing.T) {
 	src := "Nice to meet you~"
 	dest := "c0e84e870874dd37ed0d164c7986f03a"
@@ -25,6 +27,7 @@ func TestMD5Check2(t *testing.T) {
 	}
 }
 
+// TestMD5Encode function
 func TestMD5Encode(t *testing.T) {
 	src := "hello,world!"
 	r := MD5Encode(src)
@@ -34,6 +37,7 @@ func TestMD5Encode(t *testing.T) {
 	}
 }
 
+// TestMD5EncryptGo function
 func TestMD5EncryptGo(t *testing.T) {
 	var wg sync.WaitGroup
 	var r [md5.Size]byte
@@ -47,6 +51,7 @@ func TestMD5EncryptGo(t *testing.T) {
 	}
 }
 
+// TestMD5Encrypt function
 func TestMD5Encrypt(t *testing.T) {
 	src := []byte("hello,world!")
 	r := MD5Encrypt(src)
