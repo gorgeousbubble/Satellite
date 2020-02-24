@@ -61,6 +61,7 @@ func TestMD5Encrypt(t *testing.T) {
 	}
 }
 
+// BenchmarkMD5Check function
 func BenchmarkMD5Check(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "hello,world!"
@@ -72,6 +73,7 @@ func BenchmarkMD5Check(b *testing.B) {
 	}
 }
 
+// BenchmarkMD5Check2 function
 func BenchmarkMD5Check2(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "Nice to meet you~"
@@ -83,6 +85,7 @@ func BenchmarkMD5Check2(b *testing.B) {
 	}
 }
 
+// BenchmarkMD5Encode function
 func BenchmarkMD5Encode(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "hello,world!"
@@ -94,6 +97,7 @@ func BenchmarkMD5Encode(b *testing.B) {
 	}
 }
 
+// BenchmarkMD5EncryptGo function
 func BenchmarkMD5EncryptGo(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var wg sync.WaitGroup
@@ -109,6 +113,7 @@ func BenchmarkMD5EncryptGo(b *testing.B) {
 	}
 }
 
+// BenchmarkMD5Encrypt function
 func BenchmarkMD5Encrypt(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := []byte("hello,world!")
