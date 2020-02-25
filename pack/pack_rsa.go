@@ -75,6 +75,12 @@ func PackRSA(src []string, dest string) (err error) {
 	return err
 }
 
+// PackRSAWorkCalculate function
+// it will calculate the total work value which you input files
+// it will be call in progress pack files
+// input src files same as you pack src files
+// output work value and err
+// return err indicate the success or failure function execute
 func PackRSAWorkCalculate(src []string) (work int64, err error) {
 	var sum int64
 	if len(src) == 0 {
@@ -104,6 +110,13 @@ func PackRSAWorkCalculate(src []string) (work int64, err error) {
 	return work, err
 }
 
+// PackRSAOneGo function
+// input source file, return value pointer and wait group pointer
+// it will pack one file through goroutine
+// src file support both absolute and relative paths, like 'C:\\file.txt' or '../test/data/file.txt'
+// r should input byte slice pointer and it will fill in return value
+// wg is a flag to control different goroutine sync
+// return err indicate the success or failure function execute
 func PackRSAOneGo(src string, r *[]byte, wg *sync.WaitGroup) (err error) {
 	defer wg.Done()
 	*r, err = PackRSAOne(src)
@@ -114,6 +127,8 @@ func PackRSAOneGo(src string, r *[]byte, wg *sync.WaitGroup) (err error) {
 	return err
 }
 
+// PackRSAOne function
+// it the base function of PackRSAOne
 func PackRSAOne(src string) (r []byte, err error) {
 	// first, open the file
 	file, err := os.Open(src)
@@ -177,6 +192,14 @@ func PackRSAOne(src string) (r []byte, err error) {
 	return r, err
 }
 
+// RSAEncryptGo function
+// input source file, encrypt key, return value pointer and wait group pointer
+// it will encrypt one file through goroutine
+// src file must be byte slice, you can open file and read it through io
+// key is a 128bit number which used by rsa, here is 16 bit byte slice
+// dest should input byte slice pointer and it will fill in return value after encrypt
+// wg is a flag to control different goroutine sync
+// return err indicate the success or failure function execute
 func RSAEncryptGo(src, key []byte, dest *[]byte, wg *sync.WaitGroup) (err error) {
 	defer wg.Done()
 	*dest, err = RSAEncrypt(src, key)
@@ -188,6 +211,8 @@ func RSAEncryptGo(src, key []byte, dest *[]byte, wg *sync.WaitGroup) (err error)
 	return err
 }
 
+// RSAEncrypt function
+// it the base function of RSAEncryptGo
 func RSAEncrypt(src, key []byte) (dest []byte, err error) {
 	block, _ := pem.Decode(key)
 	if block == nil {
