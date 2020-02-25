@@ -7,6 +7,7 @@ import (
 	"testing"
 )
 
+// TestPackRSA function
 func TestPackRSA(t *testing.T) {
 	src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
 	dest := "../test/data/pack/file_rsa.txt"
@@ -16,6 +17,7 @@ func TestPackRSA(t *testing.T) {
 	}
 }
 
+// TestPackRSAWorkCalculate function
 func TestPackRSAWorkCalculate(t *testing.T) {
 	src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
 	_, err := PackRSAWorkCalculate(src)
@@ -24,6 +26,7 @@ func TestPackRSAWorkCalculate(t *testing.T) {
 	}
 }
 
+// TestPackRSAOneGo function
 func TestPackRSAOneGo(t *testing.T) {
 	var wg sync.WaitGroup
 	var r []byte
@@ -40,6 +43,7 @@ func TestPackRSAOneGo(t *testing.T) {
 	}
 }
 
+// TestPackRSAOne function
 func TestPackRSAOne(t *testing.T) {
 	src := "../test/data/pack/file.txt"
 	r, err := PackRSAOne(src)
@@ -52,6 +56,7 @@ func TestPackRSAOne(t *testing.T) {
 	}
 }
 
+// TestRSAEncryptGo function
 func TestRSAEncryptGo(t *testing.T) {
 	var wg sync.WaitGroup
 	var r []byte
@@ -65,6 +70,7 @@ func TestRSAEncryptGo(t *testing.T) {
 	}
 }
 
+// TestRSAEncrypt function
 func TestRSAEncrypt(t *testing.T) {
 	src := []byte("hello,world!")
 	r, err := RSAEncrypt(src, ConstRSAPublicKey)
