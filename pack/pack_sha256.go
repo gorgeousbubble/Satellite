@@ -6,6 +6,9 @@ import (
 	"sync"
 )
 
+// SHA256Check function
+// input src string and output dest string with sha1
+// return bool indicate the success or failure function execute
 func SHA256Check(src string, dest string) bool {
 	b := false
 	if SHA256Encode(src) == dest {
