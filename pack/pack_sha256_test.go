@@ -61,6 +61,7 @@ func TestSHA256Encrypt(t *testing.T) {
 	}
 }
 
+// BenchmarkSHA256Check function
 func BenchmarkSHA256Check(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "hello,world!"
@@ -72,6 +73,7 @@ func BenchmarkSHA256Check(b *testing.B) {
 	}
 }
 
+// BenchmarkSHA256Check2 function
 func BenchmarkSHA256Check2(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "Nice to meet you~"
@@ -83,6 +85,7 @@ func BenchmarkSHA256Check2(b *testing.B) {
 	}
 }
 
+// BenchmarkSHA256Encode function
 func BenchmarkSHA256Encode(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "hello,world!"
@@ -94,6 +97,7 @@ func BenchmarkSHA256Encode(b *testing.B) {
 	}
 }
 
+// BenchmarkSHA256EncryptGo function
 func BenchmarkSHA256EncryptGo(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var wg sync.WaitGroup
@@ -109,6 +113,7 @@ func BenchmarkSHA256EncryptGo(b *testing.B) {
 	}
 }
 
+// BenchmarkSHA256Encrypt function
 func BenchmarkSHA256Encrypt(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := []byte("hello,world!")
