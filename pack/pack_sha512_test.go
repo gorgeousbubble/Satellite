@@ -7,6 +7,7 @@ import (
 	"testing"
 )
 
+// TestSHA512Check function
 func TestSHA512Check(t *testing.T) {
 	src := "hello,world!"
 	dest := "fa9edcfdaab7a4165f8d2593f04077d46aca957493e7e181ca479582d519a299d967305294d5d46fb5e0158240441b94cd96510c2311bdc86870e5ebf3efe60c"
@@ -16,6 +17,7 @@ func TestSHA512Check(t *testing.T) {
 	}
 }
 
+// TestSHA512Check2 function
 func TestSHA512Check2(t *testing.T) {
 	src := "Nice to meet you~"
 	dest := "fa9edcfdaab7a4165f8d2593f04077d46aca957493e7e181ca479582d519a299d967305294d5d46fb5e0158240441b94cd96510c2311bdc86870e5ebf3efe60c"
@@ -25,6 +27,7 @@ func TestSHA512Check2(t *testing.T) {
 	}
 }
 
+// TestSHA512Encode function
 func TestSHA512Encode(t *testing.T) {
 	src := "hello,world!"
 	r := SHA512Encode(src)
@@ -34,6 +37,7 @@ func TestSHA512Encode(t *testing.T) {
 	}
 }
 
+// TestSHA512EncryptGo function
 func TestSHA512EncryptGo(t *testing.T) {
 	var wg sync.WaitGroup
 	var r [sha512.Size]byte
@@ -47,6 +51,7 @@ func TestSHA512EncryptGo(t *testing.T) {
 	}
 }
 
+// TestSHA512Encrypt
 func TestSHA512Encrypt(t *testing.T) {
 	src := []byte("hello,world!")
 	r := SHA512Encrypt(src)
