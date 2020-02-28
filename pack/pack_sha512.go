@@ -6,6 +6,9 @@ import (
 	"sync"
 )
 
+// SHA512Check function
+// input src string and output dest string with sha512
+// return bool indicate the success or failure function execute
 func SHA512Check(src string, dest string) bool {
 	b := false
 	if SHA512Encode(src) == dest {
