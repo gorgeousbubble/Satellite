@@ -51,7 +51,7 @@ func TestSHA512EncryptGo(t *testing.T) {
 	}
 }
 
-// TestSHA512Encrypt
+// TestSHA512Encrypt function
 func TestSHA512Encrypt(t *testing.T) {
 	src := []byte("hello,world!")
 	r := SHA512Encrypt(src)
@@ -61,6 +61,7 @@ func TestSHA512Encrypt(t *testing.T) {
 	}
 }
 
+// BenchmarkSHA512Check function
 func BenchmarkSHA512Check(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "hello,world!"
@@ -72,6 +73,7 @@ func BenchmarkSHA512Check(b *testing.B) {
 	}
 }
 
+// BenchmarkSHA512Check2 function
 func BenchmarkSHA512Check2(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "Nice to meet you~"
@@ -83,6 +85,7 @@ func BenchmarkSHA512Check2(b *testing.B) {
 	}
 }
 
+// BenchmarkSHA512Encode function
 func BenchmarkSHA512Encode(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "hello,world!"
@@ -94,6 +97,7 @@ func BenchmarkSHA512Encode(b *testing.B) {
 	}
 }
 
+// BenchmarkSHA512EncryptGo function
 func BenchmarkSHA512EncryptGo(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var wg sync.WaitGroup
@@ -109,6 +113,7 @@ func BenchmarkSHA512EncryptGo(b *testing.B) {
 	}
 }
 
+// BenchmarkSHA512Encrypt function
 func BenchmarkSHA512Encrypt(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := []byte("hello,world!")
