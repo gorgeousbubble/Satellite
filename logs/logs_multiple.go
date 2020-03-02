@@ -6,7 +6,7 @@ import (
 	"path"
 )
 
-type multipleLogWriter struct {
+type MultipleLogWriter struct {
 	multipleWriter *os.File
 	fileName       string
 	maxBytes       int
@@ -14,27 +14,46 @@ type multipleLogWriter struct {
 	backupCount    int
 }
 
-func (w *multipleLogWriter) Write(b []byte) (n int, err error) {
+func (w *MultipleLogWriter) Write(b []byte) (n int, err error) {
 	w.doRollOver()
 	n, err = w.multipleWriter.Write(b)
 	w.curBytes += n
 	return n, err
 }
 
-func (w *multipleLogWriter) Close() error {
+func (w *MultipleLogWriter) Writef(format string, a ...interface{}) (n int, err error) {
+	out := fmt.Sprintf(format, a...)
+	return w.Write([]byte(out))
+}
+
+func (w *MultipleLogWriter) Writeln(a ...interface{}) (n int, err error) {
+	out := fmt.Sprintln(a...)
+	return w.Write([]byte(out))
+}
+
+func (w *MultipleLogWriter) Close() error {
 	if w.multipleWriter != nil {
 		return w.multipleWriter.Close()
 	}
 	return nil
 }
 
-func NewMultipleFileWriter(fileName string, maxBytes int, backupCount int) (mw *multipleLogWriter, err error) {
+func NewMultipleFileWriter(fileName string, maxBytes int, backupCount int) (mw *MultipleLogWriter, err error) {
 	dir := path.Dir(fileName)
-	err = os.Mkdir(dir, 0777)
+	// check dir exist
+	_, err = os.Stat(dir)
 	if err != nil {
-		return nil, err
+		if os.IsNotExist(err) {
+			// dir not exist, mkdir...
+			err = os.Mkdir(dir, 0777)
+			if err != nil {
+				return nil, err
+			}
+		} else {
+			return nil, err
+		}
 	}
-	mw = new(multipleLogWriter)
+	mw = new(MultipleLogWriter)
 	if maxBytes <= 0 {
 		return nil, fmt.Errorf("invalid max bytes")
 	}
@@ -53,7 +72,7 @@ func NewMultipleFileWriter(fileName string, maxBytes int, backupCount int) (mw *
 	return mw, err
 }
 
-func (w *multipleLogWriter) doRollOver() (err error) {
+func (w *MultipleLogWriter) doRollOver() (err error) {
 	if w.curBytes < w.maxBytes {
 		return fmt.Errorf("curBytes overflow")
 	}

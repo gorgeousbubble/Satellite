@@ -6,6 +6,7 @@ import (
 	"os"
 	"runtime"
 	_ "satellite/app/erika/cli"
+	_ "satellite/app/erika/logs"
 )
 
 func init() {
