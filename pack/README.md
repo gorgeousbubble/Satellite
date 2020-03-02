@@ -57,6 +57,44 @@ dest := "../test/data/pack/file_aes.txt"
 algorithm := "AES"
 err := Pack(src, dest, algorithm)
 if err != nil {
-    fmt.Println("Error Pack:", err)
+    t.Fatal("Error Pack:", err)
+}
+```
+
+Certainly, function 'Pack' mainly do the pack or encrypt. If you also want to check the process of pack or encrypt, you can use function 'WorkCalculate' to get the work value pack now. It show how much work remain.
+```batch
+// WorkCalculate function
+// input src file list, algorithm which used in pack and output work value, return error info
+// this function will called by calculate work
+// algorithm now support 'AES', 'DES', '3DES', 'RSA' and 'BASE64', you can send both up case and low case
+// work value is total work force that will be done
+// return err indicate the success or failure function execute
+func WorkCalculate(src []string, algorithm string, work *int64) (err error) {
+	switch algorithm {
+	case "AES", "aes":
+		*work, err = PackAESWorkCalculate(src)
+	case "DES", "des":
+		*work, err = PackDESWorkCalculate(src)
+	case "3DES", "3des":
+		*work, err = PackDESWorkCalculate(src)
+	case "RSA", "rsa":
+		*work, err = PackRSAWorkCalculate(src)
+	case "BASE64", "base64":
+		*work, err = PackBase64WorkCalculate(src)
+	default:
+		s := fmt.Sprint("Undefined pack algorithm.")
+		err = errors.New(s)
+	}
+	return err
+}
+```
+
+You can use this function like this:
+```batch
+var work int64
+src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
+err := WorkCalculate(src, "aes", &work)
+if err != nil {
+    t.Fatal("Error Work Calculate:", err)
 }
 ```
