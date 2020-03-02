@@ -1,7 +1,31 @@
 package main
 
-import "fmt"
+import (
+	"flag"
+	"fmt"
+	"os"
+	"runtime"
+	_ "satellite/app/erika/cli"
+)
+
+func init() {
+	// start multiple CPU core
+	core := runtime.NumCPU()
+	runtime.GOMAXPROCS(core)
+}
 
 func main() {
-	fmt.Println("hello,world!")
+	// check cli args number
+	if len(os.Args) < 2 {
+		flag.Usage()
+		os.Exit(1)
+	}
+	// switch cli execute
+	switch os.Args[1] {
+	case "help":
+		flag.Usage()
+	default:
+		fmt.Println("Unrecognized command~")
+		os.Exit(1)
+	}
 }
