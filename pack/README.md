@@ -50,3 +50,13 @@ func Pack(src []string, dest string, algorithm string) (err error) {
 	return err
 }
 ```
+You can call this function to achieve pack or encrypt like this:
+```batch
+src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
+dest := "../test/data/pack/file_aes.txt"
+algorithm := "AES"
+err := Pack(src, dest, algorithm)
+if err != nil {
+    fmt.Println("Error Pack:", err)
+}
+```
