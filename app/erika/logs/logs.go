@@ -37,6 +37,7 @@ func Println(level string, a ...interface{}) {
 }
 
 func Debug(a ...interface{}) {
+	// check logs level...
 	if level > LogLevelDebug {
 		return
 	}
@@ -44,6 +45,7 @@ func Debug(a ...interface{}) {
 }
 
 func Info(a ...interface{}) {
+	// check logs level...
 	if level > LogLevelInfo {
 		return
 	}
@@ -51,6 +53,7 @@ func Info(a ...interface{}) {
 }
 
 func Event(a ...interface{}) {
+	// check logs level...
 	if level > LogLevelEvent {
 		return
 	}
@@ -58,6 +61,7 @@ func Event(a ...interface{}) {
 }
 
 func Warning(a ...interface{}) {
+	// check logs level...
 	if level > LogLevelWarning {
 		return
 	}
@@ -65,6 +69,7 @@ func Warning(a ...interface{}) {
 }
 
 func Error(a ...interface{}) {
+	// check logs level...
 	if level > LogLevelError {
 		return
 	}
@@ -72,6 +77,7 @@ func Error(a ...interface{}) {
 }
 
 func Critical(a ...interface{}) {
+	// check logs level...
 	if level > LogLevelCritical {
 		return
 	}
