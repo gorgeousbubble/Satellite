@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"runtime"
+	"satellite/app/erika/cli"
 	_ "satellite/app/erika/cli"
 	_ "satellite/app/erika/logs"
 )
@@ -25,6 +26,8 @@ func main() {
 	switch os.Args[1] {
 	case "help":
 		flag.Usage()
+	case "start":
+		cli.ParseCliStart()
 	default:
 		fmt.Println("Unrecognized command~")
 		os.Exit(1)

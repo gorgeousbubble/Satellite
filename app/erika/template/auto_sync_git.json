@@ -1,0 +1,18 @@
+{
+  "name": "auto_sync_git",
+  "description": "Automatic synchronization Git with remote repository.",
+  "schedule": "@hourly",
+  "attribute": {
+    "location": "/home/pi/repos/satellite"
+  },
+  "task": {
+    "exec": [
+      {
+        "command": "git pull gogs master"
+      },
+      {
+        "command": "git pull origin master"
+      }
+    ]
+  }
+}
