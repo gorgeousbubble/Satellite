@@ -31,10 +31,7 @@ func init() {
 }
 
 func Println(level string, a ...interface{}) {
-	// get current time
-	t := time.Now()
-	// print one logging
-	log.Writef("%s/%d/%d %02d:%02d:%02d -%s- ", t.Month().String(), t.Day(), t.Year(), t.Hour(), t.Minute(), t.Second(), level)
+	log.Writef("%s -%s- ", time.Now().Format("2006-01-02 15:04:05"), level)
 	log.Writeln(a...)
 }
 
