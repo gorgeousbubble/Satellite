@@ -31,6 +31,7 @@ func init() {
 }
 
 func Println(level string, a ...interface{}) {
+	// format logs once print
 	log.Writef("%s -%s- ", time.Now().Format("2006-01-02 15:04:05"), level)
 	log.Writeln(a...)
 }

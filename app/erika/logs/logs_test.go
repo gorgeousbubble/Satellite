@@ -29,3 +29,45 @@ func TestError(t *testing.T) {
 func TestCritical(t *testing.T) {
 	Critical("Critical Error!!!")
 }
+
+func BenchmarkPrintln(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		Println("DEBUG", "hello,world!")
+	}
+}
+
+func BenchmarkDebug(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		Debug("hello,world!")
+	}
+}
+
+func BenchmarkInfo(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		Info("This is a message~")
+	}
+}
+
+func BenchmarkEvent(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		Event("One Http Request###")
+	}
+}
+
+func BenchmarkWarning(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		Warning("Don't touch it!")
+	}
+}
+
+func BenchmarkError(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		Error("Error call function!!")
+	}
+}
+
+func BenchmarkCritical(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		Critical("Critical Error!!!")
+	}
+}
