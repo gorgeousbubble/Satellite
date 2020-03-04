@@ -1,7 +1,7 @@
 package nets
 
 const (
-	HTTPURLRoot  = "erika/v1"
+	HTTPURLRoot  = "/erika/v1"
 	HTTPURLHello = HTTPURLRoot + "/hello"
 )
 

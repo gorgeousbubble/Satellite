@@ -6,7 +6,6 @@ import (
 	"os"
 	"runtime"
 	"satellite/app/erika/cli"
-	_ "satellite/app/erika/cli"
 	_ "satellite/app/erika/logs"
 )
 
