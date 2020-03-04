@@ -98,3 +98,5 @@ if err != nil {
     t.Fatal("Error Work Calculate:", err)
 }
 ```
+
+For other functions, you can also call them from external. Usage is similar to the function which description before.
