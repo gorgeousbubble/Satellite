@@ -17,11 +17,30 @@ func TestUnpackBase64(t *testing.T) {
 	}
 }
 
+func TestUnpackBase64Confine(t *testing.T) {
+	src := "../test/data/unpack/file_base64.txt"
+	dest := "../test/data/unpack/"
+	err := UnpackBase64Confine(src, dest)
+	if err != nil {
+		t.Fatal("Error Unpack Base64:", err)
+	}
+}
+
 func TestUnpackBase64ToFile(t *testing.T) {
 	src := "../test/data/unpack/file_base64.txt"
 	dest := "../test/data/unpack/"
 	target := "file_1.txt"
 	err := UnpackBase64ToFile(src, target, dest)
+	if err != nil {
+		t.Fatal("Error Unpack Base64 To File:", err)
+	}
+}
+
+func TestUnpackBase64ToFileConfine(t *testing.T) {
+	src := "../test/data/unpack/file_base64.txt"
+	dest := "../test/data/unpack/"
+	target := "file_1.txt"
+	err := UnpackBase64ToFileConfine(src, target, dest)
 	if err != nil {
 		t.Fatal("Error Unpack Base64 To File:", err)
 	}
@@ -154,6 +173,37 @@ func TestUnpackBase64One(t *testing.T) {
 	}
 }
 
+func TestUnpackBase64OneConfine(t *testing.T) {
+	src := []byte{
+		0x66, 0x69, 0x6C, 0x65, 0x2E, 0x74, 0x78, 0x74, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x10, 0x61, 0x47, 0x56, 0x73, 0x62, 0x47, 0x38, 0x73, 0x64, 0x32, 0x39, 0x79,
+		0x62, 0x47, 0x51, 0x68,
+	}
+	dest := "../test/data/unpack/"
+	h := TUnpackBase64One{}
+	h.Name = make([]byte, 32)
+	h.Size = make([]byte, 4)
+	rd := bytes.NewReader(src)
+	_, err := rd.Read(h.Name)
+	if err != nil {
+		t.Fatal("Error read header name:", err)
+	}
+	_, err = rd.Read(h.Size)
+	if err != nil {
+		t.Fatal("Error read header size:", err)
+	}
+	s := make([]byte, BytesToInt(h.Size))
+	n, err := rd.Read(s)
+	if n <= 0 {
+		t.Fatal("Error read body:", err)
+	}
+	err = UnpackBase64OneConfine(s, h, dest)
+	if err != nil {
+		t.Fatal("Error unpack crypt file:", err)
+	}
+}
+
 func TestBase64DecryptGo(t *testing.T) {
 	var wg sync.WaitGroup
 	var r string
@@ -195,12 +245,35 @@ func BenchmarkUnpackBase64(b *testing.B) {
 	}
 }
 
+func BenchmarkUnpackBase64Confine(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		src := "../test/data/unpack/file_base64.txt"
+		dest := "../test/data/unpack/"
+		err := UnpackBase64Confine(src, dest)
+		if err != nil {
+			b.Fatal("Error Unpack Base64:", err)
+		}
+	}
+}
+
 func BenchmarkUnpackBase64ToFile(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_base64.txt"
 		dest := "../test/data/unpack/"
 		target := "file_1.txt"
 		err := UnpackBase64ToFile(src, target, dest)
+		if err != nil {
+			b.Fatal("Error Unpack Base64 To File:", err)
+		}
+	}
+}
+
+func BenchmarkUnpackBase64ToFileConfine(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		src := "../test/data/unpack/file_base64.txt"
+		dest := "../test/data/unpack/"
+		target := "file_1.txt"
+		err := UnpackBase64ToFileConfine(src, target, dest)
 		if err != nil {
 			b.Fatal("Error Unpack Base64 To File:", err)
 		}
@@ -340,6 +413,39 @@ func BenchmarkUnpackBase64One(b *testing.B) {
 			b.Fatal("Error read body:", err)
 		}
 		err = UnpackBase64One(s, h, dest)
+		if err != nil {
+			b.Fatal("Error unpack crypt file:", err)
+		}
+	}
+}
+
+func BenchmarkUnpackBase64OneConfine(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		src := []byte{
+			0x66, 0x69, 0x6C, 0x65, 0x2E, 0x74, 0x78, 0x74, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+			0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+			0x00, 0x00, 0x00, 0x10, 0x61, 0x47, 0x56, 0x73, 0x62, 0x47, 0x38, 0x73, 0x64, 0x32, 0x39, 0x79,
+			0x62, 0x47, 0x51, 0x68,
+		}
+		dest := "../test/data/unpack/"
+		h := TUnpackBase64One{}
+		h.Name = make([]byte, 32)
+		h.Size = make([]byte, 4)
+		rd := bytes.NewReader(src)
+		_, err := rd.Read(h.Name)
+		if err != nil {
+			b.Fatal("Error read header name:", err)
+		}
+		_, err = rd.Read(h.Size)
+		if err != nil {
+			b.Fatal("Error read header size:", err)
+		}
+		s := make([]byte, BytesToInt(h.Size))
+		n, err := rd.Read(s)
+		if n <= 0 {
+			b.Fatal("Error read body:", err)
+		}
+		err = UnpackBase64OneConfine(s, h, dest)
 		if err != nil {
 			b.Fatal("Error unpack crypt file:", err)
 		}

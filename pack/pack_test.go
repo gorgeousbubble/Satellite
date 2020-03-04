@@ -2,6 +2,7 @@ package pack
 
 import "testing"
 
+// TestPack function
 func TestPack(t *testing.T) {
 	src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
 	dest := "../test/data/pack/file_aes.txt"
@@ -12,6 +13,7 @@ func TestPack(t *testing.T) {
 	}
 }
 
+// TestPack2 function
 func TestPack2(t *testing.T) {
 	src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
 	dest := "../test/data/pack/file_aes.txt"
@@ -22,6 +24,7 @@ func TestPack2(t *testing.T) {
 	}
 }
 
+// TestPack3 function
 func TestPack3(t *testing.T) {
 	src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
 	dest := "../test/data/pack/file_aes.txt"
@@ -32,6 +35,7 @@ func TestPack3(t *testing.T) {
 	}
 }
 
+// TestPack4 function
 func TestPack4(t *testing.T) {
 	src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
 	dest := "../test/data/pack/file_aes.txt"
@@ -42,6 +46,7 @@ func TestPack4(t *testing.T) {
 	}
 }
 
+// TestPack5 function
 func TestPack5(t *testing.T) {
 	src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
 	dest := "../test/data/pack/file_aes.txt"
@@ -52,6 +57,7 @@ func TestPack5(t *testing.T) {
 	}
 }
 
+// TestWorkCalculate function
 func TestWorkCalculate(t *testing.T) {
 	var work int64
 	src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
@@ -61,6 +67,7 @@ func TestWorkCalculate(t *testing.T) {
 	}
 }
 
+// TestWorkCalculate2 function
 func TestWorkCalculate2(t *testing.T) {
 	var work int64
 	src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
@@ -70,6 +77,7 @@ func TestWorkCalculate2(t *testing.T) {
 	}
 }
 
+// TestWorkCalculate3 function
 func TestWorkCalculate3(t *testing.T) {
 	var work int64
 	src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
@@ -79,6 +87,7 @@ func TestWorkCalculate3(t *testing.T) {
 	}
 }
 
+// TestWorkCalculate4 function
 func TestWorkCalculate4(t *testing.T) {
 	var work int64
 	src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
@@ -88,6 +97,7 @@ func TestWorkCalculate4(t *testing.T) {
 	}
 }
 
+// TestWorkCalculate5 function
 func TestWorkCalculate5(t *testing.T) {
 	var work int64
 	src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
@@ -97,6 +107,7 @@ func TestWorkCalculate5(t *testing.T) {
 	}
 }
 
+// BenchmarkPack function
 func BenchmarkPack(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
@@ -109,6 +120,7 @@ func BenchmarkPack(b *testing.B) {
 	}
 }
 
+// BenchmarkPack2 function
 func BenchmarkPack2(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
@@ -121,6 +133,7 @@ func BenchmarkPack2(b *testing.B) {
 	}
 }
 
+// BenchmarkPack3 function
 func BenchmarkPack3(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
@@ -133,6 +146,7 @@ func BenchmarkPack3(b *testing.B) {
 	}
 }
 
+// BenchmarkPack4 function
 func BenchmarkPack4(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
@@ -145,6 +159,7 @@ func BenchmarkPack4(b *testing.B) {
 	}
 }
 
+// BenchmarkPack5 function
 func BenchmarkPack5(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
@@ -157,6 +172,7 @@ func BenchmarkPack5(b *testing.B) {
 	}
 }
 
+// BenchmarkWorkCalculate function
 func BenchmarkWorkCalculate(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var work int64
@@ -168,6 +184,7 @@ func BenchmarkWorkCalculate(b *testing.B) {
 	}
 }
 
+// BenchmarkWorkCalculate2 function
 func BenchmarkWorkCalculate2(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var work int64
@@ -179,6 +196,7 @@ func BenchmarkWorkCalculate2(b *testing.B) {
 	}
 }
 
+// BenchmarkWorkCalculate3 function
 func BenchmarkWorkCalculate3(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var work int64
@@ -190,6 +208,7 @@ func BenchmarkWorkCalculate3(b *testing.B) {
 	}
 }
 
+// BenchmarkWorkCalculate4 function
 func BenchmarkWorkCalculate4(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var work int64
@@ -201,6 +220,7 @@ func BenchmarkWorkCalculate4(b *testing.B) {
 	}
 }
 
+// BenchmarkWorkCalculate5 function
 func BenchmarkWorkCalculate5(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var work int64

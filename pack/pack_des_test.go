@@ -6,6 +6,7 @@ import (
 	"testing"
 )
 
+// TestPack3DES function
 func TestPack3DES(t *testing.T) {
 	src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
 	dest := "../test/data/pack/file_3des.txt"
@@ -15,6 +16,7 @@ func TestPack3DES(t *testing.T) {
 	}
 }
 
+// TestPackDES function
 func TestPackDES(t *testing.T) {
 	src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
 	dest := "../test/data/pack/file_des.txt"
@@ -24,6 +26,7 @@ func TestPackDES(t *testing.T) {
 	}
 }
 
+// TestPackDESWorkCalculate function
 func TestPackDESWorkCalculate(t *testing.T) {
 	src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
 	_, err := PackDESWorkCalculate(src)
@@ -32,6 +35,7 @@ func TestPackDESWorkCalculate(t *testing.T) {
 	}
 }
 
+// TestPack3DESOneGo function
 func TestPack3DESOneGo(t *testing.T) {
 	var wg sync.WaitGroup
 	var r []byte
@@ -48,6 +52,7 @@ func TestPack3DESOneGo(t *testing.T) {
 	}
 }
 
+// TestPack3DESOne function
 func TestPack3DESOne(t *testing.T) {
 	src := "../test/data/pack/file.txt"
 	r, err := Pack3DESOne(src)
@@ -60,6 +65,7 @@ func TestPack3DESOne(t *testing.T) {
 	}
 }
 
+// TestPackDESOneGo function
 func TestPackDESOneGo(t *testing.T) {
 	var wg sync.WaitGroup
 	var r []byte
@@ -76,6 +82,7 @@ func TestPackDESOneGo(t *testing.T) {
 	}
 }
 
+// TestPackDESOne function
 func TestPackDESOne(t *testing.T) {
 	src := "../test/data/pack/file.txt"
 	r, err := PackDESOne(src)
@@ -88,6 +95,7 @@ func TestPackDESOne(t *testing.T) {
 	}
 }
 
+// TestTripleDESEncryptGo function
 func TestTripleDESEncryptGo(t *testing.T) {
 	var wg sync.WaitGroup
 	var r []byte
@@ -102,6 +110,7 @@ func TestTripleDESEncryptGo(t *testing.T) {
 	}
 }
 
+// TestTripleDESEncrypt function
 func TestTripleDESEncrypt(t *testing.T) {
 	src := []byte("hello,world!")
 	key := []byte("HyacinthRaindropRomantic")
@@ -115,6 +124,7 @@ func TestTripleDESEncrypt(t *testing.T) {
 	}
 }
 
+// TestDESEncryptGo function
 func TestDESEncryptGo(t *testing.T) {
 	var wg sync.WaitGroup
 	var r []byte
@@ -129,6 +139,7 @@ func TestDESEncryptGo(t *testing.T) {
 	}
 }
 
+// TestDESEncrypt function
 func TestDESEncrypt(t *testing.T) {
 	src := []byte("hello,world!")
 	key := []byte("hyacinth")
@@ -142,6 +153,7 @@ func TestDESEncrypt(t *testing.T) {
 	}
 }
 
+// BenchmarkPack3DES function
 func BenchmarkPack3DES(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
@@ -153,6 +165,7 @@ func BenchmarkPack3DES(b *testing.B) {
 	}
 }
 
+// BenchmarkPackDES function
 func BenchmarkPackDES(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
@@ -164,6 +177,7 @@ func BenchmarkPackDES(b *testing.B) {
 	}
 }
 
+// BenchmarkPackDESWorkCalculate function
 func BenchmarkPackDESWorkCalculate(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
@@ -174,6 +188,7 @@ func BenchmarkPackDESWorkCalculate(b *testing.B) {
 	}
 }
 
+// BenchmarkPack3DESOneGo function
 func BenchmarkPack3DESOneGo(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var wg sync.WaitGroup
@@ -192,6 +207,7 @@ func BenchmarkPack3DESOneGo(b *testing.B) {
 	}
 }
 
+// BenchmarkPack3DESOne function
 func BenchmarkPack3DESOne(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/pack/file.txt"
@@ -206,6 +222,7 @@ func BenchmarkPack3DESOne(b *testing.B) {
 	}
 }
 
+// BenchmarkPackDESOneGo function
 func BenchmarkPackDESOneGo(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var wg sync.WaitGroup
@@ -224,6 +241,7 @@ func BenchmarkPackDESOneGo(b *testing.B) {
 	}
 }
 
+// BenchmarkPackDESOne function
 func BenchmarkPackDESOne(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/pack/file.txt"
@@ -238,6 +256,7 @@ func BenchmarkPackDESOne(b *testing.B) {
 	}
 }
 
+// BenchmarkTripleDESEncryptGo function
 func BenchmarkTripleDESEncryptGo(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var wg sync.WaitGroup
@@ -254,6 +273,7 @@ func BenchmarkTripleDESEncryptGo(b *testing.B) {
 	}
 }
 
+// BenchmarkTripleDESEncrypt function
 func BenchmarkTripleDESEncrypt(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := []byte("hello,world!")
@@ -269,6 +289,7 @@ func BenchmarkTripleDESEncrypt(b *testing.B) {
 	}
 }
 
+// BenchmarkDESEncryptGo function
 func BenchmarkDESEncryptGo(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var wg sync.WaitGroup
@@ -285,6 +306,7 @@ func BenchmarkDESEncryptGo(b *testing.B) {
 	}
 }
 
+// BenchmarkDESEncrypt function
 func BenchmarkDESEncrypt(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := []byte("hello,world!")

@@ -16,7 +16,7 @@ var udpMode string
 
 func init() {
 	udpCmd.StringVar(&udpIp, "ip", "127.0.0.1", "ip address: ipv4 address witch udp server listen, such as \"127.0.0.1\"")
-	udpCmd.StringVar(&udpPort, "port", "7000", "port: port number witch udp server listen, such as \"7000\"")
+	udpCmd.StringVar(&udpPort, "port", "12514", "port: port number witch udp server listen, such as \"12514\"")
 	udpCmd.StringVar(&udpMode, "mode", "server", "mode: udp mode choose, 's' or 'server' indicate udp server, 'c' or 'client' indicate udp client")
 }
 

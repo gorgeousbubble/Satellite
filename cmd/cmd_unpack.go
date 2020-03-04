@@ -22,12 +22,14 @@ var unpackSrc string
 var unpackDest string
 var unpackTarget string
 var unpackVerbose bool
+var unpackConfine bool
 
 func init() {
 	unpackCmd.StringVar(&unpackSrc, "i", "", "input files: packet file, such as \"file.dat\" or \"file.pak\"")
 	unpackCmd.StringVar(&unpackDest, "o", "", "output files: one or more origin files. (should be path not file)")
 	unpackCmd.StringVar(&unpackTarget, "t", "", "target file name: unpack choose one file. (should be file name)")
 	unpackCmd.BoolVar(&unpackVerbose, "v", false, "verbose information list.")
+	unpackCmd.BoolVar(&unpackConfine, "c", false, "unpack confine goroutine.")
 }
 
 func ParseCmdUnpack() {
@@ -43,7 +45,7 @@ func ParseCmdUnpack() {
 		os.Exit(1)
 	}
 	// handle command parameters
-	err = handleCmdUnpack(unpackSrc, unpackDest, unpackTarget, unpackVerbose)
+	err = handleCmdUnpack(unpackSrc, unpackDest, unpackTarget, unpackVerbose, unpackConfine)
 	if err != nil {
 		fmt.Print("\n")
 		fmt.Println("Unpack Failure:", err)
@@ -53,7 +55,7 @@ func ParseCmdUnpack() {
 	fmt.Println("Unpack Success.")
 }
 
-func handleCmdUnpack(src string, dest string, target string, verbose bool) (err error) {
+func handleCmdUnpack(src string, dest string, target string, verbose bool, confine bool) (err error) {
 	var algorithm string
 	ch := make(chan bool)
 	// whether look up verbose information
@@ -87,7 +89,7 @@ func handleCmdUnpack(src string, dest string, target string, verbose bool) (err 
 	// create process bar
 	bar := progressbar.New64(work)
 	// execute unpack function
-	go execUnpack(src, dest, target, &err, ch)
+	go execUnpack(src, dest, target, confine, &err, ch)
 	for {
 		select {
 		case r := <-ch:
@@ -126,11 +128,19 @@ func handleCmdUnpack(src string, dest string, target string, verbose bool) (err 
 	}
 }
 
-func execUnpack(src string, dest string, target string, err *error, ch chan bool) {
+func execUnpack(src string, dest string, target string, confine bool, err *error, ch chan bool) {
 	if target != "" {
-		*err = unpack.UnpackToFile(src, target, dest)
+		if confine {
+			*err = unpack.UnpackToFileConfine(src, target, dest)
+		} else {
+			*err = unpack.UnpackToFile(src, target, dest)
+		}
 	} else {
-		*err = unpack.Unpack(src, dest)
+		if confine {
+			*err = unpack.UnpackConfine(src, dest)
+		} else {
+			*err = unpack.Unpack(src, dest)
+		}
 	}
 	if *err != nil {
 		ch <- false

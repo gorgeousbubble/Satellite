@@ -9,10 +9,16 @@ import (
 	"net/http"
 	"satellite/comp"
 	"satellite/decomp"
+	. "satellite/global"
+	"satellite/images"
 	"satellite/pack"
+	"satellite/parses"
 	"satellite/unpack"
+	"strconv"
 	"sync/atomic"
 	"time"
+
+	"github.com/skip2/go-qrcode"
 )
 
 func handleRoot(w http.ResponseWriter, r *http.Request) {
@@ -21,6 +27,20 @@ func handleRoot(w http.ResponseWriter, r *http.Request) {
 	case "GET":
 		log.Printf("GET %s", r.RequestURI)
 		err = handleGetRoot(w, r)
+	}
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		log.Printf("%d Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+}
+
+func handleIndex(w http.ResponseWriter, r *http.Request) {
+	var err error
+	switch r.Method {
+	case "GET":
+		log.Printf("GET %s", r.RequestURI)
+		err = handleGetIndex(w, r)
 	}
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -108,6 +128,20 @@ func handleNetsUnpackProcess(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func handleNetsUnpackConfine(w http.ResponseWriter, r *http.Request) {
+	var err error
+	switch r.Method {
+	case "POST":
+		log.Printf("POST %s", r.RequestURI)
+		err = handlePostNetsUnpackConfine(w, r)
+	}
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		log.Printf("%d Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+}
+
 func handleNetsUnpackToFile(w http.ResponseWriter, r *http.Request) {
 	var err error
 	switch r.Method {
@@ -122,12 +156,29 @@ func handleNetsUnpackToFile(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func handleNetsUnpackToFileConfine(w http.ResponseWriter, r *http.Request) {
+	var err error
+	switch r.Method {
+	case "POST":
+		log.Printf("POST %s", r.RequestURI)
+		err = handlePostNetsUnpackToFileConfine(w, r)
+	}
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		log.Printf("%d Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+}
+
 func handleNetsUnpackToMemory(w http.ResponseWriter, r *http.Request) {
 	var err error
 	switch r.Method {
 	case "GET":
 		log.Printf("GET %s", r.RequestURI)
 		err = handleGetNetsUnpackToMemory(w, r)
+	case "POST":
+		log.Printf("POST %s", r.RequestURI)
+		err = handlePostNetsUnpackToMemory(w, r)
 	}
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -164,9 +215,60 @@ func handleNetsDecomp(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func handleNetsImagesQRCodeToFile(w http.ResponseWriter, r *http.Request) {
+	var err error
+	switch r.Method {
+	case "POST":
+		log.Printf("POST %s", r.RequestURI)
+		err = handlePostNetsImagesQRCodeToFile(w, r)
+	}
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		log.Printf("%d Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+}
+
+func handleNetsImagesQRCodeToMemory(w http.ResponseWriter, r *http.Request) {
+	var err error
+	switch r.Method {
+	case "POST":
+		log.Printf("POST %s", r.RequestURI)
+		err = handlePostNetsImagesQRCodeToMemory(w, r)
+	}
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		log.Printf("%d Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+}
+
+func handleNetsParsesIniValue(w http.ResponseWriter, r *http.Request) {
+	var err error
+	switch r.Method {
+	case "GET":
+		log.Printf("GET %s", r.RequestURI)
+		err = handleGetNetsParsesIniValue(w, r)
+	case "PUT":
+		log.Printf("PUT %s", r.RequestURI)
+		err = handlePutNetsParsesIniValue(w, r)
+	}
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		log.Printf("%d Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+}
+
 func handleGetRoot(w http.ResponseWriter, r *http.Request) (err error) {
 	w.Header().Set("Content-Type", "text/plain")
 	w.Write([]byte("Hello,World!"))
+	return err
+}
+
+func handleGetIndex(w http.ResponseWriter, r *http.Request) (err error) {
+	w.Header().Set("Content-Type", "text/plain")
+	w.Write([]byte("Satellite Project"))
 	return err
 }
 
@@ -237,7 +339,7 @@ func handlePostNetsPack(w http.ResponseWriter, r *http.Request) (err error) {
 		if finish {
 			break
 		}
-		if count >= 100 {
+		if count >= NetHttpTimeout {
 			err = errors.New("timeout")
 			return err
 		}
@@ -308,7 +410,7 @@ func handlePostNetsUnpack(w http.ResponseWriter, r *http.Request) (err error) {
 		if finish {
 			break
 		}
-		if count >= 100 {
+		if count >= NetHttpTimeout {
 			err = errors.New("timeout")
 			return err
 		}
@@ -387,7 +489,7 @@ func handleGetNetsPackProcess(w http.ResponseWriter, r *http.Request) (err error
 		if finish {
 			break
 		}
-		if count >= 100 {
+		if count >= NetHttpTimeout {
 			err = errors.New("timeout")
 			return err
 		}
@@ -481,7 +583,7 @@ func handleGetNetsUnpackVerbose(w http.ResponseWriter, r *http.Request) (err err
 		if finish {
 			break
 		}
-		if count >= 100 {
+		if count >= NetHttpTimeout {
 			err = errors.New("timeout")
 			return err
 		}
@@ -572,7 +674,7 @@ func handleGetNetsUnpackProcess(w http.ResponseWriter, r *http.Request) (err err
 		if finish {
 			break
 		}
-		if count >= 100 {
+		if count >= NetHttpTimeout {
 			err = errors.New("timeout")
 			return err
 		}
@@ -591,6 +693,77 @@ func handleGetNetsUnpackProcess(w http.ResponseWriter, r *http.Request) (err err
 
 func handlePostNetsUnpackProcess(w http.ResponseWriter, r *http.Request) (err error) {
 	return handleGetNetsUnpackProcess(w, r)
+}
+
+func handlePostNetsUnpackConfine(w http.ResponseWriter, r *http.Request) (err error) {
+	defer r.Body.Close()
+	// read request body
+	len := r.ContentLength
+	body := make([]byte, len)
+	body, err = ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Println("Error read request body:", err)
+		return err
+	}
+	// unmarshal json body
+	var t TNetsUnpack
+	err = json.Unmarshal(body, &t)
+	if err != nil {
+		http.Error(w, "Incorrect request body!", http.StatusBadRequest)
+		log.Println("Error unmarshal json body:", err)
+		log.Printf("%d Bad Request", http.StatusBadRequest)
+		return nil
+	}
+	// check request parameters
+	b, err := checkNetsUnpackParameters(t)
+	if err != nil {
+		log.Println("Error check unpack parameters:", err)
+		return err
+	}
+	if !b {
+		http.Error(w, "Illegal parameters!", http.StatusUnprocessableEntity)
+		log.Println("Illegal parameters")
+		log.Printf("%d Unprocessable Entity", http.StatusUnprocessableEntity)
+		return nil
+	}
+	// start unpack files
+	ch := make(chan bool)
+	count := 0
+	finish := false
+	go func() {
+		err = unpack.UnpackConfine(t.Src, t.Dest)
+		if err != nil {
+			ch <- false
+			return
+		}
+		ch <- true
+		return
+	}()
+	for {
+		select {
+		case r := <-ch:
+			if r == false {
+				log.Println("Unpack confine failure:", err)
+				return err
+			}
+			log.Println("Unpack confine success.")
+			finish = true
+			break
+		default:
+			count++
+			time.Sleep(100 * time.Millisecond)
+		}
+		if finish {
+			break
+		}
+		if count >= NetHttpTimeout {
+			err = errors.New("timeout")
+			return err
+		}
+	}
+	w.Header().Set("Content-Type", "text/plain")
+	log.Printf("%d Ok", http.StatusOK)
+	return err
 }
 
 func handlePostNetsUnpackToFile(w http.ResponseWriter, r *http.Request) (err error) {
@@ -654,7 +827,78 @@ func handlePostNetsUnpackToFile(w http.ResponseWriter, r *http.Request) (err err
 		if finish {
 			break
 		}
-		if count >= 100 {
+		if count >= NetHttpTimeout {
+			err = errors.New("timeout")
+			return err
+		}
+	}
+	w.Header().Set("Content-Type", "application/json")
+	log.Printf("%d Ok", http.StatusOK)
+	return err
+}
+
+func handlePostNetsUnpackToFileConfine(w http.ResponseWriter, r *http.Request) (err error) {
+	defer r.Body.Close()
+	// read request body
+	len := r.ContentLength
+	body := make([]byte, len)
+	body, err = ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Println("Error read request body:", err)
+		return err
+	}
+	// unmarshal json body
+	var t TNetsUnpackToFile
+	err = json.Unmarshal(body, &t)
+	if err != nil {
+		http.Error(w, "Incorrect request body!", http.StatusBadRequest)
+		log.Println("Error unmarshal json body:", err)
+		log.Printf("%d Bad Request", http.StatusBadRequest)
+		return nil
+	}
+	// check request parameters
+	b, err := checkNetsUnpackToFileParameters(t)
+	if err != nil {
+		log.Println("Error check unpack to file parameters:", err)
+		return err
+	}
+	if !b {
+		http.Error(w, "Illegal parameters!", http.StatusUnprocessableEntity)
+		log.Println("Illegal parameters")
+		log.Printf("%d Unprocessable Entity", http.StatusUnprocessableEntity)
+		return nil
+	}
+	// unpack file to file
+	ch := make(chan bool)
+	count := 0
+	finish := false
+	go func() {
+		err = unpack.UnpackToFileConfine(t.Src, t.Target, t.Dest)
+		if err != nil {
+			ch <- false
+			return
+		}
+		ch <- true
+		return
+	}()
+	for {
+		select {
+		case r := <-ch:
+			if r == false {
+				log.Println("Unpack to file failure:", err)
+				return err
+			}
+			log.Println("Unpack to file success.")
+			finish = true
+			break
+		default:
+			count++
+			time.Sleep(100 * time.Millisecond)
+		}
+		if finish {
+			break
+		}
+		if count >= NetHttpTimeout {
 			err = errors.New("timeout")
 			return err
 		}
@@ -726,7 +970,7 @@ func handleGetNetsUnpackToMemory(w http.ResponseWriter, r *http.Request) (err er
 		if finish {
 			break
 		}
-		if count >= 100 {
+		if count >= NetHttpTimeout {
 			err = errors.New("timeout")
 			return err
 		}
@@ -735,6 +979,10 @@ func handleGetNetsUnpackToMemory(w http.ResponseWriter, r *http.Request) (err er
 	w.Write(dest)
 	log.Printf("%d Ok", http.StatusOK)
 	return err
+}
+
+func handlePostNetsUnpackToMemory(w http.ResponseWriter, r *http.Request) (err error) {
+	return handleGetNetsUnpackToMemory(w, r)
 }
 
 func handlePostNetsComp(w http.ResponseWriter, r *http.Request) (err error) {
@@ -804,7 +1052,7 @@ func handlePostNetsComp(w http.ResponseWriter, r *http.Request) (err error) {
 		if finish {
 			break
 		}
-		if count >= 100 {
+		if count >= NetHttpTimeout {
 			err = errors.New("timeout")
 			return err
 		}
@@ -875,12 +1123,270 @@ func handlePostNetsDecomp(w http.ResponseWriter, r *http.Request) (err error) {
 		if finish {
 			break
 		}
-		if count >= 100 {
+		if count >= NetHttpTimeout {
 			err = errors.New("timeout")
 			return err
 		}
 	}
 	w.Header().Set("Content-Type", "text/plain")
+	log.Printf("%d Ok", http.StatusOK)
+	return err
+}
+
+func handlePostNetsImagesQRCodeToFile(w http.ResponseWriter, r *http.Request) (err error) {
+	defer r.Body.Close()
+	// read request body
+	len := r.ContentLength
+	body := make([]byte, len)
+	body, err = ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Println("Error read request body:", err)
+		return err
+	}
+	// unmarshal json body
+	var t TNetsImagesQRCodeToFile
+	err = json.Unmarshal(body, &t)
+	if err != nil {
+		http.Error(w, "Incorrect request body!", http.StatusBadRequest)
+		log.Println("Error unmarshal json body:", err)
+		log.Printf("%d Bad Request", http.StatusBadRequest)
+		return nil
+	}
+	// check request parameters
+	b, err := checkNetsImagesQRCodeToFileParameters(t)
+	if err != nil {
+		log.Println("Error check images qrcode parameters:", err)
+		return err
+	}
+	if !b {
+		http.Error(w, "Illegal parameters!", http.StatusUnprocessableEntity)
+		log.Println("Illegal parameters")
+		log.Printf("%d Unprocessable Entity", http.StatusUnprocessableEntity)
+		return nil
+	}
+	// generate qrcode
+	err = images.QRCodeGenerateToFile(t.Content, qrcode.Highest, t.Size, t.Dest)
+	if err != nil {
+		log.Println("Images QRCode failure:", err)
+		return err
+	}
+	log.Println("Images QRCode success.")
+	// response
+	w.Header().Set("Content-Type", "text/plain")
+	log.Printf("%d Ok", http.StatusOK)
+	return err
+}
+
+func handlePostNetsImagesQRCodeToMemory(w http.ResponseWriter, r *http.Request) (err error) {
+	defer r.Body.Close()
+	// read request body
+	len := r.ContentLength
+	body := make([]byte, len)
+	body, err = ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Println("Error read request body:", err)
+		return err
+	}
+	// unmarshal json body
+	var t TNetsImagesQRCodeToMemory
+	err = json.Unmarshal(body, &t)
+	if err != nil {
+		http.Error(w, "Incorrect request body!", http.StatusBadRequest)
+		log.Println("Error unmarshal json body:", err)
+		log.Printf("%d Bad Request", http.StatusBadRequest)
+		return nil
+	}
+	// check request parameters
+	b, err := checkNetsImagesQRCodeParameters(t)
+	if err != nil {
+		log.Println("Error check images qrcode parameters:", err)
+		return err
+	}
+	if !b {
+		http.Error(w, "Illegal parameters!", http.StatusUnprocessableEntity)
+		log.Println("Illegal parameters")
+		log.Printf("%d Unprocessable Entity", http.StatusUnprocessableEntity)
+		return nil
+	}
+	// generate qrcode
+	qr, err := images.QRCodeGenerateToMemory(t.Content, qrcode.Highest, t.Size)
+	if err != nil {
+		log.Println("Images QRCode failure:", err)
+		return err
+	}
+	log.Println("Images QRCode success.")
+	// response
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(qr)
+	log.Printf("%d Ok", http.StatusOK)
+	return err
+}
+
+func handleGetNetsParsesIniValue(w http.ResponseWriter, r *http.Request) (err error) {
+	defer r.Body.Close()
+	// read request body
+	len := r.ContentLength
+	body := make([]byte, len)
+	body, err = ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Println("Error read request body:", err)
+		return err
+	}
+	// unmarshal json body
+	var t TNetsParsesIni
+	err = json.Unmarshal(body, &t)
+	if err != nil {
+		http.Error(w, "Incorrect request body!", http.StatusBadRequest)
+		log.Println("Error unmarshal json body:", err)
+		log.Printf("%d Bad Request", http.StatusBadRequest)
+		return nil
+	}
+	// check request parameters
+	b, err := checkNetsParsesIniValueParameters(t)
+	if err != nil {
+		log.Println("Error check parses ini value parameters:", err)
+		return err
+	}
+	if !b {
+		http.Error(w, "Illegal parameters!", http.StatusUnprocessableEntity)
+		log.Println("Illegal parameters")
+		log.Printf("%d Unprocessable Entity", http.StatusUnprocessableEntity)
+		return nil
+	}
+	// parses ini get value
+	switch t.Mode {
+	case "get":
+		switch t.Type {
+		case "string":
+			var value string
+			err = parses.GetValueFrom(t.Src, t.Section, t.Name, &value)
+			if err != nil {
+				return err
+			}
+			t.Value = value
+		case "int":
+			var value int
+			err = parses.GetValueFrom(t.Src, t.Section, t.Name, &value)
+			if err != nil {
+				return err
+			}
+			t.Value = strconv.Itoa(value)
+		case "float64":
+			var value float64
+			err = parses.GetValueFrom(t.Src, t.Section, t.Name, &value)
+			if err != nil {
+				return err
+			}
+			t.Value = strconv.FormatFloat(value, 'f', -1, 64)
+		case "bool":
+			var value bool
+			err = parses.GetValueFrom(t.Src, t.Section, t.Name, &value)
+			if err != nil {
+				return err
+			}
+			t.Value = strconv.FormatBool(value)
+		default:
+			err = errors.New("unrecognized type name")
+			return err
+		}
+	default:
+		err = errors.New("unrecognized type name")
+		return err
+	}
+	// marshal json
+	js, err := json.MarshalIndent(&t, "", "\t\t")
+	if err != nil {
+		log.Println("Error marshal to json:", err)
+		return err
+	}
+	// response
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(js)
+	log.Printf("%d Ok", http.StatusOK)
+	return err
+}
+
+func handlePutNetsParsesIniValue(w http.ResponseWriter, r *http.Request) (err error) {
+	defer r.Body.Close()
+	// read request body
+	len := r.ContentLength
+	body := make([]byte, len)
+	body, err = ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Println("Error read request body:", err)
+		return err
+	}
+	// unmarshal json body
+	var t TNetsParsesIni
+	err = json.Unmarshal(body, &t)
+	if err != nil {
+		http.Error(w, "Incorrect request body!", http.StatusBadRequest)
+		log.Println("Error unmarshal json body:", err)
+		log.Printf("%d Bad Request", http.StatusBadRequest)
+		return nil
+	}
+	// check request parameters
+	b, err := checkNetsParsesIniValueParameters(t)
+	if err != nil {
+		log.Println("Error check parses ini value parameters:", err)
+		return err
+	}
+	if !b {
+		http.Error(w, "Illegal parameters!", http.StatusUnprocessableEntity)
+		log.Println("Illegal parameters")
+		log.Printf("%d Unprocessable Entity", http.StatusUnprocessableEntity)
+		return nil
+	}
+	// parses ini get value
+	switch t.Mode {
+	case "set":
+		switch t.Type {
+		case "string":
+			var value string
+			value = t.Value
+			err = parses.SetValueTo(t.Src, t.Section, t.Name, value)
+			if err != nil {
+				return err
+			}
+		case "int":
+			var value int
+			value, err = strconv.Atoi(t.Value)
+			if err != nil {
+				return err
+			}
+			err = parses.SetValueTo(t.Src, t.Section, t.Name, value)
+			if err != nil {
+				return err
+			}
+		case "float64":
+			var value float64
+			value, err = strconv.ParseFloat(t.Value, 64)
+			if err != nil {
+				return err
+			}
+			err = parses.SetValueTo(t.Src, t.Section, t.Name, value)
+			if err != nil {
+				return err
+			}
+		case "bool":
+			var value bool
+			value, err = strconv.ParseBool(t.Value)
+			if err != nil {
+				return err
+			}
+			err = parses.SetValueTo(t.Src, t.Section, t.Name, value)
+			if err != nil {
+				return err
+			}
+		default:
+			err = errors.New("unrecognized type name")
+		}
+	default:
+		err = errors.New("unrecognized type name")
+		return err
+	}
+	// response
+	w.Header().Set("Content-Type", "application/json")
 	log.Printf("%d Ok", http.StatusOK)
 	return err
 }

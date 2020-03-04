@@ -5,6 +5,13 @@ import (
 	"fmt"
 )
 
+// Pack function
+// input src file list, output dest file path and algorithm which used in pack, return error info
+// this function will base on algorithm to call correspond function
+// src file support both absolute and relative paths, like 'C:\\file.txt' or '../test/data/file.txt'
+// dest file also support both absolute and relative paths, like 'C:\\package.pak' or '../test/data/package.pak'
+// algorithm now support 'AES', 'DES', '3DES', 'RSA' and 'BASE64', you can send both up case and low case
+// return err indicate the success or failure function execute
 func Pack(src []string, dest string, algorithm string) (err error) {
 	switch algorithm {
 	case "AES", "aes":
@@ -24,6 +31,12 @@ func Pack(src []string, dest string, algorithm string) (err error) {
 	return err
 }
 
+// WorkCalculate function
+// input src file list, algorithm which used in pack and output work value, return error info
+// this function will called by calculate work
+// algorithm now support 'AES', 'DES', '3DES', 'RSA' and 'BASE64', you can send both up case and low case
+// work value is total work force that will be done
+// return err indicate the success or failure function execute
 func WorkCalculate(src []string, algorithm string, work *int64) (err error) {
 	switch algorithm {
 	case "AES", "aes":

@@ -196,6 +196,7 @@ func checkNetsCompParameters(t TNetsComp) (b bool, err error) {
 	// check algorithm
 	switch t.Type {
 	case "TAR", "tar":
+	case "TAR.GZ", "tar.gz":
 	case "ZIP", "zip":
 	default:
 		b = false
@@ -224,10 +225,80 @@ func checkNetsDecompParameters(t TNetsDecomp) (b bool, err error) {
 	// check algorithm
 	switch t.Type {
 	case "TAR", "tar":
+	case "TAR.GZ", "tar.gz":
 	case "ZIP", "zip":
 	default:
 		b = false
 		fmt.Printf("Algorithm %v not support.\n", t.Type)
+	}
+	return b, err
+}
+
+func checkNetsImagesQRCodeParameters(t TNetsImagesQRCodeToMemory) (b bool, err error) {
+	b = true
+	// check content
+	if t.Content == "" {
+		b = false
+		log.Println("Content string can't be empty.")
+		return b, err
+	}
+	// check size
+	if t.Size <= 0 {
+		b = false
+		log.Println("Size should >= 0.")
+		return b, err
+	}
+	return b, err
+}
+
+func checkNetsImagesQRCodeToFileParameters(t TNetsImagesQRCodeToFile) (b bool, err error) {
+	b = true
+	// check content
+	if t.Content == "" {
+		b = false
+		log.Println("Content string can't be empty.")
+		return b, err
+	}
+	// check size
+	if t.Size <= 0 {
+		b = false
+		log.Println("Size should >= 0.")
+		return b, err
+	}
+	return b, err
+}
+
+func checkNetsParsesIniValueParameters(t TNetsParsesIni) (b bool, err error) {
+	b = true
+	// check src files
+	if t.Src == "" {
+		b = false
+		log.Println("Source file can't be empty.")
+		return b, err
+	}
+	b, err = PathExist(t.Src)
+	if err != nil {
+		log.Println("Error check path exist:", err)
+		return b, err
+	}
+	if !b {
+		log.Println("Source file path not exist.")
+		return b, err
+	}
+	// check parses mode
+	if t.Mode != "get" && t.Mode != "set" {
+		b = false
+		log.Println("Mode should be one of 'get' or 'set'.")
+	}
+	// check parses type
+	if t.Type != "string" && t.Type != "int" && t.Type != "float64" && t.Type != "bool" {
+		b = false
+		log.Println("Type should be one of 'string', 'int', 'float64' or 'bool'.")
+	}
+	// check parses value
+	if t.Mode != "get" && t.Value == "" {
+		b = false
+		log.Println("Value should not be empty in set mode.")
 	}
 	return b, err
 }

@@ -1,0 +1,9 @@
+FROM ubuntu:latest
+
+MAINTAINER Alopex6414 "alopex6414@outlook.com"
+
+RUN mkdir /app
+COPY satellite /app
+
+EXPOSE 80
+CMD ["/app/satellite","http","-ip","0.0.0.0","-port","80"]

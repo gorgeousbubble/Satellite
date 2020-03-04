@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window size="960,720" gdiplustext="true" sizebox="4,4,6,6" roundcorner="3,3" caption="0,0,0,28" mininfo="960,720"> <!-- Window size(960x720) -->
+    <Font id="0" name="Microsoft YaHei" size="12" bold="false" italic="false" default="true"/>
+	<Font id="1" name="Microsoft YaHei" size="14" bold="false" italic="false"/>
+	<Font id="2" name="Microsoft YaHei" size="16" bold="false" italic="false"/>
+	<Font id="3" name="Microsoft YaHei" size="18" bold="false" italic="false"/>
+    <Font id="4" name="Microsoft YaHei" size="9" bold="false" italic="false"/>
+    <Font id="5" name="Microsoft YaHei" size="14" bold="true" italic="false"/>
+    <Default name="VScrollBar" value="button1normalimage=&quot;file='resources\scroll.png' source='0,0,16,16'&quot;
+     button1hotimage=&quot;file='resources\scroll.png' source='0,0,16,16' mask='#FFFF00FF'&quot;
+      button1pushedimage=&quot;file='resources\scroll.png' source='0,16,16,32' mask='#FFFF00FF'&quot;
+       button1disabledimage=&quot;file='resources\scroll.png' source='0,0,16,16' mask='#FFFF00FF'&quot;
+        button2normalimage=&quot;file='resources\scroll.png' source='0,32,16,48' mask='#FFFF00FF'&quot;
+         button2hotimage=&quot;file='resources\scroll.png' source='0,32,16,48' mask='#FFFF00FF'&quot;
+          button2pushedimage=&quot;file='resources\scroll.png' source='0,48,16,64' mask='#FFFF00FF'&quot;
+           button2disabledimage=&quot;file='resources\scroll.png' source='0,32,16,48' mask='#FFFF00FF'&quot;
+            thumbnormalimage=&quot;file='resources\scroll.png' source='0,64,16,80' corner='2,2,2,2' mask='#FFFF00FF'&quot;
+             thumbhotimage=&quot;file='resources\scroll.png' source='0,80,16,96' corner='2,2,2,2' mask='#FFFF00FF'&quot;
+              thumbpushedimage=&quot;ffile='resources\scroll.png' source='0,96,16,112' corner='2,2,2,2' mask='#FFFF00FF'&quot;
+               thumbdisabledimage=&quot;file='resources\scroll.png' source='0,64,16,80' corner='2,2,2,2' mask='#FFFF00FF'&quot;" />
+    <VerticalLayout bkcolor="#FF1E1E1E"> <!-- Background color(Dark)-->
+        <HorizontalLayout height="26" bkcolor="#FF2D2D30"> <!-- Title -->
+            <HorizontalLayout width="220" inset="0,0,0,0">
+                <Container name="logo" float="true" pos="12,3,0,0" width="16" height="20" bkimage="file='resources\logo.png'">
+                </Container>
+                <Container name="title" float="true" pos="36,7,0,0" width="179" height="15" bkimage="file='resources\title.png'">
+                </Container>
+            </HorizontalLayout>
+            <HorizontalLayout>
+            </HorizontalLayout>
+            <HorizontalLayout width="102" inset="0,0,0,0"> <!-- Controls -->
+                <Button name="minbtn" tooltip="最小化" maxwidth="34" maxheight="26" normalimage="file='resources\minbuttons.png' source='0,0,34,26'" hotimage="file='resources\minbuttons.png' source='0,26,34,52'" pushedimage="file='resources\minbuttons.png' source='0,52,34,78'">
+                </Button>
+                <Button name="maxbtn" tooltip="最大化" maxwidth="34" maxheight="26" normalimage="file='resources\maxbuttons.png' source='0,0,34,26'" hotimage="file='resources\maxbuttons.png' source='0,26,34,52'" pushedimage="file='resources\maxbuttons.png' source='0,52,34,78'">
+                </Button>
+                <Button name="restorebtn" tooltip="还原" maxwidth="34" maxheight="26" visible="false" normalimage="file='resources\restorebuttons.png' source='0,0,34,26'" hotimage="file='resources\restorebuttons.png' source='0,26,34,52'" pushedimage="file='resources\restorebuttons.png' source='0,52,34,78'">
+                </Button>
+                <Button name="closebtn" tooltip="关闭" maxwidth="34" maxheight="26" normalimage="file='resources\closebuttons.png' source='0,0,34,26'" hotimage="file='resources\closebuttons.png' source='0,26,34,52'" pushedimage="file='resources\closebuttons.png' source='0,52,34,78'">
+                </Button>
+            </HorizontalLayout>
+        </HorizontalLayout>
+        <HorizontalLayout height="2" bkcolor="#FF862323"> <!-- Slash -->
+        </HorizontalLayout>
+        <HorizontalLayout>
+            <VerticalLayout width="181" bkcolor="#FF232326"> <!-- Menu -->
+                <Container name="appslabel" float="true" pos="0,0,0,0" width="180" height="32" bkimage="file='resources\appslabel.png'">
+                </Container>
+                <Option name="packopt" float="true" pos="0,32,0,0" tooltip="加密文件" width="180" height="32" group="menu" selected="true" normalimage="file='resources\packbuttons.png' source='0,0,180,32'" hotimage="file='resources\packbuttons.png' source='0,32,180,64'" pushedimage="file='resources\packbuttons.png' source='0,64,180,96'" selectedimage="file='resources\packbuttons.png' source='0,64,180,96'">
+                </Option>
+                <Option name="unpackopt" float="true" pos="0,64,0,0" tooltip="解密文件" width="180" height="32" group="menu" selected="false" normalimage="file='resources\unpackbuttons.png' source='0,0,180,32'" hotimage="file='resources\unpackbuttons.png' source='0,32,180,64'" pushedimage="file='resources\unpackbuttons.png' source='0,64,180,96'" selectedimage="file='resources\unpackbuttons.png' source='0,64,180,96'">
+                </Option>
+                <Option name="compopt" float="true" pos="0,96,0,0" tooltip="压缩文件" width="180" height="32" group="menu" selected="false" normalimage="file='resources\compbuttons.png' source='0,0,180,32'" hotimage="file='resources\compbuttons.png' source='0,32,180,64'" pushedimage="file='resources\compbuttons.png' source='0,64,180,96'" selectedimage="file='resources\compbuttons.png' source='0,64,180,96'">
+                </Option>
+                <Option name="decompopt" float="true" pos="0,128,0,0" tooltip="解压文件" width="180" height="32" group="menu" selected="false" normalimage="file='resources\decompbuttons.png' source='0,0,180,32'" hotimage="file='resources\decompbuttons.png' source='0,32,180,64'" pushedimage="file='resources\decompbuttons.png' source='0,64,180,96'" selectedimage="file='resources\decompbuttons.png' source='0,64,180,96'">
+                </Option>
+                <Container name="configslabel" float="true" pos="0,160,0,0" width="180" height="32" bkimage="file='resources\configslabel.png'">
+                </Container>
+                <Option name="baseopt" float="true" pos="0,192,0,0" tooltip="基础设置" width="180" height="32" group="menu" selected="false" normalimage="file='resources\basebuttons.png' source='0,0,180,32'" hotimage="file='resources\basebuttons.png' source='0,32,180,64'" pushedimage="file='resources\basebuttons.png' source='0,64,180,96'" selectedimage="file='resources\basebuttons.png' source='0,64,180,96'">
+                </Option>
+                <Option name="appopt" float="true" pos="0,224,0,0" tooltip="应用设置" width="180" height="32" group="menu" selected="false" normalimage="file='resources\appbuttons.png' source='0,0,180,32'" hotimage="file='resources\appbuttons.png' source='0,32,180,64'" pushedimage="file='resources\appbuttons.png' source='0,64,180,96'" selectedimage="file='resources\appbuttons.png' source='0,64,180,96'">
+                </Option>
+                <Option name="moreopt" float="true" pos="0,256,0,0" tooltip="更多设置" width="180" height="32" group="menu" selected="false" normalimage="file='resources\moresetbuttons.png' source='0,0,180,32'" hotimage="file='resources\moresetbuttons.png' source='0,32,180,64'" pushedimage="file='resources\moresetbuttons.png' source='0,64,180,96'" selectedimage="file='resources\moresetbuttons.png' source='0,64,180,96'">
+                </Option>
+                <Container name="aboutlabel" float="true" pos="0,288,0,0" width="180" height="32" bkimage="file='resources\aboutlabel.png'">
+                </Container>
+                <Option name="aboutopt" float="true" pos="0,320,0,0" tooltip="关于信息" width="180" height="32" group="menu" selected="false" normalimage="file='resources\aboutbuttons.png' source='0,0,180,32'" hotimage="file='resources\aboutbuttons.png' source='0,32,180,64'" pushedimage="file='resources\aboutbuttons.png' source='0,64,180,96'" selectedimage="file='resources\aboutbuttons.png' source='0,64,180,96'">
+                </Option>
+            </VerticalLayout>
+            <VerticalLayout> <!-- Main -->
+                <TabLayout name="maintab">
+                    <HorizontalLayout>
+                        <framePack /> <!-- framePack -->
+                    </HorizontalLayout>
+                    <HorizontalLayout>
+                        <frameUnpack /> <!-- frameUnpack -->
+                    </HorizontalLayout>
+                    <HorizontalLayout>
+                        <frameComp /> <!-- frameComp -->
+                    </HorizontalLayout>
+                    <HorizontalLayout>
+                        <frameDecomp /> <!-- frameDecomp -->
+                    </HorizontalLayout>
+                    <HorizontalLayout>
+                        <frameBase /> <!-- frameBase -->
+                    </HorizontalLayout>
+                    <HorizontalLayout>
+                        <frameApp /> <!-- frameApp -->
+                    </HorizontalLayout>
+                    <HorizontalLayout>
+                        <frameMore /> <!-- frameMore-->
+                    </HorizontalLayout>
+                    <HorizontalLayout>
+                        <frameAbout /> <!-- frameAbout-->
+                    </HorizontalLayout>
+                </TabLayout>
+            </VerticalLayout>
+        </HorizontalLayout>
+    </VerticalLayout>
+</Window>

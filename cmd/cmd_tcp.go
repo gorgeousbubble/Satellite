@@ -16,7 +16,7 @@ var tcpMode string
 
 func init() {
 	tcpCmd.StringVar(&tcpIp, "ip", "127.0.0.1", "ip address: ipv4 address witch tcp server listen, such as \"127.0.0.1\"")
-	tcpCmd.StringVar(&tcpPort, "port", "6000", "port: port number witch tcp server listen, such as \"6000\"")
+	tcpCmd.StringVar(&tcpPort, "port", "11514", "port: port number witch tcp server listen, such as \"11514\"")
 	tcpCmd.StringVar(&tcpMode, "mode", "server", "mode: tcp mode choose, 's' or 'server' indicate tcp server, 'c' or 'client' indicate tcp client")
 }
 

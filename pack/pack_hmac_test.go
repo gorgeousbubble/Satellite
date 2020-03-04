@@ -4,6 +4,7 @@ import (
 	"testing"
 )
 
+// TestHMAC_SHA1 function
 func TestHMAC_SHA1(t *testing.T) {
 	src := "hello,world!"
 	key := "Alopex6414"
@@ -14,6 +15,7 @@ func TestHMAC_SHA1(t *testing.T) {
 	}
 }
 
+// TestHMAC_SHA256 function
 func TestHMAC_SHA256(t *testing.T) {
 	src := "hello,world!"
 	key := "Alopex6414"
@@ -24,6 +26,7 @@ func TestHMAC_SHA256(t *testing.T) {
 	}
 }
 
+// TestHMAC_SHA512 function
 func TestHMAC_SHA512(t *testing.T) {
 	src := "hello,world!"
 	key := "Alopex6414"
@@ -34,6 +37,7 @@ func TestHMAC_SHA512(t *testing.T) {
 	}
 }
 
+// BenchmarkHMAC_SHA1 function
 func BenchmarkHMAC_SHA1(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "hello,world!"
@@ -46,6 +50,7 @@ func BenchmarkHMAC_SHA1(b *testing.B) {
 	}
 }
 
+// BenchmarkHMAC_SHA256 function
 func BenchmarkHMAC_SHA256(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "hello,world!"
@@ -58,6 +63,7 @@ func BenchmarkHMAC_SHA256(b *testing.B) {
 	}
 }
 
+// BenchmarkHMAC_SHA512 function
 func BenchmarkHMAC_SHA512(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "hello,world!"

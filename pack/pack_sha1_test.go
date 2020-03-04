@@ -7,6 +7,7 @@ import (
 	"testing"
 )
 
+// TestSHA1Check function
 func TestSHA1Check(t *testing.T) {
 	src := "hello,world!"
 	dest := "4518135c05e0706c0a34168996517bb3f28d94b5"
@@ -16,6 +17,7 @@ func TestSHA1Check(t *testing.T) {
 	}
 }
 
+// TestSHA1Check2 function
 func TestSHA1Check2(t *testing.T) {
 	src := "Nice to meet you~"
 	dest := "4518135c05e0706c0a34168996517bb3f28d94b5"
@@ -25,6 +27,7 @@ func TestSHA1Check2(t *testing.T) {
 	}
 }
 
+// TestSHA1Encode function
 func TestSHA1Encode(t *testing.T) {
 	src := "hello,world!"
 	r := SHA1Encode(src)
@@ -34,6 +37,7 @@ func TestSHA1Encode(t *testing.T) {
 	}
 }
 
+// TestSHA1EncryptGo function
 func TestSHA1EncryptGo(t *testing.T) {
 	var wg sync.WaitGroup
 	var r [sha1.Size]byte
@@ -47,6 +51,7 @@ func TestSHA1EncryptGo(t *testing.T) {
 	}
 }
 
+// TestSHA1Encrypt function
 func TestSHA1Encrypt(t *testing.T) {
 	src := []byte("hello,world!")
 	r := SHA1Encrypt(src)
@@ -56,6 +61,7 @@ func TestSHA1Encrypt(t *testing.T) {
 	}
 }
 
+// BenchmarkSHA1Check function
 func BenchmarkSHA1Check(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "hello,world!"
@@ -67,6 +73,7 @@ func BenchmarkSHA1Check(b *testing.B) {
 	}
 }
 
+// BenchmarkSHA1Check2 function
 func BenchmarkSHA1Check2(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "Nice to meet you~"
@@ -78,6 +85,7 @@ func BenchmarkSHA1Check2(b *testing.B) {
 	}
 }
 
+// BenchmarkSHA1Encode function
 func BenchmarkSHA1Encode(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "hello,world!"
@@ -89,6 +97,7 @@ func BenchmarkSHA1Encode(b *testing.B) {
 	}
 }
 
+// BenchmarkSHA1EncryptGo function
 func BenchmarkSHA1EncryptGo(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var wg sync.WaitGroup
@@ -104,6 +113,7 @@ func BenchmarkSHA1EncryptGo(b *testing.B) {
 	}
 }
 
+// BenchmarkSHA1Encrypt function
 func BenchmarkSHA1Encrypt(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := []byte("hello,world!")

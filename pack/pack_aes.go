@@ -19,6 +19,12 @@ import (
 	"time"
 )
 
+// PackAES function
+// input source file list and dest package path, output error information
+// src file support both absolute and relative paths, like 'C:\\file.txt' or '../test/data/file.txt'
+// dest file also support both absolute and relative paths, like 'C:\\package.pak' or '../test/data/package.pak'
+// dest file name suffix can be any type such as '.pak', '.dat', even none is ok
+// return err indicate the success or failure function execute
 func PackAES(src []string, dest string) (err error) {
 	wg := &sync.WaitGroup{}
 	// start multi-cpu
@@ -69,6 +75,8 @@ func PackAES(src []string, dest string) (err error) {
 	return err
 }
 
+// PackAESConfine function
+// it common with function PackAES, just restrict goroutine when running
 func PackAESConfine(src []string, dest string) (err error) {
 	wg := &sync.WaitGroup{}
 	ch := make(chan interface{}, 5)
@@ -82,7 +90,8 @@ func PackAESConfine(src []string, dest string) (err error) {
 	for k, v := range src {
 		wg.Add(1)
 		ch <- struct{}{}
-		go PackAESOneGo(v, &r[k+4], wg)
+		go PackAESOneConfineGo(v, &r[k+4], wg, ch)
+		//go PackAESOneGo(v, &r[k+4], wg)
 	}
 	wg.Wait()
 	// second, check goroutine whether success or not
@@ -121,6 +130,12 @@ func PackAESConfine(src []string, dest string) (err error) {
 	return err
 }
 
+// PackAESWorkCalculate function
+// it will calculate the total work value which you input files
+// it will be call in progress pack files
+// input src files same as you pack src files
+// output work value and err
+// return err indicate the success or failure function execute
 func PackAESWorkCalculate(src []string) (work int64, err error) {
 	var sum int64
 	if len(src) == 0 {
@@ -150,6 +165,13 @@ func PackAESWorkCalculate(src []string) (work int64, err error) {
 	return work, err
 }
 
+// PackAESOneGo function
+// input source file, return value pointer and wait group pointer
+// it will pack one file through goroutine
+// src file support both absolute and relative paths, like 'C:\\file.txt' or '../test/data/file.txt'
+// r should input byte slice pointer and it will fill in return value
+// wg is a flag to control different goroutine sync
+// return err indicate the success or failure function execute
 func PackAESOneGo(src string, r *[]byte, wg *sync.WaitGroup) (err error) {
 	defer wg.Done()
 	*r, err = PackAESOne(src)
@@ -160,6 +182,8 @@ func PackAESOneGo(src string, r *[]byte, wg *sync.WaitGroup) (err error) {
 	return err
 }
 
+// PackAESOneConfineGo function
+// it common with function PackAESOneGo, just restrict goroutine when running
 func PackAESOneConfineGo(src string, r *[]byte, wg *sync.WaitGroup, ch chan interface{}) (err error) {
 	defer wg.Done()
 	*r, err = PackAESOneConfine(src)
@@ -172,6 +196,8 @@ func PackAESOneConfineGo(src string, r *[]byte, wg *sync.WaitGroup, ch chan inte
 	return err
 }
 
+// PackAESOne function
+// it the base function of PackAESOneGo
 func PackAESOne(src string) (r []byte, err error) {
 	rand.Seed(time.Now().UnixNano())
 	// first, open the file
@@ -245,6 +271,8 @@ func PackAESOne(src string) (r []byte, err error) {
 	return r, err
 }
 
+// PackAESOneConfineGo function
+// it the base function of PackAESOneConfineGo
 func PackAESOneConfine(src string) (r []byte, err error) {
 	rand.Seed(time.Now().UnixNano())
 	// first, open the file
@@ -320,6 +348,14 @@ func PackAESOneConfine(src string) (r []byte, err error) {
 	return r, err
 }
 
+// AESEncryptGo function
+// input source file, encrypt key, return value pointer and wait group pointer
+// it will encrypt one file through goroutine
+// src file must be byte slice, you can open file and read it through io
+// key is a 128bit number which used by aes, here is 16 bit byte slice
+// dest should input byte slice pointer and it will fill in return value after encrypt
+// wg is a flag to control different goroutine sync
+// return err indicate the success or failure function execute
 func AESEncryptGo(src, key []byte, dest *[]byte, wg *sync.WaitGroup) (err error) {
 	defer wg.Done()
 	*dest, err = AESEncrypt(src, key)
@@ -331,6 +367,9 @@ func AESEncryptGo(src, key []byte, dest *[]byte, wg *sync.WaitGroup) (err error)
 	return err
 }
 
+// AESEncryptConfineGo function
+// it common with function AESEncryptGo, just restrict goroutine when running
+// it will called at the confine mode
 func AESEncryptConfineGo(src, key []byte, dest *[]byte, wg *sync.WaitGroup, ch chan interface{}) (err error) {
 	defer wg.Done()
 	*dest, err = AESEncrypt(src, key)
@@ -344,6 +383,8 @@ func AESEncryptConfineGo(src, key []byte, dest *[]byte, wg *sync.WaitGroup, ch c
 	return err
 }
 
+// AESEncrypt function
+// original function of encrypt
 func AESEncrypt(src, key []byte) (dest []byte, err error) {
 	// key length should be 16, 24, 32
 	block, err := aes.NewCipher(key)
@@ -364,6 +405,8 @@ func AESEncrypt(src, key []byte) (dest []byte, err error) {
 	return dest, err
 }
 
+// PKCS7Padding function
+// AESEncrypt will call this function
 func PKCS7Padding(src []byte, size int) []byte {
 	var padding int
 	if len(src)%size != 0 {

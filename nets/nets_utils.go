@@ -142,15 +142,21 @@ func connUdpRecvHandler(c *net.UDPConn) {
 func createHttpRouter() (r *mux.Router) {
 	r = mux.NewRouter()
 	r.HandleFunc(HttpURLRoot, handleRoot).Methods("GET")
+	r.HandleFunc(HttpURLSatellite, handleIndex).Methods("GET")
 	r.HandleFunc(HttpURLPack, handleNetsPack).Methods("POST")
 	r.HandleFunc(HttpURLUnpack, handleNetsUnpack).Methods("POST")
 	r.HandleFunc(HttpURLPackProcess, handleNetsPackProcess).Methods("GET", "POST")
 	r.HandleFunc(HttpURLUnpackVerbose, handleNetsUnpackVerbose).Methods("GET", "POST")
 	r.HandleFunc(HttpURLUnpackProcess, handleNetsUnpackProcess).Methods("GET", "POST")
+	r.HandleFunc(HttpURLUnpackConfine, handleNetsUnpackConfine).Methods("POST")
 	r.HandleFunc(HttpURLUnpackToFile, handleNetsUnpackToFile).Methods("POST")
-	r.HandleFunc(HttpURLUnpackToMemory, handleNetsUnpackToMemory).Methods("GET")
+	r.HandleFunc(HttpURLUnpackToFileConfine, handleNetsUnpackToFileConfine).Methods("POST")
+	r.HandleFunc(HttpURLUnpackToMemory, handleNetsUnpackToMemory).Methods("GET", "POST")
 	r.HandleFunc(HttpURLComp, handleNetsComp).Methods("POST")
 	r.HandleFunc(HttpURLDecomp, handleNetsDecomp).Methods("POST")
+	r.HandleFunc(HttpURLImagesQRCodeToFile, handleNetsImagesQRCodeToFile).Methods("POST")
+	r.HandleFunc(HttpURLImagesQRCodeToMemory, handleNetsImagesQRCodeToMemory).Methods("POST")
+	r.HandleFunc(HttpURLParsesIni, handleNetsParsesIniValue).Methods("GET", "PUT")
 	return r
 }
 
@@ -162,7 +168,7 @@ func GenerateCA(ip string) (err error) {
 	}
 	subject := pkix.Name{
 		Organization: []string{"Team Gorgeous Bubble"},
-		CommonName:   "Https Service",
+		CommonName:   "Satellite Https Service",
 	}
 	template := x509.Certificate{
 		SerialNumber: serialNumber,

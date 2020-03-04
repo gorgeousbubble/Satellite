@@ -6,6 +6,7 @@ import (
 	"testing"
 )
 
+// TestPackAES function
 func TestPackAES(t *testing.T) {
 	src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
 	dest := "../test/data/pack/file_aes.txt"
@@ -15,6 +16,7 @@ func TestPackAES(t *testing.T) {
 	}
 }
 
+// TestPackAESConfine function
 func TestPackAESConfine(t *testing.T) {
 	src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
 	dest := "../test/data/pack/file_aes.txt"
@@ -24,6 +26,7 @@ func TestPackAESConfine(t *testing.T) {
 	}
 }
 
+// TestPackAESWorkCalculate function
 func TestPackAESWorkCalculate(t *testing.T) {
 	src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
 	_, err := PackAESWorkCalculate(src)
@@ -32,6 +35,7 @@ func TestPackAESWorkCalculate(t *testing.T) {
 	}
 }
 
+// TestPackAESOneGo function
 func TestPackAESOneGo(t *testing.T) {
 	var wg sync.WaitGroup
 	var r []byte
@@ -48,6 +52,7 @@ func TestPackAESOneGo(t *testing.T) {
 	}
 }
 
+// TestPackAESOne function
 func TestPackAESOne(t *testing.T) {
 	src := "../test/data/pack/file.txt"
 	r, err := PackAESOne(src)
@@ -60,6 +65,7 @@ func TestPackAESOne(t *testing.T) {
 	}
 }
 
+// TestPackAESOneConfine function
 func TestPackAESOneConfine(t *testing.T) {
 	src := "../test/data/pack/file.txt"
 	r, err := PackAESOneConfine(src)
@@ -72,6 +78,7 @@ func TestPackAESOneConfine(t *testing.T) {
 	}
 }
 
+// TestAESEncryptGo function
 func TestAESEncryptGo(t *testing.T) {
 	var wg sync.WaitGroup
 	var r []byte
@@ -86,6 +93,7 @@ func TestAESEncryptGo(t *testing.T) {
 	}
 }
 
+// TestAESEncrypt function
 func TestAESEncrypt(t *testing.T) {
 	src := []byte("hello,world!")
 	key := []byte("Satellite-266414")
@@ -99,6 +107,7 @@ func TestAESEncrypt(t *testing.T) {
 	}
 }
 
+// BenchmarkPackAES function
 func BenchmarkPackAES(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
@@ -110,6 +119,7 @@ func BenchmarkPackAES(b *testing.B) {
 	}
 }
 
+// BenchmarkPackAESConfine function
 func BenchmarkPackAESConfine(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
@@ -121,6 +131,7 @@ func BenchmarkPackAESConfine(b *testing.B) {
 	}
 }
 
+// BenchmarkPackAESWorkCalculate function
 func BenchmarkPackAESWorkCalculate(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
@@ -131,6 +142,7 @@ func BenchmarkPackAESWorkCalculate(b *testing.B) {
 	}
 }
 
+// BenchmarkPackAESOneGo function
 func BenchmarkPackAESOneGo(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var wg sync.WaitGroup
@@ -149,6 +161,7 @@ func BenchmarkPackAESOneGo(b *testing.B) {
 	}
 }
 
+// BenchmarkPackAESOne function
 func BenchmarkPackAESOne(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/pack/file.txt"
@@ -163,6 +176,7 @@ func BenchmarkPackAESOne(b *testing.B) {
 	}
 }
 
+// BenchmarkPackAESOneConfine function
 func BenchmarkPackAESOneConfine(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/pack/file.txt"
@@ -177,6 +191,7 @@ func BenchmarkPackAESOneConfine(b *testing.B) {
 	}
 }
 
+// BenchmarkAESEncryptGo function
 func BenchmarkAESEncryptGo(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var wg sync.WaitGroup
@@ -193,6 +208,7 @@ func BenchmarkAESEncryptGo(b *testing.B) {
 	}
 }
 
+// BenchmarkAESEncrypt function
 func BenchmarkAESEncrypt(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := []byte("hello,world!")

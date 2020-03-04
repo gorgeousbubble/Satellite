@@ -114,6 +114,107 @@ func UnpackBase64(src string, dest string) (err error) {
 	return err
 }
 
+func UnpackBase64Confine(src string, dest string) (err error) {
+	wg := &sync.WaitGroup{}
+	ch := make(chan interface{}, ConfineFiles)
+	// start multi-cpu
+	core := runtime.NumCPU()
+	runtime.GOMAXPROCS(core)
+	// clear global variable
+	atomic.StoreInt64(&Done, 0)
+	// first, open the file
+	file, err := os.Open(src)
+	if err != nil {
+		log.Println("Error open file:", err)
+		return err
+	}
+	defer file.Close()
+	// second, read file data
+	data, err := ioutil.ReadAll(file)
+	if err != nil {
+		log.Println("Error read file:", err)
+		return err
+	}
+	_, name := filepath.Split(src)
+	// third, new one header
+	h := TUnpackBase64{}
+	h.Name = make([]byte, 32)
+	h.Author = make([]byte, 16)
+	h.Type = make([]byte, 8)
+	h.Number = make([]byte, 4)
+	// fourth, read the header
+	rd := bytes.NewReader(data)
+	_, err = rd.Read(h.Name)
+	if err != nil {
+		log.Println("Error read header name:", err)
+		return err
+	}
+	s := make([]byte, 32)
+	BytesCopy(&s, []byte(name))
+	if !bytes.Equal(h.Name, s) {
+		log.Println("Error read header name:", err)
+		return err
+	}
+	_, err = rd.Read(h.Author)
+	if err != nil {
+		log.Println("Error read header author:", err)
+		return err
+	}
+	s = make([]byte, 16)
+	BytesCopy(&s, []byte("Alopex6414"))
+	if !bytes.Equal(h.Author, s) {
+		log.Println("Error read header author:", err)
+		return err
+	}
+	_, err = rd.Read(h.Type)
+	if err != nil {
+		log.Println("Error read header type:", err)
+		return err
+	}
+	s = make([]byte, 8)
+	BytesCopy(&s, []byte("BASE64"))
+	if !bytes.Equal(h.Type, s) {
+		log.Println("Error read header type:", err)
+		return err
+	}
+	_, err = rd.Read(h.Number)
+	if err != nil {
+		log.Println("Error read header number:", err)
+		return err
+	}
+	size := BytesToInt(h.Number)
+	// fifth, read every one file in packet
+	for i := 0; i < size; i++ {
+		// six, read the header
+		hh := TUnpackBase64One{}
+		hh.Name = make([]byte, 32)
+		hh.Size = make([]byte, 4)
+		_, err = rd.Read(hh.Name)
+		if err != nil {
+			log.Println("Error read header name:", err)
+			return err
+		}
+		_, err = rd.Read(hh.Size)
+		if err != nil {
+			log.Println("Error read header size:", err)
+			return err
+		}
+		// seven, read the body
+		s := make([]byte, BytesToInt(hh.Size))
+		n, err := rd.Read(s)
+		if n <= 0 {
+			log.Println("Error read body:", err)
+			return err
+		}
+		// eight, run unpack one file
+		wg.Add(1)
+		ch <- struct{}{}
+		go UnpackBase64OneConfineGo(s, hh, dest, wg, ch)
+	}
+	wg.Wait()
+	return err
+}
+
 func UnpackBase64ToFile(src string, target string, dest string) (err error) {
 	// start multi-cpu
 	core := runtime.NumCPU()
@@ -205,6 +306,107 @@ func UnpackBase64ToFile(src string, target string, dest string) (err error) {
 		// eight, when it is target file, then run unpack one file
 		if target == string(bytes.Trim(hh.Name, "\x00")) {
 			err = UnpackBase64One(s, hh, dest)
+			if err != nil {
+				log.Println("Error unpack base64 one to file:", err)
+				return err
+			}
+			return nil
+		}
+	}
+	return err
+}
+
+func UnpackBase64ToFileConfine(src string, target string, dest string) (err error) {
+	// start multi-cpu
+	core := runtime.NumCPU()
+	runtime.GOMAXPROCS(core)
+	// first, open the file
+	file, err := os.Open(src)
+	if err != nil {
+		log.Println("Error open file:", err)
+		return err
+	}
+	defer file.Close()
+	// second, read file data
+	data, err := ioutil.ReadAll(file)
+	if err != nil {
+		log.Println("Error read file:", err)
+		return err
+	}
+	_, name := filepath.Split(src)
+	// third, new one header
+	h := TUnpackBase64{}
+	h.Name = make([]byte, 32)
+	h.Author = make([]byte, 16)
+	h.Type = make([]byte, 8)
+	h.Number = make([]byte, 4)
+	// fourth, read the header
+	rd := bytes.NewReader(data)
+	_, err = rd.Read(h.Name)
+	if err != nil {
+		log.Println("Error read header name:", err)
+		return err
+	}
+	s := make([]byte, 32)
+	BytesCopy(&s, []byte(name))
+	if !bytes.Equal(h.Name, s) {
+		log.Println("Error read header name:", err)
+		return err
+	}
+	_, err = rd.Read(h.Author)
+	if err != nil {
+		log.Println("Error read header author:", err)
+		return err
+	}
+	s = make([]byte, 16)
+	BytesCopy(&s, []byte("Alopex6414"))
+	if !bytes.Equal(h.Author, s) {
+		log.Println("Error read header author:", err)
+		return err
+	}
+	_, err = rd.Read(h.Type)
+	if err != nil {
+		log.Println("Error read header type:", err)
+		return err
+	}
+	s = make([]byte, 8)
+	BytesCopy(&s, []byte("BASE64"))
+	if !bytes.Equal(h.Type, s) {
+		log.Println("Error read header type:", err)
+		return err
+	}
+	_, err = rd.Read(h.Number)
+	if err != nil {
+		log.Println("Error read header number:", err)
+		return err
+	}
+	size := BytesToInt(h.Number)
+	// fifth, read every one file in packet
+	for i := 0; i < size; i++ {
+		// six, read the header
+		hh := TUnpackBase64One{}
+		hh.Name = make([]byte, 32)
+		hh.Size = make([]byte, 4)
+		_, err = rd.Read(hh.Name)
+		if err != nil {
+			log.Println("Error read header name:", err)
+			return err
+		}
+		_, err = rd.Read(hh.Size)
+		if err != nil {
+			log.Println("Error read header size:", err)
+			return err
+		}
+		// seven, read the body
+		s := make([]byte, BytesToInt(hh.Size))
+		n, err := rd.Read(s)
+		if n <= 0 {
+			log.Println("Error read body:", err)
+			return err
+		}
+		// eight, when it is target file, then run unpack one file
+		if target == string(bytes.Trim(hh.Name, "\x00")) {
+			err = UnpackBase64OneConfine(s, hh, dest)
 			if err != nil {
 				log.Println("Error unpack base64 one to file:", err)
 				return err
@@ -537,6 +739,18 @@ func UnpackBase64OneGo(data []byte, head TUnpackBase64One, dest string, wg *sync
 	return err
 }
 
+func UnpackBase64OneConfineGo(data []byte, head TUnpackBase64One, dest string, wg *sync.WaitGroup, ch chan interface{}) (err error) {
+	defer wg.Done()
+	err = UnpackBase64OneConfine(data, head, dest)
+	if err != nil {
+		log.Println("Error base64 unpack one file:", err)
+		<-ch
+		return err
+	}
+	<-ch
+	return err
+}
+
 func UnpackBase64One(data []byte, head TUnpackBase64One, path string) (err error) {
 	// initial, fill the name
 	var s []byte
@@ -576,10 +790,58 @@ func UnpackBase64One(data []byte, head TUnpackBase64One, path string) (err error
 	return err
 }
 
+func UnpackBase64OneConfine(data []byte, head TUnpackBase64One, path string) (err error) {
+	// initial, fill the name
+	var s []byte
+	for _, v := range head.Name {
+		if v == byte(0) {
+			break
+		}
+		s = append(s, v)
+	}
+	file := path + string(s)
+	// first, split the data slice
+	ss, err := SplitByte(data, Base64BufferSize)
+	if err != nil {
+		log.Println("Error split bytes:", err)
+		return err
+	}
+	size := len(data) % Base64BufferSize
+	if size != 0 {
+		last := len(data) / Base64BufferSize
+		ss[last] = append(ss[last][:0], ss[last][:size]...)
+	}
+	// second, we can call Base64Decrypt function
+	wg := &sync.WaitGroup{}
+	ch := make(chan interface{}, ConfineBuffers)
+	rr := make([]string, len(ss))
+	for k, v := range ss {
+		wg.Add(1)
+		ch <- struct{}{}
+		go Base64DecryptConfineGo(string(v), &rr[k], wg, ch)
+	}
+	wg.Wait()
+	dest := strings.Join(rr, "")
+	// fourth, create the origin file
+	err = ioutil.WriteFile(file, []byte(dest), 0644)
+	if err != nil {
+		log.Println("Error write to dest file:", err)
+		return err
+	}
+	return err
+}
+
 func Base64DecryptGo(str string, r *string, wg *sync.WaitGroup) {
 	defer wg.Done()
 	*r = Base64Decrypt(str)
 	atomic.AddInt64(&Done, 1)
+}
+
+func Base64DecryptConfineGo(str string, r *string, wg *sync.WaitGroup, ch chan interface{}) {
+	defer wg.Done()
+	*r = Base64Decrypt(str)
+	atomic.AddInt64(&Done, 1)
+	<-ch
 }
 
 func Base64Decrypt(str string) string {

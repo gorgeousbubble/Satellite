@@ -7,6 +7,7 @@ import (
 	"testing"
 )
 
+// TestSHA256Check function
 func TestSHA256Check(t *testing.T) {
 	src := "hello,world!"
 	dest := "ec1e0bd875226943ad0e8877bdba4ca449c4cb8591a5363921c9f1ee20084c34"
@@ -16,6 +17,7 @@ func TestSHA256Check(t *testing.T) {
 	}
 }
 
+// TestSHA256Check2 function
 func TestSHA256Check2(t *testing.T) {
 	src := "Nice to meet you~"
 	dest := "ec1e0bd875226943ad0e8877bdba4ca449c4cb8591a5363921c9f1ee20084c34"
@@ -25,6 +27,7 @@ func TestSHA256Check2(t *testing.T) {
 	}
 }
 
+// TestSHA256Encode function
 func TestSHA256Encode(t *testing.T) {
 	src := "hello,world!"
 	r := SHA256Encode(src)
@@ -34,6 +37,7 @@ func TestSHA256Encode(t *testing.T) {
 	}
 }
 
+// TestSHA256EncryptGo function
 func TestSHA256EncryptGo(t *testing.T) {
 	var wg sync.WaitGroup
 	var r [sha256.Size]byte
@@ -47,6 +51,7 @@ func TestSHA256EncryptGo(t *testing.T) {
 	}
 }
 
+// TestSHA256Encrypt function
 func TestSHA256Encrypt(t *testing.T) {
 	src := []byte("hello,world!")
 	r := SHA256Encrypt(src)
@@ -56,6 +61,7 @@ func TestSHA256Encrypt(t *testing.T) {
 	}
 }
 
+// BenchmarkSHA256Check function
 func BenchmarkSHA256Check(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "hello,world!"
@@ -67,6 +73,7 @@ func BenchmarkSHA256Check(b *testing.B) {
 	}
 }
 
+// BenchmarkSHA256Check2 function
 func BenchmarkSHA256Check2(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "Nice to meet you~"
@@ -78,6 +85,7 @@ func BenchmarkSHA256Check2(b *testing.B) {
 	}
 }
 
+// BenchmarkSHA256Encode function
 func BenchmarkSHA256Encode(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "hello,world!"
@@ -89,6 +97,7 @@ func BenchmarkSHA256Encode(b *testing.B) {
 	}
 }
 
+// BenchmarkSHA256EncryptGo function
 func BenchmarkSHA256EncryptGo(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var wg sync.WaitGroup
@@ -104,6 +113,7 @@ func BenchmarkSHA256EncryptGo(b *testing.B) {
 	}
 }
 
+// BenchmarkSHA256Encrypt function
 func BenchmarkSHA256Encrypt(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := []byte("hello,world!")

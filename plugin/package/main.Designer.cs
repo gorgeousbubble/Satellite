@@ -45,6 +45,7 @@
             this.listView_pack = new System.Windows.Forms.ListView();
             this.label1 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.button_unpack_choose = new System.Windows.Forms.Button();
             this.button_unpack_execute = new System.Windows.Forms.Button();
             this.progressBar_unpack = new System.Windows.Forms.ProgressBar();
             this.label8 = new System.Windows.Forms.Label();
@@ -58,6 +59,7 @@
             this.label6 = new System.Windows.Forms.Label();
             this.timer_pack_process = new System.Windows.Forms.Timer(this.components);
             this.timer_unpack_process = new System.Windows.Forms.Timer(this.components);
+            this.checkBox_unpack_confine = new System.Windows.Forms.CheckBox();
             this.tab.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -205,6 +207,8 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.checkBox_unpack_confine);
+            this.tabPage2.Controls.Add(this.button_unpack_choose);
             this.tabPage2.Controls.Add(this.button_unpack_execute);
             this.tabPage2.Controls.Add(this.progressBar_unpack);
             this.tabPage2.Controls.Add(this.label8);
@@ -223,6 +227,16 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "unpack";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // button_unpack_choose
+            // 
+            this.button_unpack_choose.Location = new System.Drawing.Point(565, 322);
+            this.button_unpack_choose.Name = "button_unpack_choose";
+            this.button_unpack_choose.Size = new System.Drawing.Size(75, 23);
+            this.button_unpack_choose.TabIndex = 14;
+            this.button_unpack_choose.Text = "choose";
+            this.button_unpack_choose.UseVisualStyleBackColor = true;
+            this.button_unpack_choose.Click += new System.EventHandler(this.Button_unpack_choose_Click);
             // 
             // button_unpack_execute
             // 
@@ -252,7 +266,7 @@
             // 
             // button_unpack_dest
             // 
-            this.button_unpack_dest.Location = new System.Drawing.Point(646, 322);
+            this.button_unpack_dest.Location = new System.Drawing.Point(646, 389);
             this.button_unpack_dest.Name = "button_unpack_dest";
             this.button_unpack_dest.Size = new System.Drawing.Size(75, 23);
             this.button_unpack_dest.TabIndex = 10;
@@ -262,7 +276,7 @@
             // 
             // textBox_unpack_dest
             // 
-            this.textBox_unpack_dest.Location = new System.Drawing.Point(33, 322);
+            this.textBox_unpack_dest.Location = new System.Drawing.Point(33, 389);
             this.textBox_unpack_dest.Name = "textBox_unpack_dest";
             this.textBox_unpack_dest.Size = new System.Drawing.Size(607, 24);
             this.textBox_unpack_dest.TabIndex = 9;
@@ -270,7 +284,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(30, 302);
+            this.label7.Location = new System.Drawing.Point(30, 369);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(157, 17);
             this.label7.TabIndex = 8;
@@ -278,7 +292,7 @@
             // 
             // button_unpack_verbose
             // 
-            this.button_unpack_verbose.Location = new System.Drawing.Point(646, 273);
+            this.button_unpack_verbose.Location = new System.Drawing.Point(646, 322);
             this.button_unpack_verbose.Name = "button_unpack_verbose";
             this.button_unpack_verbose.Size = new System.Drawing.Size(75, 23);
             this.button_unpack_verbose.TabIndex = 7;
@@ -307,10 +321,11 @@
             // 
             this.listView_unpack.Location = new System.Drawing.Point(33, 80);
             this.listView_unpack.Name = "listView_unpack";
-            this.listView_unpack.Size = new System.Drawing.Size(688, 187);
+            this.listView_unpack.Size = new System.Drawing.Size(688, 236);
             this.listView_unpack.TabIndex = 2;
             this.listView_unpack.UseCompatibleStateImageBehavior = false;
             this.listView_unpack.View = System.Windows.Forms.View.Details;
+            this.listView_unpack.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.ListView_unpack_ItemChecked);
             // 
             // label6
             // 
@@ -328,6 +343,16 @@
             // timer_unpack_process
             // 
             this.timer_unpack_process.Tick += new System.EventHandler(this.Timer_unpack_process_Tick);
+            // 
+            // checkBox_unpack_confine
+            // 
+            this.checkBox_unpack_confine.AutoSize = true;
+            this.checkBox_unpack_confine.Location = new System.Drawing.Point(33, 324);
+            this.checkBox_unpack_confine.Name = "checkBox_unpack_confine";
+            this.checkBox_unpack_confine.Size = new System.Drawing.Size(71, 21);
+            this.checkBox_unpack_confine.TabIndex = 15;
+            this.checkBox_unpack_confine.Text = "confine";
+            this.checkBox_unpack_confine.UseVisualStyleBackColor = true;
             // 
             // FormMain
             // 
@@ -381,6 +406,8 @@
         private System.Windows.Forms.ProgressBar progressBar_unpack;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Timer timer_unpack_process;
+        private System.Windows.Forms.Button button_unpack_choose;
+        private System.Windows.Forms.CheckBox checkBox_unpack_confine;
     }
 }
 

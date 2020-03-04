@@ -18,6 +18,14 @@ jobs:
 
     - name: Get dependencies
       run: |
+        # Set env
+        cd $GOPATH
+        mkdir -p go/src
+        cd go/src
+        cp -rf /home/runner/work/Satellite/Satellite /home/runner/go/src
+        mv Satellite satellite
+        cd satellite
+        # Get dependencies
         go get -v -t -d ./...
         if [ -f Gopkg.toml ]; then
             curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
@@ -25,4 +33,66 @@ jobs:
         fi
 
     - name: Build
-      run: go build -v .
+      run: |
+        # Build
+        cd /home/runner/go/src/satellite
+        go build -v .
+
+    - name: Test
+      run: |
+        # Test
+        cd /home/runner/go/src/satellite
+        cd pack
+        echo "test pack..."
+        go test -v -cover -bench .
+        cd ..
+
+        cd unpack
+        echo "test unpack..."
+        go test -v -cover -bench .
+        cd ..
+
+        cd comp
+        echo "test comp..."
+        go test -v -cover -bench .
+        cd ..
+
+        cd decomp
+        echo "test decomp..."
+        go test -v -cover -bench .
+        cd ..
+
+        cd images
+        echo "test images..."
+        go test -v -cover -bench .
+        cd ..
+
+        # cd nets
+        # echo "test nets..."
+        # go test -v -cover -bench .
+        # cd ..
+
+        # cd parses
+        # echo "test parses..."
+        # go test -v -cover -bench .
+        # cd ..
+
+        # cd routes
+        # echo "test routes..."
+        # go test -v cover -bench .
+        # cd ..
+
+        cd searches
+        echo "test searches..."
+        go test -v -cover -bench .
+        cd ..
+
+        cd sorts
+        echo "test sorts..."
+        go test -v -cover -bench .
+        cd ..
+
+        cd utils
+        echo "test utils..."
+        go test -v -cover -bench .
+        cd ..

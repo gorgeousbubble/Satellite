@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window> <!-- Sub Window-->
+    <Font id="0" name="Microsoft YaHei" size="12" bold="false" italic="false" default="true"/>
+	<Font id="1" name="Microsoft YaHei" size="14" bold="false" italic="false"/>
+	<Font id="2" name="Microsoft YaHei" size="16" bold="false" italic="false"/>
+	<Font id="3" name="Microsoft YaHei" size="18" bold="false" italic="false"/>
+    <Font id="4" name="Microsoft YaHei" size="9" bold="false" italic="false"/>
+    <Font id="5" name="Microsoft YaHei" size="14" bold="true" italic="false"/>
+</Window>

@@ -19,7 +19,7 @@ func init() {
 	runtime.GOMAXPROCS(core)
 	// start debug pprof
 	go func() {
-		http.ListenAndServe(":6060", nil)
+		_ = http.ListenAndServe(":10514", nil)
 	}()
 }
 
@@ -32,6 +32,8 @@ func main() {
 
 	// switch command execute
 	switch os.Args[1] {
+	case CmdHelp:
+		flag.Usage()
 	case CmdPacket:
 		cmd.ParseCmdPack()
 	case CmdUnpack:
@@ -48,8 +50,18 @@ func main() {
 		cmd.ParseCmdHttp()
 	case CmdHttps:
 		cmd.ParseCmdHttps()
+	case CmdFtp:
+		cmd.ParseCmdFtp()
+	case CmdRpc:
+		cmd.ParseCmdRpc()
+	case CmdQRCode:
+		cmd.ParseCmdQRCode()
+	case CmdShell:
+		cmd.ParseCmdShell()
+	case CmdParses:
+		cmd.ParseCmdParses()
 	default:
-		fmt.Println("Invalid command~")
+		fmt.Println("Unrecognized command~")
 		os.Exit(1)
 	}
 }

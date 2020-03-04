@@ -7,6 +7,7 @@ import (
 	"testing"
 )
 
+// TestPackRSA function
 func TestPackRSA(t *testing.T) {
 	src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
 	dest := "../test/data/pack/file_rsa.txt"
@@ -16,6 +17,7 @@ func TestPackRSA(t *testing.T) {
 	}
 }
 
+// TestPackRSAWorkCalculate function
 func TestPackRSAWorkCalculate(t *testing.T) {
 	src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
 	_, err := PackRSAWorkCalculate(src)
@@ -24,6 +26,7 @@ func TestPackRSAWorkCalculate(t *testing.T) {
 	}
 }
 
+// TestPackRSAOneGo function
 func TestPackRSAOneGo(t *testing.T) {
 	var wg sync.WaitGroup
 	var r []byte
@@ -40,6 +43,7 @@ func TestPackRSAOneGo(t *testing.T) {
 	}
 }
 
+// TestPackRSAOne function
 func TestPackRSAOne(t *testing.T) {
 	src := "../test/data/pack/file.txt"
 	r, err := PackRSAOne(src)
@@ -52,6 +56,7 @@ func TestPackRSAOne(t *testing.T) {
 	}
 }
 
+// TestRSAEncryptGo function
 func TestRSAEncryptGo(t *testing.T) {
 	var wg sync.WaitGroup
 	var r []byte
@@ -65,6 +70,7 @@ func TestRSAEncryptGo(t *testing.T) {
 	}
 }
 
+// TestRSAEncrypt function
 func TestRSAEncrypt(t *testing.T) {
 	src := []byte("hello,world!")
 	r, err := RSAEncrypt(src, ConstRSAPublicKey)
@@ -77,6 +83,7 @@ func TestRSAEncrypt(t *testing.T) {
 	}
 }
 
+// BenchmarkPackRSA function
 func BenchmarkPackRSA(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
@@ -88,6 +95,7 @@ func BenchmarkPackRSA(b *testing.B) {
 	}
 }
 
+// BenchmarkPackRSAWorkCalculate function
 func BenchmarkPackRSAWorkCalculate(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := []string{"../test/data/pack/file_1.txt", "../test/data/pack/file_2.txt", "../test/data/pack/file_3.txt", "../test/data/pack/file_4.txt", "../test/data/pack/file_5.txt"}
@@ -98,6 +106,7 @@ func BenchmarkPackRSAWorkCalculate(b *testing.B) {
 	}
 }
 
+// BenchmarkPackRSAOneGo function
 func BenchmarkPackRSAOneGo(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var wg sync.WaitGroup
@@ -116,6 +125,7 @@ func BenchmarkPackRSAOneGo(b *testing.B) {
 	}
 }
 
+// BenchmarkPackRSAOne function
 func BenchmarkPackRSAOne(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/pack/file.txt"
@@ -130,6 +140,7 @@ func BenchmarkPackRSAOne(b *testing.B) {
 	}
 }
 
+// BenchmarkRSAEncryptGo function
 func BenchmarkRSAEncryptGo(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var wg sync.WaitGroup
@@ -145,6 +156,7 @@ func BenchmarkRSAEncryptGo(b *testing.B) {
 	}
 }
 
+// BenchmarkRSAEncrypt function
 func BenchmarkRSAEncrypt(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := []byte("hello,world!")

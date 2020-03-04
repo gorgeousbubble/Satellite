@@ -47,6 +47,51 @@ func TestUnpack5(t *testing.T) {
 	}
 }
 
+func TestUnpackConfine(t *testing.T) {
+	src := "../test/data/unpack/file_aes.txt"
+	dest := "../test/data/unpack/"
+	err := UnpackConfine(src, dest)
+	if err != nil {
+		t.Fatal("Error Unpack:", err)
+	}
+}
+
+func TestUnpackConfine2(t *testing.T) {
+	src := "../test/data/unpack/file_des.txt"
+	dest := "../test/data/unpack/"
+	err := UnpackConfine(src, dest)
+	if err != nil {
+		t.Fatal("Error Unpack:", err)
+	}
+}
+
+func TestUnpackConfine3(t *testing.T) {
+	src := "../test/data/unpack/file_3des.txt"
+	dest := "../test/data/unpack/"
+	err := UnpackConfine(src, dest)
+	if err != nil {
+		t.Fatal("Error Unpack:", err)
+	}
+}
+
+func TestUnpackConfine4(t *testing.T) {
+	src := "../test/data/unpack/file_rsa.txt"
+	dest := "../test/data/unpack/"
+	err := UnpackConfine(src, dest)
+	if err != nil {
+		t.Fatal("Error Unpack:", err)
+	}
+}
+
+func TestUnpackConfine5(t *testing.T) {
+	src := "../test/data/unpack/file_base64.txt"
+	dest := "../test/data/unpack/"
+	err := UnpackConfine(src, dest)
+	if err != nil {
+		t.Fatal("Error Unpack:", err)
+	}
+}
+
 func TestUnpackToFile(t *testing.T) {
 	src := "../test/data/unpack/file_aes.txt"
 	dest := "../test/data/unpack/"
@@ -92,6 +137,56 @@ func TestUnpackToFile5(t *testing.T) {
 	dest := "../test/data/unpack/"
 	target := "file_1.txt"
 	err := UnpackToFile(src, target, dest)
+	if err != nil {
+		t.Fatal("Error Unpack To File:", err)
+	}
+}
+
+func TestUnpackToFileConfine(t *testing.T) {
+	src := "../test/data/unpack/file_aes.txt"
+	dest := "../test/data/unpack/"
+	target := "file_1.txt"
+	err := UnpackToFileConfine(src, target, dest)
+	if err != nil {
+		t.Fatal("Error Unpack To File:", err)
+	}
+}
+
+func TestUnpackToFileConfine2(t *testing.T) {
+	src := "../test/data/unpack/file_des.txt"
+	dest := "../test/data/unpack/"
+	target := "file_1.txt"
+	err := UnpackToFileConfine(src, target, dest)
+	if err != nil {
+		t.Fatal("Error Unpack To File:", err)
+	}
+}
+
+func TestUnpackToFileConfine3(t *testing.T) {
+	src := "../test/data/unpack/file_3des.txt"
+	dest := "../test/data/unpack/"
+	target := "file_1.txt"
+	err := UnpackToFileConfine(src, target, dest)
+	if err != nil {
+		t.Fatal("Error Unpack To File:", err)
+	}
+}
+
+func TestUnpackToFileConfine4(t *testing.T) {
+	src := "../test/data/unpack/file_rsa.txt"
+	dest := "../test/data/unpack/"
+	target := "file_1.txt"
+	err := UnpackToFileConfine(src, target, dest)
+	if err != nil {
+		t.Fatal("Error Unpack To File:", err)
+	}
+}
+
+func TestUnpackToFileConfine5(t *testing.T) {
+	src := "../test/data/unpack/file_base64.txt"
+	dest := "../test/data/unpack/"
+	target := "file_1.txt"
+	err := UnpackToFileConfine(src, target, dest)
 	if err != nil {
 		t.Fatal("Error Unpack To File:", err)
 	}
@@ -322,6 +417,61 @@ func BenchmarkUnpack5(b *testing.B) {
 	}
 }
 
+func BenchmarkUnpackConfine(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		src := "../test/data/unpack/file_aes.txt"
+		dest := "../test/data/unpack/"
+		err := UnpackConfine(src, dest)
+		if err != nil {
+			b.Fatal("Error Unpack:", err)
+		}
+	}
+}
+
+func BenchmarkUnpackConfine2(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		src := "../test/data/unpack/file_des.txt"
+		dest := "../test/data/unpack/"
+		err := UnpackConfine(src, dest)
+		if err != nil {
+			b.Fatal("Error Unpack:", err)
+		}
+	}
+}
+
+func BenchmarkUnpackConfine3(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		src := "../test/data/unpack/file_3des.txt"
+		dest := "../test/data/unpack/"
+		err := UnpackConfine(src, dest)
+		if err != nil {
+			b.Fatal("Error Unpack:", err)
+		}
+	}
+}
+
+func BenchmarkUnpackConfine4(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		src := "../test/data/unpack/file_rsa.txt"
+		dest := "../test/data/unpack/"
+		err := UnpackConfine(src, dest)
+		if err != nil {
+			b.Fatal("Error Unpack:", err)
+		}
+	}
+}
+
+func BenchmarkUnpackConfine5(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		src := "../test/data/unpack/file_base64.txt"
+		dest := "../test/data/unpack/"
+		err := UnpackConfine(src, dest)
+		if err != nil {
+			b.Fatal("Error Unpack:", err)
+		}
+	}
+}
+
 func BenchmarkUnpackToFile(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_aes.txt"
@@ -376,6 +526,66 @@ func BenchmarkUnpackToFile5(b *testing.B) {
 		dest := "../test/data/unpack/"
 		target := "file_1.txt"
 		err := UnpackToFile(src, target, dest)
+		if err != nil {
+			b.Fatal("Error Unpack To File:", err)
+		}
+	}
+}
+
+func BenchmarkUnpackToFileConfine(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		src := "../test/data/unpack/file_aes.txt"
+		dest := "../test/data/unpack/"
+		target := "file_1.txt"
+		err := UnpackToFileConfine(src, target, dest)
+		if err != nil {
+			b.Fatal("Error Unpack To File:", err)
+		}
+	}
+}
+
+func BenchmarkUnpackToFileConfine2(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		src := "../test/data/unpack/file_des.txt"
+		dest := "../test/data/unpack/"
+		target := "file_1.txt"
+		err := UnpackToFileConfine(src, target, dest)
+		if err != nil {
+			b.Fatal("Error Unpack To File:", err)
+		}
+	}
+}
+
+func BenchmarkUnpackToFileConfine3(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		src := "../test/data/unpack/file_3des.txt"
+		dest := "../test/data/unpack/"
+		target := "file_1.txt"
+		err := UnpackToFileConfine(src, target, dest)
+		if err != nil {
+			b.Fatal("Error Unpack To File:", err)
+		}
+	}
+}
+
+func BenchmarkUnpackToFileConfine4(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		src := "../test/data/unpack/file_rsa.txt"
+		dest := "../test/data/unpack/"
+		target := "file_1.txt"
+		err := UnpackToFileConfine(src, target, dest)
+		if err != nil {
+			b.Fatal("Error Unpack To File:", err)
+		}
+	}
+}
+
+func BenchmarkUnpackToFileConfine5(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		src := "../test/data/unpack/file_base64.txt"
+		dest := "../test/data/unpack/"
+		target := "file_1.txt"
+		err := UnpackToFileConfine(src, target, dest)
 		if err != nil {
 			b.Fatal("Error Unpack To File:", err)
 		}

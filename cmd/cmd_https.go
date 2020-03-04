@@ -14,7 +14,7 @@ var httpsPort string
 
 func init() {
 	httpsCmd.StringVar(&httpsIp, "ip", "127.0.0.1", "ip address: ipv4 address witch http server listen, such as \"127.0.0.1\"")
-	httpsCmd.StringVar(&httpsPort, "port", "9000", "port: port number witch http server listen, such as \"9000\"")
+	httpsCmd.StringVar(&httpsPort, "port", "15514", "port: port number witch http server listen, such as \"15514\"")
 }
 
 func ParseCmdHttps() {

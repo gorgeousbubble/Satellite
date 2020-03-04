@@ -19,6 +19,12 @@ import (
 	"time"
 )
 
+// Pack3DES function
+// input source file list and dest package path, output error information
+// src file support both absolute and relative paths, like 'C:\\file.txt' or '../test/data/file.txt'
+// dest file also support both absolute and relative paths, like 'C:\\package.pak' or '../test/data/package.pak'
+// dest file name suffix can be any type such as '.pak', '.dat', even none is ok
+// return err indicate the success or failure function execute
 func Pack3DES(src []string, dest string) (err error) {
 	wg := &sync.WaitGroup{}
 	// start multi-cpu
@@ -69,6 +75,12 @@ func Pack3DES(src []string, dest string) (err error) {
 	return err
 }
 
+// PackDES function
+// input source file list and dest package path, output error information
+// src file support both absolute and relative paths, like 'C:\\file.txt' or '../test/data/file.txt'
+// dest file also support both absolute and relative paths, like 'C:\\package.pak' or '../test/data/package.pak'
+// dest file name suffix can be any type such as '.pak', '.dat', even none is ok
+// return err indicate the success or failure function execute
 func PackDES(src []string, dest string) (err error) {
 	wg := &sync.WaitGroup{}
 	// start multi-cpu
@@ -119,6 +131,12 @@ func PackDES(src []string, dest string) (err error) {
 	return err
 }
 
+// PackDESWorkCalculate function
+// input src file list, return work value and err code
+// this function will called by process function
+// src file list same as pack src file list
+// work value is the total work effort
+// return err indicate the success or failure function execute
 func PackDESWorkCalculate(src []string) (work int64, err error) {
 	var sum int64
 	if len(src) == 0 {
@@ -148,6 +166,9 @@ func PackDESWorkCalculate(src []string) (work int64, err error) {
 	return work, err
 }
 
+// Pack3DESOneGo function
+// this function pack one file with goroutine by 3des
+// inner function called by Pack3DES
 func Pack3DESOneGo(src string, r *[]byte, wg *sync.WaitGroup) (err error) {
 	defer wg.Done()
 	*r, err = Pack3DESOne(src)
@@ -158,6 +179,9 @@ func Pack3DESOneGo(src string, r *[]byte, wg *sync.WaitGroup) (err error) {
 	return err
 }
 
+// Pack3DESOne function
+// this function pack one file by 3des
+// inner function called by Pack3DESOneGo
 func Pack3DESOne(src string) (r []byte, err error) {
 	rand.Seed(time.Now().UnixNano())
 	// first, open the file
@@ -225,6 +249,9 @@ func Pack3DESOne(src string) (r []byte, err error) {
 	return r, err
 }
 
+// PackDESOneGo function
+// this function pack one file with goroutine by des
+// inner function called by PackDES
 func PackDESOneGo(src string, r *[]byte, wg *sync.WaitGroup) (err error) {
 	defer wg.Done()
 	*r, err = PackDESOne(src)
@@ -235,6 +262,9 @@ func PackDESOneGo(src string, r *[]byte, wg *sync.WaitGroup) (err error) {
 	return err
 }
 
+// PackDESOne function
+// this function pack one file by des
+// inner function called by PackDESOneGo
 func PackDESOne(src string) (r []byte, err error) {
 	rand.Seed(time.Now().UnixNano())
 	// first, open the file
@@ -302,6 +332,9 @@ func PackDESOne(src string) (r []byte, err error) {
 	return r, err
 }
 
+// TripleDESEncryptGo function
+// this function encrypt byte slice with goroutine
+// inner function called by Pack3DESOne
 func TripleDESEncryptGo(src, key []byte, dest *[]byte, wg *sync.WaitGroup) (err error) {
 	defer wg.Done()
 	*dest, err = TripleDESEncrypt(src, key)
@@ -313,6 +346,9 @@ func TripleDESEncryptGo(src, key []byte, dest *[]byte, wg *sync.WaitGroup) (err 
 	return err
 }
 
+// TripleDESEncrypt function
+// this function encrypt byte slice
+// inner function called by TripleDESEncryptGo
 func TripleDESEncrypt(src, key []byte) (dest []byte, err error) {
 	// key length should be 24
 	block, err := des.NewTripleDESCipher(key)
@@ -333,6 +369,9 @@ func TripleDESEncrypt(src, key []byte) (dest []byte, err error) {
 	return dest, err
 }
 
+// DESEncryptGo function
+// this function encrypt byte slice with goroutine
+// inner function called by PackDESOne
 func DESEncryptGo(src, key []byte, dest *[]byte, wg *sync.WaitGroup) (err error) {
 	defer wg.Done()
 	*dest, err = DESEncrypt(src, key)
@@ -344,6 +383,9 @@ func DESEncryptGo(src, key []byte, dest *[]byte, wg *sync.WaitGroup) (err error)
 	return err
 }
 
+// DESEncrypt function
+// this function encrypt byte slice
+// inner function called by DESEncryptGo
 func DESEncrypt(src, key []byte) (dest []byte, err error) {
 	// key length should be 8
 	block, err := des.NewCipher(key)
@@ -364,6 +406,7 @@ func DESEncrypt(src, key []byte) (dest []byte, err error) {
 	return dest, err
 }
 
+// PKCS5Padding function
 func PKCS5Padding(src []byte, size int) []byte {
 	var padding int
 	if len(src)%size != 0 {
