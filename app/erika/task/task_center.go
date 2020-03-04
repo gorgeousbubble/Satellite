@@ -7,6 +7,33 @@ import (
 	"github.com/robfig/cron"
 )
 
+type TaskCenter struct {
+	C *cron.Cron
+}
+
+func NewTaskCenter() *TaskCenter {
+	// new task center...
+	c := cron.New()
+	tc := &TaskCenter{
+		C: c,
+	}
+	return tc
+}
+
+func (tc *TaskCenter) Create(spec string, cmd func()) (err error) {
+	// create a task...
+	_, err = tc.C.AddFunc(spec, cmd)
+	return err
+}
+
+func (tc *TaskCenter) Start() {
+	tc.C.Start()
+}
+
+func (tc *TaskCenter) Stop() {
+	tc.C.Stop()
+}
+
 func Run() (err error) {
 	// create a new cron instance...
 	c := cron.New()
