@@ -9,6 +9,13 @@ import (
 	"os"
 )
 
+// Unpack function
+// input src file which was packed or encrypted, output dest file path, return error info
+// this function will base on algorithm to call correspond function
+// src file support both absolute and relative paths, like 'C:\\file.pak' or '../test/data/file.pak'
+// dest file also support both absolute and relative paths, like 'C:\\' or '../test/data/'
+// algorithm now support 'AES', 'DES', '3DES', 'RSA' and 'BASE64', but you don't need to care it~
+// return err indicate the success or failure function execute
 func Unpack(src string, dest string) (err error) {
 	// first, open the file
 	file, err := os.Open(src)
