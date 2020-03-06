@@ -106,6 +106,13 @@ func UnpackConfine(src string, dest string) (err error) {
 	return err
 }
 
+// UnpackToFile function
+// unpack file select target file. If there are many files in package, you can use this function to just decrypt one of them.
+// src file support both absolute and relative paths, like 'C:\\file.pak' or '../test/data/file.pak'
+// dest file also support both absolute and relative paths, like 'C:\\' or '../test/data/'
+// target string is the file which you want to decrypt from package. for instance, if the original name of file is 'capture.png',
+// you should fill target segment with 'capture.png'
+// return err indicate the success or failure function execute
 func UnpackToFile(src string, target string, dest string) (err error) {
 	// first, open the file
 	file, err := os.Open(src)
