@@ -156,6 +156,10 @@ func UnpackToFile(src string, target string, dest string) (err error) {
 	return err
 }
 
+// UnpackToFileConfine function
+// unpack file select target one file with restrict goroutine(if we do not restrict goroutine, memory will soon be occupied)
+// you can adjust confine file and confine buffer when you need change
+// other function is same as 'UnpackToFile'
 func UnpackToFileConfine(src string, target string, dest string) (err error) {
 	// first, open the file
 	file, err := os.Open(src)
