@@ -2,8 +2,10 @@ FROM golang:latest
 
 MAINTAINER Alopex6414 "alopex6414@outlook.com"
 
-WORKDIR $GOPATH/src/satellite/app/erika
+WORKDIR $GOPATH/src/satellite
 COPY . .
+
+cd ./app/erika/
 
 RUN go get -v -t -d ./...
 RUN go install -v ./...
