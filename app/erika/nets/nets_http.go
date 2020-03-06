@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func StartHttpServer(ip string, port string) {
+func StartHttpServer(ip string, port string) (err error) {
 	server := http.Server{
 		Addr:         ip + ":" + port,
 		WriteTimeout: HTTPWriteTimeout * time.Millisecond,
@@ -15,8 +15,10 @@ func StartHttpServer(ip string, port string) {
 		Handler:      createHttpRouter(),
 	}
 	fmt.Println("Start Listen And Server on ", ip+":"+port)
-	err := server.ListenAndServe()
+	err = server.ListenAndServe()
 	if err != nil {
 		logs.Error("Error Listen And Server:", err)
+		return err
 	}
+	return err
 }

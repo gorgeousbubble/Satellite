@@ -1,8 +1,8 @@
 package app
 
 import (
+	"errors"
 	"fmt"
-	"os"
 	"runtime"
 	"satellite/app/erika/logs"
 	"satellite/app/erika/nets"
@@ -11,15 +11,24 @@ import (
 	"strings"
 )
 
-func Run(ip string, port string) {
+func Run(ip string, port string, force bool) (err error) {
 	// check if there any process running
 	exist, err := isAlive()
 	if err != nil {
 		logs.Error("Error check process exist:", err)
+		return err
 	}
 	if exist {
-		fmt.Println("Erika is already running. Please shutdown it first before start an instance.")
-		os.Exit(1)
+		if !force {
+			logs.Error("Erika is already running. Please shutdown it first before start an instance.")
+			err = errors.New("erika is already running")
+			return err
+		}
+		err = kill()
+		if err != nil {
+			logs.Error("Error execute kill process:", err)
+			return err
+		}
 	}
 	// new task center instance...
 	tc := task.NewTaskCenter()
@@ -27,6 +36,7 @@ func Run(ip string, port string) {
 	err = tc.Create("@hourly", func() { logs.Info("hello,World!") })
 	if err != nil {
 		logs.Error("Error create job in task center:", err)
+		return err
 	}
 	// start task...
 	tc.Start()
@@ -34,7 +44,12 @@ func Run(ip string, port string) {
 	// erika tips
 	fmt.Println("Erika Start...")
 	// start http service
-	nets.StartHttpServer(ip, port)
+	err = nets.StartHttpServer(ip, port)
+	if err != nil {
+		logs.Error("Error start http server:", err)
+		return err
+	}
+	return err
 }
 
 func isAlive() (exist bool, err error) {
@@ -57,7 +72,6 @@ func isAlive() (exist bool, err error) {
 	if n == 1 {
 		exist = false
 	}
-	logs.Debug("Process number:", n)
 	return exist, err
 }
 
