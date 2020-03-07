@@ -208,6 +208,8 @@ func UnpackToFileConfine(src string, target string, dest string) (err error) {
 // src file support both absolute and relative paths, like 'C:\\file.pak' or '../test/data/file.pak'
 // dest is a slice which used to receive decrypt data. You can send '[]byte' slice address here.
 // target string is the file which you want to decrypt from package. for instance, if the original name of file is 'capture.png',
+// you should fill target segment with 'capture.png'
+// return err indicate the success or failure function execute
 func UnpackToMemory(src string, target string, dest *[]byte) (err error) {
 	// first, open the file
 	file, err := os.Open(src)
@@ -251,6 +253,13 @@ func UnpackToMemory(src string, target string, dest *[]byte) (err error) {
 	return err
 }
 
+// ExtractInfo function
+// This function is mainly used for check verbose information of package.
+// src file support both absolute and relative paths, like 'C:\\file.pak' or '../test/data/file.pak'
+// dest string slice will return the files name in package.
+// sz int slice will return the file number in package.
+// algorithm will return which algorithm used by encrypt package.
+// return err indicate the success or failure function execute
 func ExtractInfo(src string, dest *[]string, sz *[]int, algorithm *string) (err error) {
 	// first, open the file
 	file, err := os.Open(src)
