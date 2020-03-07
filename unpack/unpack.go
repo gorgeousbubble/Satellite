@@ -308,6 +308,12 @@ func ExtractInfo(src string, dest *[]string, sz *[]int, algorithm *string) (err 
 	return err
 }
 
+// WorkCalculate function
+// This function is mainly used for calculate the total work of unpack process.
+// src file support both absolute and relative paths, like 'C:\\file.pak' or '../test/data/file.pak'
+// algorithm return the algorithm type which used in unpack
+// work return the total work value of unpack process.
+// return err indicate the success or failure function execute
 func WorkCalculate(src string, algorithm *string, work *int64) (err error) {
 	// first, open the file
 	file, err := os.Open(src)
