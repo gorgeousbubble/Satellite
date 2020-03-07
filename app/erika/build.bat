@@ -48,13 +48,13 @@ goto build_go_app
 :build_debug
     :: Build Golang(With debug information)
     echo [Build Debug]
-    echo go build -o ../../bin/erika.exe main.go
-    go build -o ../../bin/erika.exe main.go
+    echo go build -o bin/erika.exe main.go
+    go build -o bin/erika.exe main.go
     echo.
     echo.
 
     :: Build Result
-    if exist ../../bin/%dirName%.exe (( choice /t 1 /d y /n >nul ) | ( echo build success. )) else ( echo build failure! | pause )
+    if exist bin/%dirName%.exe (( choice /t 1 /d y /n >nul ) | ( echo build success. )) else ( echo build failure! | pause )
     echo.
     echo.
 
@@ -65,19 +65,19 @@ goto build_go_app
 :build_release
     :: Build Golang(Without debug information)
     echo [Build Release]
-    echo go build -ldflags="-w -s" -o ../../bin/erika.exe main.go
-    go build -ldflags="-w -s" -o ../../bin/%dirName%.exe main.go
+    echo go build -ldflags="-w -s" -o bin/erika.exe main.go
+    go build -ldflags="-w -s" -o bin/%dirName%.exe main.go
     echo.
     echo.
 
     :: UPX Shell Pack
-    echo upx -9 ../../bin/erika.exe
-    %absPath%\..\..\tools\upx -9 ../../bin/%dirName%.exe
+    echo upx -9 bin/erika.exe
+    %absPath%\..\..\tools\upx -9 bin/%dirName%.exe
     echo.
     echo.
 
     :: Build Result
-    if exist ../../bin/%dirName%.exe (( choice /t 1 /d y /n >nul ) | ( echo build success. )) else ( echo build failure! | pause )
+    if exist bin/%dirName%.exe (( choice /t 1 /d y /n >nul ) | ( echo build success. )) else ( echo build failure! | pause )
     echo.
     echo.
 

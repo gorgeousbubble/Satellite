@@ -8,7 +8,7 @@ GOGET 	= $(GO) get
 
 # Binary Parameters
 GOBASE  = $(shell pwd)
-GOBIN   = $(GOBASE)/../../bin
+GOBIN   = $(GOBASE)/bin
 MKBIN   = $(shell mkdir -p $(GOBIN))
 
 # Docker Commands
@@ -19,7 +19,7 @@ DOCKERRUN   = $(DOCKER) run
 # Application
 APPNAME	= erika
 APPDIST = erika.tar.gz
-APPPATH = ../../bin/$(APPNAME)
+APPPATH = bin/$(APPNAME)
 
 # Build
 all: build
