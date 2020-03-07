@@ -203,6 +203,11 @@ func UnpackToFileConfine(src string, target string, dest string) (err error) {
 	return err
 }
 
+// UnpackToMemory function
+// unpack file to memory instate of file. It usually use in a situation which need protect data security.
+// src file support both absolute and relative paths, like 'C:\\file.pak' or '../test/data/file.pak'
+// dest is a slice which used to receive decrypt data. You can send '[]byte' slice address here.
+// target string is the file which you want to decrypt from package. for instance, if the original name of file is 'capture.png',
 func UnpackToMemory(src string, target string, dest *[]byte) (err error) {
 	// first, open the file
 	file, err := os.Open(src)
