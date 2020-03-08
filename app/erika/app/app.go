@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-func Run(ip string, port string, force bool) (err error) {
+func Start(ip string, port string, force bool) (err error) {
 	// check if there any process running
 	exist, err := isAlive()
 	if err != nil {
@@ -49,6 +49,17 @@ func Run(ip string, port string, force bool) (err error) {
 		logs.Error("Error start http server:", err)
 		return err
 	}
+	return err
+}
+
+func Stop() (err error) {
+	fmt.Println("Erika Stop...")
+	err = kill()
+	if err != nil {
+		logs.Error("Error execute kill process:", err)
+		return err
+	}
+	fmt.Println("Erika has successfully stopped.")
 	return err
 }
 

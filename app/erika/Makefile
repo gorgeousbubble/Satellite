@@ -25,8 +25,13 @@ APPPATH = bin/$(APPNAME)
 all: build
 
 build:
-	$(MKBIN)
+    $(MKBIN)
 	$(GOBUILD) -o $(GOBIN)
+
+build_image:
+    $(MKBIN)
+    $(GOBUILD) -o $(GOBIN)
+    $(DOCKERBUILD) -t $(APPNAME) .
 
 deps:
 	$(GOGET) -v -t -d ./...
