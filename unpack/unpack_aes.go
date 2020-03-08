@@ -131,6 +131,11 @@ func UnpackAES(src string, dest string) (err error) {
 	return err
 }
 
+// UnpackAESConfine function
+// This function is mainly used for unpack aes package with restrict go routine.
+// src file support both absolute and relative paths, like 'C:\\file.pak' or '../test/data/file.pak'
+// dest file also support both absolute and relative paths, like 'C:\\' or '../test/data/'
+// return err indicate the success or failure function execute
 func UnpackAESConfine(src string, dest string) (err error) {
 	wg := &sync.WaitGroup{}
 	ch := make(chan interface{}, ConfineFiles)
@@ -244,6 +249,13 @@ func UnpackAESConfine(src string, dest string) (err error) {
 	return err
 }
 
+// UnpackAESToFile function
+// This function is mainly used for unpack aes package to file.
+// src file support both absolute and relative paths, like 'C:\\file.pak' or '../test/data/file.pak'
+// dest file also support both absolute and relative paths, like 'C:\\' or '../test/data/'
+// target string is the file which you want to decrypt from package. for instance, if the original name of file is 'capture.png',
+// you should fill target segment with 'capture.png'
+// return err indicate the success or failure function execute
 func UnpackAESToFile(src string, target string, dest string) (err error) {
 	// start multi-cpu
 	core := runtime.NumCPU()
@@ -357,6 +369,13 @@ func UnpackAESToFile(src string, target string, dest string) (err error) {
 	return err
 }
 
+// UnpackAESToFileConfine function
+// This function is mainly used for unpack aes package to file with restrict go routine.
+// src file support both absolute and relative paths, like 'C:\\file.pak' or '../test/data/file.pak'
+// dest file also support both absolute and relative paths, like 'C:\\' or '../test/data/'
+// target string is the file which you want to decrypt from package. for instance, if the original name of file is 'capture.png',
+// you should fill target segment with 'capture.png'
+// return err indicate the success or failure function execute
 func UnpackAESToFileConfine(src string, target string, dest string) (err error) {
 	// start multi-cpu
 	core := runtime.NumCPU()
