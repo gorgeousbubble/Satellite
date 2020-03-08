@@ -1,5 +1,5 @@
 {
-  "name": "auto_sync_git",
+  "name": "auto_exec_sync_git",
   "description": "Automatic synchronization Git with remote repository.",
   "schedule": "@hourly",
   "attribute": {

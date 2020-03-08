@@ -40,6 +40,7 @@ Usage: erika [help] [start/stop] [status]
 Options:
     help    - help information about erika application.
     start   - start an erika instance.
+    stop    - stop all erika instance.
 `)
 	if err != nil {
 		log.Println("Error print information:", err)

@@ -27,6 +27,8 @@ func main() {
 		flag.Usage()
 	case "start":
 		cli.ParseCliStart()
+	case "stop":
+		cli.ParseCliStop()
 	default:
 		fmt.Println("Unrecognized command~")
 		os.Exit(1)

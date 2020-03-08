@@ -25,7 +25,7 @@ func ParseCliStart() {
 	// parse cli start
 	err := startCli.Parse(os.Args[2:])
 	if err != nil {
-		logs.Error("Error Parse Http Command.")
+		logs.Error("Error Parse start Command.")
 		os.Exit(1)
 	}
 	// help info
@@ -38,7 +38,7 @@ func ParseCliStart() {
 }
 
 func handleCliStart(ip string, port string, force bool) {
-	err := app.Run(ip, port, force)
+	err := app.Start(ip, port, force)
 	if err != nil {
 		fmt.Println("Error start Erika:", err)
 		os.Exit(1)
