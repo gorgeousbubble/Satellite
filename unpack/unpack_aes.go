@@ -489,6 +489,13 @@ func UnpackAESToFileConfine(src string, target string, dest string) (err error) 
 	return err
 }
 
+// UnpackAESToMemory function
+// This function is mainly used for unpack aes package to memory.
+// src file support both absolute and relative paths, like 'C:\\file.pak' or '../test/data/file.pak'
+// dest is a slice which used to receive decrypt data. You can send '[]byte' slice address here.
+// target string is the file which you want to decrypt from package. for instance, if the original name of file is 'capture.png',
+// you should fill target segment with 'capture.png'
+// return err indicate the success or failure function execute
 func UnpackAESToMemory(src string, target string, dest *[]byte) (err error) {
 	// start multi-cpu
 	core := runtime.NumCPU()
