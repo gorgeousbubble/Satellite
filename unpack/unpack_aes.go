@@ -830,6 +830,9 @@ func UnpackAESWorkCalculate(src string) (work int64, err error) {
 	return work, err
 }
 
+// UnpackAESOneToMemory function
+// This function is mainly used for unpack one file to memory.
+// It will called by function UnpackAESToMemory.
 func UnpackAESOneToMemory(data []byte, head TUnpackAESOne, dest *[]byte) (err error) {
 	// initial, fill the key
 	key := head.Key
@@ -854,6 +857,8 @@ func UnpackAESOneToMemory(data []byte, head TUnpackAESOne, dest *[]byte) (err er
 	return err
 }
 
+// UnpackAESOneGo function
+// This function is mainly used for unpack aes one file with go routine.
 func UnpackAESOneGo(data []byte, head TUnpackAESOne, dest string, wg *sync.WaitGroup) (err error) {
 	defer wg.Done()
 	err = UnpackAESOne(data, head, dest)
@@ -864,6 +869,8 @@ func UnpackAESOneGo(data []byte, head TUnpackAESOne, dest string, wg *sync.WaitG
 	return err
 }
 
+// UnpackAESOneConfineGo function
+// This function is mainly used for unpack aes one file with restrict go routine.
 func UnpackAESOneConfineGo(data []byte, head TUnpackAESOne, dest string, wg *sync.WaitGroup, ch chan interface{}) (err error) {
 	defer wg.Done()
 	err = UnpackAESOneConfine(data, head, dest)
@@ -876,6 +883,8 @@ func UnpackAESOneConfineGo(data []byte, head TUnpackAESOne, dest string, wg *syn
 	return err
 }
 
+// UnpackAESOne function
+// This function is mainly used for unpack aes one file.
 func UnpackAESOne(data []byte, head TUnpackAESOne, path string) (err error) {
 	// initial, fill the name
 	var s []byte
@@ -914,6 +923,8 @@ func UnpackAESOne(data []byte, head TUnpackAESOne, path string) (err error) {
 	return err
 }
 
+// UnpackAESOneConfine function
+// This function is mainly used for unpack aes one file with restrict go routine.
 func UnpackAESOneConfine(data []byte, head TUnpackAESOne, path string) (err error) {
 	// initial, fill the name
 	var s []byte
