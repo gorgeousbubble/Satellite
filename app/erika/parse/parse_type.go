@@ -6,6 +6,7 @@ type TAutoExec struct {
 	Description string             `json:"description" yaml:"description"`
 	Schedule    string             `json:"schedule" yaml:"schedule"`
 	Attribute   TAutoExecAttribute `json:"attribute" yaml:"attribute"`
+	Task        TAutoExecTask      `json:"task" yaml"task"`
 }
 
 type TAutoExecAttribute struct {
