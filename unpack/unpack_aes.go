@@ -965,6 +965,8 @@ func UnpackAESOneConfine(data []byte, head TUnpackAESOne, path string) (err erro
 	return err
 }
 
+// AESDecryptGo function
+// This function is mainly used for decrypt aes buffer with go routine.
 func AESDecryptGo(src, key []byte, dest *[]byte, wg *sync.WaitGroup) (err error) {
 	defer wg.Done()
 	*dest, err = AESDecrypt(src, key)
@@ -976,6 +978,8 @@ func AESDecryptGo(src, key []byte, dest *[]byte, wg *sync.WaitGroup) (err error)
 	return err
 }
 
+// AESDecryptConfineGo function
+// This function is mainly used for decrypt aes buffer with restrict go routine.
 func AESDecryptConfineGo(src, key []byte, dest *[]byte, wg *sync.WaitGroup, ch chan interface{}) (err error) {
 	defer wg.Done()
 	*dest, err = AESDecrypt(src, key)
@@ -989,6 +993,12 @@ func AESDecryptConfineGo(src, key []byte, dest *[]byte, wg *sync.WaitGroup, ch c
 	return err
 }
 
+// AESDecrypt function
+// This function is mainly used for decrypt aes buffer.
+// src buffer input stream wait for convert
+// key buffer input decrypt key of aes
+// dest buffer will output conversion result
+// return err indicate the success or failure function execute
 func AESDecrypt(src, key []byte) (dest []byte, err error) {
 	// key length should be 16, 24, 32
 	block, err := aes.NewCipher(key)
@@ -1009,6 +1019,7 @@ func AESDecrypt(src, key []byte) (dest []byte, err error) {
 	return dest, err
 }
 
+// PKCS7UnPadding function
 func PKCS7UnPadding(src []byte) []byte {
 	// don't need do anything
 	/*size := len(src)
