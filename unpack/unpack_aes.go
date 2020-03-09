@@ -720,6 +720,12 @@ func UnpackAESExtractInfo(src string, dest *[]string, sz *[]int) (err error) {
 	return err
 }
 
+// UnpackAESWorkCalculate function
+// This function is mainly used for calculate the total work of unpack process.
+// src file support both absolute and relative paths, like 'C:\\file.pak' or '../test/data/file.pak'
+// algorithm return the algorithm type which used in unpack
+// work return the total work value of unpack process.
+// return err indicate the success or failure function execute
 func UnpackAESWorkCalculate(src string) (work int64, err error) {
 	var sum int64
 	// first, open the file
