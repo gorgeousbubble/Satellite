@@ -38,6 +38,12 @@ func Start(ip string, port string, force bool) (err error) {
 		logs.Error("Error create job in task center:", err)
 		return err
 	}
+	// automatic discovery task...
+	err = tc.Discovery("./task")
+	if err != nil {
+		logs.Error("Error automatic discovery tasks:", err)
+		return err
+	}
 	// start task...
 	tc.Start()
 	defer tc.Start()
