@@ -609,6 +609,13 @@ func UnpackAESToMemory(src string, target string, dest *[]byte) (err error) {
 	return err
 }
 
+// UnpackAESExtractInfo function
+// This function is mainly used for check verbose information of package.
+// src file support both absolute and relative paths, like 'C:\\file.pak' or '../test/data/file.pak'
+// dest string slice will return the files name in package.
+// sz int slice will return the file number in package.
+// algorithm will return which algorithm used by encrypt package.
+// return err indicate the success or failure function execute
 func UnpackAESExtractInfo(src string, dest *[]string, sz *[]int) (err error) {
 	// first, open the file
 	file, err := os.Open(src)
