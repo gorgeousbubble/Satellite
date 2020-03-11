@@ -316,6 +316,7 @@ func TestAESDecrypt(t *testing.T) {
 	}
 }
 
+// BenchmarkUnpackAES function
 func BenchmarkUnpackAES(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_aes.txt"
@@ -327,6 +328,7 @@ func BenchmarkUnpackAES(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackAESConfine function
 func BenchmarkUnpackAESConfine(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_aes.txt"
@@ -338,6 +340,7 @@ func BenchmarkUnpackAESConfine(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackAESToFile function
 func BenchmarkUnpackAESToFile(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_aes.txt"
@@ -350,6 +353,7 @@ func BenchmarkUnpackAESToFile(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackAESToFile function
 func BenchmarkUnpackAESToFileConfine(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_aes.txt"
@@ -362,6 +366,7 @@ func BenchmarkUnpackAESToFileConfine(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackAESToMemory function
 func BenchmarkUnpackAESToMemory(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var dest []byte
@@ -374,6 +379,7 @@ func BenchmarkUnpackAESToMemory(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackAESToMemory function
 func BenchmarkUnpackAESExtractInfo(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var dest []string
@@ -389,6 +395,7 @@ func BenchmarkUnpackAESExtractInfo(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackAESWorkCalculate function
 func BenchmarkUnpackAESWorkCalculate(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_aes.txt"
@@ -399,6 +406,7 @@ func BenchmarkUnpackAESWorkCalculate(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackAESOneToMemory function
 func BenchmarkUnpackAESOneToMemory(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var dest []byte
@@ -453,6 +461,7 @@ func BenchmarkUnpackAESOneToMemory(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackAESOneGo function
 func BenchmarkUnpackAESOneGo(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var wg sync.WaitGroup
@@ -504,6 +513,7 @@ func BenchmarkUnpackAESOneGo(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackAESOne function
 func BenchmarkUnpackAESOne(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := []byte{0x66, 0x69, 0x6C, 0x65, 0x2E, 0x74, 0x78, 0x74, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -555,6 +565,7 @@ func BenchmarkUnpackAESOne(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackAESOneConfine function
 func BenchmarkUnpackAESOneConfine(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := []byte{0x66, 0x69, 0x6C, 0x65, 0x2E, 0x74, 0x78, 0x74, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -606,6 +617,7 @@ func BenchmarkUnpackAESOneConfine(b *testing.B) {
 	}
 }
 
+// BenchmarkAESDecryptGo function
 func BenchmarkAESDecryptGo(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var dest []byte
@@ -622,6 +634,7 @@ func BenchmarkAESDecryptGo(b *testing.B) {
 	}
 }
 
+// BenchmarkAESDecrypt function
 func BenchmarkAESDecrypt(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := []byte{0x3B, 0x1B, 0x63, 0x41, 0x08, 0xC7, 0x8B, 0x97, 0xEC, 0x0D, 0xA3, 0xE4, 0xD2, 0xCD, 0x39, 0x84}
