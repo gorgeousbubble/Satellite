@@ -8,6 +8,7 @@ import (
 	"testing"
 )
 
+// TestUnpackAES function
 func TestUnpackAES(t *testing.T) {
 	src := "../test/data/unpack/file_aes.txt"
 	dest := "../test/data/unpack/"
@@ -17,6 +18,7 @@ func TestUnpackAES(t *testing.T) {
 	}
 }
 
+// TestUnpackAESConfine function
 func TestUnpackAESConfine(t *testing.T) {
 	src := "../test/data/unpack/file_aes.txt"
 	dest := "../test/data/unpack/"
@@ -26,6 +28,7 @@ func TestUnpackAESConfine(t *testing.T) {
 	}
 }
 
+// TestUnpackAESToFile function
 func TestUnpackAESToFile(t *testing.T) {
 	src := "../test/data/unpack/file_aes.txt"
 	dest := "../test/data/unpack/"
@@ -36,6 +39,7 @@ func TestUnpackAESToFile(t *testing.T) {
 	}
 }
 
+// TestUnpackAESToFileConfine function
 func TestUnpackAESToFileConfine(t *testing.T) {
 	src := "../test/data/unpack/file_aes.txt"
 	dest := "../test/data/unpack/"
@@ -46,6 +50,7 @@ func TestUnpackAESToFileConfine(t *testing.T) {
 	}
 }
 
+// TestUnpackAESToMemory function
 func TestUnpackAESToMemory(t *testing.T) {
 	var dest []byte
 	src := "../test/data/unpack/file_aes.txt"
