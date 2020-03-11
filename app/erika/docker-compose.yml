@@ -1,0 +1,12 @@
+version: "3"
+services:
+  erika:
+    image: erika:latest
+    container_name: erika
+    ports:
+      - 14514:80
+    volumes:
+      - ${PWD}/log:/app/log
+      - ${PWD}/task:/app/task
+      - /home/pi/repos:/home/pi/repos
+    restart: always
