@@ -119,6 +119,11 @@ func UnpackBase64(src string, dest string) (err error) {
 	return err
 }
 
+// UnpackBase64Confine function
+// This function mainly used for unpack base64 package with restrict go routine.
+// src file support both absolute and relative paths, like 'C:\\file.pak' or '../test/data/file.pak'
+// dest file also support both absolute and relative paths, like 'C:\\' or '../test/data/'
+// return err indicate the success or failure function execute
 func UnpackBase64Confine(src string, dest string) (err error) {
 	wg := &sync.WaitGroup{}
 	ch := make(chan interface{}, ConfineFiles)
@@ -220,6 +225,12 @@ func UnpackBase64Confine(src string, dest string) (err error) {
 	return err
 }
 
+// UnpackBase64ToFile function
+// This function mainly used for unpack base64 package to file.
+// src file support both absolute and relative paths, like 'C:\\file.pak' or '../test/data/file.pak'
+// dest file also support both absolute and relative paths, like 'C:\\' or '../test/data/'
+// target string is the file which you want to decrypt from package. for instance, if the original name of file is 'capture.png',
+// return err indicate the success or failure function execute
 func UnpackBase64ToFile(src string, target string, dest string) (err error) {
 	// start multi-cpu
 	core := runtime.NumCPU()
@@ -321,6 +332,12 @@ func UnpackBase64ToFile(src string, target string, dest string) (err error) {
 	return err
 }
 
+// UnpackBase64ToFileConfine function
+// This function mainly used for unpack base64 package to file with restrict go routine.
+// src file support both absolute and relative paths, like 'C:\\file.pak' or '../test/data/file.pak'
+// dest file also support both absolute and relative paths, like 'C:\\' or '../test/data/'
+// target string is the file which you want to decrypt from package. for instance, if the original name of file is 'capture.png',
+// return err indicate the success or failure function execute
 func UnpackBase64ToFileConfine(src string, target string, dest string) (err error) {
 	// start multi-cpu
 	core := runtime.NumCPU()
