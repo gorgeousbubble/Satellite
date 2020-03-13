@@ -1,0 +1,24 @@
+{
+    "name": "auto_exec_sync_git_nightmare",
+    "description": "Automatic synchronization Git with remote repository.",
+    "schedule": "@hourly",
+    "attribute": {
+        "location": "/home/pi/repos/nightmare"
+    },
+    "task": {
+        "exec": [
+            {
+                "command": "git pull gogs master"
+            },
+            {
+                "command": "git add ."
+            },
+            {
+                "command": "git commit -m 'Automatic Commit by Erika.'"
+            },
+            {
+                "command": "git push gogs master"
+            }
+        ]
+    }
+}
