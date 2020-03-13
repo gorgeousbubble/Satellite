@@ -2,6 +2,7 @@ package parse
 
 import (
 	"encoding/json"
+	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"os"
 	"satellite/app/erika/logs"
@@ -29,12 +30,12 @@ func unmarshalAutoExec(path string, out *TAutoExec, style string) (err error) {
 			logs.Error("Error unmarshal json data to struct:", err)
 			return err
 		}
-	//case "yaml":
-	//	err = yaml.Unmarshal(data, out)
-	//	if err != nil {
-	//		logs.Error("Error unmarshal yaml data to struct:", err)
-	//		return err
-	//	}
+	case "yaml":
+		err = yaml.Unmarshal(data, out)
+		if err != nil {
+			logs.Error("Error unmarshal yaml data to struct:", err)
+			return err
+		}
 	default:
 		err = json.Unmarshal(data, out)
 		if err != nil {
@@ -57,12 +58,12 @@ func marshalAutoExec(path string, in *TAutoExec, style string) (err error) {
 			logs.Error("Error marshal struct to json data")
 			return err
 		}
-	//case "yaml":
-	//	data, err = yaml.Marshal(in)
-	//	if err != nil {
-	//		logs.Error("Error marshal struct to yaml data")
-	//		return err
-	//	}
+	case "yaml":
+		data, err = yaml.Marshal(in)
+		if err != nil {
+			logs.Error("Error marshal struct to yaml data")
+			return err
+		}
 	default:
 		data, err = json.MarshalIndent(in, "", "\t")
 		if err != nil {
