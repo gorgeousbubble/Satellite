@@ -68,7 +68,7 @@ func (tc *TaskCenter) Discovery(dir string) (err error) {
 		}
 		tc.Create(s.Schedule, func() { proc.HandleAutoExec(location, commands) })
 		err = nil
-		break
+		continue
 	}
 	return err
 }
