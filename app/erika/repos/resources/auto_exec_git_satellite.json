@@ -3,7 +3,7 @@
     "description": "Automatic synchronization Git with remote repository.",
     "schedule": "@hourly",
     "attribute": {
-        "location": "/home/pi/repos/nightmare"
+        "location": "/home/pi/repos/satellite"
     },
     "task": {
         "exec": [
