@@ -439,6 +439,13 @@ func UnpackBase64ToFileConfine(src string, target string, dest string) (err erro
 	return err
 }
 
+// UnpackBase64ToMemory function
+// This function mainly used for unpack base64 package to memory.
+// src file support both absolute and relative paths, like 'C:\\file.pak' or '../test/data/file.pak'
+// dest is a slice which used to receive decrypt data. You can send '[]byte' slice address here.
+// target string is the file which you want to decrypt from package. for instance, if the original name of file is 'capture.png',
+// you should fill target segment with 'capture.png'
+// return err indicate the success or failure function execute
 func UnpackBase64ToMemory(src string, target string, dest *[]byte) (err error) {
 	// start multi-cpu
 	core := runtime.NumCPU()
