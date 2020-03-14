@@ -8,6 +8,7 @@ import (
 	"testing"
 )
 
+// TestUnpackBase64 function
 func TestUnpackBase64(t *testing.T) {
 	src := "../test/data/unpack/file_base64.txt"
 	dest := "../test/data/unpack/"
@@ -17,6 +18,7 @@ func TestUnpackBase64(t *testing.T) {
 	}
 }
 
+// TestUnpackBase64Confine function
 func TestUnpackBase64Confine(t *testing.T) {
 	src := "../test/data/unpack/file_base64.txt"
 	dest := "../test/data/unpack/"
@@ -26,6 +28,7 @@ func TestUnpackBase64Confine(t *testing.T) {
 	}
 }
 
+// TestUnpackBase64ToFile function
 func TestUnpackBase64ToFile(t *testing.T) {
 	src := "../test/data/unpack/file_base64.txt"
 	dest := "../test/data/unpack/"
@@ -36,6 +39,7 @@ func TestUnpackBase64ToFile(t *testing.T) {
 	}
 }
 
+// TestUnpackBase64ToFileConfine function
 func TestUnpackBase64ToFileConfine(t *testing.T) {
 	src := "../test/data/unpack/file_base64.txt"
 	dest := "../test/data/unpack/"
@@ -46,6 +50,7 @@ func TestUnpackBase64ToFileConfine(t *testing.T) {
 	}
 }
 
+// TestUnpackBase64ToMemory function
 func TestUnpackBase64ToMemory(t *testing.T) {
 	var dest []byte
 	src := "../test/data/unpack/file_base64.txt"
@@ -56,6 +61,7 @@ func TestUnpackBase64ToMemory(t *testing.T) {
 	}
 }
 
+// TestBase64ExtractInfo function
 func TestBase64ExtractInfo(t *testing.T) {
 	var dest []string
 	var sz []int
@@ -69,6 +75,7 @@ func TestBase64ExtractInfo(t *testing.T) {
 	}
 }
 
+// TestUnpackBase64WorkCalculate function
 func TestUnpackBase64WorkCalculate(t *testing.T) {
 	src := "../test/data/unpack/file_base64.txt"
 	_, err := UnpackBase64WorkCalculate(src)
@@ -77,6 +84,7 @@ func TestUnpackBase64WorkCalculate(t *testing.T) {
 	}
 }
 
+// TestUnpackBase64OneToMemory function
 func TestUnpackBase64OneToMemory(t *testing.T) {
 	var dest string
 	src := []byte{
@@ -111,6 +119,7 @@ func TestUnpackBase64OneToMemory(t *testing.T) {
 	}
 }
 
+// TestUnpackBase64OneGo function
 func TestUnpackBase64OneGo(t *testing.T) {
 	var wg sync.WaitGroup
 	src := []byte{
@@ -142,6 +151,7 @@ func TestUnpackBase64OneGo(t *testing.T) {
 	wg.Wait()
 }
 
+// TestUnpackBase64One function
 func TestUnpackBase64One(t *testing.T) {
 	src := []byte{
 		0x66, 0x69, 0x6C, 0x65, 0x2E, 0x74, 0x78, 0x74, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -173,6 +183,7 @@ func TestUnpackBase64One(t *testing.T) {
 	}
 }
 
+// TestUnpackBase64OneConfine function
 func TestUnpackBase64OneConfine(t *testing.T) {
 	src := []byte{
 		0x66, 0x69, 0x6C, 0x65, 0x2E, 0x74, 0x78, 0x74, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -204,6 +215,7 @@ func TestUnpackBase64OneConfine(t *testing.T) {
 	}
 }
 
+// TestBase64DecryptGo function
 func TestBase64DecryptGo(t *testing.T) {
 	var wg sync.WaitGroup
 	var r string
@@ -221,6 +233,7 @@ func TestBase64DecryptGo(t *testing.T) {
 	}
 }
 
+// TestBase64Decrypt function
 func TestBase64Decrypt(t *testing.T) {
 	src := "aGVsbG8sd29ybGQh"
 	dest := "hello,world!"
