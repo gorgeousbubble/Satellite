@@ -549,6 +549,13 @@ func UnpackBase64ToMemory(src string, target string, dest *[]byte) (err error) {
 	return err
 }
 
+// UnpackBase64ExtractInfo function
+// This function is mainly used for check verbose information of package.
+// src file support both absolute and relative paths, like 'C:\\file.pak' or '../test/data/file.pak'
+// dest string slice will return the files name in package.
+// sz int slice will return the file number in package.
+// algorithm will return which algorithm used by encrypt package.
+// return err indicate the success or failure function execute
 func UnpackBase64ExtractInfo(src string, dest *[]string, sz *[]int) (err error) {
 	// first, open the file
 	file, err := os.Open(src)
@@ -641,6 +648,12 @@ func UnpackBase64ExtractInfo(src string, dest *[]string, sz *[]int) (err error) 
 	return err
 }
 
+// UnpackBase64WorkCalculate function
+// This function is mainly used for calculate the total work of unpack process.
+// src file support both absolute and relative paths, like 'C:\\file.pak' or '../test/data/file.pak'
+// algorithm return the algorithm type which used in unpack
+// work return the total work value of unpack process.
+// return err indicate the success or failure function execute
 func UnpackBase64WorkCalculate(src string) (work int64, err error) {
 	var sum int64
 	// first, open the file
@@ -734,6 +747,9 @@ func UnpackBase64WorkCalculate(src string) (work int64, err error) {
 	return work, err
 }
 
+// UnpackBase64OneToMemory function
+// This function is mainly used for unpack one file to memory.
+// It will called by function UnpackBase64ToMemory.
 func UnpackBase64OneToMemory(data []byte, dest *string) (err error) {
 	// first, split the data slice
 	ss, err := SplitByte(data, Base64BufferSize)
@@ -758,6 +774,8 @@ func UnpackBase64OneToMemory(data []byte, dest *string) (err error) {
 	return err
 }
 
+// UnpackBase64OneGo function
+// This function is mainly used for unpack base64 one file with go routine.
 func UnpackBase64OneGo(data []byte, head TUnpackBase64One, dest string, wg *sync.WaitGroup) (err error) {
 	defer wg.Done()
 	err = UnpackBase64One(data, head, dest)
@@ -768,6 +786,8 @@ func UnpackBase64OneGo(data []byte, head TUnpackBase64One, dest string, wg *sync
 	return err
 }
 
+// UnpackBase64OneConfineGo function
+// This function is mainly used for unpack base64 one file with restrict go routine.
 func UnpackBase64OneConfineGo(data []byte, head TUnpackBase64One, dest string, wg *sync.WaitGroup, ch chan interface{}) (err error) {
 	defer wg.Done()
 	err = UnpackBase64OneConfine(data, head, dest)
@@ -780,6 +800,8 @@ func UnpackBase64OneConfineGo(data []byte, head TUnpackBase64One, dest string, w
 	return err
 }
 
+// UnpackBase64One function
+// This function is mainly used for unpack base64 one file.
 func UnpackBase64One(data []byte, head TUnpackBase64One, path string) (err error) {
 	// initial, fill the name
 	var s []byte
@@ -819,6 +841,8 @@ func UnpackBase64One(data []byte, head TUnpackBase64One, path string) (err error
 	return err
 }
 
+// UnpackBase64OneConfine function
+// This function is mainly used for unpack base64 one file.
 func UnpackBase64OneConfine(data []byte, head TUnpackBase64One, path string) (err error) {
 	// initial, fill the name
 	var s []byte
@@ -860,12 +884,14 @@ func UnpackBase64OneConfine(data []byte, head TUnpackBase64One, path string) (er
 	return err
 }
 
+// Base64DecryptGo function
 func Base64DecryptGo(str string, r *string, wg *sync.WaitGroup) {
 	defer wg.Done()
 	*r = Base64Decrypt(str)
 	atomic.AddInt64(&Done, 1)
 }
 
+// Base64DecryptConfineGo function
 func Base64DecryptConfineGo(str string, r *string, wg *sync.WaitGroup, ch chan interface{}) {
 	defer wg.Done()
 	*r = Base64Decrypt(str)
@@ -873,6 +899,7 @@ func Base64DecryptConfineGo(str string, r *string, wg *sync.WaitGroup, ch chan i
 	<-ch
 }
 
+// Base64Decrypt function
 func Base64Decrypt(str string) string {
 	s, _ := base64.StdEncoding.DecodeString(str)
 	r := string(s)
