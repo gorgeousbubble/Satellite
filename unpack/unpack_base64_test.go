@@ -247,6 +247,7 @@ func TestBase64Decrypt(t *testing.T) {
 	}
 }
 
+// BenchmarkUnpackBase64 function
 func BenchmarkUnpackBase64(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_base64.txt"
@@ -258,6 +259,7 @@ func BenchmarkUnpackBase64(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackBase64Confine function
 func BenchmarkUnpackBase64Confine(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_base64.txt"
@@ -269,6 +271,7 @@ func BenchmarkUnpackBase64Confine(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackBase64ToFile function
 func BenchmarkUnpackBase64ToFile(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_base64.txt"
@@ -281,6 +284,7 @@ func BenchmarkUnpackBase64ToFile(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackBase64ToFileConfine function
 func BenchmarkUnpackBase64ToFileConfine(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_base64.txt"
@@ -293,6 +297,7 @@ func BenchmarkUnpackBase64ToFileConfine(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackBase64ToMemory function
 func BenchmarkUnpackBase64ToMemory(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var dest []byte
@@ -305,6 +310,7 @@ func BenchmarkUnpackBase64ToMemory(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackBase64ExtractInfo function
 func BenchmarkUnpackBase64ExtractInfo(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var dest []string
@@ -320,6 +326,7 @@ func BenchmarkUnpackBase64ExtractInfo(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackBase64WorkCalculate function
 func BenchmarkUnpackBase64WorkCalculate(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_base64.txt"
@@ -330,6 +337,7 @@ func BenchmarkUnpackBase64WorkCalculate(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackBase64OneToMemory function
 func BenchmarkUnpackBase64OneToMemory(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var dest string
@@ -366,6 +374,7 @@ func BenchmarkUnpackBase64OneToMemory(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackBase64OneGo function
 func BenchmarkUnpackBase64OneGo(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var wg sync.WaitGroup
@@ -399,6 +408,7 @@ func BenchmarkUnpackBase64OneGo(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackBase64One function
 func BenchmarkUnpackBase64One(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := []byte{
@@ -432,6 +442,7 @@ func BenchmarkUnpackBase64One(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackBase64One function
 func BenchmarkUnpackBase64OneConfine(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := []byte{
@@ -465,6 +476,7 @@ func BenchmarkUnpackBase64OneConfine(b *testing.B) {
 	}
 }
 
+// BenchmarkBase64DecryptGo function
 func BenchmarkBase64DecryptGo(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var wg sync.WaitGroup
@@ -484,6 +496,7 @@ func BenchmarkBase64DecryptGo(b *testing.B) {
 	}
 }
 
+// BenchmarkBase64Decrypt function
 func BenchmarkBase64Decrypt(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "aGVsbG8sd29ybGQh"
