@@ -33,7 +33,7 @@ func Start(ip string, port string, force bool) (err error) {
 	// new task center instance...
 	tc := task.NewTaskCenter()
 	// create task job
-	err = tc.Create("@hourly", func() { logs.Info("hello,World!") })
+	err = tc.Create("@hourly", func() { tc.Discovery("./task") })
 	if err != nil {
 		logs.Error("Error create job in task center:", err)
 		return err

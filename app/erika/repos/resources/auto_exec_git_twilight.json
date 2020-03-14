@@ -8,7 +8,7 @@
     "task": {
         "exec": [
             {
-                "command": "git pull gogs master"
+                "command": "git pull origin master"
             },
             {
                 "command": "git add ."
@@ -17,7 +17,7 @@
                 "command": "git commit -m 'Automatic Commit by Erika.'"
             },
             {
-                "command": "git push gogs master"
+                "command": "git push origin master"
             }
         ]
     }
