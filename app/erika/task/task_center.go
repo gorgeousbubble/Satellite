@@ -14,13 +14,16 @@ import (
 
 type TaskCenter struct {
 	C *cron.Cron
+	M *TaskManager
 }
 
 func NewTaskCenter() *TaskCenter {
 	// new task center...
 	c := cron.New()
+	m := NewTaskManager()
 	tc := &TaskCenter{
 		C: c,
+		M: m,
 	}
 	return tc
 }
@@ -57,6 +60,12 @@ func (tc *TaskCenter) Discovery(dir string) (err error) {
 		err = parse.Unmarshal(path, &s)
 		if err != nil {
 			logs.Info("Error Unmarshal file:", err)
+			continue
+		}
+		// append task to manager...
+		err = tc.M.AppendTask(s.Id, &s)
+		if err != nil {
+			logs.Error("Error append task to manager:", err)
 			continue
 		}
 		// create task process...
