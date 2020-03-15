@@ -1,5 +1,6 @@
 {
   "name": "auto_exec_sync_git_nightmare",
+  "id": "e96d37a3b9853c1d9cc88166e11f465b339794a5",
   "description": "Automatic synchronization Git with remote repository.",
   "schedule": "@hourly",
   "attribute": {

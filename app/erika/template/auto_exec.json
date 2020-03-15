@@ -1,5 +1,6 @@
 {
   "name": "auto_exec_sync_git",
+  "id": "fae05c3d771b78fc0d806a57219f9d27da4e36c4",
   "description": "Automatic synchronization Git with remote repository.",
   "schedule": "@hourly",
   "attribute": {
@@ -8,7 +9,7 @@
   "task": {
     "exec": [
       {
-        "command": "git pull gogs master"
+        "command": "git pull origin master"
       },
       {
         "command": "git add ."
@@ -17,7 +18,7 @@
         "command": "git commit -m 'Automatic Commit by Erika.'"
       },
       {
-        "command": "git push gogs master"
+        "command": "git push origin master"
       }
     ]
   }

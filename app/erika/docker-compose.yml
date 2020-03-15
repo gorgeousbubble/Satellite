@@ -1,12 +1,12 @@
 version: "3"
 services:
   erika:
-    image: erika:latest
+    image: erika:${ERIKA_VERSION}
     container_name: erika
     ports:
-      - 14514:80
+      - 14514:${HTTP_PORT}
     volumes:
-      - ${PWD}/log:/app/log
-      - ${PWD}/task:/app/task
-      - /home/pi/repos:/home/pi/repos
+      - ${PWD}/log:${ERIKA_LOG_DIR}
+      - ${PWD}/task:${ERIKA_TASK_DIR}
+      - ${ERIKA_GIT_DIR}:${ERIKA_GIT_DIR}
     restart: always
