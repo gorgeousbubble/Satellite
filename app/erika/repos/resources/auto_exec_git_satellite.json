@@ -1,5 +1,6 @@
 {
-    "name": "auto_exec_sync_git_nightmare",
+    "name": "auto_exec_sync_git_satellite",
+    "id": "c7c7b6b91e23bbac7b1f0003bc5043a51480178d",
     "description": "Automatic synchronization Git with remote repository.",
     "schedule": "@hourly",
     "attribute": {
