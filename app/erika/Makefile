@@ -28,7 +28,7 @@ build:
 	$(MKBIN)
 	$(GOBUILD) -o $(GOBIN)
 
-build_image:
+image:
 	$(MKBIN)
 	$(GOBUILD) -o $(GOBIN)
 	$(DOCKERBUILD) -t $(APPNAME) .
