@@ -15,6 +15,11 @@ import (
 	"sync/atomic"
 )
 
+// Unpack3DES function
+// This function mainly used for unpack des package.
+// src file support both absolute and relative paths, like 'C:\\file.pak' or '../test/data/file.pak'
+// dest file also support both absolute and relative paths, like 'C:\\' or '../test/data/'
+// return err indicate the success or failure function execute
 func Unpack3DES(src string, dest string) (err error) {
 	wg := &sync.WaitGroup{}
 	// start multi-cpu
@@ -126,6 +131,11 @@ func Unpack3DES(src string, dest string) (err error) {
 	return err
 }
 
+// UnpackDES function
+// This function mainly used for unpack des package.
+// src file support both absolute and relative paths, like 'C:\\file.pak' or '../test/data/file.pak'
+// dest file also support both absolute and relative paths, like 'C:\\' or '../test/data/'
+// return err indicate the success or failure function execute
 func UnpackDES(src string, dest string) (err error) {
 	wg := &sync.WaitGroup{}
 	// start multi-cpu
@@ -237,6 +247,11 @@ func UnpackDES(src string, dest string) (err error) {
 	return err
 }
 
+// Unpack3DESConfine function
+// This function is mainly used for unpack des package with restrict go routine.
+// src file support both absolute and relative paths, like 'C:\\file.pak' or '../test/data/file.pak'
+// dest file also support both absolute and relative paths, like 'C:\\' or '../test/data/'
+// return err indicate the success or failure function execute
 func Unpack3DESConfine(src string, dest string) (err error) {
 	wg := &sync.WaitGroup{}
 	ch := make(chan interface{}, ConfineFiles)
@@ -350,6 +365,11 @@ func Unpack3DESConfine(src string, dest string) (err error) {
 	return err
 }
 
+// UnpackDESConfine function
+// This function is mainly used for unpack des package with restrict go routine.
+// src file support both absolute and relative paths, like 'C:\\file.pak' or '../test/data/file.pak'
+// dest file also support both absolute and relative paths, like 'C:\\' or '../test/data/'
+// return err indicate the success or failure function execute
 func UnpackDESConfine(src string, dest string) (err error) {
 	wg := &sync.WaitGroup{}
 	ch := make(chan interface{}, ConfineFiles)
