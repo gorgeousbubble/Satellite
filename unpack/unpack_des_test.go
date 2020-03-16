@@ -8,6 +8,7 @@ import (
 	"testing"
 )
 
+// TestUnpack3DES function
 func TestUnpack3DES(t *testing.T) {
 	src := "../test/data/unpack/file_3des.txt"
 	dest := "../test/data/unpack/"
@@ -17,6 +18,7 @@ func TestUnpack3DES(t *testing.T) {
 	}
 }
 
+// TestUnpack3DESConfine function
 func TestUnpack3DESConfine(t *testing.T) {
 	src := "../test/data/unpack/file_3des.txt"
 	dest := "../test/data/unpack/"
@@ -26,6 +28,7 @@ func TestUnpack3DESConfine(t *testing.T) {
 	}
 }
 
+// TestUnpackDES function
 func TestUnpackDES(t *testing.T) {
 	src := "../test/data/unpack/file_des.txt"
 	dest := "../test/data/unpack/"
@@ -35,6 +38,7 @@ func TestUnpackDES(t *testing.T) {
 	}
 }
 
+// TestUnpackDESConfine function
 func TestUnpackDESConfine(t *testing.T) {
 	src := "../test/data/unpack/file_des.txt"
 	dest := "../test/data/unpack/"
@@ -44,6 +48,7 @@ func TestUnpackDESConfine(t *testing.T) {
 	}
 }
 
+// TestUnpack3DESToFile function
 func TestUnpack3DESToFile(t *testing.T) {
 	src := "../test/data/unpack/file_3des.txt"
 	dest := "../test/data/unpack/"
@@ -54,6 +59,7 @@ func TestUnpack3DESToFile(t *testing.T) {
 	}
 }
 
+// TestUnpack3DESToFileConfine function
 func TestUnpack3DESToFileConfine(t *testing.T) {
 	src := "../test/data/unpack/file_3des.txt"
 	dest := "../test/data/unpack/"
@@ -64,6 +70,7 @@ func TestUnpack3DESToFileConfine(t *testing.T) {
 	}
 }
 
+// TestUnpackDESToFile function
 func TestUnpackDESToFile(t *testing.T) {
 	src := "../test/data/unpack/file_des.txt"
 	dest := "../test/data/unpack/"
@@ -74,6 +81,7 @@ func TestUnpackDESToFile(t *testing.T) {
 	}
 }
 
+// TestUnpackDESToFileConfine function
 func TestUnpackDESToFileConfine(t *testing.T) {
 	src := "../test/data/unpack/file_des.txt"
 	dest := "../test/data/unpack/"
