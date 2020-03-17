@@ -483,6 +483,13 @@ func UnpackDESConfine(src string, dest string) (err error) {
 	return err
 }
 
+// Unpack3DESToFile function
+// This function is mainly used for unpack 3des package to file.
+// src file support both absolute and relative paths, like 'C:\\file.pak' or '../test/data/file.pak'
+// dest file also support both absolute and relative paths, like 'C:\\' or '../test/data/'
+// target string is the file which you want to decrypt from package. for instance, if the original name of file is 'capture.png',
+// you should fill target segment with 'capture.png'
+// return err indicate the success or failure function execute
 func Unpack3DESToFile(src string, target string, dest string) (err error) {
 	// start multi-cpu
 	core := runtime.NumCPU()
