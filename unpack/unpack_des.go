@@ -1203,6 +1203,13 @@ func UnpackDESToMemory(src string, target string, dest *[]byte) (err error) {
 	return err
 }
 
+// Unpack3DESExtractInfo function
+// This function is mainly used for check verbose information of package.
+// src file support both absolute and relative paths, like 'C:\\file.pak' or '../test/data/file.pak'
+// dest string slice will return the files name in package.
+// sz int slice will return the file number in package.
+// algorithm will return which algorithm used by encrypt package.
+// return err indicate the success or failure function execute
 func Unpack3DESExtractInfo(src string, dest *[]string, sz *[]int) (err error) {
 	// first, open the file
 	file, err := os.Open(src)
@@ -1307,6 +1314,13 @@ func Unpack3DESExtractInfo(src string, dest *[]string, sz *[]int) (err error) {
 	return err
 }
 
+// UnpackDESExtractInfo function
+// This function is mainly used for check verbose information of package.
+// src file support both absolute and relative paths, like 'C:\\file.pak' or '../test/data/file.pak'
+// dest string slice will return the files name in package.
+// sz int slice will return the file number in package.
+// algorithm will return which algorithm used by encrypt package.
+// return err indicate the success or failure function execute
 func UnpackDESExtractInfo(src string, dest *[]string, sz *[]int) (err error) {
 	// first, open the file
 	file, err := os.Open(src)
@@ -1411,6 +1425,12 @@ func UnpackDESExtractInfo(src string, dest *[]string, sz *[]int) (err error) {
 	return err
 }
 
+// Unpack3DESWorkCalculate function
+// This function is mainly used for calculate the total work of unpack process.
+// src file support both absolute and relative paths, like 'C:\\file.pak' or '../test/data/file.pak'
+// algorithm return the algorithm type which used in unpack
+// work return the total work value of unpack process.
+// return err indicate the success or failure function execute
 func Unpack3DESWorkCalculate(src string) (work int64, err error) {
 	var sum int64
 	// first, open the file
@@ -1516,6 +1536,12 @@ func Unpack3DESWorkCalculate(src string) (work int64, err error) {
 	return work, err
 }
 
+// UnpackDESWorkCalculate function
+// This function is mainly used for calculate the total work of unpack process.
+// src file support both absolute and relative paths, like 'C:\\file.pak' or '../test/data/file.pak'
+// algorithm return the algorithm type which used in unpack
+// work return the total work value of unpack process.
+// return err indicate the success or failure function execute
 func UnpackDESWorkCalculate(src string) (work int64, err error) {
 	var sum int64
 	// first, open the file
@@ -1621,6 +1647,9 @@ func UnpackDESWorkCalculate(src string) (work int64, err error) {
 	return work, err
 }
 
+// Unpack3DESOneToMemory function
+// This function is mainly used for unpack one file to memory.
+// It will called by function Unpack3DESToMemory.
 func Unpack3DESOneToMemory(data []byte, head TUnpack3DESOne, dest *[]byte) (err error) {
 	// initial, fill the key
 	key := head.Key
@@ -1645,6 +1674,8 @@ func Unpack3DESOneToMemory(data []byte, head TUnpack3DESOne, dest *[]byte) (err 
 	return err
 }
 
+// Unpack3DESOneGo function
+// This function is mainly used for unpack 3des one file with go routine.
 func Unpack3DESOneGo(data []byte, head TUnpack3DESOne, dest string, wg *sync.WaitGroup) (err error) {
 	defer wg.Done()
 	err = Unpack3DESOne(data, head, dest)
@@ -1655,6 +1686,8 @@ func Unpack3DESOneGo(data []byte, head TUnpack3DESOne, dest string, wg *sync.Wai
 	return err
 }
 
+// Unpack3DESOneConfineGo function
+// This function is mainly used for unpack 3des one file with restrict go routine.
 func Unpack3DESOneConfineGo(data []byte, head TUnpack3DESOne, dest string, wg *sync.WaitGroup, ch chan interface{}) (err error) {
 	defer wg.Done()
 	err = Unpack3DESOneConfine(data, head, dest)
@@ -1667,6 +1700,8 @@ func Unpack3DESOneConfineGo(data []byte, head TUnpack3DESOne, dest string, wg *s
 	return err
 }
 
+// Unpack3DESOne function
+// This function is mainly used for unpack 3des one file.
 func Unpack3DESOne(data []byte, head TUnpack3DESOne, path string) (err error) {
 	// initial, fill the name
 	var s []byte
@@ -1705,6 +1740,8 @@ func Unpack3DESOne(data []byte, head TUnpack3DESOne, path string) (err error) {
 	return err
 }
 
+// Unpack3DESOneConfine function
+// This function is mainly used for unpack 3des one file with restrict go routine.
 func Unpack3DESOneConfine(data []byte, head TUnpack3DESOne, path string) (err error) {
 	// initial, fill the name
 	var s []byte
@@ -1745,6 +1782,9 @@ func Unpack3DESOneConfine(data []byte, head TUnpack3DESOne, path string) (err er
 	return err
 }
 
+// UnpackDESOneToMemory function
+// This function is mainly used for unpack one file to memory.
+// It will called by function UnpackDESToMemory.
 func UnpackDESOneToMemory(data []byte, head TUnpackDESOne, dest *[]byte) (err error) {
 	// initial, fill the key
 	key := head.Key
@@ -1769,6 +1809,8 @@ func UnpackDESOneToMemory(data []byte, head TUnpackDESOne, dest *[]byte) (err er
 	return err
 }
 
+// UnpackDESOneGo function
+// This function is mainly used for unpack des one file with go routine.
 func UnpackDESOneGo(data []byte, head TUnpackDESOne, dest string, wg *sync.WaitGroup) (err error) {
 	defer wg.Done()
 	err = UnpackDESOne(data, head, dest)
@@ -1779,6 +1821,8 @@ func UnpackDESOneGo(data []byte, head TUnpackDESOne, dest string, wg *sync.WaitG
 	return err
 }
 
+// UnpackDESOneConfineGo function
+// This function is mainly used for unpack des one file with restrict go routine.
 func UnpackDESOneConfineGo(data []byte, head TUnpackDESOne, dest string, wg *sync.WaitGroup, ch chan interface{}) (err error) {
 	defer wg.Done()
 	err = UnpackDESOneConfine(data, head, dest)
@@ -1791,6 +1835,8 @@ func UnpackDESOneConfineGo(data []byte, head TUnpackDESOne, dest string, wg *syn
 	return err
 }
 
+// UnpackDESOne function
+// This function is mainly used for unpack des one file.
 func UnpackDESOne(data []byte, head TUnpackDESOne, path string) (err error) {
 	// initial, fill the name
 	var s []byte
@@ -1829,6 +1875,8 @@ func UnpackDESOne(data []byte, head TUnpackDESOne, path string) (err error) {
 	return err
 }
 
+// UnpackDESOneConfine function
+// This function is mainly used for unpack des one file with restrict go routine.
 func UnpackDESOneConfine(data []byte, head TUnpackDESOne, path string) (err error) {
 	// initial, fill the name
 	var s []byte
