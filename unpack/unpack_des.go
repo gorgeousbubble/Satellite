@@ -723,6 +723,13 @@ func Unpack3DESToFileConfine(src string, target string, dest string) (err error)
 	return err
 }
 
+// Unpack3DESToMemory function
+// This function is mainly used for unpack 3des package to memory.
+// src file support both absolute and relative paths, like 'C:\\file.pak' or '../test/data/file.pak'
+// dest is a slice which used to receive decrypt data. You can send '[]byte' slice address here.
+// target string is the file which you want to decrypt from package. for instance, if the original name of file is 'capture.png',
+// you should fill target segment with 'capture.png'
+// return err indicate the success or failure function execute
 func Unpack3DESToMemory(src string, target string, dest *[]byte) (err error) {
 	// start multi-cpu
 	core := runtime.NumCPU()
@@ -836,6 +843,13 @@ func Unpack3DESToMemory(src string, target string, dest *[]byte) (err error) {
 	return err
 }
 
+// UnpackDESToFile function
+// This function is mainly used for unpack des package to file.
+// src file support both absolute and relative paths, like 'C:\\file.pak' or '../test/data/file.pak'
+// dest file also support both absolute and relative paths, like 'C:\\' or '../test/data/'
+// target string is the file which you want to decrypt from package. for instance, if the original name of file is 'capture.png',
+// you should fill target segment with 'capture.png'
+// return err indicate the success or failure function execute
 func UnpackDESToFile(src string, target string, dest string) (err error) {
 	// start multi-cpu
 	core := runtime.NumCPU()
@@ -949,6 +963,13 @@ func UnpackDESToFile(src string, target string, dest string) (err error) {
 	return err
 }
 
+// UnpackDESToFileConfine function
+// This function is mainly used for unpack des package to file with restrict go routine.
+// src file support both absolute and relative paths, like 'C:\\file.pak' or '../test/data/file.pak'
+// dest file also support both absolute and relative paths, like 'C:\\' or '../test/data/'
+// target string is the file which you want to decrypt from package. for instance, if the original name of file is 'capture.png',
+// you should fill target segment with 'capture.png'
+// return err indicate the success or failure function execute
 func UnpackDESToFileConfine(src string, target string, dest string) (err error) {
 	// start multi-cpu
 	core := runtime.NumCPU()
@@ -1062,6 +1083,13 @@ func UnpackDESToFileConfine(src string, target string, dest string) (err error) 
 	return err
 }
 
+// UnpackDESToMemory function
+// This function is mainly used for unpack des package to memory.
+// src file support both absolute and relative paths, like 'C:\\file.pak' or '../test/data/file.pak'
+// dest is a slice which used to receive decrypt data. You can send '[]byte' slice address here.
+// target string is the file which you want to decrypt from package. for instance, if the original name of file is 'capture.png',
+// you should fill target segment with 'capture.png'
+// return err indicate the success or failure function execute
 func UnpackDESToMemory(src string, target string, dest *[]byte) (err error) {
 	// start multi-cpu
 	core := runtime.NumCPU()
