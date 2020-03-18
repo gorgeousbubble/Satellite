@@ -6,6 +6,7 @@ import (
 	"testing"
 )
 
+// TestGobDecode function
 func TestGobDecode(t *testing.T) {
 	type test struct {
 		Name  string
@@ -27,6 +28,7 @@ func TestGobDecode(t *testing.T) {
 	fmt.Println(out)
 }
 
+// BenchmarkGobDecode function
 func BenchmarkGobDecode(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		type test struct {
@@ -49,6 +51,7 @@ func BenchmarkGobDecode(b *testing.B) {
 	}
 }
 
+// TestGobDecodeFrom function
 func TestGobDecodeFrom(t *testing.T) {
 	type test struct {
 		Name  string
@@ -62,6 +65,7 @@ func TestGobDecodeFrom(t *testing.T) {
 	}
 }
 
+// BenchmarkGobDecodeFrom function
 func BenchmarkGobDecodeFrom(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		type test struct {
