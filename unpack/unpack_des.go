@@ -1917,6 +1917,7 @@ func UnpackDESOneConfine(data []byte, head TUnpackDESOne, path string) (err erro
 	return err
 }
 
+// TripleDESDecryptGo function
 func TripleDESDecryptGo(src, key []byte, dest *[]byte, wg *sync.WaitGroup) (err error) {
 	defer wg.Done()
 	*dest, err = TripleDESDecrypt(src, key)
@@ -1928,6 +1929,7 @@ func TripleDESDecryptGo(src, key []byte, dest *[]byte, wg *sync.WaitGroup) (err 
 	return err
 }
 
+// TripleDESDecryptConfineGo function
 func TripleDESDecryptConfineGo(src, key []byte, dest *[]byte, wg *sync.WaitGroup, ch chan interface{}) (err error) {
 	defer wg.Done()
 	*dest, err = TripleDESDecrypt(src, key)
@@ -1941,6 +1943,7 @@ func TripleDESDecryptConfineGo(src, key []byte, dest *[]byte, wg *sync.WaitGroup
 	return err
 }
 
+// TripleDESDecrypt function
 func TripleDESDecrypt(src, key []byte) (dest []byte, err error) {
 	// key length should be 24
 	block, err := des.NewTripleDESCipher(key)
@@ -1961,6 +1964,7 @@ func TripleDESDecrypt(src, key []byte) (dest []byte, err error) {
 	return dest, err
 }
 
+// DESDecryptGo function
 func DESDecryptGo(src, key []byte, dest *[]byte, wg *sync.WaitGroup) (err error) {
 	defer wg.Done()
 	*dest, err = DESDecrypt(src, key)
@@ -1972,6 +1976,7 @@ func DESDecryptGo(src, key []byte, dest *[]byte, wg *sync.WaitGroup) (err error)
 	return err
 }
 
+// DESDecryptConfineGo function
 func DESDecryptConfineGo(src, key []byte, dest *[]byte, wg *sync.WaitGroup, ch chan interface{}) (err error) {
 	defer wg.Done()
 	*dest, err = DESDecrypt(src, key)
@@ -1985,6 +1990,7 @@ func DESDecryptConfineGo(src, key []byte, dest *[]byte, wg *sync.WaitGroup, ch c
 	return err
 }
 
+// DESDecrypt function
 func DESDecrypt(src, key []byte) (dest []byte, err error) {
 	// key length should be 8
 	block, err := des.NewCipher(key)
@@ -2005,6 +2011,7 @@ func DESDecrypt(src, key []byte) (dest []byte, err error) {
 	return dest, err
 }
 
+// PKCS5UnPadding function
 func PKCS5UnPadding(src []byte) []byte {
 	// don't need do anything
 	/*size := len(src)
