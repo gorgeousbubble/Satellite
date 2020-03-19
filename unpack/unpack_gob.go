@@ -7,6 +7,11 @@ import (
 	"os"
 )
 
+// GobDecode function
+// This function is mainly used for decode gob type
+// buf buffer is data stream wait for decode
+// out interface should input structure address
+// return err indicate the success or failure function execute
 func GobDecode(buf *bytes.Buffer, out interface{}) (err error) {
 	dec := gob.NewDecoder(buf)
 	err = dec.Decode(out)
@@ -17,6 +22,11 @@ func GobDecode(buf *bytes.Buffer, out interface{}) (err error) {
 	return err
 }
 
+// GobDecodeFrom function
+// This function is mainly used for decode gob type from file
+// src file save gob data wait for decode
+// out interface should input structure address
+// return err indicate the success or failure function execute
 func GobDecodeFrom(src string, out interface{}) (err error) {
 	file, err := os.Open(src)
 	if err != nil {

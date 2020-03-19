@@ -8,6 +8,7 @@ import (
 	"testing"
 )
 
+// TestUnpack3DES function
 func TestUnpack3DES(t *testing.T) {
 	src := "../test/data/unpack/file_3des.txt"
 	dest := "../test/data/unpack/"
@@ -17,6 +18,7 @@ func TestUnpack3DES(t *testing.T) {
 	}
 }
 
+// TestUnpack3DESConfine function
 func TestUnpack3DESConfine(t *testing.T) {
 	src := "../test/data/unpack/file_3des.txt"
 	dest := "../test/data/unpack/"
@@ -26,6 +28,7 @@ func TestUnpack3DESConfine(t *testing.T) {
 	}
 }
 
+// TestUnpackDES function
 func TestUnpackDES(t *testing.T) {
 	src := "../test/data/unpack/file_des.txt"
 	dest := "../test/data/unpack/"
@@ -35,6 +38,7 @@ func TestUnpackDES(t *testing.T) {
 	}
 }
 
+// TestUnpackDESConfine function
 func TestUnpackDESConfine(t *testing.T) {
 	src := "../test/data/unpack/file_des.txt"
 	dest := "../test/data/unpack/"
@@ -44,6 +48,7 @@ func TestUnpackDESConfine(t *testing.T) {
 	}
 }
 
+// TestUnpack3DESToFile function
 func TestUnpack3DESToFile(t *testing.T) {
 	src := "../test/data/unpack/file_3des.txt"
 	dest := "../test/data/unpack/"
@@ -54,6 +59,7 @@ func TestUnpack3DESToFile(t *testing.T) {
 	}
 }
 
+// TestUnpack3DESToFileConfine function
 func TestUnpack3DESToFileConfine(t *testing.T) {
 	src := "../test/data/unpack/file_3des.txt"
 	dest := "../test/data/unpack/"
@@ -64,6 +70,7 @@ func TestUnpack3DESToFileConfine(t *testing.T) {
 	}
 }
 
+// TestUnpackDESToFile function
 func TestUnpackDESToFile(t *testing.T) {
 	src := "../test/data/unpack/file_des.txt"
 	dest := "../test/data/unpack/"
@@ -74,6 +81,7 @@ func TestUnpackDESToFile(t *testing.T) {
 	}
 }
 
+// TestUnpackDESToFileConfine function
 func TestUnpackDESToFileConfine(t *testing.T) {
 	src := "../test/data/unpack/file_des.txt"
 	dest := "../test/data/unpack/"
@@ -84,6 +92,7 @@ func TestUnpackDESToFileConfine(t *testing.T) {
 	}
 }
 
+// TestUnpack3DESToMemory function
 func TestUnpack3DESToMemory(t *testing.T) {
 	var dest []byte
 	src := "../test/data/unpack/file_3des.txt"
@@ -94,6 +103,7 @@ func TestUnpack3DESToMemory(t *testing.T) {
 	}
 }
 
+// TestUnpackDESToMemory function
 func TestUnpackDESToMemory(t *testing.T) {
 	var dest []byte
 	src := "../test/data/unpack/file_des.txt"
@@ -104,6 +114,7 @@ func TestUnpackDESToMemory(t *testing.T) {
 	}
 }
 
+// TestUnpack3DESExtractInfo function
 func TestUnpack3DESExtractInfo(t *testing.T) {
 	var dest []string
 	var sz []int
@@ -117,6 +128,7 @@ func TestUnpack3DESExtractInfo(t *testing.T) {
 	}
 }
 
+// TestUnpackDESExtractInfo function
 func TestUnpackDESExtractInfo(t *testing.T) {
 	var dest []string
 	var sz []int
@@ -130,6 +142,7 @@ func TestUnpackDESExtractInfo(t *testing.T) {
 	}
 }
 
+// TestUnpack3DESWorkCalculate function
 func TestUnpack3DESWorkCalculate(t *testing.T) {
 	src := "../test/data/unpack/file_3des.txt"
 	_, err := Unpack3DESWorkCalculate(src)
@@ -138,6 +151,7 @@ func TestUnpack3DESWorkCalculate(t *testing.T) {
 	}
 }
 
+// TestUnpackDESWorkCalculate function
 func TestUnpackDESWorkCalculate(t *testing.T) {
 	src := "../test/data/unpack/file_des.txt"
 	_, err := UnpackDESWorkCalculate(src)
@@ -146,6 +160,7 @@ func TestUnpackDESWorkCalculate(t *testing.T) {
 	}
 }
 
+// TestUnpack3DESOneToMemory function
 func TestUnpack3DESOneToMemory(t *testing.T) {
 	var dest []byte
 	src := []byte{0x66, 0x69, 0x6C, 0x65, 0x2E, 0x74, 0x78, 0x74, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -198,6 +213,7 @@ func TestUnpack3DESOneToMemory(t *testing.T) {
 	}
 }
 
+// TestUnpack3DESOneGo function
 func TestUnpack3DESOneGo(t *testing.T) {
 	var wg sync.WaitGroup
 	src := []byte{0x66, 0x69, 0x6C, 0x65, 0x2E, 0x74, 0x78, 0x74, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -247,6 +263,7 @@ func TestUnpack3DESOneGo(t *testing.T) {
 	wg.Wait()
 }
 
+// TestUnpack3DESOne function
 func TestUnpack3DESOne(t *testing.T) {
 	src := []byte{0x66, 0x69, 0x6C, 0x65, 0x2E, 0x74, 0x78, 0x74, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -296,6 +313,7 @@ func TestUnpack3DESOne(t *testing.T) {
 	}
 }
 
+// TestUnpack3DESConfineOne function
 func TestUnpack3DESConfineOne(t *testing.T) {
 	src := []byte{0x66, 0x69, 0x6C, 0x65, 0x2E, 0x74, 0x78, 0x74, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -345,6 +363,7 @@ func TestUnpack3DESConfineOne(t *testing.T) {
 	}
 }
 
+// TestUnpackDESOneToMemory function
 func TestUnpackDESOneToMemory(t *testing.T) {
 	var dest []byte
 	src := []byte{0x66, 0x69, 0x6C, 0x65, 0x2E, 0x74, 0x78, 0x74, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -396,6 +415,7 @@ func TestUnpackDESOneToMemory(t *testing.T) {
 	}
 }
 
+// TestUnpackDESOneGo function
 func TestUnpackDESOneGo(t *testing.T) {
 	var wg sync.WaitGroup
 	src := []byte{0x66, 0x69, 0x6C, 0x65, 0x2E, 0x74, 0x78, 0x74, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -444,6 +464,7 @@ func TestUnpackDESOneGo(t *testing.T) {
 	wg.Wait()
 }
 
+// TestUnpackDESOne function
 func TestUnpackDESOne(t *testing.T) {
 	src := []byte{0x66, 0x69, 0x6C, 0x65, 0x2E, 0x74, 0x78, 0x74, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -492,6 +513,7 @@ func TestUnpackDESOne(t *testing.T) {
 	}
 }
 
+// TestUnpackDESConfineOne function
 func TestUnpackDESConfineOne(t *testing.T) {
 	src := []byte{0x66, 0x69, 0x6C, 0x65, 0x2E, 0x74, 0x78, 0x74, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -540,6 +562,7 @@ func TestUnpackDESConfineOne(t *testing.T) {
 	}
 }
 
+// TestTripleDESDecryptGo function
 func TestTripleDESDecryptGo(t *testing.T) {
 	var dest []byte
 	var wg sync.WaitGroup
@@ -554,6 +577,7 @@ func TestTripleDESDecryptGo(t *testing.T) {
 	}
 }
 
+// TestTripleDESDecrypt function
 func TestTripleDESDecrypt(t *testing.T) {
 	src := []byte{0x2F, 0x58, 0x70, 0x9E, 0xA3, 0x98, 0x7E, 0xD7, 0x8E, 0x79, 0x12, 0x0F, 0x47, 0xF3, 0xA5, 0x49}
 	key := []byte("HyacinthRaindropRomantic")
@@ -567,6 +591,7 @@ func TestTripleDESDecrypt(t *testing.T) {
 	}
 }
 
+// TestDESDecryptGo function
 func TestDESDecryptGo(t *testing.T) {
 	var dest []byte
 	var wg sync.WaitGroup
@@ -581,6 +606,7 @@ func TestDESDecryptGo(t *testing.T) {
 	}
 }
 
+// TestDESDecrypt function
 func TestDESDecrypt(t *testing.T) {
 	src := []byte{0x8F, 0x34, 0x1C, 0x84, 0xBB, 0xB4, 0x58, 0xA8, 0x54, 0x8B, 0xC0, 0x9E, 0x2F, 0x55, 0x01, 0xF2}
 	key := []byte("hyacinth")
@@ -594,6 +620,7 @@ func TestDESDecrypt(t *testing.T) {
 	}
 }
 
+// BenchmarkUnpack3DES function
 func BenchmarkUnpack3DES(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_3des.txt"
@@ -605,6 +632,7 @@ func BenchmarkUnpack3DES(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpack3DESConfine function
 func BenchmarkUnpack3DESConfine(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_3des.txt"
@@ -616,6 +644,7 @@ func BenchmarkUnpack3DESConfine(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackDES function
 func BenchmarkUnpackDES(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_des.txt"
@@ -627,6 +656,7 @@ func BenchmarkUnpackDES(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackDESConfine function
 func BenchmarkUnpackDESConfine(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_des.txt"
@@ -638,6 +668,7 @@ func BenchmarkUnpackDESConfine(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpack3DESToFile function
 func BenchmarkUnpack3DESToFile(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_3des.txt"
@@ -650,6 +681,7 @@ func BenchmarkUnpack3DESToFile(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpack3DESToFileConfine function
 func BenchmarkUnpack3DESToFileConfine(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_3des.txt"
@@ -662,6 +694,7 @@ func BenchmarkUnpack3DESToFileConfine(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackDESToFile function
 func BenchmarkUnpackDESToFile(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_des.txt"
@@ -674,6 +707,7 @@ func BenchmarkUnpackDESToFile(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackDESToFileConfine function
 func BenchmarkUnpackDESToFileConfine(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_des.txt"
@@ -686,6 +720,7 @@ func BenchmarkUnpackDESToFileConfine(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpack3DESToMemory function
 func BenchmarkUnpack3DESToMemory(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var dest []byte
@@ -698,6 +733,7 @@ func BenchmarkUnpack3DESToMemory(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackDESToMemory function
 func BenchmarkUnpackDESToMemory(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var dest []byte
@@ -710,6 +746,7 @@ func BenchmarkUnpackDESToMemory(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpack3DESExtractInfo function
 func BenchmarkUnpack3DESExtractInfo(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var dest []string
@@ -725,6 +762,7 @@ func BenchmarkUnpack3DESExtractInfo(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackDESExtractInfo function
 func BenchmarkUnpackDESExtractInfo(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var dest []string
@@ -740,6 +778,7 @@ func BenchmarkUnpackDESExtractInfo(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpack3DESWorkCalculate function
 func BenchmarkUnpack3DESWorkCalculate(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_3des.txt"
@@ -750,6 +789,7 @@ func BenchmarkUnpack3DESWorkCalculate(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackDESWorkCalculate function
 func BenchmarkUnpackDESWorkCalculate(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_des.txt"
@@ -760,6 +800,7 @@ func BenchmarkUnpackDESWorkCalculate(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpack3DESOneToMemory function
 func BenchmarkUnpack3DESOneToMemory(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var dest []byte
@@ -814,6 +855,7 @@ func BenchmarkUnpack3DESOneToMemory(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpack3DESOneGo function
 func BenchmarkUnpack3DESOneGo(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var wg sync.WaitGroup
@@ -865,6 +907,7 @@ func BenchmarkUnpack3DESOneGo(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpack3DESOne function
 func BenchmarkUnpack3DESOne(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := []byte{0x66, 0x69, 0x6C, 0x65, 0x2E, 0x74, 0x78, 0x74, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -916,6 +959,7 @@ func BenchmarkUnpack3DESOne(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpack3DESConfineOne function
 func BenchmarkUnpack3DESConfineOne(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := []byte{0x66, 0x69, 0x6C, 0x65, 0x2E, 0x74, 0x78, 0x74, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -967,6 +1011,7 @@ func BenchmarkUnpack3DESConfineOne(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackDESOneToMemory function
 func BenchmarkUnpackDESOneToMemory(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var dest []byte
@@ -1020,6 +1065,7 @@ func BenchmarkUnpackDESOneToMemory(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackDESOneGo function
 func BenchmarkUnpackDESOneGo(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var wg sync.WaitGroup
@@ -1070,6 +1116,7 @@ func BenchmarkUnpackDESOneGo(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackDESOne function
 func BenchmarkUnpackDESOne(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := []byte{0x66, 0x69, 0x6C, 0x65, 0x2E, 0x74, 0x78, 0x74, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -1120,6 +1167,7 @@ func BenchmarkUnpackDESOne(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackDESConfineOne function
 func BenchmarkUnpackDESConfineOne(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := []byte{0x66, 0x69, 0x6C, 0x65, 0x2E, 0x74, 0x78, 0x74, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -1170,6 +1218,7 @@ func BenchmarkUnpackDESConfineOne(b *testing.B) {
 	}
 }
 
+// BenchmarkTripleDESDecryptGo function
 func BenchmarkTripleDESDecryptGo(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var dest []byte
@@ -1186,6 +1235,7 @@ func BenchmarkTripleDESDecryptGo(b *testing.B) {
 	}
 }
 
+// BenchmarkTripleDESDecrypt function
 func BenchmarkTripleDESDecrypt(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := []byte{0x2F, 0x58, 0x70, 0x9E, 0xA3, 0x98, 0x7E, 0xD7, 0x8E, 0x79, 0x12, 0x0F, 0x47, 0xF3, 0xA5, 0x49}
@@ -1201,6 +1251,7 @@ func BenchmarkTripleDESDecrypt(b *testing.B) {
 	}
 }
 
+// BenchmarkDESDecryptGo function
 func BenchmarkDESDecryptGo(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var dest []byte
