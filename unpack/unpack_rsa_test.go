@@ -588,6 +588,7 @@ func TestRSADecrypt(t *testing.T) {
 	}
 }
 
+// BenchmarkUnpackRSA function
 func BenchmarkUnpackRSA(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_rsa.txt"
@@ -599,6 +600,7 @@ func BenchmarkUnpackRSA(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackRSAConfine function
 func BenchmarkUnpackRSAConfine(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_rsa.txt"
@@ -610,6 +612,7 @@ func BenchmarkUnpackRSAConfine(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackRSAToFile function
 func BenchmarkUnpackRSAToFile(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_rsa.txt"
@@ -622,6 +625,7 @@ func BenchmarkUnpackRSAToFile(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackRSAToFileConfine function
 func BenchmarkUnpackRSAToFileConfine(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_rsa.txt"
@@ -634,6 +638,7 @@ func BenchmarkUnpackRSAToFileConfine(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackRSAToMemory function
 func BenchmarkUnpackRSAToMemory(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var dest []byte
@@ -646,6 +651,7 @@ func BenchmarkUnpackRSAToMemory(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackRSAExtractInfo function
 func BenchmarkUnpackRSAExtractInfo(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var dest []string
@@ -661,6 +667,7 @@ func BenchmarkUnpackRSAExtractInfo(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackRSAWorkCalculate function
 func BenchmarkUnpackRSAWorkCalculate(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_rsa.txt"
@@ -671,6 +678,7 @@ func BenchmarkUnpackRSAWorkCalculate(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackRSAOneToMemory function
 func BenchmarkUnpackRSAOneToMemory(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var dest []byte
@@ -789,6 +797,7 @@ func BenchmarkUnpackRSAOneToMemory(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackRSAOneGo function
 func BenchmarkUnpackRSAOneGo(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var wg sync.WaitGroup
@@ -904,6 +913,7 @@ func BenchmarkUnpackRSAOneGo(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackRSAOne function
 func BenchmarkUnpackRSAOne(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := []byte{
@@ -1019,6 +1029,7 @@ func BenchmarkUnpackRSAOne(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackRSAOneConfine function
 func BenchmarkUnpackRSAOneConfine(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := []byte{
@@ -1134,6 +1145,7 @@ func BenchmarkUnpackRSAOneConfine(b *testing.B) {
 	}
 }
 
+// BenchmarkRSADecryptGo function
 func BenchmarkRSADecryptGo(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var dest []byte
@@ -1158,6 +1170,7 @@ func BenchmarkRSADecryptGo(b *testing.B) {
 	}
 }
 
+// BenchmarkRSADecrypt function
 func BenchmarkRSADecrypt(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := []byte{
