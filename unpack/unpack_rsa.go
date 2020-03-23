@@ -18,6 +18,11 @@ import (
 	"sync/atomic"
 )
 
+// UnpackRSA function
+// This function mainly used for unpack rsa package.
+// src file support both absolute and relative paths, like 'C:\\file.pak' or '../test/data/file.pak'
+// dest file also support both absolute and relative paths, like 'C:\\' or '../test/data/'
+// return err indicate the success or failure function execute
 func UnpackRSA(src string, dest string) (err error) {
 	wg := &sync.WaitGroup{}
 	// start multi-cpu
