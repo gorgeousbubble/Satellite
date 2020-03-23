@@ -134,6 +134,11 @@ func UnpackRSA(src string, dest string) (err error) {
 	return err
 }
 
+// UnpackRSAConfine function
+// This function is mainly used for unpack rsa package with restrict go routine.
+// src file support both absolute and relative paths, like 'C:\\file.pak' or '../test/data/file.pak'
+// dest file also support both absolute and relative paths, like 'C:\\' or '../test/data/'
+// return err indicate the success or failure function execute
 func UnpackRSAConfine(src string, dest string) (err error) {
 	wg := &sync.WaitGroup{}
 	ch := make(chan interface{}, ConfineFiles)
@@ -247,6 +252,13 @@ func UnpackRSAConfine(src string, dest string) (err error) {
 	return err
 }
 
+// UnpackRSAToFile function
+// This function is mainly used for unpack rsa package to file.
+// src file support both absolute and relative paths, like 'C:\\file.pak' or '../test/data/file.pak'
+// dest file also support both absolute and relative paths, like 'C:\\' or '../test/data/'
+// target string is the file which you want to decrypt from package. for instance, if the original name of file is 'capture.png',
+// you should fill target segment with 'capture.png'
+// return err indicate the success or failure function execute
 func UnpackRSAToFile(src string, target string, dest string) (err error) {
 	// start multi-cpu
 	core := runtime.NumCPU()
@@ -360,6 +372,13 @@ func UnpackRSAToFile(src string, target string, dest string) (err error) {
 	return err
 }
 
+// UnpackRSAToFileConfine function
+// This function is mainly used for unpack rsa package to file with restrict go routine.
+// src file support both absolute and relative paths, like 'C:\\file.pak' or '../test/data/file.pak'
+// dest file also support both absolute and relative paths, like 'C:\\' or '../test/data/'
+// target string is the file which you want to decrypt from package. for instance, if the original name of file is 'capture.png',
+// you should fill target segment with 'capture.png'
+// return err indicate the success or failure function execute
 func UnpackRSAToFileConfine(src string, target string, dest string) (err error) {
 	// start multi-cpu
 	core := runtime.NumCPU()
@@ -473,6 +492,13 @@ func UnpackRSAToFileConfine(src string, target string, dest string) (err error) 
 	return err
 }
 
+// UnpackRSAToMemory function
+// This function is mainly used for unpack rsa package to memory.
+// src file support both absolute and relative paths, like 'C:\\file.pak' or '../test/data/file.pak'
+// dest is a slice which used to receive decrypt data. You can send '[]byte' slice address here.
+// target string is the file which you want to decrypt from package. for instance, if the original name of file is 'capture.png',
+// you should fill target segment with 'capture.png'
+// return err indicate the success or failure function execute
 func UnpackRSAToMemory(src string, target string, dest *[]byte) (err error) {
 	// start multi-cpu
 	core := runtime.NumCPU()
@@ -586,6 +612,13 @@ func UnpackRSAToMemory(src string, target string, dest *[]byte) (err error) {
 	return err
 }
 
+// UnpackRSAExtractInfo function
+// This function is mainly used for check verbose information of package.
+// src file support both absolute and relative paths, like 'C:\\file.pak' or '../test/data/file.pak'
+// dest string slice will return the files name in package.
+// sz int slice will return the file number in package.
+// algorithm will return which algorithm used by encrypt package.
+// return err indicate the success or failure function execute
 func UnpackRSAExtractInfo(src string, dest *[]string, sz *[]int) (err error) {
 	// first, open the file
 	file, err := os.Open(src)
@@ -690,6 +723,12 @@ func UnpackRSAExtractInfo(src string, dest *[]string, sz *[]int) (err error) {
 	return err
 }
 
+// UnpackRSAWorkCalculate function
+// This function is mainly used for calculate the total work of unpack process.
+// src file support both absolute and relative paths, like 'C:\\file.pak' or '../test/data/file.pak'
+// algorithm return the algorithm type which used in unpack
+// work return the total work value of unpack process.
+// return err indicate the success or failure function execute
 func UnpackRSAWorkCalculate(src string) (work int64, err error) {
 	var sum int64
 	// first, open the file
@@ -795,6 +834,9 @@ func UnpackRSAWorkCalculate(src string) (work int64, err error) {
 	return work, err
 }
 
+// UnpackRSAOneToMemory function
+// This function is mainly used for unpack one file to memory.
+// It will called by function UnpackRSAOneToMemory.
 func UnpackRSAOneToMemory(data []byte, head TUnpackRSAOne, dest *[]byte) (err error) {
 	// initial, fill the key
 	key := head.Key
@@ -819,6 +861,8 @@ func UnpackRSAOneToMemory(data []byte, head TUnpackRSAOne, dest *[]byte) (err er
 	return err
 }
 
+// UnpackRSAOneGo function
+// This function is mainly used for unpack rsa one file with go routine.
 func UnpackRSAOneGo(data []byte, head TUnpackRSAOne, dest string, wg *sync.WaitGroup) (err error) {
 	defer wg.Done()
 	err = UnpackRSAOne(data, head, dest)
@@ -829,6 +873,8 @@ func UnpackRSAOneGo(data []byte, head TUnpackRSAOne, dest string, wg *sync.WaitG
 	return err
 }
 
+// UnpackRSAOneConfineGo function
+// This function is mainly used for unpack rsa one file with go routine.
 func UnpackRSAOneConfineGo(data []byte, head TUnpackRSAOne, dest string, wg *sync.WaitGroup, ch chan interface{}) (err error) {
 	defer wg.Done()
 	err = UnpackRSAOneConfine(data, head, dest)
@@ -841,6 +887,8 @@ func UnpackRSAOneConfineGo(data []byte, head TUnpackRSAOne, dest string, wg *syn
 	return err
 }
 
+// UnpackRSAOne function
+// This function is mainly used for unpack rsa one file.
 func UnpackRSAOne(data []byte, head TUnpackRSAOne, path string) (err error) {
 	// initial, fill the name
 	var s []byte
@@ -879,6 +927,8 @@ func UnpackRSAOne(data []byte, head TUnpackRSAOne, path string) (err error) {
 	return err
 }
 
+// UnpackRSAOneConfine function
+// This function is mainly used for unpack rsa one file with restrict go routine.
 func UnpackRSAOneConfine(data []byte, head TUnpackRSAOne, path string) (err error) {
 	// initial, fill the name
 	var s []byte
@@ -919,6 +969,8 @@ func UnpackRSAOneConfine(data []byte, head TUnpackRSAOne, path string) (err erro
 	return err
 }
 
+// RSADecryptGo function
+// This function is mainly used for decrypt rsa buffer with go routine.
 func RSADecryptGo(src, key []byte, dest *[]byte, wg *sync.WaitGroup) (err error) {
 	defer wg.Done()
 	*dest, err = RSADecrypt(src, key)
@@ -930,6 +982,8 @@ func RSADecryptGo(src, key []byte, dest *[]byte, wg *sync.WaitGroup) (err error)
 	return err
 }
 
+// RSADecryptConfineGo function
+// This function is mainly used for decrypt rsa buffer with restrict go routine.
 func RSADecryptConfineGo(src, key []byte, dest *[]byte, wg *sync.WaitGroup, ch chan interface{}) (err error) {
 	defer wg.Done()
 	*dest, err = RSADecrypt(src, key)
@@ -943,6 +997,12 @@ func RSADecryptConfineGo(src, key []byte, dest *[]byte, wg *sync.WaitGroup, ch c
 	return err
 }
 
+// RSADecrypt function
+// This function is mainly used for decrypt rsa buffer.
+// src buffer input stream wait for convert
+// key buffer input decrypt key of rsa
+// dest buffer will output conversion result
+// return err indicate the success or failure function execute
 func RSADecrypt(src, key []byte) (dest []byte, err error) {
 	block, _ := pem.Decode(key)
 	if block == nil {
