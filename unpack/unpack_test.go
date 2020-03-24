@@ -2,6 +2,7 @@ package unpack
 
 import "testing"
 
+// TestUnpack function
 func TestUnpack(t *testing.T) {
 	src := "../test/data/unpack/file_aes.txt"
 	dest := "../test/data/unpack/"
@@ -11,6 +12,7 @@ func TestUnpack(t *testing.T) {
 	}
 }
 
+// TestUnpack2 function
 func TestUnpack2(t *testing.T) {
 	src := "../test/data/unpack/file_des.txt"
 	dest := "../test/data/unpack/"
@@ -20,6 +22,7 @@ func TestUnpack2(t *testing.T) {
 	}
 }
 
+// TestUnpack3 function
 func TestUnpack3(t *testing.T) {
 	src := "../test/data/unpack/file_3des.txt"
 	dest := "../test/data/unpack/"
@@ -29,6 +32,7 @@ func TestUnpack3(t *testing.T) {
 	}
 }
 
+// TestUnpack4 function
 func TestUnpack4(t *testing.T) {
 	src := "../test/data/unpack/file_rsa.txt"
 	dest := "../test/data/unpack/"
@@ -38,6 +42,7 @@ func TestUnpack4(t *testing.T) {
 	}
 }
 
+// TestUnpack5 function
 func TestUnpack5(t *testing.T) {
 	src := "../test/data/unpack/file_base64.txt"
 	dest := "../test/data/unpack/"
@@ -47,6 +52,7 @@ func TestUnpack5(t *testing.T) {
 	}
 }
 
+// TestUnpackConfine function
 func TestUnpackConfine(t *testing.T) {
 	src := "../test/data/unpack/file_aes.txt"
 	dest := "../test/data/unpack/"
@@ -56,6 +62,7 @@ func TestUnpackConfine(t *testing.T) {
 	}
 }
 
+// TestUnpackConfine2 function
 func TestUnpackConfine2(t *testing.T) {
 	src := "../test/data/unpack/file_des.txt"
 	dest := "../test/data/unpack/"
@@ -65,6 +72,7 @@ func TestUnpackConfine2(t *testing.T) {
 	}
 }
 
+// TestUnpackConfine3 function
 func TestUnpackConfine3(t *testing.T) {
 	src := "../test/data/unpack/file_3des.txt"
 	dest := "../test/data/unpack/"
@@ -74,6 +82,7 @@ func TestUnpackConfine3(t *testing.T) {
 	}
 }
 
+// TestUnpackConfine4 function
 func TestUnpackConfine4(t *testing.T) {
 	src := "../test/data/unpack/file_rsa.txt"
 	dest := "../test/data/unpack/"
@@ -83,6 +92,7 @@ func TestUnpackConfine4(t *testing.T) {
 	}
 }
 
+// TestUnpackConfine5 function
 func TestUnpackConfine5(t *testing.T) {
 	src := "../test/data/unpack/file_base64.txt"
 	dest := "../test/data/unpack/"
@@ -92,6 +102,7 @@ func TestUnpackConfine5(t *testing.T) {
 	}
 }
 
+// TestUnpackToFile function
 func TestUnpackToFile(t *testing.T) {
 	src := "../test/data/unpack/file_aes.txt"
 	dest := "../test/data/unpack/"
@@ -102,6 +113,7 @@ func TestUnpackToFile(t *testing.T) {
 	}
 }
 
+// TestUnpackToFile2 function
 func TestUnpackToFile2(t *testing.T) {
 	src := "../test/data/unpack/file_des.txt"
 	dest := "../test/data/unpack/"
@@ -112,6 +124,7 @@ func TestUnpackToFile2(t *testing.T) {
 	}
 }
 
+// TestUnpackToFile3 function
 func TestUnpackToFile3(t *testing.T) {
 	src := "../test/data/unpack/file_3des.txt"
 	dest := "../test/data/unpack/"
@@ -122,6 +135,7 @@ func TestUnpackToFile3(t *testing.T) {
 	}
 }
 
+// TestUnpackToFile4 function
 func TestUnpackToFile4(t *testing.T) {
 	src := "../test/data/unpack/file_rsa.txt"
 	dest := "../test/data/unpack/"
@@ -132,6 +146,7 @@ func TestUnpackToFile4(t *testing.T) {
 	}
 }
 
+// TestUnpackToFile5 function
 func TestUnpackToFile5(t *testing.T) {
 	src := "../test/data/unpack/file_base64.txt"
 	dest := "../test/data/unpack/"
@@ -142,6 +157,7 @@ func TestUnpackToFile5(t *testing.T) {
 	}
 }
 
+// TestUnpackToFileConfine function
 func TestUnpackToFileConfine(t *testing.T) {
 	src := "../test/data/unpack/file_aes.txt"
 	dest := "../test/data/unpack/"
@@ -152,6 +168,7 @@ func TestUnpackToFileConfine(t *testing.T) {
 	}
 }
 
+// TestUnpackToFileConfine2 function
 func TestUnpackToFileConfine2(t *testing.T) {
 	src := "../test/data/unpack/file_des.txt"
 	dest := "../test/data/unpack/"
@@ -162,6 +179,7 @@ func TestUnpackToFileConfine2(t *testing.T) {
 	}
 }
 
+// TestUnpackToFileConfine3 function
 func TestUnpackToFileConfine3(t *testing.T) {
 	src := "../test/data/unpack/file_3des.txt"
 	dest := "../test/data/unpack/"
@@ -172,6 +190,7 @@ func TestUnpackToFileConfine3(t *testing.T) {
 	}
 }
 
+// TestUnpackToFileConfine4 function
 func TestUnpackToFileConfine4(t *testing.T) {
 	src := "../test/data/unpack/file_rsa.txt"
 	dest := "../test/data/unpack/"
@@ -182,6 +201,7 @@ func TestUnpackToFileConfine4(t *testing.T) {
 	}
 }
 
+// TestUnpackToFileConfine5 function
 func TestUnpackToFileConfine5(t *testing.T) {
 	src := "../test/data/unpack/file_base64.txt"
 	dest := "../test/data/unpack/"
