@@ -267,6 +267,7 @@ func TestUnpackToMemory5(t *testing.T) {
 	}
 }
 
+// TestExtractInfo function
 func TestExtractInfo(t *testing.T) {
 	var dest []string
 	var size []int
@@ -281,6 +282,7 @@ func TestExtractInfo(t *testing.T) {
 	}
 }
 
+// TestExtractInfo2 function
 func TestExtractInfo2(t *testing.T) {
 	var dest []string
 	var size []int
@@ -295,6 +297,7 @@ func TestExtractInfo2(t *testing.T) {
 	}
 }
 
+// TestExtractInfo3 function
 func TestExtractInfo3(t *testing.T) {
 	var dest []string
 	var size []int
@@ -309,6 +312,7 @@ func TestExtractInfo3(t *testing.T) {
 	}
 }
 
+// TestExtractInfo4 function
 func TestExtractInfo4(t *testing.T) {
 	var dest []string
 	var size []int
@@ -323,6 +327,7 @@ func TestExtractInfo4(t *testing.T) {
 	}
 }
 
+// TestExtractInfo5 function
 func TestExtractInfo5(t *testing.T) {
 	var dest []string
 	var size []int
@@ -337,6 +342,7 @@ func TestExtractInfo5(t *testing.T) {
 	}
 }
 
+// TestWorkCalculate function
 func TestWorkCalculate(t *testing.T) {
 	var work int64
 	var algorithm string
@@ -347,6 +353,7 @@ func TestWorkCalculate(t *testing.T) {
 	}
 }
 
+// TestWorkCalculate2 function
 func TestWorkCalculate2(t *testing.T) {
 	var work int64
 	var algorithm string
@@ -357,6 +364,7 @@ func TestWorkCalculate2(t *testing.T) {
 	}
 }
 
+// TestWorkCalculate3 function
 func TestWorkCalculate3(t *testing.T) {
 	var work int64
 	var algorithm string
@@ -367,6 +375,7 @@ func TestWorkCalculate3(t *testing.T) {
 	}
 }
 
+// TestWorkCalculate4 function
 func TestWorkCalculate4(t *testing.T) {
 	var work int64
 	var algorithm string
@@ -377,6 +386,7 @@ func TestWorkCalculate4(t *testing.T) {
 	}
 }
 
+// TestWorkCalculate5 function
 func TestWorkCalculate5(t *testing.T) {
 	var work int64
 	var algorithm string
