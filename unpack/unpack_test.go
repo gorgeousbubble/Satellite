@@ -397,6 +397,7 @@ func TestWorkCalculate5(t *testing.T) {
 	}
 }
 
+// BenchmarkUnpack function
 func BenchmarkUnpack(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_aes.txt"
@@ -408,6 +409,7 @@ func BenchmarkUnpack(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpack2 function
 func BenchmarkUnpack2(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_des.txt"
@@ -419,6 +421,7 @@ func BenchmarkUnpack2(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpack3 function
 func BenchmarkUnpack3(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_3des.txt"
@@ -430,6 +433,7 @@ func BenchmarkUnpack3(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpack4 function
 func BenchmarkUnpack4(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_rsa.txt"
@@ -441,6 +445,7 @@ func BenchmarkUnpack4(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpack5 function
 func BenchmarkUnpack5(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_base64.txt"
