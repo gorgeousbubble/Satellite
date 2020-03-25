@@ -212,6 +212,7 @@ func TestUnpackToFileConfine5(t *testing.T) {
 	}
 }
 
+// TestUnpackToMemory function
 func TestUnpackToMemory(t *testing.T) {
 	var dest []byte
 	src := "../test/data/unpack/file_aes.txt"
@@ -222,6 +223,7 @@ func TestUnpackToMemory(t *testing.T) {
 	}
 }
 
+// TestUnpackToMemory2 function
 func TestUnpackToMemory2(t *testing.T) {
 	var dest []byte
 	src := "../test/data/unpack/file_des.txt"
@@ -232,6 +234,7 @@ func TestUnpackToMemory2(t *testing.T) {
 	}
 }
 
+// TestUnpackToMemory3 function
 func TestUnpackToMemory3(t *testing.T) {
 	var dest []byte
 	src := "../test/data/unpack/file_3des.txt"
@@ -242,6 +245,7 @@ func TestUnpackToMemory3(t *testing.T) {
 	}
 }
 
+// TestUnpackToMemory4 function
 func TestUnpackToMemory4(t *testing.T) {
 	var dest []byte
 	src := "../test/data/unpack/file_rsa.txt"
@@ -252,6 +256,7 @@ func TestUnpackToMemory4(t *testing.T) {
 	}
 }
 
+// TestUnpackToMemory5 function
 func TestUnpackToMemory5(t *testing.T) {
 	var dest []byte
 	src := "../test/data/unpack/file_base64.txt"
