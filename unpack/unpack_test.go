@@ -457,6 +457,7 @@ func BenchmarkUnpack5(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackConfine function
 func BenchmarkUnpackConfine(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_aes.txt"
@@ -468,6 +469,7 @@ func BenchmarkUnpackConfine(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackConfine2 function
 func BenchmarkUnpackConfine2(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_des.txt"
@@ -479,6 +481,7 @@ func BenchmarkUnpackConfine2(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackConfine3 function
 func BenchmarkUnpackConfine3(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_3des.txt"
@@ -490,6 +493,7 @@ func BenchmarkUnpackConfine3(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackConfine4 function
 func BenchmarkUnpackConfine4(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_rsa.txt"
@@ -501,6 +505,7 @@ func BenchmarkUnpackConfine4(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackConfine5 function
 func BenchmarkUnpackConfine5(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_base64.txt"
@@ -512,6 +517,7 @@ func BenchmarkUnpackConfine5(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackToFile function
 func BenchmarkUnpackToFile(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_aes.txt"
@@ -524,6 +530,7 @@ func BenchmarkUnpackToFile(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackToFile2 function
 func BenchmarkUnpackToFile2(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_des.txt"
@@ -536,6 +543,7 @@ func BenchmarkUnpackToFile2(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackToFile3 function
 func BenchmarkUnpackToFile3(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_3des.txt"
@@ -548,6 +556,7 @@ func BenchmarkUnpackToFile3(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackToFile4 function
 func BenchmarkUnpackToFile4(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_rsa.txt"
@@ -560,6 +569,7 @@ func BenchmarkUnpackToFile4(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackToFile5 function
 func BenchmarkUnpackToFile5(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_base64.txt"
