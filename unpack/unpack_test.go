@@ -647,6 +647,7 @@ func BenchmarkUnpackToFileConfine5(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackToMemory function
 func BenchmarkUnpackToMemory(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var dest []byte
@@ -659,6 +660,7 @@ func BenchmarkUnpackToMemory(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackToMemory2 function
 func BenchmarkUnpackToMemory2(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var dest []byte
@@ -671,6 +673,7 @@ func BenchmarkUnpackToMemory2(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackToMemory3 function
 func BenchmarkUnpackToMemory3(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var dest []byte
@@ -683,6 +686,7 @@ func BenchmarkUnpackToMemory3(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackToMemory4 function
 func BenchmarkUnpackToMemory4(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var dest []byte
@@ -695,6 +699,7 @@ func BenchmarkUnpackToMemory4(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackToMemory5 function
 func BenchmarkUnpackToMemory5(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var dest []byte
@@ -707,6 +712,7 @@ func BenchmarkUnpackToMemory5(b *testing.B) {
 	}
 }
 
+// BenchmarkExtractInfo function
 func BenchmarkExtractInfo(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var dest []string
@@ -723,6 +729,7 @@ func BenchmarkExtractInfo(b *testing.B) {
 	}
 }
 
+// BenchmarkExtractInfo2 function
 func BenchmarkExtractInfo2(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var dest []string
@@ -739,6 +746,7 @@ func BenchmarkExtractInfo2(b *testing.B) {
 	}
 }
 
+// BenchmarkExtractInfo3 function
 func BenchmarkExtractInfo3(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var dest []string
@@ -755,6 +763,7 @@ func BenchmarkExtractInfo3(b *testing.B) {
 	}
 }
 
+// BenchmarkExtractInfo4 function
 func BenchmarkExtractInfo4(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var dest []string
@@ -771,6 +780,7 @@ func BenchmarkExtractInfo4(b *testing.B) {
 	}
 }
 
+// BenchmarkExtractInfo5 function
 func BenchmarkExtractInfo5(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var dest []string
@@ -787,6 +797,7 @@ func BenchmarkExtractInfo5(b *testing.B) {
 	}
 }
 
+// BenchmarkWorkCalculate function
 func BenchmarkWorkCalculate(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var work int64
@@ -799,6 +810,7 @@ func BenchmarkWorkCalculate(b *testing.B) {
 	}
 }
 
+// BenchmarkWorkCalculate2 function
 func BenchmarkWorkCalculate2(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var work int64
@@ -811,6 +823,7 @@ func BenchmarkWorkCalculate2(b *testing.B) {
 	}
 }
 
+// BenchmarkWorkCalculate3 function
 func BenchmarkWorkCalculate3(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var work int64
@@ -823,6 +836,7 @@ func BenchmarkWorkCalculate3(b *testing.B) {
 	}
 }
 
+// BenchmarkWorkCalculate4 function
 func BenchmarkWorkCalculate4(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var work int64
@@ -835,6 +849,7 @@ func BenchmarkWorkCalculate4(b *testing.B) {
 	}
 }
 
+// BenchmarkWorkCalculate5 function
 func BenchmarkWorkCalculate5(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var work int64
