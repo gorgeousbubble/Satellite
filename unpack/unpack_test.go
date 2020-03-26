@@ -582,6 +582,7 @@ func BenchmarkUnpackToFile5(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackToFileConfine function
 func BenchmarkUnpackToFileConfine(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_aes.txt"
@@ -594,6 +595,7 @@ func BenchmarkUnpackToFileConfine(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackToFileConfine2 function
 func BenchmarkUnpackToFileConfine2(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_des.txt"
@@ -606,6 +608,7 @@ func BenchmarkUnpackToFileConfine2(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackToFileConfine3 function
 func BenchmarkUnpackToFileConfine3(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_3des.txt"
@@ -618,6 +621,7 @@ func BenchmarkUnpackToFileConfine3(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackToFileConfine4 function
 func BenchmarkUnpackToFileConfine4(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_rsa.txt"
@@ -630,6 +634,7 @@ func BenchmarkUnpackToFileConfine4(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackToFileConfine5 function
 func BenchmarkUnpackToFileConfine5(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_base64.txt"
