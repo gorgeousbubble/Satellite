@@ -212,6 +212,7 @@ func TestUnpackToFileConfine5(t *testing.T) {
 	}
 }
 
+// TestUnpackToMemory function
 func TestUnpackToMemory(t *testing.T) {
 	var dest []byte
 	src := "../test/data/unpack/file_aes.txt"
@@ -222,6 +223,7 @@ func TestUnpackToMemory(t *testing.T) {
 	}
 }
 
+// TestUnpackToMemory2 function
 func TestUnpackToMemory2(t *testing.T) {
 	var dest []byte
 	src := "../test/data/unpack/file_des.txt"
@@ -232,6 +234,7 @@ func TestUnpackToMemory2(t *testing.T) {
 	}
 }
 
+// TestUnpackToMemory3 function
 func TestUnpackToMemory3(t *testing.T) {
 	var dest []byte
 	src := "../test/data/unpack/file_3des.txt"
@@ -242,6 +245,7 @@ func TestUnpackToMemory3(t *testing.T) {
 	}
 }
 
+// TestUnpackToMemory4 function
 func TestUnpackToMemory4(t *testing.T) {
 	var dest []byte
 	src := "../test/data/unpack/file_rsa.txt"
@@ -252,6 +256,7 @@ func TestUnpackToMemory4(t *testing.T) {
 	}
 }
 
+// TestUnpackToMemory5 function
 func TestUnpackToMemory5(t *testing.T) {
 	var dest []byte
 	src := "../test/data/unpack/file_base64.txt"
@@ -262,6 +267,7 @@ func TestUnpackToMemory5(t *testing.T) {
 	}
 }
 
+// TestExtractInfo function
 func TestExtractInfo(t *testing.T) {
 	var dest []string
 	var size []int
@@ -276,6 +282,7 @@ func TestExtractInfo(t *testing.T) {
 	}
 }
 
+// TestExtractInfo2 function
 func TestExtractInfo2(t *testing.T) {
 	var dest []string
 	var size []int
@@ -290,6 +297,7 @@ func TestExtractInfo2(t *testing.T) {
 	}
 }
 
+// TestExtractInfo3 function
 func TestExtractInfo3(t *testing.T) {
 	var dest []string
 	var size []int
@@ -304,6 +312,7 @@ func TestExtractInfo3(t *testing.T) {
 	}
 }
 
+// TestExtractInfo4 function
 func TestExtractInfo4(t *testing.T) {
 	var dest []string
 	var size []int
@@ -318,6 +327,7 @@ func TestExtractInfo4(t *testing.T) {
 	}
 }
 
+// TestExtractInfo5 function
 func TestExtractInfo5(t *testing.T) {
 	var dest []string
 	var size []int
@@ -332,6 +342,7 @@ func TestExtractInfo5(t *testing.T) {
 	}
 }
 
+// TestWorkCalculate function
 func TestWorkCalculate(t *testing.T) {
 	var work int64
 	var algorithm string
@@ -342,6 +353,7 @@ func TestWorkCalculate(t *testing.T) {
 	}
 }
 
+// TestWorkCalculate2 function
 func TestWorkCalculate2(t *testing.T) {
 	var work int64
 	var algorithm string
@@ -352,6 +364,7 @@ func TestWorkCalculate2(t *testing.T) {
 	}
 }
 
+// TestWorkCalculate3 function
 func TestWorkCalculate3(t *testing.T) {
 	var work int64
 	var algorithm string
@@ -362,6 +375,7 @@ func TestWorkCalculate3(t *testing.T) {
 	}
 }
 
+// TestWorkCalculate4 function
 func TestWorkCalculate4(t *testing.T) {
 	var work int64
 	var algorithm string
@@ -372,6 +386,7 @@ func TestWorkCalculate4(t *testing.T) {
 	}
 }
 
+// TestWorkCalculate5 function
 func TestWorkCalculate5(t *testing.T) {
 	var work int64
 	var algorithm string
@@ -382,6 +397,7 @@ func TestWorkCalculate5(t *testing.T) {
 	}
 }
 
+// BenchmarkUnpack function
 func BenchmarkUnpack(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_aes.txt"
@@ -393,6 +409,7 @@ func BenchmarkUnpack(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpack2 function
 func BenchmarkUnpack2(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_des.txt"
@@ -404,6 +421,7 @@ func BenchmarkUnpack2(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpack3 function
 func BenchmarkUnpack3(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_3des.txt"
@@ -415,6 +433,7 @@ func BenchmarkUnpack3(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpack4 function
 func BenchmarkUnpack4(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_rsa.txt"
@@ -426,6 +445,7 @@ func BenchmarkUnpack4(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpack5 function
 func BenchmarkUnpack5(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_base64.txt"
@@ -437,6 +457,7 @@ func BenchmarkUnpack5(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackConfine function
 func BenchmarkUnpackConfine(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_aes.txt"
@@ -448,6 +469,7 @@ func BenchmarkUnpackConfine(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackConfine2 function
 func BenchmarkUnpackConfine2(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_des.txt"
@@ -459,6 +481,7 @@ func BenchmarkUnpackConfine2(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackConfine3 function
 func BenchmarkUnpackConfine3(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_3des.txt"
@@ -470,6 +493,7 @@ func BenchmarkUnpackConfine3(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackConfine4 function
 func BenchmarkUnpackConfine4(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_rsa.txt"
@@ -481,6 +505,7 @@ func BenchmarkUnpackConfine4(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackConfine5 function
 func BenchmarkUnpackConfine5(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_base64.txt"
@@ -492,6 +517,7 @@ func BenchmarkUnpackConfine5(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackToFile function
 func BenchmarkUnpackToFile(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_aes.txt"
@@ -504,6 +530,7 @@ func BenchmarkUnpackToFile(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackToFile2 function
 func BenchmarkUnpackToFile2(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_des.txt"
@@ -516,6 +543,7 @@ func BenchmarkUnpackToFile2(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackToFile3 function
 func BenchmarkUnpackToFile3(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_3des.txt"
@@ -528,6 +556,7 @@ func BenchmarkUnpackToFile3(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackToFile4 function
 func BenchmarkUnpackToFile4(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_rsa.txt"
@@ -540,6 +569,7 @@ func BenchmarkUnpackToFile4(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackToFile5 function
 func BenchmarkUnpackToFile5(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_base64.txt"
@@ -552,6 +582,7 @@ func BenchmarkUnpackToFile5(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackToFileConfine function
 func BenchmarkUnpackToFileConfine(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_aes.txt"
@@ -564,6 +595,7 @@ func BenchmarkUnpackToFileConfine(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackToFileConfine2 function
 func BenchmarkUnpackToFileConfine2(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_des.txt"
@@ -576,6 +608,7 @@ func BenchmarkUnpackToFileConfine2(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackToFileConfine3 function
 func BenchmarkUnpackToFileConfine3(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_3des.txt"
@@ -588,6 +621,7 @@ func BenchmarkUnpackToFileConfine3(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackToFileConfine4 function
 func BenchmarkUnpackToFileConfine4(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_rsa.txt"
@@ -600,6 +634,7 @@ func BenchmarkUnpackToFileConfine4(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackToFileConfine5 function
 func BenchmarkUnpackToFileConfine5(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/unpack/file_base64.txt"
@@ -612,6 +647,7 @@ func BenchmarkUnpackToFileConfine5(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackToMemory function
 func BenchmarkUnpackToMemory(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var dest []byte
@@ -624,6 +660,7 @@ func BenchmarkUnpackToMemory(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackToMemory2 function
 func BenchmarkUnpackToMemory2(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var dest []byte
@@ -636,6 +673,7 @@ func BenchmarkUnpackToMemory2(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackToMemory3 function
 func BenchmarkUnpackToMemory3(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var dest []byte
@@ -648,6 +686,7 @@ func BenchmarkUnpackToMemory3(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackToMemory4 function
 func BenchmarkUnpackToMemory4(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var dest []byte
@@ -660,6 +699,7 @@ func BenchmarkUnpackToMemory4(b *testing.B) {
 	}
 }
 
+// BenchmarkUnpackToMemory5 function
 func BenchmarkUnpackToMemory5(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var dest []byte
@@ -672,6 +712,7 @@ func BenchmarkUnpackToMemory5(b *testing.B) {
 	}
 }
 
+// BenchmarkExtractInfo function
 func BenchmarkExtractInfo(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var dest []string
@@ -688,6 +729,7 @@ func BenchmarkExtractInfo(b *testing.B) {
 	}
 }
 
+// BenchmarkExtractInfo2 function
 func BenchmarkExtractInfo2(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var dest []string
@@ -704,6 +746,7 @@ func BenchmarkExtractInfo2(b *testing.B) {
 	}
 }
 
+// BenchmarkExtractInfo3 function
 func BenchmarkExtractInfo3(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var dest []string
@@ -720,6 +763,7 @@ func BenchmarkExtractInfo3(b *testing.B) {
 	}
 }
 
+// BenchmarkExtractInfo4 function
 func BenchmarkExtractInfo4(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var dest []string
@@ -736,6 +780,7 @@ func BenchmarkExtractInfo4(b *testing.B) {
 	}
 }
 
+// BenchmarkExtractInfo5 function
 func BenchmarkExtractInfo5(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var dest []string
@@ -752,6 +797,7 @@ func BenchmarkExtractInfo5(b *testing.B) {
 	}
 }
 
+// BenchmarkWorkCalculate function
 func BenchmarkWorkCalculate(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var work int64
@@ -764,6 +810,7 @@ func BenchmarkWorkCalculate(b *testing.B) {
 	}
 }
 
+// BenchmarkWorkCalculate2 function
 func BenchmarkWorkCalculate2(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var work int64
@@ -776,6 +823,7 @@ func BenchmarkWorkCalculate2(b *testing.B) {
 	}
 }
 
+// BenchmarkWorkCalculate3 function
 func BenchmarkWorkCalculate3(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var work int64
@@ -788,6 +836,7 @@ func BenchmarkWorkCalculate3(b *testing.B) {
 	}
 }
 
+// BenchmarkWorkCalculate4 function
 func BenchmarkWorkCalculate4(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var work int64
@@ -800,6 +849,7 @@ func BenchmarkWorkCalculate4(b *testing.B) {
 	}
 }
 
+// BenchmarkWorkCalculate5 function
 func BenchmarkWorkCalculate5(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		var work int64
