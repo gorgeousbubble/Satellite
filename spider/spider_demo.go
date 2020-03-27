@@ -58,3 +58,30 @@ func GetMovie(url string) (err error) {
 	fmt.Println("category:" + category)
 	return err
 }
+
+func GetTopList(url string) (l []string, err error) {
+	// send request and get response
+	resp, err := http.Get(url)
+	if err != nil {
+		log.Println("Error send GET request:", err)
+		return l, err
+	}
+	// check response status code
+	if resp.StatusCode != http.StatusOK {
+		log.Println("Error response status code:", err)
+		return l, err
+	}
+	// create document from response body
+	doc, err := goquery.NewDocumentFromReader(resp.Body)
+	if err != nil {
+		log.Println("Error create document from response body:", err)
+		return l, err
+	}
+	// find movies link info
+	doc.Find("#content div div.article ol li div div.info div.hd a").Each(func(i int, s *goquery.Selection) {
+		fmt.Printf("%v", s)
+		herf, _ := s.Attr("href")
+		l = append(l, herf)
+	})
+	return l, err
+}
