@@ -37,9 +37,7 @@ build:
 build_image:
 	$(DOCKERBUILD) -t $(APPNAME) .
 
-dist:	
-	$(MKBIN)
-	$(GOBUILD) -o $(GOBIN)
+dist:	build
 	tar -zcvf $(APPDIST) $(APPPATH)
 
 test:
