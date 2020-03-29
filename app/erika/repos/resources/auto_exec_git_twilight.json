@@ -1,5 +1,6 @@
 {
     "name": "auto_exec_sync_git_twilight",
+    "id": "6d12d5a9a2d6767e529762899f92e4304985b65e",
     "description": "Automatic synchronization Git with remote repository.",
     "schedule": "@hourly",
     "attribute": {

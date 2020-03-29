@@ -3,6 +3,7 @@ package parse
 // Auto execute task template structure...
 type TAutoExec struct {
 	Name        string             `json:"name" yaml:"name"`
+	Id          string             `json:"id" yaml:"id"`
 	Description string             `json:"description" yaml:"description"`
 	Schedule    string             `json:"schedule" yaml:"schedule"`
 	Attribute   TAutoExecAttribute `json:"attribute" yaml:"attribute"`

@@ -10,7 +10,7 @@ RUN apt-get install -y\
 RUN mkdir -p .
 RUN mkdir -p ./task
 COPY ./bin/erika .
-COPY ./template ./task
+COPY ./repos/resources ./task
 
 EXPOSE 80
 ENTRYPOINT ["./erika","start","-ip","0.0.0.0","-port","80"]
