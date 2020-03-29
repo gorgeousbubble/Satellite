@@ -23,12 +23,16 @@ APPNAME	= satellite
 APPDIST = satellite.tar.gz
 APPPATH = ./bin/$(APPNAME)
 
+# UPX Commands
+UPX = ./tools/upx
+
 # Build
 all: test build
 
 build:
 	$(MKBIN)
 	$(GOBUILD) -o $(GOBIN)
+	$(UPX) -9 $(APPPATH)
 
 build_image:
 	$(DOCKERBUILD) -t $(APPNAME) .
