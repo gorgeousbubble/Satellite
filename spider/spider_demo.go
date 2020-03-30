@@ -1,15 +1,36 @@
 package spider
 
 import (
+	"crypto/tls"
 	"fmt"
 	"github.com/PuerkitoBio/goquery"
 	"log"
 	"net/http"
 )
 
+var https *http.Client
+
+func init() {
+	tr := &http.Transport{
+		TLSClientConfig: &tls.Config{
+			InsecureSkipVerify: true,
+		},
+	}
+	https = &http.Client{
+		Transport: tr,
+	}
+}
+
 func GetMovie(url string) (err error) {
+	// combine http request
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return err
+	}
+	// append request header
+	req.Header.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36")
 	// send request and get response
-	resp, err := http.Get(url)
+	resp, err := https.Do(req)
 	if err != nil {
 		log.Println("Error send GET request:", err)
 		return err
@@ -60,8 +81,15 @@ func GetMovie(url string) (err error) {
 }
 
 func GetTopList(url string) (l []string, err error) {
+	// combine http request
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
+	// append request header
+	req.Header.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36")
 	// send request and get response
-	resp, err := http.Get(url)
+	resp, err := https.Do(req)
 	if err != nil {
 		log.Println("Error send GET request:", err)
 		return l, err
