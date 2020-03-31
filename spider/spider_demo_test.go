@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestGetTopList(t *testing.T) {
+func TestGetMovieTopList(t *testing.T) {
 	url := "https://movie.douban.com/top250?start="
 	for i := 0; i < 10; i++ {
 		s := i * 25
