@@ -13,3 +13,6 @@ The package is mainly used for decrypt data or unpack file which has been operat
   * Support HTTP and HTTPS to call this function
   * You can know the process when unpack or decrypt
   * Simple and useful
+
+## External definitions
+There are some constant defined in file 'global/const.go', mainly about decrypt slice buffer size. You can redefine it in 'unpack' package it you want to use this package independence.
