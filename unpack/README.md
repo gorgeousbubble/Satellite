@@ -16,3 +16,6 @@ The package is mainly used for decrypt data or unpack file which has been operat
 
 ## External definitions
 There are some constant defined in file 'global/const.go', mainly about decrypt slice buffer size. You can redefine it in 'unpack' package it you want to use this package independence.
+
+## Usage of interfaces
+Although many function was expose to external, we only need call function 'Unpack(...)' to realize our function. You can also use other functions according to you demand.
