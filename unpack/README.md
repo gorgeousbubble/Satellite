@@ -70,3 +70,12 @@ func Unpack(src string, dest string) (err error) {
 	return err
 }
 ```
+You can call this function to achieve unpack or decrypt like this:
+```batch
+src := "../test/data/unpack/file_aes.txt"
+dest := "../test/data/unpack/"
+err := Unpack(src, dest)
+if err != nil {
+	t.Fatal("Error Unpack:", err)
+}
+```
