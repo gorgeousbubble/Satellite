@@ -81,7 +81,7 @@ if err != nil {
 ```
 
 Certainly, function 'Unpack' mainly do the unpack or decrypt. There are some other function in package which you can call it for different situation.
-If the package file is too large that the program may generate amout of go-routine. Too much go-routine may not a good thing for speed up unpack, it will squeeze memory and cause program break down. You can call this function to restrict go-routine when unpack package.
+If the package file is too large that the program may generate amount of go-routine. Too much go-routine may not a good thing for speed up unpack, it will squeeze memory and cause program break down. You can call this function to restrict go-routine when unpack package.
 ```batch
 // UnpackConfine function
 // unpack file with restrict goroutine(if we do not restrict goroutine, memory will soon be occupied)
