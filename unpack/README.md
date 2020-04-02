@@ -79,3 +79,5 @@ if err != nil {
 	t.Fatal("Error Unpack:", err)
 }
 ```
+
+Certainly, function 'Unpack' mainly do the unpack or decrypt. There are some other function in package which you can call it for different situation.
