@@ -81,3 +81,52 @@ if err != nil {
 ```
 
 Certainly, function 'Unpack' mainly do the unpack or decrypt. There are some other function in package which you can call it for different situation.
+If the package file is too large that the program may generate amout of go-routine. Too much go-routine may not a good thing for speed up unpack, it will squeeze memory and cause program break down. You can call this function to restrict go-routine when unpack package.
+```batch
+// UnpackConfine function
+// unpack file with restrict goroutine(if we do not restrict goroutine, memory will soon be occupied)
+// you can adjust confine file and confine buffer when you need change
+// other function is same as 'Unpack'
+func UnpackConfine(src string, dest string) (err error) {
+	// first, open the file
+	file, err := os.Open(src)
+	if err != nil {
+		log.Println("Error open file:", err)
+		return err
+	}
+	// second, read file data
+	buf := make([]byte, 60)
+	rd := bufio.NewReader(file)
+	_, err = rd.Read(buf)
+	if err != nil {
+		log.Println("Error read file:", err)
+		return err
+	}
+	// third, close the file
+	err = file.Close()
+	if err != nil {
+		log.Println("Error close file:", err)
+		return err
+	}
+	// fourth, find the algorithm
+	buf = buf[48:56]
+	index := bytes.IndexByte(buf, 0)
+	tp := string(buf[0:index])
+	switch tp {
+	case "AES", "aes":
+		err = UnpackAESConfine(src, dest)
+	case "DES", "des":
+		err = UnpackDESConfine(src, dest)
+	case "3DES", "3des":
+		err = Unpack3DESConfine(src, dest)
+	case "RSA", "rsa":
+		err = UnpackRSAConfine(src, dest)
+	case "BASE64", "base64":
+		err = UnpackBase64Confine(src, dest)
+	default:
+		s := fmt.Sprint("Undefined unpack algorithm.")
+		err = errors.New(s)
+	}
+	return err
+}
+```
