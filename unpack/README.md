@@ -132,3 +132,54 @@ func UnpackConfine(src string, dest string) (err error) {
 ```
 
 If you just want to unpack one file from the package. I recommand you to use function 'UnpackToFile'. This function will receive one parameter called 'target' indicate the file name which you want to unpack.
+```batch
+// UnpackToFile function
+// unpack file select target file. If there are many files in package, you can use this function to just decrypt one of them.
+// src file support both absolute and relative paths, like 'C:\\file.pak' or '../test/data/file.pak'
+// dest file also support both absolute and relative paths, like 'C:\\' or '../test/data/'
+// target string is the file which you want to decrypt from package. for instance, if the original name of file is 'capture.png',
+// you should fill target segment with 'capture.png'
+// return err indicate the success or failure function execute
+func UnpackToFile(src string, target string, dest string) (err error) {
+	// first, open the file
+	file, err := os.Open(src)
+	if err != nil {
+		log.Println("Error open file:", err)
+		return err
+	}
+	// second, read file data
+	buf := make([]byte, 60)
+	rd := bufio.NewReader(file)
+	_, err = rd.Read(buf)
+	if err != nil {
+		log.Println("Error read file:", err)
+		return err
+	}
+	// third, close the file
+	err = file.Close()
+	if err != nil {
+		log.Println("Error close file:", err)
+		return err
+	}
+	// fourth, find the algorithm
+	buf = buf[48:56]
+	index := bytes.IndexByte(buf, 0)
+	tp := string(buf[0:index])
+	switch tp {
+	case "AES", "aes":
+		err = UnpackAESToFile(src, target, dest)
+	case "DES", "des":
+		err = UnpackDESToFile(src, target, dest)
+	case "3DES", "3des":
+		err = Unpack3DESToFile(src, target, dest)
+	case "RSA", "rsa":
+		err = UnpackRSAToFile(src, target, dest)
+	case "BASE64", "base64":
+		err = UnpackBase64ToFile(src, target, dest)
+	default:
+		s := fmt.Sprint("Undefined unpack algorithm.")
+		err = errors.New(s)
+	}
+	return err
+}
+```
