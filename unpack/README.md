@@ -183,3 +183,56 @@ func UnpackToFile(src string, target string, dest string) (err error) {
 	return err
 }
 ```
+
+You may not want to store data in file, but just unpack data store in memory. We certainly support this feature, you can use the function 'UnpackToMemory' to achieve it.
+```batch
+// UnpackToMemory function
+// unpack file to memory instate of file. It usually use in a situation which need protect data security.
+// src file support both absolute and relative paths, like 'C:\\file.pak' or '../test/data/file.pak'
+// dest is a slice which used to receive decrypt data. You can send '[]byte' slice address here.
+// target string is the file which you want to decrypt from package. for instance, if the original name of file is 'capture.png',
+// you should fill target segment with 'capture.png'
+// return err indicate the success or failure function execute
+func UnpackToMemory(src string, target string, dest *[]byte) (err error) {
+	// first, open the file
+	file, err := os.Open(src)
+	if err != nil {
+		log.Println("Error open file:", err)
+		return err
+	}
+	// second, read file data
+	buf := make([]byte, 60)
+	rd := bufio.NewReader(file)
+	_, err = rd.Read(buf)
+	if err != nil {
+		log.Println("Error read file:", err)
+		return err
+	}
+	// third, close the file
+	err = file.Close()
+	if err != nil {
+		log.Println("Error close file:", err)
+		return err
+	}
+	// fourth, find the algorithm
+	buf = buf[48:56]
+	index := bytes.IndexByte(buf, 0)
+	tp := string(buf[0:index])
+	switch tp {
+	case "AES", "aes":
+		err = UnpackAESToMemory(src, target, dest)
+	case "DES", "des":
+		err = UnpackDESToMemory(src, target, dest)
+	case "3DES", "3des":
+		err = Unpack3DESToMemory(src, target, dest)
+	case "RSA", "rsa":
+		err = UnpackRSAToMemory(src, target, dest)
+	case "BASE64", "base64":
+		err = UnpackBase64ToMemory(src, target, dest)
+	default:
+		s := fmt.Sprint("Undefined unpack algorithm.")
+		err = errors.New(s)
+	}
+	return err
+}
+```
