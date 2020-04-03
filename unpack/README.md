@@ -130,3 +130,5 @@ func UnpackConfine(src string, dest string) (err error) {
 	return err
 }
 ```
+
+If you just want to unpack one file from the package. I recommand you to use function 'UnpackToFile'. This function will receive one parameter called 'target' indicate the file name which you want to unpack.
