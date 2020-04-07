@@ -237,6 +237,64 @@ func UnpackToMemory(src string, target string, dest *[]byte) (err error) {
 }
 ```
 
+The function 'ExtractInfo' is mainly used for check verbose information of package. It will automaticly called by program that you don't need care.
+```batch
+// ExtractInfo function
+// This function is mainly used for check verbose information of package.
+// src file support both absolute and relative paths, like 'C:\\file.pak' or '../test/data/file.pak'
+// dest string slice will return the files name in package.
+// sz int slice will return the file number in package.
+// algorithm will return which algorithm used by encrypt package.
+// return err indicate the success or failure function execute
+func ExtractInfo(src string, dest *[]string, sz *[]int, algorithm *string) (err error) {
+	// first, open the file
+	file, err := os.Open(src)
+	if err != nil {
+		log.Println("Error open file:", err)
+		return err
+	}
+	// second, read file data
+	buf := make([]byte, 60)
+	rd := bufio.NewReader(file)
+	_, err = rd.Read(buf)
+	if err != nil {
+		log.Println("Error read file:", err)
+		return err
+	}
+	// third, close the file
+	err = file.Close()
+	if err != nil {
+		log.Println("Error close file:", err)
+		return err
+	}
+	// fourth, find the algorithm
+	buf = buf[48:56]
+	index := bytes.IndexByte(buf, 0)
+	tp := string(buf[0:index])
+	switch tp {
+	case "AES", "aes":
+		err = UnpackAESExtractInfo(src, dest, sz)
+		*algorithm = "aes"
+	case "DES", "des":
+		err = UnpackDESExtractInfo(src, dest, sz)
+		*algorithm = "des"
+	case "3DES", "3des":
+		err = Unpack3DESExtractInfo(src, dest, sz)
+		*algorithm = "3des"
+	case "RSA", "rsa":
+		err = UnpackRSAExtractInfo(src, dest, sz)
+		*algorithm = "rsa"
+	case "BASE64", "base64":
+		err = UnpackBase64ExtractInfo(src, dest, sz)
+		*algorithm = "base64"
+	default:
+		s := fmt.Sprint("Undefined unpack algorithm.")
+		err = errors.New(s)
+	}
+	return err
+}
+```
+
 If you also want to check the process of unpack or decrypt, you can use function 'WorkCalculate' to get the work value pack now. It show how much work remain.
 ```batch
 // WorkCalculate function
