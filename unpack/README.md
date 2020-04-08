@@ -351,3 +351,5 @@ func WorkCalculate(src string, algorithm *string, work *int64) (err error) {
 	return err
 }
 ```
+
+For other functions, you can also call them from external. Usage is similar to the function which description before.
