@@ -1,25 +1,11 @@
 package spider
 
 import (
-	"crypto/tls"
 	"fmt"
 	"github.com/PuerkitoBio/goquery"
 	"log"
 	"net/http"
 )
-
-var https *http.Client
-
-func init() {
-	tr := &http.Transport{
-		TLSClientConfig: &tls.Config{
-			InsecureSkipVerify: true,
-		},
-	}
-	https = &http.Client{
-		Transport: tr,
-	}
-}
 
 func GetMovie(url string) (err error) {
 	// combine http request
