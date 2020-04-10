@@ -68,6 +68,12 @@ func CompressTar(src []string, dest string) (err error) {
 	return err
 }
 
+// CompressTarGz function
+// input src file list, output dest file path, return error info
+// this function will use tar.gz algorithm to compress file list
+// src file support both absolute and relative paths, like 'C:\\file.txt' or '../test/data/file.txt'
+// dest file also support both absolute and relative paths, like 'C:\\package.pak' or '../test/data/package.pak'
+// return err indicate the success or failure function execute
 func CompressTarGz(src []string, dest string) (err error) {
 	// create the dest tar.gz file...
 	file, err := os.Create(dest)
