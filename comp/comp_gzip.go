@@ -16,7 +16,7 @@ import (
 // input src file list, output dest file path, return error info
 // this function will use gzip algorithm to compress file list
 // src file support both absolute and relative paths, like 'C:\\file.txt' or '../test/data/file.txt'
-// dest file also support both absolute and relative paths, like 'C:\\package.pak' or '../test/data/package.pak'
+// dest file also support both absolute and relative paths, like 'C:\\package.gz' or '../test/data/package.gz'
 // return err indicate the success or failure function execute
 func CompressGzip(src []string, dest string) (err error) {
 	// check the dest whether dir or not...

@@ -12,7 +12,7 @@ import (
 // input src file list, output dest file path, return error info
 // this function will use zip algorithm to compress file list
 // src file support both absolute and relative paths, like 'C:\\file.txt' or '../test/data/file.txt'
-// dest file also support both absolute and relative paths, like 'C:\\package.pak' or '../test/data/package.pak'
+// dest file also support both absolute and relative paths, like 'C:\\package.zip' or '../test/data/package.zip'
 // return err indicate the success or failure function execute
 func CompressZip(src []string, dest string) (err error) {
 	// create the dest zip file...
