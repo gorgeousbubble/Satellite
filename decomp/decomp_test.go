@@ -2,6 +2,7 @@ package decomp
 
 import "testing"
 
+// TestDeCompress function
 func TestDeCompress(t *testing.T) {
 	src := "../test/data/decomp/file.tar.gz"
 	dest := "../test/data/decomp/"
@@ -11,6 +12,7 @@ func TestDeCompress(t *testing.T) {
 	}
 }
 
+// TestDeCompress2 function
 func TestDeCompress2(t *testing.T) {
 	src := "../test/data/decomp/file.zip"
 	dest := "../test/data/decomp/"
@@ -20,6 +22,7 @@ func TestDeCompress2(t *testing.T) {
 	}
 }
 
+// TestDeCompress3 function
 func TestDeCompress3(t *testing.T) {
 	src := "../test/data/decomp/file.tar"
 	dest := "../test/data/decomp/"
