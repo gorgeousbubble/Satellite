@@ -32,6 +32,7 @@ func TestDeCompress3(t *testing.T) {
 	}
 }
 
+// BenchmarkDeCompress function
 func BenchmarkDeCompress(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/decomp/file.tar.gz"
@@ -43,6 +44,7 @@ func BenchmarkDeCompress(b *testing.B) {
 	}
 }
 
+// BenchmarkDeCompress2 function
 func BenchmarkDeCompress2(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/decomp/file.zip"
@@ -54,6 +56,7 @@ func BenchmarkDeCompress2(b *testing.B) {
 	}
 }
 
+// BenchmarkDeCompress3 function
 func BenchmarkDeCompress3(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/decomp/file.tar"
