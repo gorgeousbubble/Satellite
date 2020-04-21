@@ -5,6 +5,7 @@ import (
 	"testing"
 )
 
+// TestCompressZlib function
 func TestCompressZlib(t *testing.T) {
 	src := "hello,world!"
 	fmt.Println("Before Compress Zlib:", src)
@@ -15,6 +16,7 @@ func TestCompressZlib(t *testing.T) {
 	fmt.Println("After Compress Zlib:", string(dest))
 }
 
+// BenchmarkCompressZlib function
 func BenchmarkCompressZlib(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "hello,world!"

@@ -10,6 +10,12 @@ import (
 	"strings"
 )
 
+// DeCompressTar function
+// input src file list, output dest file path and algorithm which used in unpack, return error info
+// this function will base on algorithm to call correspond function
+// src file support both absolute and relative paths, like 'C:\\file.tar' or '../test/data/file.tar'
+// dest file also support both absolute and relative paths, like 'C:\\' or '../test/data/'
+// return err indicate the success or failure function execute
 func DeCompressTar(src string, dest string) (err error) {
 	// open the src tar ball file...
 	file, err := os.Open(src)
@@ -49,6 +55,12 @@ func DeCompressTar(src string, dest string) (err error) {
 	return err
 }
 
+// DeCompressTarGz function
+// input src file list, output dest file path and algorithm which used in unpack, return error info
+// this function will base on algorithm to call correspond function
+// src file support both absolute and relative paths, like 'C:\\file.tar.gz' or '../test/data/file.tar.gz'
+// dest file also support both absolute and relative paths, like 'C:\\' or '../test/data/'
+// return err indicate the success or failure function execute
 func DeCompressTarGz(src string, dest string) (err error) {
 	// open the src tar ball file...
 	file, err := os.Open(src)
@@ -94,6 +106,12 @@ func DeCompressTarGz(src string, dest string) (err error) {
 	return err
 }
 
+// DeCompressTarBz2 function
+// input src file list, output dest file path and algorithm which used in unpack, return error info
+// this function will base on algorithm to call correspond function
+// src file support both absolute and relative paths, like 'C:\\file.tar.bz2' or '../test/data/file.tar.bz2'
+// dest file also support both absolute and relative paths, like 'C:\\' or '../test/data/'
+// return err indicate the success or failure function execute
 func DeCompressTarBz2(src string, dest string) (err error) {
 	// open the src tar ball file...
 	file, err := os.Open(src)

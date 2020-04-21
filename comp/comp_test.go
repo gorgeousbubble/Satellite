@@ -2,6 +2,7 @@ package comp
 
 import "testing"
 
+// TestCompress function
 func TestCompress(t *testing.T) {
 	src := []string{"../test/data/comp/file_1.txt", "../test/data/comp/file_2.txt", "../test/data/comp/file_3.txt", "../test/data/comp/file_4.txt", "../test/data/comp/file_5.txt"}
 	dest := "../test/data/comp/file.tar.gz"
@@ -13,6 +14,7 @@ func TestCompress(t *testing.T) {
 	}
 }
 
+// TestCompress2 function
 func TestCompress2(t *testing.T) {
 	src := []string{"../test/data/comp/file_1.txt", "../test/data/comp/file_2.txt", "../test/data/comp/file_3.txt", "../test/data/comp/file_4.txt", "../test/data/comp/file_5.txt"}
 	dest := "../test/data/comp/file.zip"
@@ -24,6 +26,7 @@ func TestCompress2(t *testing.T) {
 	}
 }
 
+// TestCompress3 function
 func TestCompress3(t *testing.T) {
 	src := []string{"../test/data/comp/file_1.txt", "../test/data/comp/file_2.txt", "../test/data/comp/file_3.txt", "../test/data/comp/file_4.txt", "../test/data/comp/file_5.txt"}
 	dest := "../test/data/comp/file.tar"
@@ -35,6 +38,7 @@ func TestCompress3(t *testing.T) {
 	}
 }
 
+// BenchmarkCompress function
 func BenchmarkCompress(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := []string{"../test/data/comp/file_1.txt", "../test/data/comp/file_2.txt", "../test/data/comp/file_3.txt", "../test/data/comp/file_4.txt", "../test/data/comp/file_5.txt"}
@@ -48,6 +52,7 @@ func BenchmarkCompress(b *testing.B) {
 	}
 }
 
+// BenchmarkCompress2 function
 func BenchmarkCompress2(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := []string{"../test/data/comp/file_1.txt", "../test/data/comp/file_2.txt", "../test/data/comp/file_3.txt", "../test/data/comp/file_4.txt", "../test/data/comp/file_5.txt"}
@@ -61,6 +66,7 @@ func BenchmarkCompress2(b *testing.B) {
 	}
 }
 
+// BenchmarkCompress3 function
 func BenchmarkCompress3(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := []string{"../test/data/comp/file_1.txt", "../test/data/comp/file_2.txt", "../test/data/comp/file_3.txt", "../test/data/comp/file_4.txt", "../test/data/comp/file_5.txt"}

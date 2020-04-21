@@ -11,6 +11,12 @@ import (
 	"satellite/utils"
 )
 
+// DeCompressGzip function
+// input src file list, output dest file path and algorithm which used in unpack, return error info
+// this function will base on algorithm to call correspond function
+// src file support both absolute and relative paths, like 'C:\\file.gz' or '../test/data/file.gz'
+// dest file also support both absolute and relative paths, like 'C:\\' or '../test/data/'
+// return err indicate the success or failure function execute
 func DeCompressGzip(src []string, dest string) (err error) {
 	// check the dest whether dir or not...
 	is, err := utils.IsDir(dest)

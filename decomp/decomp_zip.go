@@ -8,6 +8,12 @@ import (
 	"path/filepath"
 )
 
+// DeCompressZip function
+// input src file list, output dest file path and algorithm which used in unpack, return error info
+// this function will base on algorithm to call correspond function
+// src file support both absolute and relative paths, like 'C:\\file.tar.zip' or '../test/data/file.tar.zip'
+// dest file also support both absolute and relative paths, like 'C:\\' or '../test/data/'
+// return err indicate the success or failure function execute
 func DeCompressZip(src string, dest string) (err error) {
 	// open the zip reader...
 	reader, err := zip.OpenReader(src)

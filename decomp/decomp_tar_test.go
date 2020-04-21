@@ -2,6 +2,7 @@ package decomp
 
 import "testing"
 
+// TestDeCompressTar function
 func TestDeCompressTar(t *testing.T) {
 	src := "../test/data/decomp/file.tar"
 	dest := "../test/data/decomp/"
@@ -11,6 +12,7 @@ func TestDeCompressTar(t *testing.T) {
 	}
 }
 
+// BenchmarkDeCompressTar function
 func BenchmarkDeCompressTar(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/decomp/file.tar"
@@ -22,6 +24,7 @@ func BenchmarkDeCompressTar(b *testing.B) {
 	}
 }
 
+// TestDeCompressTarGz function
 func TestDeCompressTarGz(t *testing.T) {
 	src := "../test/data/decomp/file.tar.gz"
 	dest := "../test/data/decomp/"
@@ -31,6 +34,7 @@ func TestDeCompressTarGz(t *testing.T) {
 	}
 }
 
+// BenchmarkDeCompressTarGz function
 func BenchmarkDeCompressTarGz(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := "../test/data/decomp/file.tar.gz"
