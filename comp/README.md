@@ -2,4 +2,4 @@
 The Compress package function interfaces description.
 
 ## Introduction
-Unpack package is a functional package. It can decrypt files or data. Related algorithms are mainly from the Go package.
+Compress package is a functional package. It can compress files to an archive. Related algorithms are mainly from the Go package. Now support tar, tar.gz, zip, etc.
