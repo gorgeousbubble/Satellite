@@ -1,11 +1,13 @@
 package cmd
 
 import (
+	"errors"
 	"flag"
 	"fmt"
 	"log"
 	"os"
 	. "satellite/global"
+	"satellite/pack"
 )
 
 var hashCmd = flag.NewFlagSet(CmdHash, flag.ExitOnError)
@@ -42,5 +44,38 @@ func ParseCmdHash() {
 
 func handleCmdHash(src string, algorithm string) (err error) {
 	// check parameters
+	is := checkHashParameters(src, algorithm)
+	if !is {
+		err = errors.New("parameters illegal")
+		return err
+	}
+	// calculate hash
+	dest, err := pack.PackHashEncode(src, algorithm)
+	if err != nil {
+		return err
+	}
+	fmt.Printf("Hash %v:%v\n", algorithm, dest)
 	return err
+}
+
+func checkHashParameters(src string, algorithm string) (is bool) {
+	// check input source
+	is = true
+	// check src
+	if len(src) == 0 {
+		is = false
+		fmt.Println("Source string can't be empty.")
+		return is
+	}
+	// check algorithm
+	switch algorithm {
+	case "MD5", "md5":
+	case "SHA1", "sha1":
+	case "SHA256", "sha256":
+	case "SHA512", "sha512":
+	default:
+		is = false
+		fmt.Printf("Algorithm %v not support.\n", algorithm)
+	}
+	return is
 }
