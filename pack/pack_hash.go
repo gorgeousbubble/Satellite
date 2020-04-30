@@ -5,6 +5,13 @@ import (
 	"fmt"
 )
 
+// PackHashEncode function
+// input src string, output hash string and algorithm which used in hash, return error info
+// this function will base on algorithm to call correspond function
+// src string which you want to encode by hash algorithm, like 'hello,world!' or '../test/data/file.txt'
+// dest string is the result of hash value, like 'C:\\package.pak' or '../test/data/package.pak'
+// algorithm now support 'md5', 'sha1', 'sha256', 'sha512', you can send both up case and low case
+// return err indicate the success or failure function execute
 func PackHashEncode(src string, algorithm string) (dest string, err error) {
 	switch algorithm {
 	case "MD5", "md5":
