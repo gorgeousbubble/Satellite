@@ -1,6 +1,7 @@
 package pack
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -11,7 +12,25 @@ func TestPackHashEncodeMD5(t *testing.T) {
 	if err != nil {
 		t.Fatal("Error pack hash encode:", err)
 	}
-	if dest != "c0e84e870874dd37ed0d164c7986f03a" {
-		t.Fatal("Error encode result")
+	fmt.Println("Hash md5 encode:", dest)
+}
+
+func TestPackHashEncodeSHA1(t *testing.T) {
+	src := "hello,world!"
+	algorithm := "sha1"
+	dest, err := PackHashEncode(src, algorithm)
+	if err != nil {
+		t.Fatal("Error pack hash encode:", err)
 	}
+	fmt.Println("Hash sha1 encode:", dest)
+}
+
+func TestPackHashEncodeSHA256(t *testing.T) {
+	src := "hello,world!"
+	algorithm := "sha256"
+	dest, err := PackHashEncode(src, algorithm)
+	if err != nil {
+		t.Fatal("Error pack hash encode:", err)
+	}
+	fmt.Println("Hash sha256 encode:", dest)
 }
