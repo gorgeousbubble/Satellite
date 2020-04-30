@@ -34,3 +34,13 @@ func TestPackHashEncodeSHA256(t *testing.T) {
 	}
 	fmt.Println("Hash sha256 encode:", dest)
 }
+
+func TestPackHashEncodeSHA512(t *testing.T) {
+	src := "hello,world!"
+	algorithm := "sha512"
+	dest, err := PackHashEncode(src, algorithm)
+	if err != nil {
+		t.Fatal("Error pack hash encode:", err)
+	}
+	fmt.Println("Hash sha512 encode:", dest)
+}
