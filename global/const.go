@@ -10,6 +10,7 @@ const (
 	CmdHelp       = "help"
 	CmdPacket     = "pack"
 	CmdUnpack     = "unpack"
+	CmdHash       = "hash"
 	CmdCompress   = "comp"
 	CmdDecompress = "decomp"
 	CmdTcp        = "tcp"

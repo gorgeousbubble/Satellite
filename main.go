@@ -38,6 +38,8 @@ func main() {
 		cmd.ParseCmdPack()
 	case CmdUnpack:
 		cmd.ParseCmdUnpack()
+	case CmdHash:
+		cmd.ParseCmdHash()
 	case CmdCompress:
 		cmd.ParseCmdComp()
 	case CmdDecompress:
