@@ -57,6 +57,12 @@ func ParseCmdPack() {
 	fmt.Println("Pack success.")
 }
 
+// handleCmdPack function
+// this function mainly handle the main flow of command
+// first check parameters legally, otherwise exit and return error
+// then calculate the total work the pack should do, otherwise exit and return error
+// start one go-routine to execute pack function and check result
+// timeout will break and exit
 func handleCmdPack(src []string, dest string, algorithm string) (err error) {
 	ch := make(chan bool)
 	// check parameters
