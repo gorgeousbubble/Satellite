@@ -169,6 +169,8 @@ func checkParameters(src []string, dest string, algorithm string) (is bool) {
 	return is
 }
 
+// refactorSource function
+// this function is mainly used to refactor the source files path
 func refactorSource(src []string) (dest []string, err error) {
 	for i := 0; i < len(src); {
 		is, err := IsDir(src[i])
@@ -198,6 +200,8 @@ func refactorSource(src []string) (dest []string, err error) {
 	return dest, err
 }
 
+// execPack function
+// this function is the process will be execute in new go-routine
 func execPack(src []string, dest string, algorithm string, err *error, ch chan bool) {
 	*err = pack.Pack(src, dest, algorithm)
 	if *err != nil {
