@@ -27,6 +27,13 @@ func init() {
 	packCmd.StringVar(&packType, "t", "AES", "pack type: one type of enum [AES,DES,3DES,RSA,BASE64]")
 }
 
+// ParseCmdPack function
+// this function will be called in main.go and parse and execute one pack command
+// pack command has three parameters
+// input src file list, output dest file path and algorithm which used in unpack, return error info
+// dest file also support both absolute and relative paths, like 'C:\\' or '../test/data/'
+// algorithm now support 'tar', 'tar.gz', 'zip', you can send both up case and low case
+// any failure or error will output print to screen and exit process
 func ParseCmdPack() {
 	// check args number
 	if len(os.Args) == 2 {
