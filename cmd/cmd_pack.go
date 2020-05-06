@@ -135,6 +135,11 @@ func handleCmdPack(src []string, dest string, algorithm string) (err error) {
 	}
 }
 
+// checkParameters function
+// this function is mainly used to check parameters which from cli input and return check result
+// check src files not empty and exist
+// check algorithm is supported
+// return check result(true/false)
 func checkParameters(src []string, dest string, algorithm string) (is bool) {
 	is = true
 	// check src
