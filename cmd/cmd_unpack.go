@@ -32,6 +32,15 @@ func init() {
 	unpackCmd.BoolVar(&unpackConfine, "c", false, "unpack confine goroutine.")
 }
 
+// ParseCmdUnpack function
+// this function will be called in main.go and parse and execute one unpack command
+// unpack command has five parameters
+// input src file list, output dest file path and algorithm which used in unpack, return error info
+// dest file also support both absolute and relative paths, like 'C:\\' or '../test/data/'
+// target file name, when target package contains more files, you can specific which file could be unpacked
+// verbose show the detail information of the package
+// confine will restrict go-routine numbers in order to make unpack smoothly and save memory
+// any failure or error will output print to screen and exit process
 func ParseCmdUnpack() {
 	// check args number
 	if len(os.Args) == 2 {
