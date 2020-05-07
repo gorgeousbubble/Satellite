@@ -27,6 +27,13 @@ func init() {
 	packCmd.StringVar(&packType, "t", "AES", "pack type: one type of enum [AES,DES,3DES,RSA,BASE64]")
 }
 
+// ParseCmdPack function
+// this function will be called in main.go and parse and execute one pack command
+// pack command has three parameters
+// input src file list, output dest file path and algorithm which used in unpack, return error info
+// dest file also support both absolute and relative paths, like 'C:\\' or '../test/data/'
+// algorithm now support 'tar', 'tar.gz', 'zip', you can send both up case and low case
+// any failure or error will output print to screen and exit process
 func ParseCmdPack() {
 	// check args number
 	if len(os.Args) == 2 {
@@ -50,6 +57,12 @@ func ParseCmdPack() {
 	fmt.Println("Pack success.")
 }
 
+// handleCmdPack function
+// this function mainly handle the main flow of command
+// first check parameters legally, otherwise exit and return error
+// then calculate the total work the pack should do, otherwise exit and return error
+// start one go-routine to execute pack function and check result
+// timeout will break and exit
 func handleCmdPack(src []string, dest string, algorithm string) (err error) {
 	ch := make(chan bool)
 	// check parameters
@@ -122,6 +135,11 @@ func handleCmdPack(src []string, dest string, algorithm string) (err error) {
 	}
 }
 
+// checkParameters function
+// this function is mainly used to check parameters which from cli input and return check result
+// check src files not empty and exist
+// check algorithm is supported
+// return check result(true/false)
 func checkParameters(src []string, dest string, algorithm string) (is bool) {
 	is = true
 	// check src
@@ -151,6 +169,8 @@ func checkParameters(src []string, dest string, algorithm string) (is bool) {
 	return is
 }
 
+// refactorSource function
+// this function is mainly used to refactor the source files path
 func refactorSource(src []string) (dest []string, err error) {
 	for i := 0; i < len(src); {
 		is, err := IsDir(src[i])
@@ -180,6 +200,8 @@ func refactorSource(src []string) (dest []string, err error) {
 	return dest, err
 }
 
+// execPack function
+// this function is the process will be execute in new go-routine
 func execPack(src []string, dest string, algorithm string, err *error, ch chan bool) {
 	*err = pack.Pack(src, dest, algorithm)
 	if *err != nil {
