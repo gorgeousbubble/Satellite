@@ -64,6 +64,13 @@ func ParseCmdUnpack() {
 	fmt.Println("Unpack Success.")
 }
 
+// handleCmdUnpack function
+// this function mainly handle the main flow of command
+// first check parameters legally, otherwise exit and return error
+// if user want to see verbose info, extract package info
+// then calculate the total work the pack should do, otherwise exit and return error
+// start one go-routine to execute pack function and check result
+// timeout will break and exit
 func handleCmdUnpack(src string, dest string, target string, verbose bool, confine bool) (err error) {
 	var algorithm string
 	ch := make(chan bool)
@@ -137,6 +144,8 @@ func handleCmdUnpack(src string, dest string, target string, verbose bool, confi
 	}
 }
 
+// execUnpack function
+// this function is the process will be execute in new go-routine
 func execUnpack(src string, dest string, target string, confine bool, err *error, ch chan bool) {
 	if target != "" {
 		if confine {
