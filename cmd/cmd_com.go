@@ -43,6 +43,7 @@ Options:
 	unpack	- unpack packet to origin files.
 	comp	- compress files to 'zip' or 'tar.gz'.
 	decomp	- decompress packet to origin files.
+	hash    - calculate hash code of string or file.
 	tcp     - tcp simple server/client.
 	udp     - udp simple server/client.
 	http 	- http restful server.
