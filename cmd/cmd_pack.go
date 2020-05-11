@@ -32,7 +32,7 @@ func init() {
 // pack command has three parameters
 // input src file list, output dest file path and algorithm which used in unpack, return error info
 // dest file also support both absolute and relative paths, like 'C:\\' or '../test/data/'
-// algorithm now support 'tar', 'tar.gz', 'zip', you can send both up case and low case
+// algorithm now support 'aes', 'des', '3des', 'rsa', 'base64', you can send both up case and low case
 // any failure or error will output print to screen and exit process
 func ParseCmdPack() {
 	// check args number

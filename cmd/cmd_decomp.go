@@ -20,6 +20,13 @@ func init() {
 	deCompCmd.StringVar(&deCompType, "t", "zip", "decompress type: one type of enum [tar.gz,zip]")
 }
 
+// ParseCmdDeComp function
+// this function will be called in main.go and parse and execute one decomp command
+// decomp command has three parameters
+// input src file which has been compress also support both absolute and relative paths, like 'C:\\' or '../test/data/'
+// output dest file path store in disk also support both absolute and relative paths, like 'C:\\' or '../test/data/'
+// algorithm now support 'tar', 'tar.gz', 'zip', you can send both up case and low case
+// any failure or error will output print to screen and exit process
 func ParseCmdDeComp() {
 	// check args number
 	if len(os.Args) == 2 {
@@ -41,6 +48,9 @@ func ParseCmdDeComp() {
 	fmt.Println("Decompress success.")
 }
 
+// handleCmdDeComp function
+// this function mainly handle the main flow of command
+// any error will break and exit
 func handleCmdDeComp(src string, dest string, algorithm string) (err error) {
 	// execute unpack function
 	err = decomp.DeCompress(src, dest, algorithm)
