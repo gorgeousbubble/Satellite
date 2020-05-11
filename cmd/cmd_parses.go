@@ -30,6 +30,11 @@ func init() {
 	parsesCmd.StringVar(&parsesValue, "v", "", "parameter value: correspond parameter only for set mode")
 }
 
+// ParseCmdParses function
+// this function will be called in main.go and parse and execute one parses command
+// input parses resolver, parses package resolver, you can choose one from ['ini','erl']
+// input src file path correspond file need to be parse, such as 'test.ini' or 'test.erl'
+// any failure or error will output print to screen and exit process
 func ParseCmdParses() {
 	// check args number
 	if len(os.Args) == 2 {
@@ -57,6 +62,9 @@ func ParseCmdParses() {
 	fmt.Println("Parses success.")
 }
 
+// handleCmdParsesIni function
+// this function mainly handle the main flow of command
+// any error will break and exit
 func handleCmdParsesIni(src string, mode string, section string, name string, kind string, val string) (err error) {
 	// handle command parses ini
 	switch mode {
@@ -141,6 +149,9 @@ func handleCmdParsesIni(src string, mode string, section string, name string, ki
 	return err
 }
 
+// handleCmdParsesErl function
+// this function mainly handle the main flow of command
+// any error will break and exit
 func handleCmdParsesErl(src string, name string, kind string) (err error) {
 	// handle command parses erl
 	return err
