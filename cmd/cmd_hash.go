@@ -19,6 +19,11 @@ func init() {
 	hashCmd.StringVar(&hashType, "t", "", "hash type: one type of enum [md5, sha1, sha256, sha512]")
 }
 
+// ParseCmdHash function
+// this function will be called in main.go and parse and execute one hash command
+// input src string support sentences and file path, such as 'hello,world!' or '../data/hash/file.txt'
+// algorithm now support 'md5', 'sha1', 'sha256', 'sha512', you can send both up case and low case
+// any failure or error will output print to screen and exit process
 func ParseCmdHash() {
 	// check args number
 	if len(os.Args) == 2 {
@@ -42,6 +47,9 @@ func ParseCmdHash() {
 	fmt.Println("Hash calculate success.")
 }
 
+// handleCmdHash function
+// this function mainly handle the main flow of command
+// any error will break and exit
 func handleCmdHash(src string, algorithm string) (err error) {
 	// check parameters
 	is := checkHashParameters(src, algorithm)
@@ -58,6 +66,9 @@ func handleCmdHash(src string, algorithm string) (err error) {
 	return err
 }
 
+// checkHashParameters function
+// this function will check parameters legally
+// return true indicate check pass, otherwise check failed
 func checkHashParameters(src string, algorithm string) (is bool) {
 	// check input source
 	is = true
