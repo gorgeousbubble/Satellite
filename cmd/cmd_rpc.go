@@ -20,6 +20,12 @@ func init() {
 	rpcCmd.StringVar(&rpcProtocol, "protocol", "tcp", "protocol: rpc realize protocol, you can choose one from ['tcp','http']")
 }
 
+// ParseCmdRpc function
+// this function will be called in main.go and parse and execute one qrcode command
+// ip address support both IPv4 and IPv6, you can send parameter like 'localhost', '192.168.1.100', etc.
+// port is the integer number between 1~65535, please use the reserve port range (50000~65535), such as '55555'
+// protocol is the api name which you want to call
+// any failure or error will output print to screen and exit process
 func ParseCmdRpc() {
 	// check args number
 	if len(os.Args) == 2 {
@@ -36,6 +42,9 @@ func ParseCmdRpc() {
 	handleCmdRpc(rpcIp, rpcPort, rpcProtocol)
 }
 
+// handleCmdRpc function
+// this function mainly handle the main flow of command
+// any error will break and exit
 func handleCmdRpc(ip string, port string, protocol string) {
 	switch protocol {
 	case "tcp":
