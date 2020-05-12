@@ -25,6 +25,13 @@ func init() {
 	qrCmd.StringVar(&qrDest, "o", "", "output files: one file path of qrcode images which you want to save, such as \"../test/data/images/qr_satellite.png\"")
 }
 
+// ParseCmdQRCode function
+// this function will be called in main.go and parse and execute one qrcode command
+// content which want to be make to qrcode, usually it's a http or https link, when scan qrcode, user can visit web
+// level decide the picture's quality, you can choose one from enum ['Low', 'Medium', 'High', 'Highest']
+// size decide the picture's size, you can input the image size in this parameter
+// dest is the destination path which to save the picture file
+// any failure or error will output print to screen and exit process
 func ParseCmdQRCode() {
 	// check args number
 	if len(os.Args) == 2 {
@@ -48,6 +55,9 @@ func ParseCmdQRCode() {
 	fmt.Println("QRCode Generate success.")
 }
 
+// handleCmdQRCode function
+// this function mainly handle the main flow of command
+// any error will break and exit
 func handleCmdQRCode(content string, level string, size int, dest string) (err error) {
 	var qrlevel qrcode.RecoveryLevel
 	// check parameters
