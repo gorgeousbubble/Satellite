@@ -20,6 +20,11 @@ func init() {
 	tcpCmd.StringVar(&tcpMode, "mode", "server", "mode: tcp mode choose, 's' or 'server' indicate tcp server, 'c' or 'client' indicate tcp client")
 }
 
+// ParseCmdTcp function
+// this function will be called in main.go and parse and execute one tcp command
+// ip address support both IPv4 and IPv6, you can send parameter like 'localhost', '192.168.1.100', etc.
+// port is the integer number between 1~65535, please use the reserve port range (50000~65535), such as '55555'
+// any failure or error will output print to screen and exit process
 func ParseCmdTcp() {
 	// check args number
 	if len(os.Args) == 2 {
@@ -36,6 +41,9 @@ func ParseCmdTcp() {
 	handleCmdTcp(tcpIp, tcpPort, tcpMode)
 }
 
+// function handleCmdTcp
+// this function mainly handle the main flow of command
+// any error will break and exit
 func handleCmdTcp(ip string, port string, mode string) {
 	switch mode {
 	case "s", "server":
