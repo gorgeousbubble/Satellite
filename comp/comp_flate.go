@@ -6,6 +6,12 @@ import (
 	"log"
 )
 
+// CompressGzip function
+// input src byte stream, output dest byte stream, return error info
+// this function will use flate algorithm to compress stream
+// src stream should be byte slice stream, if input a string, please convert it first
+// dest stream should be byte slice stream, if input a string, please convert it first
+// return err indicate the success or failure function execute
 func CompressFlate(src []byte) (dest []byte, err error) {
 	// create new buffer
 	out := bytes.NewBuffer(nil)
