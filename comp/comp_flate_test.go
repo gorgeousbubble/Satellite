@@ -5,6 +5,7 @@ import (
 	"testing"
 )
 
+// TestCompressFlate function
 func TestCompressFlate(t *testing.T) {
 	src := []byte("hello,world!")
 	dest, err := CompressFlate(src)
@@ -15,6 +16,7 @@ func TestCompressFlate(t *testing.T) {
 	fmt.Println("The dest:", string(dest))
 }
 
+// BenchmarkCompressFlate function
 func BenchmarkCompressFlate(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		src := []byte("hello,world!")
