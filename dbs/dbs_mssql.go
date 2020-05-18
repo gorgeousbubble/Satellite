@@ -9,7 +9,7 @@ import (
 	_ "github.com/denisenkom/go-mssqldb"
 )
 
-// MYSQL Connect function
+// MSSQL Connect function
 // this function is mainly use to connect to MYSQL database
 // return err indicate the success or failure function execute
 func (db *TMSSQL) Connect() (err error) {
@@ -28,7 +28,7 @@ func (db *TMSSQL) Connect() (err error) {
 	return err
 }
 
-// MYSQL Close function
+// MSSQL Close function
 // this function is mainly use to close the connection of MYSQL database
 // return err indicate the success or failure function execute
 func (db *TMSSQL) Close() (err error) {
@@ -40,6 +40,10 @@ func (db *TMSSQL) Close() (err error) {
 	return err
 }
 
+// MSSQL QueryRow function
+// this function is mainly used to search user by user id segment
+// id is a number which define in structure 'TMSSQL'
+// return err indicate the success or failure function execute
 func (db *TMSSQL) QueryRow(id int64) (user TUser, err error) {
 	query := fmt.Sprintf("select * from %s where id=?", db.DataBase)
 	// query one row from database
@@ -51,6 +55,9 @@ func (db *TMSSQL) QueryRow(id int64) (user TUser, err error) {
 	return user, err
 }
 
+// MSSQL Query function
+// this function is mainly used to search user
+// return err indicate the success or failure function execute
 func (db *TMSSQL) Query() (users []TUser, err error) {
 	query := fmt.Sprintf("select * from %s", db.DataBase)
 	// query all rows from database
@@ -82,6 +89,10 @@ func (db *TMSSQL) Query() (users []TUser, err error) {
 	return users, err
 }
 
+// MSSQL Insert function
+// this function is mainly used to add user to database
+// input user instance 'TUser'
+// return err indicate the success or failure function execute
 func (db *TMSSQL) Insert(user TUser) (id int64, ra int64, err error) {
 	query := fmt.Sprintf("insert into %s(name,password) value(?,?)", db.DataBase)
 	// insert one row into database
@@ -105,6 +116,10 @@ func (db *TMSSQL) Insert(user TUser) (id int64, ra int64, err error) {
 	return id, ra, err
 }
 
+// MSSQL Update function
+// this function is mainly used to update a user in database
+// input user instance 'TUser'
+// return err indicate the success or failure function execute
 func (db *TMSSQL) Update(user TUser) (ra int64, err error) {
 	query := fmt.Sprintf("update %s set password=? where id=?", db.DataBase)
 	// update one row in database
@@ -122,6 +137,10 @@ func (db *TMSSQL) Update(user TUser) (ra int64, err error) {
 	return ra, err
 }
 
+// MSSQL Delete function
+// this function is mainly used to delete a user in database
+// input user instance 'TUser'
+// return err indicate the success or failure function execute
 func (db *TMSSQL) Delete(user TUser) (id int64, ra int64, err error) {
 	query := fmt.Sprintf("delete from %s where id=?", db.DataBase)
 	// delete one row in database
