@@ -9,6 +9,9 @@ import (
 	_ "github.com/denisenkom/go-mssqldb"
 )
 
+// MYSQL Connect function
+// this function is mainly use to connect to MYSQL database
+// return err indicate the success or failure function execute
 func (db *TMSSQL) Connect() (err error) {
 	// splice data source name
 	dsn := fmt.Sprintf("server=%s;port=%d;database=%s;user id=%s;password=%s", db.Host, db.Port, db.DataBase, db.User, db.Password)
@@ -25,6 +28,9 @@ func (db *TMSSQL) Connect() (err error) {
 	return err
 }
 
+// MYSQL Close function
+// this function is mainly use to close the connection of MYSQL database
+// return err indicate the success or failure function execute
 func (db *TMSSQL) Close() (err error) {
 	err = db.DB.Close()
 	if err != nil {
