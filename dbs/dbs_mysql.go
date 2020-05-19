@@ -9,6 +9,9 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
+// MYSQL Connect function
+// this function is mainly use to connect to MYSQL database
+// return err indicate the success or failure function execute
 func (db *TMySQL) Connect() (err error) {
 	// splice data source name
 	dsn := fmt.Sprintf("%s:%s@%s(%s:%d)/%s?charset=utf8", db.User, db.Password, db.Protocol, db.Host, db.Port, db.DataBase)
@@ -25,6 +28,9 @@ func (db *TMySQL) Connect() (err error) {
 	return err
 }
 
+// MSSQL Close function
+// this function is mainly use to close the connection of MYSQL database
+// return err indicate the success or failure function execute
 func (db *TMySQL) Close() (err error) {
 	err = db.DB.Close()
 	if err != nil {

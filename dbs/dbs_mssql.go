@@ -10,7 +10,7 @@ import (
 )
 
 // MSSQL Connect function
-// this function is mainly use to connect to MYSQL database
+// this function is mainly use to connect to MSSQL database
 // return err indicate the success or failure function execute
 func (db *TMSSQL) Connect() (err error) {
 	// splice data source name
@@ -29,7 +29,7 @@ func (db *TMSSQL) Connect() (err error) {
 }
 
 // MSSQL Close function
-// this function is mainly use to close the connection of MYSQL database
+// this function is mainly use to close the connection of MSSQL database
 // return err indicate the success or failure function execute
 func (db *TMSSQL) Close() (err error) {
 	err = db.DB.Close()
