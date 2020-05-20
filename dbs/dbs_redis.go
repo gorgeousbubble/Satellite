@@ -6,6 +6,9 @@ import (
 	"github.com/go-redis/redis"
 )
 
+// Redis Connect function
+// this function is mainly use to connect to Redis database
+// return err indicate the success or failure function execute
 func (db *TRedis) Connect() (err error) {
 	// create one new redis client
 	db.DB = redis.NewClient(&redis.Options{
