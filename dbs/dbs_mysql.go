@@ -9,6 +9,9 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
+// MYSQL Connect function
+// this function is mainly use to connect to MYSQL database
+// return err indicate the success or failure function execute
 func (db *TMySQL) Connect() (err error) {
 	// splice data source name
 	dsn := fmt.Sprintf("%s:%s@%s(%s:%d)/%s?charset=utf8", db.User, db.Password, db.Protocol, db.Host, db.Port, db.DataBase)
@@ -25,6 +28,9 @@ func (db *TMySQL) Connect() (err error) {
 	return err
 }
 
+// MYSQL Close function
+// this function is mainly use to close the connection of MYSQL database
+// return err indicate the success or failure function execute
 func (db *TMySQL) Close() (err error) {
 	err = db.DB.Close()
 	if err != nil {
@@ -34,6 +40,10 @@ func (db *TMySQL) Close() (err error) {
 	return err
 }
 
+// MYSQL QueryRow function
+// this function is mainly used to search user by user id segment
+// id is a number which define in structure 'TMySQL'
+// return err indicate the success or failure function execute
 func (db *TMySQL) QueryRow(id int64) (user TUser, err error) {
 	query := fmt.Sprintf("select * from %s where id=?", db.DataBase)
 	// query one row from database
@@ -45,6 +55,9 @@ func (db *TMySQL) QueryRow(id int64) (user TUser, err error) {
 	return user, err
 }
 
+// MYSQL Query function
+// this function is mainly used to search user
+// return err indicate the success or failure function execute
 func (db *TMySQL) Query() (users []TUser, err error) {
 	query := fmt.Sprintf("select * from %s", db.DataBase)
 	// query all rows from database
@@ -76,6 +89,10 @@ func (db *TMySQL) Query() (users []TUser, err error) {
 	return users, err
 }
 
+// MYSQL Insert function
+// this function is mainly used to add user to database
+// input user instance 'TUser'
+// return err indicate the success or failure function execute
 func (db *TMySQL) Insert(user TUser) (id int64, ra int64, err error) {
 	query := fmt.Sprintf("insert into %s(name,password) value(?,?)", db.DataBase)
 	// insert one row into database
@@ -99,6 +116,10 @@ func (db *TMySQL) Insert(user TUser) (id int64, ra int64, err error) {
 	return id, ra, err
 }
 
+// MYSQL Update function
+// this function is mainly used to update a user in database
+// input user instance 'TUser'
+// return err indicate the success or failure function execute
 func (db *TMySQL) Update(user TUser) (ra int64, err error) {
 	query := fmt.Sprintf("update %s set password=? where id=?", db.DataBase)
 	// update one row in database
@@ -116,6 +137,10 @@ func (db *TMySQL) Update(user TUser) (ra int64, err error) {
 	return ra, err
 }
 
+// MYSQL Delete function
+// this function is mainly used to delete a user in database
+// input user instance 'TUser'
+// return err indicate the success or failure function execute
 func (db *TMySQL) Delete(user TUser) (id int64, ra int64, err error) {
 	query := fmt.Sprintf("delete from %s where id=?", db.DataBase)
 	// delete one row in database

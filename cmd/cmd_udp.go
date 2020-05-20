@@ -20,6 +20,11 @@ func init() {
 	udpCmd.StringVar(&udpMode, "mode", "server", "mode: udp mode choose, 's' or 'server' indicate udp server, 'c' or 'client' indicate udp client")
 }
 
+// ParseCmdUdp function
+// this function will be called in main.go and parse and execute one udp command
+// ip address support both IPv4 and IPv6, you can send parameter like 'localhost', '192.168.1.100', etc.
+// port is the integer number between 1~65535, please use the reserve port range (50000~65535), such as '55555'
+// any failure or error will output print to screen and exit process
 func ParseCmdUdp() {
 	// check args number
 	if len(os.Args) == 2 {
@@ -36,6 +41,9 @@ func ParseCmdUdp() {
 	handleCmdUdp(udpIp, udpPort, udpMode)
 }
 
+// function handleCmdTcp
+// this function mainly handle the main flow of command
+// any error will break and exit
 func handleCmdUdp(ip string, port string, mode string) {
 	switch mode {
 	case "s", "server":

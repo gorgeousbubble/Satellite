@@ -21,6 +21,12 @@ func init() {
 	shellCmd.StringVar(&shellType, "t", "upx", "shell type: choose one shell type from enum [upx]")
 }
 
+// ParseCmdShell function
+// this function will be called in main.go and parse and execute one cmd command
+// src is a binary or exe file which will be shelled by shell algorithm, like upx
+// dest is a new file store path after binary or exe file shelled by shell algorithm
+// algorithm is shell algorithm enum list, now support ['upx']
+// any failure or error will output print to screen and exit process
 func ParseCmdShell() {
 	// check args number
 	if len(os.Args) == 2 {
@@ -44,6 +50,9 @@ func ParseCmdShell() {
 	fmt.Println("Shell success.")
 }
 
+// handleCmdShell function
+// this function mainly handle the main flow of command
+// any error will break and exit
 func handleCmdShell(src string, dest string, algorithm string) (err error) {
 	// check parameters
 	if src == "" {
