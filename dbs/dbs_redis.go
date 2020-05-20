@@ -26,6 +26,9 @@ func (db *TRedis) Connect() (err error) {
 	return err
 }
 
+// Redis Get function
+// this function is mainly use to get a value though a key
+// return err indicate the success or failure function execute
 func (db *TRedis) Get(key string) (value string, err error) {
 	value, err = db.DB.Get(key).Result()
 	if err == redis.Nil {
@@ -38,6 +41,9 @@ func (db *TRedis) Get(key string) (value string, err error) {
 	return value, err
 }
 
+// Redis Set function
+// this function is mainly use to set a value though a key
+// return err indicate the success or failure function execute
 func (db *TRedis) Set(key string, value interface{}) (err error) {
 	err = db.DB.Set(key, value, 0).Err()
 	if err != nil {
@@ -47,6 +53,9 @@ func (db *TRedis) Set(key string, value interface{}) (err error) {
 	return err
 }
 
+// Redis ping function
+// this function is mainly use to test whether database exist or not
+// return err indicate the success or failure function execute
 func (db *TRedis) ping() (err error) {
 	pong, err := db.DB.Ping().Result()
 	if err != nil {
