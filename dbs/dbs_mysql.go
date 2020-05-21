@@ -42,7 +42,7 @@ func (db *TMySQL) Close() (err error) {
 
 // MYSQL QueryRow function
 // this function is mainly used to search user by user id segment
-// id is a number which define in structure 'TMySQL'
+// id is a number which define in structure 'TUser'
 // return err indicate the success or failure function execute
 func (db *TMySQL) QueryRow(id int64) (user TUser, err error) {
 	query := fmt.Sprintf("select * from %s where id=?", db.DataBase)

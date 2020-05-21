@@ -40,6 +40,10 @@ func (db *TSQLite3) Close() (err error) {
 	return err
 }
 
+// SQLite3 QueryRow function
+// this function is mainly used to search user by user id segment
+// id is a number which define in structure 'TUser'
+// return err indicate the success or failure function execute
 func (db *TSQLite3) QueryRow(id int64) (user TUser, err error) {
 	query := fmt.Sprintf("select * from %s where id=?", db.DataBase)
 	// query one row from database
@@ -51,6 +55,9 @@ func (db *TSQLite3) QueryRow(id int64) (user TUser, err error) {
 	return user, err
 }
 
+// SQLite3 Query function
+// this function is mainly used to search user
+// return err indicate the success or failure function execute
 func (db *TSQLite3) Query() (users []TUser, err error) {
 	query := fmt.Sprintf("select * from %s", db.DataBase)
 	// query all rows from database
@@ -82,6 +89,10 @@ func (db *TSQLite3) Query() (users []TUser, err error) {
 	return users, err
 }
 
+// SQLite3 Insert function
+// this function is mainly used to add user to database
+// input user instance 'TUser'
+// return err indicate the success or failure function execute
 func (db *TSQLite3) Insert(user TUser) (id int64, ra int64, err error) {
 	query := fmt.Sprintf("insert into %s(name,password) value(?,?)", db.DataBase)
 	// insert one row into database
@@ -105,6 +116,10 @@ func (db *TSQLite3) Insert(user TUser) (id int64, ra int64, err error) {
 	return id, ra, err
 }
 
+// SQLite3 Update function
+// this function is mainly used to update a user in database
+// input user instance 'TUser'
+// return err indicate the success or failure function execute
 func (db *TSQLite3) Update(user TUser) (ra int64, err error) {
 	query := fmt.Sprintf("update %s set password=? where id=?", db.DataBase)
 	// update one row in database
@@ -122,6 +137,10 @@ func (db *TSQLite3) Update(user TUser) (ra int64, err error) {
 	return ra, err
 }
 
+// SQLite3 Delete function
+// this function is mainly used to delete a user in database
+// input user instance 'TUser'
+// return err indicate the success or failure function execute
 func (db *TSQLite3) Delete(user TUser) (id int64, ra int64, err error) {
 	query := fmt.Sprintf("delete from %s where id=?", db.DataBase)
 	// delete one row in database
