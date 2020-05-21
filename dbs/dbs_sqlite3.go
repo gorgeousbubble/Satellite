@@ -9,6 +9,9 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
+// SQLite3 Connect function
+// this function is mainly use to connect to SQLite3 database
+// return err indicate the success or failure function execute
 func (db *TSQLite3) Connect() (err error) {
 	// splice data source name
 	dsn := fmt.Sprintf("file:%s?cache=shared&mode=memory", db.DataBase)
@@ -25,6 +28,9 @@ func (db *TSQLite3) Connect() (err error) {
 	return err
 }
 
+// SQLite3 Close function
+// this function is mainly use to close the connection of SQLite3 database
+// return err indicate the success or failure function execute
 func (db *TSQLite3) Close() (err error) {
 	err = db.DB.Close()
 	if err != nil {
