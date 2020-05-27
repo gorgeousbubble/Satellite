@@ -12,3 +12,5 @@ The package is mainly used for connect to database which has been realized by 'd
   * Support various databases which has been operated by 'dbs' package, like SQLServer, MySQL, SQLite3, Redis, etc.
   * Similar interfaces and methods
   * Useful and effective
+
+  ## Usage of interfaces
