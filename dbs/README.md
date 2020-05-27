@@ -13,4 +13,9 @@ The package is mainly used for connect to database which has been realized by 'd
   * Similar interfaces and methods
   * Useful and effective
 
-  ## Usage of interfaces
+## Usage of interfaces
+  * When you first connect to database, you can call method 'Connect(...)' to connect to database.
+  * When program finished or need close connection with database, you can call method 'Close(...)' to disconnect with database.
+  * You can call 'Insert', 'Update', 'Delete' functions to operate the database.
+  * If you want to get data from database, please use 'Query' or 'QueryRow' to fetch the data from database.
+  * It just a demo of database operation, you may extend the interfaces when you want to use function futher more.
