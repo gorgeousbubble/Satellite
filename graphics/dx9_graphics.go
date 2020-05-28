@@ -67,6 +67,11 @@ func (dx9 *DX9Graphics) Create() (err error) {
 	return err
 }
 
+// DX9Graphics Release function
+// this function is mainly used to Release an instance for DX9 Graphics
+// when you use DX9, this function should be called as last function to release all resources
+// first you should release all DX9Graphics resources, then call 'Release' function
+// return err indicate the success or failure function execute
 func (dx9 *DX9Graphics) Release() {
 	defer dx9.D3D9.Release()
 }
