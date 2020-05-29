@@ -9,6 +9,13 @@ import (
 	"github.com/jlaffaye/ftp"
 )
 
+// StartFtpClient function
+// this function is mainly used to start ftp client
+// host is the ip address of host machine
+// user is the user name of ftp server
+// pass is the password of ftp server
+// if connect successful it will return the ftp server connection handle, else it will be nil
+// return err indicate the success or failure function execute
 func StartFtpClient(host string, user string, pass string) (c *ftp.ServerConn, err error) {
 	// connect to ftp server
 	c, err = ftp.Dial(host+":21", ftp.DialWithTimeout(5*time.Second))
