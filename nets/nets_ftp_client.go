@@ -34,6 +34,9 @@ func StartFtpClient(host string, user string, pass string) (c *ftp.ServerConn, e
 	return c, err
 }
 
+// StopFtpClient function
+// this function is mainly used to stop the connection with ftp
+// return err indicate the success or failure function execute
 func StopFtpClient(c *ftp.ServerConn) (err error) {
 	err = c.Quit()
 	if err != nil {
