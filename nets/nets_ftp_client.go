@@ -47,6 +47,11 @@ func StopFtpClient(c *ftp.ServerConn) (err error) {
 	return err
 }
 
+// UploadFile function
+// this function is mainly used to Upload the file to ftp server
+// input ServerConn
+// path indicate the file path which you want to upload
+// return err indicate the success or failure function execute
 func UploadFile(c *ftp.ServerConn, path string, r io.Reader) (err error) {
 	err = c.Stor(path, r)
 	if err != nil {
@@ -57,6 +62,11 @@ func UploadFile(c *ftp.ServerConn, path string, r io.Reader) (err error) {
 	return err
 }
 
+// DownloadFile function
+// this function is mainly used to Download the file from ftp server
+// input ServerConn
+// path indicate the file path which you want to upload
+// return err indicate the success or failure function execute
 func DownloadFile(c *ftp.ServerConn, path string) (r io.Reader, err error) {
 	r, err = c.Retr(path)
 	if err != nil {
