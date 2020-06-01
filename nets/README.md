@@ -6,3 +6,13 @@ Nets package is a functional package. It can offer different kind of network con
 
 ## Feature of package
 The package is mainly used for network connection which has been realized by 'nets' package. You can refer to corresponding go file.
+
+#### Interface of nets
+  * The nets package offer interfaces let program easy to realize network connection
+  * Support TCP/UDP server and client
+  * Support HTTP/HTTPS server and client
+  * Support FTP service
+  * support RPC service
+  * Support SMTP/POP3/GMAIL send and receive e-mail
+  * Support interfaces to allow external application to interactive with Satellite
+  * Useful and effective
