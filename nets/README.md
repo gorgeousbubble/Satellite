@@ -30,4 +30,32 @@ There are some constant defined in file 'global/const.go', mainly about HTTP/HTT
 ## Usage of interfaces
 There are many interfaces in nets package. You can refer to corresponding golang file in order to find futher more function.
 
+#### Start TCP Service
+  * Start TCP Server
+  ```batch
+  func TestStartTcpServer(t *testing.T) {
+	ip := "127.0.0.1"
+	port := "11514"
+	// skip this test case
+	t.Skip("IGNORE: TestStartTcpServer")
+	// start tcp server goroutine
+	go StartTcpServer(ip, port)
+	// start tcp client...
+	StartTcpClient(ip, port)
+  }
+  ```
+  
+  * Start TCP Client
+  ```batch
+  func TestStartTcpClient(t *testing.T) {
+	ip := "127.0.0.1"
+	port := "11515"
+	// skip this test case
+	t.Skip("IGNORE: TestStartTcpClient")
+	// start tcp server goroutine
+	go StartTcpServer(ip, port)
+	// start tcp client...
+	StartTcpClient(ip, port)
+  }
+  ```
 
