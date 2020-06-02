@@ -5,6 +5,7 @@ import (
 	"testing"
 )
 
+// TestExecCmd function
 func TestExecCmd(t *testing.T) {
 	s := "cmd"
 	r, err := ExecCmd(s)
@@ -14,6 +15,7 @@ func TestExecCmd(t *testing.T) {
 	fmt.Println(r)
 }
 
+// TestExecCmd2 function
 func TestExecCmd2(t *testing.T) {
 	s := "mstsc"
 	r, err := ExecCmd(s)
@@ -23,6 +25,7 @@ func TestExecCmd2(t *testing.T) {
 	fmt.Println(r)
 }
 
+// TestExecCmd3 function
 func TestExecCmd3(t *testing.T) {
 	s := "dxdiag"
 	r, err := ExecCmd(s)
@@ -32,6 +35,7 @@ func TestExecCmd3(t *testing.T) {
 	fmt.Println(r)
 }
 
+// BenchmarkExecCmd function
 func BenchmarkExecCmd(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		s := "cmd"

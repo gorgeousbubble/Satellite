@@ -15,6 +15,11 @@ type DX9Graphics struct {
 	Height uint32
 }
 
+// DX9Graphics Create function
+// this function is mainly used to Create an instance for DX9 Graphics
+// when you use DX9, this function should be called before other operations
+// first you should create a DX9Graphics instance, then call 'Create' function
+// return err indicate the success or failure function execute
 func (dx9 *DX9Graphics) Create() (err error) {
 	var vp uint32
 	// create d3d9 instance
@@ -62,6 +67,11 @@ func (dx9 *DX9Graphics) Create() (err error) {
 	return err
 }
 
+// DX9Graphics Release function
+// this function is mainly used to Release an instance for DX9 Graphics
+// when you use DX9, this function should be called as last function to release all resources
+// first you should release all DX9Graphics resources, then call 'Release' function
+// return err indicate the success or failure function execute
 func (dx9 *DX9Graphics) Release() {
 	defer dx9.D3D9.Release()
 }
