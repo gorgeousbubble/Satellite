@@ -17,6 +17,13 @@ The package is mainly used for network connection which has been realized by 'ne
   * Support interfaces to allow external application to interactive with Satellite
   * Useful and effective
 
+#### HTTP/HTTPS service support application API
+  * Encrypt/Decrypt files
+  * Pack/Unpack files
+  * Compress/Decompress files
+  * QR-Code Generator
+  * Parse documents
+
 ## External definitions
 There are some constant defined in file 'global/const.go', mainly about HTTP/HTTPS service URI. You can redefine it in 'nets' package it you want to use this package independence.
 
