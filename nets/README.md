@@ -72,3 +72,17 @@ There are many interfaces in nets package. You can refer to corresponding golang
 	StartUdpClient(ip, port)
   }
   ```
+
+  * Start UDP Client
+  ```batch
+  func TestStartUdpClient(t *testing.T) {
+	ip := "127.0.0.1"
+	port := "12515"
+	// skip this test case
+	t.Skip("IGNORE: TestStartUdpClient")
+	// start udp server goroutine
+	go StartUdpServer(ip, port)
+	// start udp client...
+	StartUdpClient(ip, port)
+  }
+  ```
