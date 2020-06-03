@@ -98,3 +98,15 @@ There are many interfaces in nets package. You can refer to corresponding golang
 	StartHttpServer(ip, port)
   }
   ```
+
+  * Start HTTPS Server
+  ```batch
+  func TestStartHttpsServer(t *testing.T) {
+	ip := "127.0.0.1"
+	port := "12514"
+	// skip this test case
+	t.Skip("IGNORE: TestStartHttpsServer")
+	// start https server
+	StartHttpsServer(ip, port)
+  }
+  ```
