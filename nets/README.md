@@ -86,3 +86,15 @@ There are many interfaces in nets package. You can refer to corresponding golang
 	StartUdpClient(ip, port)
   }
   ```
+
+  * Start HTTP Server
+  ```batch
+  func TestStartHttpServer(t *testing.T) {
+	ip := "127.0.0.1"
+	port := "12514"
+	// skip this test case
+	t.Skip("IGNORE: TestStartHttpServer")
+	// start http server
+	StartHttpServer(ip, port)
+  }
+  ```
