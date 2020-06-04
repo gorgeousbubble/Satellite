@@ -110,6 +110,24 @@ There are many interfaces in nets package. You can refer to corresponding golang
 	StartHttpsServer(ip, port)
   }
   ```
+
+  * Start HTTP/HTTPS Client  
+  for HTTP client, you can use the interfaces in 'http' go package.  
+  for HTTPS client, you should define a httpClient first and modify it's configure like this:
+  ```batch
+  var httpsClient *http.Client
+
+  func init() {
+	 tr := &http.Transport{
+		TLSClientConfig: &tls.Config{
+			InsecureSkipVerify: true,
+		},
+	}
+	httpsClient = &http.Client{
+		Transport: tr,
+	}
+  }
+  ```
   
   * Start FTP Server
   ```batch
