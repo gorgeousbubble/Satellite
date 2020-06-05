@@ -246,7 +246,28 @@ There are many interfaces in nets package. You can refer to corresponding golang
 			fmt.Println("RPC client connect to server:", conn.RemoteAddr())
 		}(conn)
 	}
-}
+  }
+  ```
+
+  * Start RPC Client - RPC Call Procedures
+  ```batch
+  func TestHttpCallRpcApiMD5Encode(t *testing.T) {
+	ip := "127.0.0.1"
+	port := "12000"
+	request := TNetsRpcPackMD5EncodeReq{Src: "Satellite"}
+	response := TNetsRpcPackMD5EncodeResp{}
+	// skip this test case
+	t.Skip("IGNORE: TestHttpCallRpcApiMD5Encode")
+	// start rpc http server...
+	go StartRpcHttpServer(ip, port)
+	// start rpc http client call function
+	err := RpcHttpClientCall(ip, port, "GoApi.MD5Encode", request, &response)
+	if err != nil {
+		t.Fatal("Error rpc http call function:", err)
+	}
+	fmt.Println("Rpc request:", request)
+	fmt.Println("Rpc response:", response)
+  }
   ```
 
 #### Start SMTP/POP3/GOMAIL Service
