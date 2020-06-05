@@ -186,7 +186,7 @@ There are many interfaces in nets package. You can refer to corresponding golang
   ```
 
 #### Start RPC Service
-  * Start RPC Server(HTTP)
+  * Start RPC Server (HTTP)
   ```batch
   func StartRpcHttpServer(ip string, port string) {
 	// rpc register interface...
@@ -214,6 +214,39 @@ There are many interfaces in nets package. You can refer to corresponding golang
 		os.Exit(1)
 	}
   }
+  ```
+
+  * Start RPC Server (TCP)
+  ```batch
+  func StartRpcTcpServer(ip string, port string) {
+	// rpc register interface...
+	err := rpc.Register(new(GoApi))
+	if err != nil {
+		fmt.Println("Error RPC register interface:", err)
+		log.Println("Error RPC register interface:", err)
+		os.Exit(1)
+	}
+	// rpc start tcp service...
+	l, err := net.Listen("tcp", ip+":"+port)
+	if err != nil {
+		fmt.Println("Error listen tcp:", err)
+		log.Println("Error listen tcp:", err)
+		os.Exit(1)
+	}
+	fmt.Println("Start Listen And Server on ", ip+":"+port)
+	for {
+		// client connect to server...
+		conn, err := l.Accept()
+		if err != nil {
+			continue
+		}
+		// handle json transfer
+		go func(conn net.Conn) {
+			jsonrpc.ServeConn(conn)
+			fmt.Println("RPC client connect to server:", conn.RemoteAddr())
+		}(conn)
+	}
+}
   ```
 
 #### Start SMTP/POP3/GOMAIL Service
