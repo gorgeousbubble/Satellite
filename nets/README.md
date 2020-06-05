@@ -131,7 +131,7 @@ There are many interfaces in nets package. You can refer to corresponding golang
   }
   ```
   
-  #### Start FTP Service
+#### Start FTP Service
   * Start FTP Server
   ```batch
   func TestStartFtpServer(t *testing.T) {
@@ -182,5 +182,36 @@ There are many interfaces in nets package. You can refer to corresponding golang
 		panic(err)
 	}
 	return r, err
+  }
+  ```
+
+#### Start SMTP/POP3/GOMAIL Service
+  * Start SMTP Server
+  ```batch
+  func TestMailSmtpSend(t *testing.T) {
+	mail := MailSmtp{
+		user:     "1029535012@qq.com",
+		password: "amdepjytfocvbfbc",
+		host:     "smtp.qq.com",
+		port:     "465",
+	}
+	message := Message{
+		from:        "1029535012@qq.com",
+		to:          []string{"alopex6414@outlook.com", "1029535012@qq.com"},
+		cc:          []string{},
+		bcc:         []string{},
+		subject:     "Satellite",
+		body:        "hello,world!(Automatic send by Satellite smpt client.)",
+		contentType: "text/plain;charset=utf-8",
+		attachment: Attachment{
+			name:        "test.jpg",
+			contentType: "image/jpg",
+			withFile:    false,
+		},
+	}
+	err := mail.SendTLS(message)
+	if err != nil {
+		t.Errorf("Error send stmp mail:%v", err)
+	}
   }
   ```
