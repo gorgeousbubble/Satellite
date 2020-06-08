@@ -28,6 +28,13 @@ The package is mainly used for network connection which has been realized by 'ne
 There are some constant defined in file 'global/const.go', mainly about HTTP/HTTPS service URI. You can redefine it in 'nets' package it you want to use this package independence.
 
 ## Restful API list
+There are the API list of the http/https service restful.
+
+  | URL                  | Request Type  | Package  | Description             |
+  | -------------------- |:-------------:|:--------:| :---------------------: |
+  | {apiroot}/pack       | POST          | pack     | pack packages           |
+  | Linux                | adm64         | 1.13.6 ▲ | go1.13.6 linux/amd64    |
+  | Linux                | arm           | 1.13.6 ▲ | go1.13.6 linux/arm      |
 
 ## Usage of interfaces
 There are many interfaces in nets package. You can refer to corresponding golang file in order to find futher more function.
