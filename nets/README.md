@@ -27,6 +27,8 @@ The package is mainly used for network connection which has been realized by 'ne
 ## External definitions
 There are some constant defined in file 'global/const.go', mainly about HTTP/HTTPS service URI. You can redefine it in 'nets' package it you want to use this package independence.
 
+## Restful API list
+
 ## Usage of interfaces
 There are many interfaces in nets package. You can refer to corresponding golang file in order to find futher more function.
 
