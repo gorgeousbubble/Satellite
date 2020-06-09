@@ -33,7 +33,7 @@ There are the API list of the http/https service restful.
   | URL                  | Request Type  | Package  | Description             |
   | -------------------- |:-------------:|:--------:| :---------------------: |
   | {apiroot}/pack       | POST          | pack     | pack packages           |
-  | Linux                | adm64         | 1.13.6 ▲ | go1.13.6 linux/amd64    |
+  | {apiroot}/unpak      | POST          | unpack   | unpack packages         |
   | Linux                | arm           | 1.13.6 ▲ | go1.13.6 linux/arm      |
 
 ## Usage of interfaces
