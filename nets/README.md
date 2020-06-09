@@ -33,8 +33,8 @@ There are the API list of the http/https service restful.
   | URL                  | Request Type  | Package  | Description             |
   | -------------------- |:-------------:|:--------:| :---------------------: |
   | {apiroot}/pack       | POST          | pack     | pack packages           |
+  | {apiroot}/pack/p     | POST/GET      | pack     | check pack process      |
   | {apiroot}/unpak      | POST          | unpack   | unpack packages         |
-  | Linux                | arm           | 1.13.6 ▲ | go1.13.6 linux/arm      |
 
 ## Usage of interfaces
 There are many interfaces in nets package. You can refer to corresponding golang file in order to find futher more function.
