@@ -35,6 +35,7 @@ There are the API list of the http/https service restful.
   | {apiroot}/pack       | POST          | pack     | pack packages           |
   | {apiroot}/pack/p     | POST/GET      | pack     | check pack process      |
   | {apiroot}/unpak      | POST          | unpack   | unpack packages         |
+  | {apiroot}/unpak/v    | POST/GET      | unpack   | unpack package verbose  |
 
 ## Usage of interfaces
 There are many interfaces in nets package. You can refer to corresponding golang file in order to find futher more function.
