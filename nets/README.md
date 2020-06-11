@@ -30,15 +30,17 @@ There are some constant defined in file 'global/const.go', mainly about HTTP/HTT
 ## Restful API list
 There are the API list of the http/https service restful.
 
-  | URL                  | Request Type  | Package  | Description                           |
-  | -------------------- |:-------------:|:--------:| :-----------------------------------: |
-  | {apiroot}/pack       | POST          | pack     | pack packages                         |
-  | {apiroot}/pack/p     | POST/GET      | pack     | check pack process                    |
-  | {apiroot}/unpak      | POST          | unpack   | unpack packages                       |
-  | {apiroot}/unpak/v    | POST/GET      | unpack   | unpack package verbose                |
-  | {apiroot}/unpak/p    | POST/GET      | unpack   | check unpack process                  |
-  | {apiroot}/unpak/c    | POST          | unpack   | unpack package restrict go routine    |
-  | {apiroot}/unpak/f    | POST          | unpack   | unpack package to file                |
+  | URL                  | Request Type  | Package  | Description                                   |
+  | -------------------- |:-------------:|:--------:| :-------------------------------------------: |
+  | {apiroot}/pack       | POST          | pack     | pack packages                                 |
+  | {apiroot}/pack/p     | POST/GET      | pack     | check pack process                            |
+  | {apiroot}/unpak      | POST          | unpack   | unpack packages                               |
+  | {apiroot}/unpak/v    | POST/GET      | unpack   | unpack package verbose                        |
+  | {apiroot}/unpak/p    | POST/GET      | unpack   | check unpack process                          |
+  | {apiroot}/unpak/c    | POST          | unpack   | unpack package restrict go routine            |
+  | {apiroot}/unpak/f    | POST          | unpack   | unpack package to file                        |
+  | {apiroot}/unpak/cf   | POST          | unpack   | unpack package to file restrict go routine    |
+  | {apiroot}/unpak/m    | POST          | unpack   | unpack package to memory                      |
 
 ## Usage of interfaces
 There are many interfaces in nets package. You can refer to corresponding golang file in order to find futher more function.
