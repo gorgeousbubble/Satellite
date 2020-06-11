@@ -2,7 +2,7 @@
 The Nets package function interfaces description.
 
 ## Introduction
-Nets package is a functional package. It can offer different kind of network connection drive interfaces. You can use this package to realize network connection, e-main send and receive, HTTP/HTTPS service and client, and so on. Nets package based on the go 'net' package, it support multiple network protocols such as TCP, UDP HTTP, HTTPS, FTP, RPC, SMTP, POP3, etc.
+Nets package is a functional package. It can offer different kind of network connection drive interfaces. You can use this package to realize network connection, e-mail send and receive, HTTP/HTTPS service and client, and so on. Nets package based on the go 'net' package, it support multiple network protocols such as TCP, UDP HTTP, HTTPS, FTP, RPC, SMTP, POP3, etc.
 
 ## Feature of package
 The package is mainly used for network connection which has been realized by 'nets' package. You can refer to corresponding go file.
@@ -41,7 +41,8 @@ There are the API list of the http/https service restful.
   | {apiroot}/unpak/f    | POST          | unpack   | unpack package to file                        |
   | {apiroot}/unpak/cf   | POST          | unpack   | unpack package to file restrict go routine    |
   | {apiroot}/unpak/m    | POST          | unpack   | unpack package to memory                      |
-  | {apiroot}/comp       | POST          | comp     | compress file to achieve                      |
+  | {apiroot}/comp       | POST          | comp     | compress files to achieve                     |
+  | {apiroot}/decomp     | POST          | decomp   | decompress achieve to files                   |
 
 ## Usage of interfaces
 There are many interfaces in nets package. You can refer to corresponding golang file in order to find futher more function.
