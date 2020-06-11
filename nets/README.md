@@ -41,6 +41,7 @@ There are the API list of the http/https service restful.
   | {apiroot}/unpak/f    | POST          | unpack   | unpack package to file                        |
   | {apiroot}/unpak/cf   | POST          | unpack   | unpack package to file restrict go routine    |
   | {apiroot}/unpak/m    | POST          | unpack   | unpack package to memory                      |
+  | {apiroot}/comp       | POST          | comp     | compress file to achieve                      |
 
 ## Usage of interfaces
 There are many interfaces in nets package. You can refer to corresponding golang file in order to find futher more function.
