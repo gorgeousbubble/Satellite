@@ -10,3 +10,9 @@ func Blake2bEncode256(src string) string {
 	h.Write([]byte(src))
 	return hex.EncodeToString(h.Sum(nil))
 }
+
+func Blake2bEncode512(src string) string {
+	h := blake2b.New512()
+	h.Write([]byte(src))
+	return hex.EncodeToString(h.Sum(nil))
+}
