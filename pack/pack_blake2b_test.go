@@ -5,6 +5,15 @@ import (
 	"testing"
 )
 
+func TestBlake2bEncode128(t *testing.T) {
+	src := "hello,world!"
+	r := Blake2bEncode128(src)
+	err := ioutil.WriteFile("../test/data/pack/file_blake2b_128.txt", []byte(r), 0644)
+	if err != nil {
+		t.Fatal("Error Write blake2b Encode:", err)
+	}
+}
+
 func TestBlake2bEncode256(t *testing.T) {
 	src := "hello,world!"
 	r := Blake2bEncode256(src)
