@@ -22,3 +22,11 @@ func Blake2bEncode512(src string) string {
 	h.Write([]byte(src))
 	return hex.EncodeToString(h.Sum(nil))
 }
+
+func Blake2bCheck128(src string, dest string) bool {
+	b := false
+	if Blake2bEncode128(src) == dest {
+		b = true
+	}
+	return b
+}
