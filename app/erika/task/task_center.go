@@ -54,30 +54,17 @@ func (tc *TaskCenter) Discovery(dir string) (err error) {
 	// unmarshal file
 	for _, v := range files {
 		// prepare for data parse
-		s := parse.TAutoExec{}
 		path := dir + "/" + v.Name()
-		// unmarshal data to struct
-		err = parse.Unmarshal(path, &s)
-		if err != nil {
-			logs.Info("Error Unmarshal file:", err)
+		// handle auto exec
+		err = tc.handleAutoExec(path)
+		if err == nil {
 			continue
 		}
-		// append task to manager...
-		err = tc.M.AppendTask(s.Id, &s)
-		if err != nil {
-			logs.Error("Error append task to manager:", err)
+		// handle auto monitor
+		err = tc.handleAutoMonitor(path)
+		if err == nil {
 			continue
 		}
-		// create task process...
-		var location string
-		var commands []string
-		location = s.Attribute.Location
-		for _, v := range s.Task.Exec {
-			commands = append(commands, v.Command)
-		}
-		tc.Create(s.Schedule, func() { proc.HandleAutoExec(location, commands) })
-		err = nil
-		continue
 	}
 	return err
 }
@@ -96,5 +83,51 @@ func Run() (err error) {
 	// do something else at during that time...
 	// todo
 	time.Sleep(time.Minute * 5)
+	return err
+}
+
+func (tc *TaskCenter) handleAutoExec(path string) (err error) {
+	// prepare for data parse
+	s := parse.TAutoExec{}
+	// unmarshal data to struct
+	err = parse.UnmarshalAutoExec(path, &s)
+	if err != nil {
+		logs.Info("Error Unmarshal file:", err)
+		return err
+	}
+	// append task to manager...
+	err = tc.M.AppendTask(s.Id, &s)
+	if err != nil {
+		logs.Error("Error append task to manager:", err)
+		return err
+	}
+	// create task process...
+	var location string
+	var commands []string
+	location = s.Attribute.Location
+	for _, v := range s.Task.Exec {
+		commands = append(commands, v.Command)
+	}
+	_ = tc.Create(s.Schedule, func() { _ = proc.HandleAutoExec(location, commands) })
+	return err
+}
+
+func (tc *TaskCenter) handleAutoMonitor(path string) (err error) {
+	// prepare for data parse
+	s := parse.TAutoMonitor{}
+	// unmarshal data to struct
+	err = parse.UnmarshalAutoMonitor(path, &s)
+	if err != nil {
+		logs.Info("Error Unmarshal file:", err)
+		return err
+	}
+	// append task to manager...
+	err = tc.M.AppendTask(s.Id, &s)
+	if err != nil {
+		logs.Error("Error append task to manager:", err)
+		return err
+	}
+	// create task process...
+	_ = tc.Create(s.Schedule, func() { _ = proc.HandleAutoMonitor(s.Attribute.Location, s.Attribute.Period, s.Attribute.Format, s.Attribute.Width, s.Attribute.Height) })
 	return err
 }
