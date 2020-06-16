@@ -64,3 +64,12 @@ func BenchmarkBlake2bEncode512(b *testing.B) {
 		}
 	}
 }
+
+func TestBlake2bCheck128(t *testing.T) {
+	src := "hello,world!"
+	dest := "1748e3d0f53508245851db4571424eee"
+	r := Blake2bCheck128(src, dest)
+	if !r {
+		t.Fatal("Error check blake2b 128 encode:", r)
+	}
+}

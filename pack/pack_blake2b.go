@@ -39,9 +39,9 @@ func Blake2bCheck256(src string, dest string) bool {
 	return b
 }
 
-func Blake2bEncode512(src string, dest string) bool {
+func Blake2bCheck512(src string, dest string) bool {
 	b := false
-	if Blake2bEncode256(src) == dest {
+	if Blake2bEncode512(src) == dest {
 		b = true
 	}
 	return b
