@@ -73,3 +73,12 @@ func TestBlake2bCheck128(t *testing.T) {
 		t.Fatal("Error check blake2b 128 encode:", r)
 	}
 }
+
+func TestBlake2bCheck256(t *testing.T) {
+	src := "hello,world!"
+	dest := "8268578331a07de98347abd8cf11addf924a4ea0ac75e4aec1bf3fe6cb314553"
+	r := Blake2bCheck256(src, dest)
+	if !r {
+		t.Fatal("Error check blake2b 256 encode:", r)
+	}
+}
