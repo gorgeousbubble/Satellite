@@ -21,3 +21,20 @@ type TAutoExecTask struct {
 type TAutoExecTaskCommand struct {
 	Command string `json:"command" yaml:"command"`
 }
+
+// Auto monitor task template structure
+type TAutoMonitor struct {
+	Name        string                `json:"name" yaml:"name"`
+	Id          string                `json:"id" yaml:"id"`
+	Description string                `json:"description" yaml:"description"`
+	Schedule    string                `json:"schedule" yaml:"schedule"`
+	Attribute   TAutoMonitorAttribute `json:"attribute" yaml:"attribute"`
+}
+
+type TAutoMonitorAttribute struct {
+	Location string `json:"location" yaml:"location"`
+	Period   string `json:"period" yaml:"period"`
+	Format   string `json:"format" yaml:"format"`
+	Width    string `json:"width" yaml:"width"`
+	Height   string `json:"height" yaml:"height"`
+}

@@ -1,0 +1,13 @@
+{
+  "name": "auto_rasp_monitor",
+  "id": "759a42e046b8e6604bf6f7635c0f98d3a429a5b0",
+  "description": "Automatic monitor room by raspberry camera.",
+  "schedule": "@hourly",
+  "attribute": {
+    "location": "/home/pi/monitor",
+    "period": "600000",
+    "format": "h264",
+    "width": "1920",
+    "height": "1080"
+  }
+}
