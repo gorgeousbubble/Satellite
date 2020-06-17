@@ -74,6 +74,17 @@ func TestBlake2bCheck128(t *testing.T) {
 	}
 }
 
+func BenchmarkBlake2bCheck128(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		src := "hello,world!"
+		dest := "1748e3d0f53508245851db4571424eee"
+		r := Blake2bCheck128(src, dest)
+		if !r {
+			b.Fatal("Error check blake2b 128 encode:", r)
+		}
+	}
+}
+
 func TestBlake2bCheck256(t *testing.T) {
 	src := "hello,world!"
 	dest := "8268578331a07de98347abd8cf11addf924a4ea0ac75e4aec1bf3fe6cb314553"
