@@ -44,7 +44,7 @@ func unmarshalAutoMonitor(path string, out *TAutoMonitor, style string) (err err
 		}
 	}
 	// show conversion result
-	logs.Info("Unmarshal Auto Exec successfully.")
+	logs.Info("Unmarshal Auto Monitor successfully.")
 	return err
 }
 
@@ -78,6 +78,6 @@ func marshalAutoMonitor(path string, in *TAutoMonitor, style string) (err error)
 		return err
 	}
 	// show conversion result
-	logs.Info("Marshal Auto Exec successfully.")
+	logs.Info("Marshal Auto Monitor successfully.")
 	return err
 }

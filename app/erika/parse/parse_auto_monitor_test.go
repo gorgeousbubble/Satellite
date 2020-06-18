@@ -8,7 +8,7 @@ func TestUnmarshalAutoMonitorJson(t *testing.T) {
 	out := TAutoMonitor{}
 	err := unmarshalAutoMonitor(path, &out, style)
 	if err != nil {
-		t.Fatal("Error unmarshal monitor exec:", err)
+		t.Fatal("Error unmarshal auto monitor:", err)
 	}
 }
 
@@ -19,7 +19,7 @@ func BenchmarkUnmarshalAutoMonitorJson(b *testing.B) {
 		out := TAutoMonitor{}
 		err := unmarshalAutoMonitor(path, &out, style)
 		if err != nil {
-			b.Fatal("Error unmarshal monitor exec:", err)
+			b.Fatal("Error unmarshal auto monitor:", err)
 		}
 	}
 }
