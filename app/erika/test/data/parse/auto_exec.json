@@ -1,24 +1,13 @@
 {
-	"name": "auto_exec_sync_git",
-	"description": "Automatic synchronization Git with remote repository.",
+	"name": "auto_rasp_monitor",
+	"id": "",
+	"description": "Automatic monitor room by raspberry camera.",
 	"schedule": "@hourly",
 	"attribute": {
-		"location": "/home/pi/repos/satellite"
-	},
-	"task": {
-		"exec": [
-			{
-				"command": "git pull gogs master"
-			},
-			{
-				"command": "git add ."
-			},
-			{
-				"command": "git commit -m 'Automatic Commit by Erika.'"
-			},
-			{
-				"command": "git push gogs master"
-			}
-		]
+		"location": "/home/pi/monitor",
+		"period": "600000",
+		"format": "h264",
+		"width": "1920",
+		"height": "1080"
 	}
 }
