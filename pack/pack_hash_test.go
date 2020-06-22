@@ -88,3 +88,33 @@ func BenchmarkPackHashEncodeSHA512(b *testing.B) {
 		}
 	}
 }
+
+func TestPackHashEncodeBlake2b128(t *testing.T) {
+	src := "hello,world!"
+	algorithm := "blake2b128"
+	dest, err := PackHashEncode(src, algorithm)
+	if err != nil {
+		t.Fatal("Error pack hash encode:", err)
+	}
+	fmt.Println("Hash blake2b encode:", dest)
+}
+
+func TestPackHashEncodeBlake2b256(t *testing.T) {
+	src := "hello,world!"
+	algorithm := "blake2b256"
+	dest, err := PackHashEncode(src, algorithm)
+	if err != nil {
+		t.Fatal("Error pack hash encode:", err)
+	}
+	fmt.Println("Hash blake2b encode:", dest)
+}
+
+func TestPackHashEncodeBlake2b512(t *testing.T) {
+	src := "hello,world!"
+	algorithm := "blake2b512"
+	dest, err := PackHashEncode(src, algorithm)
+	if err != nil {
+		t.Fatal("Error pack hash encode:", err)
+	}
+	fmt.Println("Hash blake2b encode:", dest)
+}
