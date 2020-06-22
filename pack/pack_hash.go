@@ -22,6 +22,12 @@ func PackHashEncode(src string, algorithm string) (dest string, err error) {
 		dest = SHA256Encode(src)
 	case "SHA512", "sha512":
 		dest = SHA512Encode(src)
+	case "BLAKE2B128", "blake2b128":
+		dest = Blake2bEncode128(src)
+	case "BLAKE2B256", "blake2b256":
+		dest = Blake2bEncode256(src)
+	case "BLAKE2B512", "blake2b512":
+		dest = Blake2bEncode512(src)
 	default:
 		s := fmt.Sprint("Undefined hash algorithm.")
 		err = errors.New(s)
