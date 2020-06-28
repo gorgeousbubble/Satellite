@@ -263,3 +263,16 @@ func BenchmarkPackHashCheckSHA512(b *testing.B) {
 		}
 	}
 }
+
+func TestPackHashCheckBlake2b128(t *testing.T) {
+	src := "hello,world!"
+	dest := "1748e3d0f53508245851db4571424eee"
+	algorithm := "blake2b128"
+	result, err := PackHashCheck(src, dest, algorithm)
+	if err != nil {
+		t.Fatal("Error pack hash check:", err)
+	}
+	if !result {
+		t.Fatal("Error pack hash check result")
+	}
+}
