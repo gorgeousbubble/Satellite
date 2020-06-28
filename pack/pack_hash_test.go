@@ -276,3 +276,16 @@ func TestPackHashCheckBlake2b128(t *testing.T) {
 		t.Fatal("Error pack hash check result")
 	}
 }
+
+func TestPackHashCheckBlake2b256(t *testing.T) {
+	src := "hello,world!"
+	dest := "8268578331a07de98347abd8cf11addf924a4ea0ac75e4aec1bf3fe6cb314553"
+	algorithm := "blake2b256"
+	result, err := PackHashCheck(src, dest, algorithm)
+	if err != nil {
+		t.Fatal("Error pack hash check:", err)
+	}
+	if !result {
+		t.Fatal("Error pack hash check result")
+	}
+}
