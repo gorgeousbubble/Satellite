@@ -22,9 +22,38 @@ func PackHashEncode(src string, algorithm string) (dest string, err error) {
 		dest = SHA256Encode(src)
 	case "SHA512", "sha512":
 		dest = SHA512Encode(src)
+	case "BLAKE2B128", "blake2b128":
+		dest = Blake2bEncode128(src)
+	case "BLAKE2B256", "blake2b256":
+		dest = Blake2bEncode256(src)
+	case "BLAKE2B512", "blake2b512":
+		dest = Blake2bEncode512(src)
 	default:
 		s := fmt.Sprint("Undefined hash algorithm.")
 		err = errors.New(s)
 	}
 	return dest, err
+}
+
+func PackHashCheck(src string, dest string, algorithm string) (b bool, err error) {
+	switch algorithm {
+	case "MD5", "md5":
+		b = MD5Check(src, dest)
+	case "SHA1", "sha1":
+		b = SHA1Check(src, dest)
+	case "SHA256", "sha256":
+		b = SHA256Check(src, dest)
+	case "SHA512", "sha512":
+		b = SHA512Check(src, dest)
+	case "BLAKE2B128", "blake2b128":
+		b = Blake2bCheck128(src, dest)
+	case "BLAKE2B256", "blake2b256":
+		b = Blake2bCheck256(src, dest)
+	case "BLAKE2B512", "blake2b512":
+		b = Blake2bCheck512(src, dest)
+	default:
+		s := fmt.Sprint("Undefined hash algorithm.")
+		err = errors.New(s)
+	}
+	return b, err
 }
