@@ -332,3 +332,18 @@ func TestPackHashCheckBlake2b512(t *testing.T) {
 		t.Fatal("Error pack hash check result")
 	}
 }
+
+func BenchmarkPackHashCheckBlake2b512(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		src := "hello,world!"
+		dest := "9fda5311802ea6b2e54fe5da18206584aed4a488cf8a06553e8b98f11f61d2b2115b9aba70c61d29bca31f444059cdba2f262a60358d23b0f661f75d5b91213f"
+		algorithm := "blake2b512"
+		result, err := PackHashCheck(src, dest, algorithm)
+		if err != nil {
+			b.Fatal("Error pack hash check:", err)
+		}
+		if !result {
+			b.Fatal("Error pack hash check result")
+		}
+	}
+}
