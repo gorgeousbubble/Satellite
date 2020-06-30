@@ -84,6 +84,9 @@ func checkHashParameters(src string, algorithm string) (is bool) {
 	case "SHA1", "sha1":
 	case "SHA256", "sha256":
 	case "SHA512", "sha512":
+	case "BLAKE2B128", "blake2b128":
+	case "BLAKE2B256", "blake2b256":
+	case "BLAKE2B512", "blake2b512":
 	case "HMAC_SHA1", "hmac_sha1":
 	case "HMAC_SHA256", "hmac_sha256":
 	case "HMAC_SHA512", "hmac_sha512":
