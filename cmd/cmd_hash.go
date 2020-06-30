@@ -16,7 +16,7 @@ var hashType string
 
 func init() {
 	hashCmd.StringVar(&hashSrc, "i", "", "hash source: one file or string which want to be calc by hash, such as \"test.txt\" or \"hello,world!\"")
-	hashCmd.StringVar(&hashType, "t", "", "hash type: one type of enum [md5, sha1, sha256, sha512]")
+	hashCmd.StringVar(&hashType, "t", "", "hash type: one type of enum [md5, sha1, sha256, sha512, hmac_sha1, hmac_sha256, hmac_sha512]")
 }
 
 // ParseCmdHash function
