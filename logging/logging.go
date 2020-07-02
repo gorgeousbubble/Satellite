@@ -12,6 +12,11 @@ import (
 	"time"
 )
 
+// Notice about logging package...
+// This package is a simple multiple files logger which used to record parameters during debug process
+// You can easy to use it by import package like this [import _ "satellite/logging"]
+// Because you do not really import any function in this package, just need call 'init' function to redirect log package
+// When you import package in your code, you can use log.Println, log.Printf, log.Print ... to record your log
 func init() {
 	// Get current time now
 	t := time.Now()

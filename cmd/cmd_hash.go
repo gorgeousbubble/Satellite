@@ -12,11 +12,13 @@ import (
 
 var hashCmd = flag.NewFlagSet(CmdHash, flag.ExitOnError)
 var hashSrc string
+var hashCode string
 var hashType string
 
 func init() {
 	hashCmd.StringVar(&hashSrc, "i", "", "hash source: one file or string which want to be calc by hash, such as \"test.txt\" or \"hello,world!\"")
-	hashCmd.StringVar(&hashType, "t", "", "hash type: one type of enum [md5, sha1, sha256, sha512]")
+	hashCmd.StringVar(&hashCode, "c", "", "hash code: the hash code which has been calculate hash in order to check sum, such as \"c0e84e870874dd37ed0d164c7986f03a\"")
+	hashCmd.StringVar(&hashType, "t", "", "hash type: one type of enum [md5, sha1, sha256, sha512, blake2b128, blake2b256, blake2b512, hmac_sha1, hmac_sha256, hmac_sha512]")
 }
 
 // ParseCmdHash function
@@ -37,7 +39,7 @@ func ParseCmdHash() {
 		os.Exit(1)
 	}
 	// handle command parameters
-	err = handleCmdHash(hashSrc, hashType)
+	err = handleCmdHash(hashSrc, hashCode, hashType)
 	if err != nil {
 		fmt.Print("\n")
 		fmt.Println("Hash calculate failure:", err)
@@ -50,11 +52,24 @@ func ParseCmdHash() {
 // handleCmdHash function
 // this function mainly handle the main flow of command
 // any error will break and exit
-func handleCmdHash(src string, algorithm string) (err error) {
+func handleCmdHash(src string, code string, algorithm string) (err error) {
 	// check parameters
 	is := checkHashParameters(src, algorithm)
 	if !is {
 		err = errors.New("parameters illegal")
+		return err
+	}
+	// check hash sum
+	if code != "" {
+		b, err := pack.PackHashCheck(src, code, algorithm)
+		if err != nil {
+			return err
+		}
+		if !b {
+			fmt.Println("Hash check failed!")
+			return err
+		}
+		fmt.Println("Hash check success!")
 		return err
 	}
 	// calculate hash
@@ -84,6 +99,12 @@ func checkHashParameters(src string, algorithm string) (is bool) {
 	case "SHA1", "sha1":
 	case "SHA256", "sha256":
 	case "SHA512", "sha512":
+	case "BLAKE2B128", "blake2b128":
+	case "BLAKE2B256", "blake2b256":
+	case "BLAKE2B512", "blake2b512":
+	case "HMAC_SHA1", "hmac_sha1":
+	case "HMAC_SHA256", "hmac_sha256":
+	case "HMAC_SHA512", "hmac_sha512":
 	default:
 		is = false
 		fmt.Printf("Algorithm %v not support.\n", algorithm)

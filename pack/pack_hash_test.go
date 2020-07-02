@@ -277,6 +277,21 @@ func TestPackHashCheckBlake2b128(t *testing.T) {
 	}
 }
 
+func BenchmarkPackHashCheckBlake2b128(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		src := "hello,world!"
+		dest := "1748e3d0f53508245851db4571424eee"
+		algorithm := "blake2b128"
+		result, err := PackHashCheck(src, dest, algorithm)
+		if err != nil {
+			b.Fatal("Error pack hash check:", err)
+		}
+		if !result {
+			b.Fatal("Error pack hash check result")
+		}
+	}
+}
+
 func TestPackHashCheckBlake2b256(t *testing.T) {
 	src := "hello,world!"
 	dest := "8268578331a07de98347abd8cf11addf924a4ea0ac75e4aec1bf3fe6cb314553"
@@ -290,6 +305,21 @@ func TestPackHashCheckBlake2b256(t *testing.T) {
 	}
 }
 
+func BenchmarkPackHashCheckBlake2b256(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		src := "hello,world!"
+		dest := "8268578331a07de98347abd8cf11addf924a4ea0ac75e4aec1bf3fe6cb314553"
+		algorithm := "blake2b256"
+		result, err := PackHashCheck(src, dest, algorithm)
+		if err != nil {
+			b.Fatal("Error pack hash check:", err)
+		}
+		if !result {
+			b.Fatal("Error pack hash check result")
+		}
+	}
+}
+
 func TestPackHashCheckBlake2b512(t *testing.T) {
 	src := "hello,world!"
 	dest := "9fda5311802ea6b2e54fe5da18206584aed4a488cf8a06553e8b98f11f61d2b2115b9aba70c61d29bca31f444059cdba2f262a60358d23b0f661f75d5b91213f"
@@ -300,5 +330,20 @@ func TestPackHashCheckBlake2b512(t *testing.T) {
 	}
 	if !result {
 		t.Fatal("Error pack hash check result")
+	}
+}
+
+func BenchmarkPackHashCheckBlake2b512(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		src := "hello,world!"
+		dest := "9fda5311802ea6b2e54fe5da18206584aed4a488cf8a06553e8b98f11f61d2b2115b9aba70c61d29bca31f444059cdba2f262a60358d23b0f661f75d5b91213f"
+		algorithm := "blake2b512"
+		result, err := PackHashCheck(src, dest, algorithm)
+		if err != nil {
+			b.Fatal("Error pack hash check:", err)
+		}
+		if !result {
+			b.Fatal("Error pack hash check result")
+		}
 	}
 }
