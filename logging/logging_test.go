@@ -31,3 +31,12 @@ func BenchmarkLoggingPlain(b *testing.B) {
 		log.Println("hello,world!")
 	}
 }
+
+func BenchmarkLoggingWithParameters(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		a, b := 3, 5
+		log.Println("a =", a)
+		log.Println("b =", b)
+		log.Printf("a + b = %v\n", a + b)
+	}
+}
