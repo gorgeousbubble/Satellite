@@ -19,3 +19,9 @@ func TestLoggingWithParameters(t *testing.T) {
 	log.Println("b =", b)
 	log.Printf("a + b = %v\n", a + b)
 }
+
+func TestLoggingWithCycle(t *testing.T) {
+	for i := 0; i < 10000; i++ {
+		log.Println("Count:", i)
+	}
+}
