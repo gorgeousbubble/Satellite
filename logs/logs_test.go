@@ -13,3 +13,12 @@ func TestConsoleLog(t *testing.T) {
 	l := NewDefaultLogger(w)
 	l.Info("hello,world!")
 }
+
+func TestFileLog(t *testing.T) {
+	w, err := NewFileWriter("./log/satellite.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND)
+	if err != nil {
+		t.Fatal("Error new file writer:", err)
+	}
+	l := w
+	l.Write([]byte("hello,world!"))
+}
