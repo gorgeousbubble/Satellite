@@ -19,6 +19,6 @@ func TestFileLog(t *testing.T) {
 	if err != nil {
 		t.Fatal("Error new file writer:", err)
 	}
-	l := w
-	l.Write([]byte("hello,world!"))
+	l := NewDefaultLogger(w)
+	l.Debug("hello,world!")
 }
