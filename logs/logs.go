@@ -26,7 +26,7 @@ const (
 
 const maxBufPoolSize = 16
 
-var levelPrefix = [LevelDebug + 1]string{"C", "E", "W", "T", "I", "D"}
+var levelPrefix = [LevelDebug + 1]string{"CRITICAL", "ERROR", "WARNING", "TRACE", "INFO", "DEBUG"}
 
 type Atom int32
 
@@ -112,7 +112,7 @@ func (l *Logger) Output(callDepth int, level int, format string, v ...interface{
 	if l.closed.Get() == 1 {
 		return
 	}
-	if l.level.Get() > level {
+	if l.level.Get() < level {
 		return
 	}
 	var s string
@@ -147,9 +147,9 @@ func (l *Logger) Output(callDepth int, level int, format string, v ...interface{
 		buf = append(buf, ' ')
 	}
 	if l.flag&Llevel > 0 {
-		buf = append(buf, '[')
+		buf = append(buf, '-')
 		buf = append(buf, levelPrefix[level]...)
-		buf = append(buf, "] "...)
+		buf = append(buf, "- "...)
 	}
 	buf = append(buf, s...)
 	if s[len(s)-1] != '\n' {

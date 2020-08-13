@@ -31,3 +31,17 @@ func TestMultipleFileLog(t *testing.T) {
 	l := NewDefaultLogger(w)
 	l.Debug("hello,world!")
 }
+
+func TestMultipleFileLogOutput(t *testing.T) {
+	w, err := NewMultipleFileWriter("./log/satellite.log", 1*1024*1024, 5)
+	if err != nil {
+		t.Fatal("Error new multiple writer:", err)
+	}
+	l := NewDefaultLogger(w)
+	l.Debug("hello,world!")
+	l.Info("hello,world!")
+	l.Trace("hello,world!")
+	l.Warning("hello,world!")
+	l.Error("hello,world!")
+	l.Cirtical("hello,world!")
+}
