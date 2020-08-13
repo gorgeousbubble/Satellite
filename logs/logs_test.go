@@ -22,3 +22,12 @@ func TestFileLog(t *testing.T) {
 	l := NewDefaultLogger(w)
 	l.Debug("hello,world!")
 }
+
+func TestMultipleFileLog(t *testing.T) {
+	w, err := NewMultipleFileWriter("./log/satellite.log", 1*1024*1024, 5)
+	if err != nil {
+		t.Fatal("Error new multiple writer:", err)
+	}
+	l := NewDefaultLogger(w)
+	l.Debug("hello,world!")
+}
