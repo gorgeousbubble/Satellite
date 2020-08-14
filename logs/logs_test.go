@@ -38,10 +38,10 @@ func TestMultipleFileLogOutput(t *testing.T) {
 		t.Fatal("Error new multiple writer:", err)
 	}
 	l := NewDefaultLogger(w)
-	l.Debug("hello,world!")
-	l.Info("hello,world!")
-	l.Trace("hello,world!")
-	l.Warning("hello,world!")
-	l.Error("hello,world!")
-	l.Cirtical("hello,world!")
+	l.Debug("hello!")
+	l.Info("Can you speak English?")
+	l.Trace("Welcome!")
+	l.Warning("What a nice day!")
+	l.Error("Something error has happened!")
+	l.Cirtical("Critical Fatal...")
 }
