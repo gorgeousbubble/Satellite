@@ -19,10 +19,17 @@ func (w *fileLogWriter) Close() error {
 
 func NewFileWriter(name string, flag int) (fw *fileLogWriter, err error) {
 	dir := path.Dir(name)
-	err = os.Mkdir(dir, 0777)
+	// check file or path exist
+	_, err = os.Stat(dir)
 	if err != nil {
-		return nil, err
+		if os.IsNotExist(err) {
+			err = os.Mkdir(dir, 0777)
+			if err != nil {
+				return nil, err
+			}
+		}
 	}
+	// create or open file
 	file, err := os.OpenFile(name, flag, 0)
 	if err != nil {
 		return nil, err
